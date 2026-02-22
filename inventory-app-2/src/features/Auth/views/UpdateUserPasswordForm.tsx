@@ -9,6 +9,7 @@ import { Button } from '@/shared/ui/Button'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateSecretToken } from '@/reducers/authSlice'
 import type { RootState } from '@/store/store'
+import { AuthForm } from '../components/AuthForm'
 
 export const UpdateUserPasswordForm = () => {
     const secretToken = useSelector((state: RootState) => state.auth.secretToken)
@@ -60,33 +61,37 @@ export const UpdateUserPasswordForm = () => {
 
 
     return (
-        <div className="flex flex-col items-center w-full align-center justify-center sm:p-10 p-6">
-            <h1 className="text-4xl font-bold pb-8 w-full text-center">Introduce tu nueva contraseña</h1>
-            <form onSubmit={handleSubmit((data) => mutate(data))} className="w-full" autoComplete="off">
-                <InputText
-                    id="resetToken"
-                    type="hidden"
-                    errorMessage={errors.resetToken}
-                    functionEnabled={register('resetToken')} />
 
-                <InputText
-                    id="newPassword"
-                    label="Nueva contraseña"
-                    placeholder="Introduce tu nueva contraseña"
-                    type="password"
-                    errorMessage={errors.newPassword}
-                    functionEnabled={register('newPassword')} />
-                <InputText
-                    id="confirmNewPassword"
-                    label="Confirma la nueva contraseña"
-                    placeholder="Confirma la nueva contraseña"
-                    type="password"
-                    errorMessage={errors.confirmNewPassword}
-                    functionEnabled={register('confirmNewPassword')} />
+        <AuthForm
+            title="Introduce tu nueva contraseña"
+            onSubmit={handleSubmit((data) => mutate(data))}
+            children={
+                <>
+                    <InputText
+                        id="resetToken"
+                        type="hidden"
+                        errorMessage={errors.resetToken}
+                        functionEnabled={register('resetToken')} />
+
+                    <InputText
+                        id="newPassword"
+                        label="Nueva contraseña"
+                        placeholder="Introduce tu nueva contraseña"
+                        type="password"
+                        errorMessage={errors.newPassword}
+                        functionEnabled={register('newPassword')} />
+                    <InputText
+                        id="confirmNewPassword"
+                        label="Confirma la nueva contraseña"
+                        placeholder="Confirma la nueva contraseña"
+                        type="password"
+                        errorMessage={errors.confirmNewPassword}
+                        functionEnabled={register('confirmNewPassword')} />
 
 
-                <Button text="Cambiar contraseña" type="submit" color="bg-green-800 " hoverColor="hover:bg-green-700" />
-            </form>
-        </div>
+                    <Button text="Cambiar contraseña" type="submit" color="bg-green-800 " hoverColor="hover:bg-green-700" />
+                </>
+            }
+        />
     )
 }

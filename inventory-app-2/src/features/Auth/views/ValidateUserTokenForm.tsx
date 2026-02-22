@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import type { AuthValidateUserTokenForm } from '../types'
 import { useMutation } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
@@ -9,6 +9,7 @@ import { Button } from '@/shared/ui/Button'
 import { useDispatch, useSelector } from 'react-redux'
 import type { RootState } from '@/store/store'
 import { updateSecretToken } from '@/reducers/authSlice'
+import { AuthForm } from '../components/AuthForm'
 
 export const ValidateUserTokenForm = () => {
     const secretToken = useSelector((state: RootState) => state.auth.secretToken)
@@ -57,39 +58,37 @@ export const ValidateUserTokenForm = () => {
 
 
     return (
-        <div className="flex flex-col items-center w-full align-center justify-center sm:p-10 p-6">
-            <h1 className="text-4xl font-bold pb-8 w-full text-center">Introduce el token</h1>
-            <form onSubmit={handleSubmit((data) => mutate(data))} className="w-full" autoComplete="off">
-                <p className='pb-6 w-full'>
-                    Introduce el token de 6 digitos que se envio a tu correo electrónico, para reestablecer tu contraseña.
-                </p>
+        <AuthForm
+            title="Introduce el token"
+            onSubmit={handleSubmit((data) => mutate(data))}
+            helpText='Introduce el token de 6 digitos que se envio a tu correo electrónico, para reestablecer tu contraseña.'
+            children={
+                <>
+                    <InputText
+                        id="requestId"
+                        type="hidden"
+                        errorMessage={errors.requestId}
+                        defaultValue={secretToken}
+                        functionEnabled={register('requestId')}
+                    />
 
-                <InputText
-                    id="requestId"
-                    type="hidden"
-                    errorMessage={errors.requestId}
-                    defaultValue={secretToken}
-                    functionEnabled={register('requestId')}
-                />
+                    {/* TODO: EN ALGUNA FUTURA ACTUALIZACION, SE PODRIA UTILIZAR CHACKRA UI PARA LIMITAR A 6 DIGITOS */}
+                    <InputText
+                        id="value"
+                        label="Token"
+                        placeholder="Introduce el token de 6 digitos"
+                        type="number"
+                        errorMessage={errors.value}
+                        functionEnabled={register('value')} />
 
-                <InputText
-                    id="value"
-                    label="Token"
-                    placeholder="Introduce el token de 6 digitos"
-                    type="number"
-                    errorMessage={errors.value}
-                    functionEnabled={register('value')} />
-
-
-                <Button text="Validar el token" type="submit" color="bg-green-800 " hoverColor="hover:bg-green-700" />
-
-                <hr className="my-8 border-gray-700" />
-
-                <div className="text-center">
-                    <span className="text-gray-700">Necesitas un nuevo token de 6 digitos, </span>
-                    <Link to="/restore-password" className="text-green-700 cursor-pointer"> Haz clic aqui para obtenerlo</Link>
-                </div>
-            </form>
-        </div>
+                    <Button text="Validar token" type="submit" color="bg-green-800 " hoverColor="hover:bg-green-700" />
+                </>
+            }
+            secondaryLink={{
+                text: 'Necesitas un nuevo token de 6 digitos, ',
+                to: '/restore-password',
+                linkText: 'Haz clic aqui para obtenerlo'
+            }}
+        />
     )
 }

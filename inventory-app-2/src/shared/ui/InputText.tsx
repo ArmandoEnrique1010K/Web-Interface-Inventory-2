@@ -39,7 +39,7 @@ export const InputText = ({ id, label, placeholder, type, defaultValue, errorMes
                 />
                 {
                     type === "password" && (
-                        <button className="p-2 border border-gray-700 rounded" type="button" onClick={() => setShowPassword(!showPassword)}>
+                        <button className="p-2 border border-gray-700 rounded hover:cursor-pointer" type="button" onClick={() => setShowPassword(!showPassword)}>
                             {showPassword ? <EyeSlashIcon className="w-6 h-6" /> : <EyeIcon className="w-6 h-6" />}
                         </button>
                     )

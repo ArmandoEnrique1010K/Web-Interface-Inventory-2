@@ -34,7 +34,8 @@
       "@/router/*": ["router/*"],
       "@/shared/*": ["shared/*"],
       "@/store/*": ["store/*"],
-      "@/reducers/*": ["reducers/*"]
+      "@/reducers/*": ["reducers/*"],
+      "@/views/*": ["views/*"]
     }
   },
   "include": ["src"],
