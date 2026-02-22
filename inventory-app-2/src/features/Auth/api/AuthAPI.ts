@@ -15,7 +15,6 @@ export async function login(formData: AuthLoginForm) {
     //   "message": "Has iniciado sesión con éxito" 
     // }
     if (data.type === 'success') {
-      console.log(data.message)
       // redireccionar, guardar estado, etc.
       return data.message
     }
@@ -70,8 +69,10 @@ export async function forgotUserPassword(formData: AuthForgotUserPasswordForm) {
     const { data } = await api.post<GeneralResponse>(url, formData)
 
     if (data.type === 'success') {
-      console.log(data.message)
-      return data.message
+      return {
+        data: data.message,
+        requestId: data.secretField
+      }
     }
   } catch (error) {
     if (isAxiosError(error) && error.response) {
@@ -107,8 +108,10 @@ export async function validateUserToken(formData: AuthValidateUserTokenForm) {
     const { data } = await api.post<GeneralResponse>(url, formData)
 
     if (data.type === 'success') {
-      console.log(data.message)
-      return data.message
+      return {
+        data: data.message!,
+        resetToken: data.secretField!
+      }
     }
   } catch (error) {
     if (isAxiosError(error) && error.response) {
@@ -138,13 +141,12 @@ export async function validateUserToken(formData: AuthValidateUserTokenForm) {
   }
 }
 
-export async function updateUserPassword({ formData, token }: { formData: AuthUpdateUserPasswordForm, token: string }) {
+export async function updateUserPassword(formData: AuthUpdateUserPasswordForm) {
   try {
-    const url = `/auth/change-password/${token}`
+    const url = `/auth/change-password`
     const { data } = await api.put<GeneralResponse>(url, formData)
 
     if (data.type === 'success') {
-      console.log(data.message)
       return data.message
     }
   } catch (error) {
@@ -181,7 +183,6 @@ export async function logout() {
     const { data } = await api.post<GeneralResponse>(url)
 
     if (data.type === 'success') {
-      console.log(data.message)
       return data.message
     }
   } catch (error) {

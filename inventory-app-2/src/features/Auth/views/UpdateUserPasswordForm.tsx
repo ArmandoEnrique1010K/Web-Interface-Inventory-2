@@ -6,10 +6,15 @@ import { toast } from 'sonner'
 import { useNavigate } from 'react-router-dom'
 import { InputText } from '@/shared/ui/InputText'
 import { Button } from '@/shared/ui/Button'
+import { useDispatch, useSelector } from 'react-redux'
+import { updateSecretToken } from '@/reducers/authSlice'
+import type { RootState } from '@/store/store'
 
 export const UpdateUserPasswordForm = () => {
+    const secretToken = useSelector((state: RootState) => state.auth.secretToken)
 
     const initialValues: AuthUpdateUserPasswordForm = {
+        resetToken: secretToken,
         newPassword: '',
         confirmNewPassword: ''
     }
@@ -20,12 +25,12 @@ export const UpdateUserPasswordForm = () => {
 
     const navigate = useNavigate()
 
-    const token = sessionStorage.getItem('tokenValidate') as string;
+    const dispatch = useDispatch()
+
 
     const { mutate } = useMutation({
         mutationFn: updateUserPassword,
         onError: (error: any) => {
-            // toast.error(error.message)
 
             // Error de campo
             if (error.type === 'FIELD_ERROR') {
@@ -47,8 +52,8 @@ export const UpdateUserPasswordForm = () => {
             }
         },
         onSuccess: (data) => {
-            sessionStorage.removeItem('tokenValidate')
             toast.success(data)
+            dispatch(updateSecretToken({ secretToken: "" }))
             navigate('/')
         }
     })
@@ -57,7 +62,13 @@ export const UpdateUserPasswordForm = () => {
     return (
         <div className="flex flex-col items-center w-full align-center justify-center sm:p-10 p-6">
             <h1 className="text-4xl font-bold pb-8 w-full text-center">Introduce tu nueva contraseña</h1>
-            <form onSubmit={handleSubmit((data) => mutate({ formData: data, token }))} className="w-full" autoComplete="off">
+            <form onSubmit={handleSubmit((data) => mutate(data))} className="w-full" autoComplete="off">
+                <InputText
+                    id="resetToken"
+                    type="hidden"
+                    errorMessage={errors.resetToken}
+                    functionEnabled={register('resetToken')} />
+
                 <InputText
                     id="newPassword"
                     label="Nueva contraseña"

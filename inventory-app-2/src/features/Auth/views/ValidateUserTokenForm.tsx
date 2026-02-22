@@ -6,20 +6,25 @@ import { validateUserToken } from '../api/AuthAPI'
 import { toast } from 'sonner'
 import { InputText } from '@/shared/ui/InputText'
 import { Button } from '@/shared/ui/Button'
+import { useDispatch, useSelector } from 'react-redux'
+import type { RootState } from '@/store/store'
+import { updateSecretToken } from '@/reducers/authSlice'
 
 export const ValidateUserTokenForm = () => {
+    const secretToken = useSelector((state: RootState) => state.auth.secretToken)
+
     const initialValues: AuthValidateUserTokenForm = {
+        requestId: secretToken,
         value: '',
     }
 
-    const { register, handleSubmit, setError, watch, formState: { errors } } = useForm<AuthValidateUserTokenForm>({
+    const { register, handleSubmit, setError, formState: { errors } } = useForm<AuthValidateUserTokenForm>({
         defaultValues: initialValues
     })
 
     const navigate = useNavigate()
 
-    // Obtener el valor del token en tiempo real
-    const tokenValue = watch('value')
+    const dispatch = useDispatch()
 
     const { mutate } = useMutation({
         mutationFn: validateUserToken,
@@ -42,10 +47,9 @@ export const ValidateUserTokenForm = () => {
             }
         },
 
-
-        onSuccess: (data) => {
-            toast.success(data)
-            sessionStorage.setItem('tokenValidate', tokenValue)
+        onSuccess: async (data) => {
+            toast.success(data?.data);
+            dispatch(updateSecretToken({ secretToken: data!.resetToken }))
             navigate('/update-password')
         }
     })
@@ -59,6 +63,14 @@ export const ValidateUserTokenForm = () => {
                 <p className='pb-6 w-full'>
                     Introduce el token de 6 digitos que se envio a tu correo electrónico, para reestablecer tu contraseña.
                 </p>
+
+                <InputText
+                    id="requestId"
+                    type="hidden"
+                    errorMessage={errors.requestId}
+                    defaultValue={secretToken}
+                    functionEnabled={register('requestId')}
+                />
 
                 <InputText
                     id="value"

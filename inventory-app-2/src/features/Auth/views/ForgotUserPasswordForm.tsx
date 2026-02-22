@@ -6,6 +6,8 @@ import { forgotUserPassword } from '../api/AuthAPI'
 import { toast } from 'sonner'
 import { InputText } from '@/shared/ui/InputText'
 import { Button } from '@/shared/ui/Button'
+import { useDispatch } from 'react-redux'
+import { updateSecretToken } from '@/reducers/authSlice'
 
 export const ForgotUserPasswordForm = () => {
 
@@ -18,6 +20,8 @@ export const ForgotUserPasswordForm = () => {
     })
 
     const navigate = useNavigate()
+
+    const dispatch = useDispatch()
 
     const { mutate } = useMutation({
         mutationFn: forgotUserPassword,
@@ -40,7 +44,8 @@ export const ForgotUserPasswordForm = () => {
             }
         },
         onSuccess: (data) => {
-            toast.success(data)
+            toast.success(data?.data)
+            dispatch(updateSecretToken({ secretToken: data!.requestId }))
             navigate('/validate-token')
         }
     })
