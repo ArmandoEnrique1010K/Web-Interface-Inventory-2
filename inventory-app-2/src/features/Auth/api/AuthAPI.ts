@@ -1,5 +1,5 @@
 import { api } from "@/lib/axiosConfig"
-import type { AuthLoginForm } from "../types"
+import type { AuthForgotUserPasswordForm, AuthLoginForm, AuthUpdateUserPasswordForm, AuthValidateUserTokenForm } from "../types"
 import type { GeneralResponse } from "@/shared/types"
 import { isAxiosError } from "axios"
 
@@ -55,22 +55,159 @@ export async function login(formData: AuthLoginForm) {
         }
       }
     }
+
+    // ❌ Error general (cuando no hay conexión a la API)
+    throw {
+      type: 'GENERAL_ERROR',
+      message: 'Ocurrió un error inesperado'
+    }
   }
 }
 
+export async function forgotUserPassword(formData: AuthForgotUserPasswordForm) {
+  try {
+    const url = `/auth/forgot-password`
+    const { data } = await api.post<GeneralResponse>(url, formData)
 
+    if (data.type === 'success') {
+      console.log(data.message)
+      return data.message
+    }
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      const err = error.response.data;
+      if (!err) return
 
-// TODO: ELIMINAR, ES UNA PRUEBA ESTE MÉTODO
-// export async function welcome() {
-//   try {
-//     const url = ``
-//     const { data } = await api.get<string>(url)
-//     return data
-//   } catch (error) {
-//     if (isAxiosError(error) && error.response) {
-//       throw new Error(error.response.data.error)
-//     }
+      if (err.fields) {
+        throw {
+          type: 'FIELD_ERROR',
+          message: err.message,
+          fields: err.fields
+        }
+      }
 
-//     console.log(error)
-//   }
-// }
+      if (err.message) {
+        throw {
+          type: 'GENERAL_ERROR',
+          message: err.message
+        }
+      }
+    }
+
+    throw {
+      type: 'GENERAL_ERROR',
+      message: 'Ocurrió un error inesperado'
+    }
+  }
+}
+
+export async function validateUserToken(formData: AuthValidateUserTokenForm) {
+  try {
+    const url = `/auth/validate-token`
+    const { data } = await api.post<GeneralResponse>(url, formData)
+
+    if (data.type === 'success') {
+      console.log(data.message)
+      return data.message
+    }
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      const err = error.response.data;
+      if (!err) return
+
+      if (err.fields) {
+        throw {
+          type: 'FIELD_ERROR',
+          message: err.message,
+          fields: err.fields
+        }
+      }
+
+      if (err.message) {
+        throw {
+          type: 'GENERAL_ERROR',
+          message: err.message
+        }
+      }
+    }
+
+    throw {
+      type: 'GENERAL_ERROR',
+      message: 'Ocurrió un error inesperado'
+    }
+  }
+}
+
+export async function updateUserPassword({ formData, token }: { formData: AuthUpdateUserPasswordForm, token: string }) {
+  try {
+    const url = `/auth/change-password/${token}`
+    const { data } = await api.put<GeneralResponse>(url, formData)
+
+    if (data.type === 'success') {
+      console.log(data.message)
+      return data.message
+    }
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      const err = error.response.data;
+      if (!err) return
+
+      if (err.fields) {
+        throw {
+          type: 'FIELD_ERROR',
+          message: err.message,
+          fields: err.fields
+        }
+      }
+
+      if (err.message) {
+        throw {
+          type: 'GENERAL_ERROR',
+          message: err.message
+        }
+      }
+    }
+
+    throw {
+      type: 'GENERAL_ERROR',
+      message: 'Ocurrió un error inesperado'
+    }
+  }
+}
+
+export async function logout() {
+  try {
+    const url = `/auth/logout`
+    const { data } = await api.post<GeneralResponse>(url)
+
+    if (data.type === 'success') {
+      console.log(data.message)
+      return data.message
+    }
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      const err = error.response.data;
+      if (!err) return
+
+      if (err.fields) {
+        throw {
+          type: 'FIELD_ERROR',
+          message: err.message,
+          fields: err.fields
+        }
+      }
+
+      if (err.message) {
+        throw {
+          type: 'GENERAL_ERROR',
+          message: err.message
+        }
+      }
+    }
+
+    throw {
+      type: 'GENERAL_ERROR',
+      message: 'Ocurrió un error inesperado'
+    }
+  }
+}

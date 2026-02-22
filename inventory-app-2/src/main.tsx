@@ -10,7 +10,7 @@ const queryClient = new QueryClient()
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <Toaster position="top-right" duration={2000} />
+      <Toaster position="top-right" duration={5000} richColors />
       <GeneralRouter />
     </QueryClientProvider>
   </StrictMode>,

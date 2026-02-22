@@ -1,9 +1,11 @@
 import type { AuthLoginForm } from "../types"
 import { useForm } from "react-hook-form"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useMutation } from "@tanstack/react-query"
 import { login } from "../api/AuthAPI"
 import { toast } from "sonner"
+import { InputText } from "@/shared/ui/InputText"
+import { Button } from "@/shared/ui/Button"
 
 export const LoginForm = () => {
 
@@ -23,6 +25,7 @@ export const LoginForm = () => {
         onError: (error: any) => {
             // toast.error(error.message)
 
+            // Error de campo
             if (error.type === 'FIELD_ERROR') {
                 Object.entries(error.fields).forEach(([field, message]) => {
                     setError(field as keyof AuthLoginForm, {
@@ -35,12 +38,11 @@ export const LoginForm = () => {
                 return
             }
 
-            // 🔴 Error general
+            // Error general
             if (error.type === 'GENERAL_ERROR') {
                 toast.error(error.message)
+                return
             }
-
-
         },
         onSuccess: (data) => {
             toast.success(data)
@@ -49,30 +51,35 @@ export const LoginForm = () => {
     })
 
     return (
-        <div className="flex flex-col items-center space-y-8">
-            <h1>LoginForm</h1>
-            <form onSubmit={handleSubmit((data) => mutate(data))}>
+        <div className="flex flex-col items-center w-full align-center justify-center sm:p-10 p-6">
+            <h1 className="text-4xl font-bold pb-8 w-full text-center">Inicio de sesión</h1>
+            <form onSubmit={handleSubmit((data) => mutate(data))} className="w-full" autoComplete="off">
+                <InputText
+                    id="email"
+                    label="Correo"
+                    placeholder="Correo del usuario"
+                    type="email"
+                    errorMessage={errors.email}
+                    functionEnabled={register('email')} />
 
-                <input id="email" type="email" placeholder="email del usuario"
-                    {...register('email')}
-                />
+                <InputText
+                    id="password"
+                    label="Contraseña"
+                    placeholder="Contraseña del usuario"
+                    type="password"
+                    errorMessage={errors.password}
+                    functionEnabled={register('password')} />
 
-                {errors.email?.message && (
-                    <p className="text-red-500">{errors.email.message}</p>
-                )}
+                <Button text="Iniciar sesión" type="submit" color="bg-green-800 " hoverColor="hover:bg-green-700" />
 
-                <input id="password" type="password" placeholder="contraseña del usuario"
-                    {...register('password')}
-                />
+                <hr className="my-8 border-gray-700" />
 
-                {errors.password?.message && (
-                    <p className="text-red-500">{errors.password.message}</p>
-                )}
-
-                <button type="submit">Iniciar sesión</button>
+                <div className="text-center">
+                    <span className="text-gray-700">¿Olvidastes tu contraseña?</span>
+                    <Link to="/restore-password" className="text-green-700 cursor-pointer"> Haz clic aqui para cambiarla</Link>
+                </div>
 
             </form>
         </div>
     )
 }
-{/* <InputText name="username" placeholder="Usuario" type="text"  /> */ }
