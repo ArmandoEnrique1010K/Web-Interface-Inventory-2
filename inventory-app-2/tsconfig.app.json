@@ -31,11 +31,12 @@
       "@/features/*": ["features/*"],
       "@/layout/*": ["layout/*"],
       "@/lib/*": ["lib/*"],
+      "@/reducers/*": ["reducers/*"],
       "@/router/*": ["router/*"],
       "@/shared/*": ["shared/*"],
       "@/store/*": ["store/*"],
-      "@/reducers/*": ["reducers/*"],
-      "@/views/*": ["views/*"]
+      "@/thunk/*": ["thunk/*"],
+      "@/views/*": ["views/*"],
     }
   },
   "include": ["src"],

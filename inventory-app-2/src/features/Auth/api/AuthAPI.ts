@@ -212,3 +212,39 @@ export async function logout() {
     }
   }
 }
+
+export async function currentSession() {
+  try {
+    const url = `/auth/current-session`
+    const { data } = await api.get(url)
+
+    if (data.type === 'success') {
+      return data
+    }
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      const err = error.response.data;
+      if (!err) return
+
+      if (err.fields) {
+        throw {
+          type: 'FIELD_ERROR',
+          message: err.message,
+          fields: err.fields
+        }
+      }
+
+      if (err.message) {
+        throw {
+          type: 'GENERAL_ERROR',
+          message: err.message
+        }
+      }
+    }
+
+    throw {
+      type: 'GENERAL_ERROR',
+      message: 'Ocurrió un error inesperado'
+    }
+  }
+}

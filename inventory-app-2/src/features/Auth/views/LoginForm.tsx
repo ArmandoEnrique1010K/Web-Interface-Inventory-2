@@ -2,11 +2,13 @@ import type { AuthLoginForm } from "../types"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 import { useMutation } from "@tanstack/react-query"
-import { login } from "../api/AuthAPI"
+import { currentSession, login } from "../api/AuthAPI"
 import { toast } from "sonner"
 import { InputText } from "@/shared/ui/InputText"
 import { Button } from "@/shared/ui/Button"
 import { AuthForm } from "../components/AuthForm"
+import { useDispatch } from "react-redux"
+import { setAuthenticated, setUserRoles } from '@/reducers/authSlice';
 
 export const LoginForm = () => {
 
@@ -19,7 +21,9 @@ export const LoginForm = () => {
         defaultValues: initialValues
     })
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+
+    const dispatch = useDispatch();
 
     const { mutate } = useMutation({
         mutationFn: login,
@@ -45,9 +49,12 @@ export const LoginForm = () => {
                 return
             }
         },
-        onSuccess: (data) => {
+        onSuccess: async (data) => {
             toast.success(data)
-            navigate('/dashboard')
+            const userProfile = await currentSession()
+            dispatch(setUserRoles(userProfile.data.roles))
+            dispatch(setAuthenticated())
+            navigate('/')
         }
     })
 

@@ -13,13 +13,15 @@ export const dataSchema = z.object({
     data: z.any()
 })
 
+// export const pageDataSchema ...
+
 export type GeneralResponse = z.infer<typeof responseSchema>
 export type DataResponse = z.infer<typeof dataSchema>
 
 
-
+// Tipo de dato de los items del menu en Sidebar
 export type MenuItem = {
     label: string;
-    icon: string;
+    icon: React.ReactNode;
     to: string;
 }
