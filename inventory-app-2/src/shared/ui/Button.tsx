@@ -1,21 +1,41 @@
+import { Link } from "react-router-dom"
+
 type Props = {
     text: string
-    type: 'submit' | 'button'
-    color: string
-    hoverColor: string
+    type: 'submit' | 'button' | 'link'
+    aditionalStyles: string
+    to?: string
 }
 
-export const Button = ({ text, type, color, hoverColor }: Props) => {
+export const Button = ({ text, type, aditionalStyles, to }: Props) => {
     return (
-        <div className="flex items-center justify-center pt-4">
-            <button type={type} className={`w-full text-white
-                px-5 py-2 border border-gray-300 rounded ${color} 
-                cursor-pointer transition-colors ${hoverColor}
-                font-sans font-bold text-lg`
+        <>
+            {
+                (type === 'submit' || type === 'button') && (
+                    <button type={type} className={`text-white
+                px-5 py-2 border border-gray-300 rounded 
+                cursor-pointer transition-colors
+                font-sans font-bold text-lg  ${aditionalStyles}`
+                    }>
+                        {text}
+                    </button>
+                )
             }
-            >
-                {text}
-            </button>
-        </div>
+
+            {
+                type === 'link' && (
+                    <Link to={to!} className={`text-white
+                px-5 py-2 border border-gray-300
+                cursor-pointer transition-colors
+                font-sans font-bold text-md text-center  ${aditionalStyles}`
+                    }>
+                        {text}
+                    </Link>
+
+                )
+            }
+
+
+        </>
     )
 }

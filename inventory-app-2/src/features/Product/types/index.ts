@@ -1,6 +1,7 @@
 import { z } from "zod"
 
 export const categorySchema = z.object({
+    id: z.number(),
     name: z.string(),
 })
 
@@ -35,7 +36,8 @@ type Model = z.infer<typeof modelSchema>
 type Product = z.infer<typeof productSchema>
 type Type = z.infer<typeof typeSchema>
 
-export type CategoryForm = Category;
+export type CategoryItem = Category;
+export type CategoryForm = Pick<Category, "name">;
 export type ModelForm = Model;
 export type ProductCreateForm = Product;
 export type ProductUpdateForm = Pick<Product, "name" | "length" | "width" | "height" | "categoryId" | "typeId">;

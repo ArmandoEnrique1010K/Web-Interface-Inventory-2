@@ -1,13 +1,15 @@
 
 import { api } from "@/lib/axiosConfig"
 import type { CategoryForm } from "../types"
-import type { GeneralResponse } from "@/shared/types"
+import type { DataResponse, GeneralResponse } from "@/shared/types"
 import { isAxiosError } from "axios"
 
 export async function registerCategory(formData: CategoryForm) {
     try {
         const url = `/categories`
-        const { data } = await api.post<GeneralResponse>(url, formData)
+        const { data } = await api.post<GeneralResponse>(url, formData, {
+            withCredentials: true,
+        })
         if (data.type === 'success') {
             return data.message
         }
@@ -37,10 +39,12 @@ export async function registerCategory(formData: CategoryForm) {
 export async function listAllCategories() {
     try {
         const url = `/categories`
-        const { data } = await api.get<GeneralResponse>(url)
-        if (data.type === 'success') {
-            return data;
-        }
+        const { data } = await api.get<DataResponse>(url,
+            {
+                withCredentials: true,
+            }
+        )
+        return data.data;
     } catch (error) {
         if (isAxiosError(error) && error.response) {
             const err = error.response.data;

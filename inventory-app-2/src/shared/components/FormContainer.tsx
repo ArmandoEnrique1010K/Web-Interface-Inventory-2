@@ -1,6 +1,5 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-
 type Props = {
     title: string
     onSubmit: React.SubmitEventHandler<HTMLFormElement>,
@@ -14,11 +13,11 @@ type Props = {
     }
 }
 
-export const AuthForm = ({ title, onSubmit, helpText, children, secondaryLink }: Props) => {
+export const FormContainer = ({ title, onSubmit, helpText, children, secondaryLink }: Props) => {
     return (
         <div className="flex flex-col items-center w-full align-center justify-center sm:p-10 p-6">
             <h1 className="text-4xl font-bold pb-8 w-full text-center">{title}</h1>
-            <form onSubmit={onSubmit} className="w-full" autoComplete="off" noValidate>
+            <form onSubmit={onSubmit} className="w-full" autoComplete="off">
                 {
                     helpText && (
                         <p className='pb-6 w-full'>

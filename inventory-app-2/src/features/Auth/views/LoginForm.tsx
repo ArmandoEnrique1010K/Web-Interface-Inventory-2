@@ -80,7 +80,7 @@ export const LoginForm = () => {
                         errorMessage={errors.password}
                         functionEnabled={register('password')} />
 
-                    <Button text="Iniciar sesión" type="submit" color="bg-green-800 " hoverColor="hover:bg-green-700" />
+                    <Button text="Iniciar sesión" type="submit" aditionalStyles="mt-4 w-full bg-green-800 hover:bg-green-700" />
                 </>
             }
             secondaryLink={{

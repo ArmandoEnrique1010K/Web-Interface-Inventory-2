@@ -89,9 +89,14 @@ export const UpdateUserPasswordForm = () => {
                         functionEnabled={register('confirmNewPassword')} />
 
 
-                    <Button text="Cambiar contraseña" type="submit" color="bg-green-800 " hoverColor="hover:bg-green-700" />
+                    <Button text="Cambiar contraseña" type="submit" aditionalStyles="mt-4 w-full bg-green-800 hover:bg-green-700" />
                 </>
             }
+            secondaryLink={{
+                text: 'Necesitas un nuevo token de 6 digitos, ',
+                to: '/restore-password',
+                linkText: 'Haz clic aqui para obtenerlo'
+            }}
         />
     )
 }

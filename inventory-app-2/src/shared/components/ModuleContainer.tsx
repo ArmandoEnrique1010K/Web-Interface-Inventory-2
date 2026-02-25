@@ -54,11 +54,9 @@ export const ModuleContainer = ({ title, menuItems, children }: Props) => {
                 }
             </div>
             <div className='p-4'>
-                <h1 className='text-4xl font-bold mb-2'>
-
-                    {/* Si title existe, mostrarlo, sino mostrar el label del menú o el label de la ruta */}
+                {/* <h1 className='text-4xl font-bold mb-2'>
                     {title || getLabelFromPath(location.pathname)}
-                </h1>
+                </h1> */}
 
 
                 {children}

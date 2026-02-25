@@ -22,34 +22,39 @@ export const InputText = ({ id, label, placeholder, type, defaultValue, errorMes
         if (type === 'hidden') {
             return 'hidden'
         }
-        return 'flex flex-col space-y-1 w-full pb-6'
+        return 'flex flex-col space-y-1 w-full pb-4'
     }
 
     return (
         <div className={applyStylesInHiddenInput()}>
             <label className="text-md font-bold" htmlFor={id}>{label}</label>
-            <div className="flex flex-row gap-2">
-                <input
-                    className="outline-none focus:outline-none p-2 border border-gray-700 rounded w-full"
-                    type={type === "password" && showPassword ? "text" : type}
-                    placeholder={placeholder}
-                    id={id}
-                    {...functionEnabled}
-                    defaultValue={defaultValue}
-                />
-                {
-                    type === "password" && (
-                        <button className="p-2 border border-gray-700 rounded hover:cursor-pointer" type="button" onClick={() => setShowPassword(!showPassword)}>
-                            {showPassword ? <EyeSlashIcon className="w-6 h-6" /> : <EyeIcon className="w-6 h-6" />}
-                        </button>
-                    )
-                }
+            <div className="flex flex-col gap-2">
+                <div className="flex flex-row gap-2">
+
+                    <input
+                        className="outline-none focus:outline-none p-2 border border-gray-700 rounded w-full"
+                        type={type === "password" && showPassword ? "text" : type}
+                        placeholder={placeholder}
+                        id={id}
+                        {...functionEnabled}
+                        defaultValue={defaultValue}
+                    />
+                    {
+                        type === "password" && (
+                            <button className="p-2 border border-gray-700 rounded hover:cursor-pointer" type="button" onClick={() => setShowPassword(!showPassword)}>
+                                {showPassword ? <EyeSlashIcon className="w-6 h-6" /> : <EyeIcon className="w-6 h-6" />}
+                            </button>
+                        )
+                    }
+                </div>
                 {errorMessage?.message && (
                     <p className="text-red-700">{errorMessage.message}</p>
                 )}
 
 
             </div>
+
+
         </div>
     )
 }
