@@ -2,21 +2,21 @@
 
 import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom'
 import { AuthLayout } from '@/layout/AuthLayout'
-import { LoginForm } from '@/features/Auth/views/LoginForm'
+import { LoginForm } from '@/features/Auth/components/LoginForm'
 import { DashboardLayout } from '@/layout/DashboardLayout'
-import { ForgotUserPasswordForm } from '@/features/Auth/views/ForgotUserPasswordForm'
-import { ValidateUserTokenForm } from '@/features/Auth/views/ValidateUserTokenForm'
-import { UpdateUserPasswordForm } from '@/features/Auth/views/UpdateUserPasswordForm'
+import { ForgotUserPasswordForm } from '@/features/Auth/components/ForgotUserPasswordForm'
+import { ValidateUserTokenForm } from '@/features/Auth/components/ValidateUserTokenForm'
+import { UpdateUserPasswordForm } from '@/features/Auth/components/UpdateUserPasswordForm'
 import { useSelector } from 'react-redux'
 import type { RootState } from '@/store/store'
 import { UserProfile } from '@/features/User/views/UserProfile'
-import { Loading } from '@/shared/views/Loading'
-import { ModuleContainer } from '@/shared/components/ModuleContainer'
-import type { MenuItem } from '@/shared/types'
+import { Loading } from '@/views/Loading'
+import type { MenuItem } from 'types'
 import { DocumentDuplicateIcon, NewspaperIcon, RectangleGroupIcon, TagIcon } from '@heroicons/react/24/outline'
-import { CategoryAddForm } from '@/features/Product/views/category/CategoryAddForm'
-import { CategoryList } from '@/features/Product/views/category/CategoryList'
-import { CategoryGetData } from '@/features/Product/views/category/CategoryGetData'
+import { CategoryAddForm } from '@/features/Product/components/category/CategoryAddForm'
+import { CategoryList } from '@/features/Product/components/category/CategoryList'
+import { CategoryEditLoader } from '@/features/Product/components/category/CategoryEditLoader'
+import { NavbarContainer } from '@/components/NavbarContainer'
 
 const productItems: MenuItem[] = [
     {
@@ -71,17 +71,16 @@ export const GeneralRouter = () => {
                 {isAuthenticated && (
                     <Route path="/" element={<DashboardLayout />}>
                         <Route index element={
-                            <ModuleContainer title="Bienvenido">
+                            <NavbarContainer title="Bienvenido">
                                 <h1>TODO: CREAR DASHBOARD LAYOUT</h1>
-                            </ModuleContainer>
+                            </NavbarContainer>
                         } />
 
                         <Route path="products" element={
-                            <ModuleContainer menuItems={productItems}>
+                            <NavbarContainer menuItems={productItems}>
                                 <Outlet />
-                            </ModuleContainer>
+                            </NavbarContainer>
                         }>
-                            {/* TODO: DENTRO DE CADA UNA DE LA LISTAS DEBE HABER UN BOTON PARA CREAR UN NUEVO REGISTRO */}
                             <Route index element={<h1>Pagina de lista de productos</h1>} />
                             <Route path="new" element={<h1>Formulario de nuevo producto</h1>} />
                             <Route path="edit/:id" element={<h1>Formulario de editar producto</h1>} />
@@ -89,7 +88,7 @@ export const GeneralRouter = () => {
                             {/* TODO: EN EL BACKEND, CREAR UN ENDPOINT PARA LISTAR PRODUCTOS Y NO MODELOS DE PRODUCTOS */}
                             <Route path="categories" element={<CategoryList />} />
                             <Route path="categories/new" element={<CategoryAddForm />} />
-                            <Route path="categories/edit/:id" element={<CategoryGetData />} />
+                            <Route path="categories/edit/:id" element={<CategoryEditLoader />} />
 
                             <Route path="models" element={<h1>Pagina de lista de modelos</h1>} />
                             <Route path="models/new" element={<h1>Formulario de nuevo modelo</h1>} />
@@ -104,9 +103,9 @@ export const GeneralRouter = () => {
 
 
                         <Route path="profile" element={
-                            <ModuleContainer title='Perfil del usuario'>
+                            <NavbarContainer title='Perfil del usuario'>
                                 <Outlet />
-                            </ModuleContainer>
+                            </NavbarContainer>
 
                         }>
                             <Route index element={<UserProfile />} />

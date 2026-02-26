@@ -1,14 +1,14 @@
 import { useQuery } from '@tanstack/react-query'
 import { listAllCategories } from '../../api/CategoryAPI'
 import type { CategoryItem } from '../../types'
-import { Button } from '@/shared/ui/Button'
-import { ListDataContainer } from '@/shared/components/ListDataContainer'
-import { TableHeaderContainer } from '@/shared/components/TableHeaderContainer'
-import { TableRow } from '@/shared/components/TableRow'
-import { TableDataCell } from '@/shared/components/TableDataCell'
+import { Button } from '@/ui/Button'
+import { TitleContainer } from '@/components/TitleContainer'
+import { TableHeaderContainer } from '@/components/TableHeaderContainer'
+import { TableRowContainer } from '@/components/TableRowContainer'
+import { BaseTableCell } from '@/components/BaseTableCell'
 
 export const CategoryList = () => {
-    const { data, isLoading } = useQuery({
+    const { data, isLoading, isError } = useQuery({
         queryKey: ['list-categories'],
         queryFn: listAllCategories
     })
@@ -18,7 +18,7 @@ export const CategoryList = () => {
     }
 
     return (
-        <ListDataContainer
+        <TitleContainer
             title="Categorias"
             buttons={
                 <Button
@@ -32,12 +32,15 @@ export const CategoryList = () => {
 
             <TableHeaderContainer
                 headers={['ID', 'Nombre', 'Editar']}
-                children={
+                isError={isError}
+                isEmpty={!data?.length}
+            >
+                {
                     data?.map((category: CategoryItem) => (
-                        <TableRow key={category.id}>
-                            <TableDataCell data={category.id} />
-                            <TableDataCell data={category.name} />
-                            <TableDataCell data={
+                        <TableRowContainer key={category.id}>
+                            <BaseTableCell data={category.id} />
+                            <BaseTableCell data={category.name} />
+                            <BaseTableCell data={
                                 <Button
                                     size="small"
                                     text="Editar"
@@ -46,10 +49,11 @@ export const CategoryList = () => {
                                     color="blue"
                                 />
                             } isCenter />
-                        </TableRow>
+                        </TableRowContainer>
                     ))
+
                 }
-            />
-        </ListDataContainer>
+            </TableHeaderContainer>
+        </TitleContainer>
     )
 }

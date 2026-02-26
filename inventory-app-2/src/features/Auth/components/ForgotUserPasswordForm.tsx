@@ -4,11 +4,12 @@ import { useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
 import { forgotUserPassword } from '../api/AuthAPI'
 import { toast } from 'sonner'
-import { InputText } from '@/shared/ui/InputText'
-import { Button } from '@/shared/ui/Button'
+import { InputText } from '@/ui/InputText'
+import { Button } from '@/ui/Button'
 import { useDispatch } from 'react-redux'
 import { updateSecretToken } from '@/reducers/authSlice'
-import { AuthForm } from '../components/AuthForm'
+import { AuthFormContainer } from '@/features/Auth/views/AuthFormContainer'
+import type { GeneralError } from 'types'
 
 export const ForgotUserPasswordForm = () => {
 
@@ -26,7 +27,7 @@ export const ForgotUserPasswordForm = () => {
 
     const { mutate } = useMutation({
         mutationFn: forgotUserPassword,
-        onError: (error: any) => {
+        onError: (error: GeneralError) => {
             if (error.type === 'FIELD_ERROR') {
                 Object.entries(error.fields).forEach(([field, message]) => {
                     setError(field as keyof AuthForgotUserPasswordForm, {
@@ -52,7 +53,7 @@ export const ForgotUserPasswordForm = () => {
     })
 
     return (
-        <AuthForm
+        <AuthFormContainer
             title="Reestablecer contraseña"
             onSubmit={handleSubmit((data) => mutate(data))}
             helpText='Introduce tu correo electrónico y te enviaremos un token de 6 digitos para que puedas reestablecer tu contraseña.'

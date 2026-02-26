@@ -4,12 +4,13 @@ import { useMutation } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { validateUserToken } from '../api/AuthAPI'
 import { toast } from 'sonner'
-import { InputText } from '@/shared/ui/InputText'
-import { Button } from '@/shared/ui/Button'
+import { InputText } from '@/ui/InputText'
+import { Button } from '@/ui/Button'
 import { useDispatch, useSelector } from 'react-redux'
 import type { RootState } from '@/store/store'
 import { updateSecretToken } from '@/reducers/authSlice'
-import { AuthForm } from '../components/AuthForm'
+import { AuthFormContainer } from '@/features/Auth/views/AuthFormContainer'
+import type { GeneralError } from 'types'
 
 export const ValidateUserTokenForm = () => {
     const secretToken = useSelector((state: RootState) => state.auth.secretToken)
@@ -29,7 +30,7 @@ export const ValidateUserTokenForm = () => {
 
     const { mutate } = useMutation({
         mutationFn: validateUserToken,
-        onError: (error: any) => {
+        onError: (error: GeneralError) => {
             if (error.type === 'FIELD_ERROR') {
                 Object.entries(error.fields).forEach(([field, message]) => {
                     setError(field as keyof AuthValidateUserTokenForm, {
@@ -58,7 +59,7 @@ export const ValidateUserTokenForm = () => {
 
 
     return (
-        <AuthForm
+        <AuthFormContainer
             title="Introduce el token"
             onSubmit={handleSubmit((data) => mutate(data))}
             helpText='Introduce el token de 6 digitos que se envio a tu correo electrónico, para reestablecer tu contraseña.'

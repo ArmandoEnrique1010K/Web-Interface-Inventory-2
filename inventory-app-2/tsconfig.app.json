@@ -28,14 +28,17 @@
     // Configuración para acortar las rutas de importación
     "baseUrl": "src",
     "paths": {
+      "@/components/*": ["components/*"],
       "@/features/*": ["features/*"],
       "@/layout/*": ["layout/*"],
       "@/lib/*": ["lib/*"],
       "@/reducers/*": ["reducers/*"],
       "@/router/*": ["router/*"],
-      "@/shared/*": ["shared/*"],
       "@/store/*": ["store/*"],
       "@/thunk/*": ["thunk/*"],
+      "@/types/*": ["types/*"],
+      "@/ui/*": ["ui/*"],
+      "@/utils/*" :["utils/*"],
       "@/views/*": ["views/*"],
     }
   },

@@ -5,7 +5,7 @@ type Props = {
 }
 
 // Componente generico para mostrar datos en una lista
-export const ListDataContainer = ({ title, buttons, children }: Props) => {
+export const TitleContainer = ({ title, buttons, children }: Props) => {
     return (
         <>
             <h1 className='text-4xl font-bold pb-6'>{title}</h1>
@@ -16,7 +16,6 @@ export const ListDataContainer = ({ title, buttons, children }: Props) => {
                     </div>
                 )
             }
-
             {children}
         </>
     )

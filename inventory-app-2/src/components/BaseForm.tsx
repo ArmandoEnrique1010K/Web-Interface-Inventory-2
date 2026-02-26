@@ -2,12 +2,12 @@ import React from 'react'
 type Props = {
     onSubmit: React.SubmitEventHandler<HTMLFormElement>,
     helpText?: string,
-    children: React.ReactNode,
+    inputs: React.ReactNode,
     buttons: React.ReactNode,
 }
 
 // Componente generico para mostrar un formulario
-export const FormContainer = ({ onSubmit, helpText, children, buttons }: Props) => {
+export const BaseForm = ({ onSubmit, helpText, inputs, buttons }: Props) => {
     return (
         <form onSubmit={onSubmit} className="w-full" autoComplete="off" noValidate>
             {
@@ -18,7 +18,7 @@ export const FormContainer = ({ onSubmit, helpText, children, buttons }: Props) 
                 )
             }
 
-            {children}
+            {inputs}
 
             <div className="flex flex-row gap-2 justify-center pt-6">
                 {buttons}

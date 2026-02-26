@@ -14,7 +14,7 @@ type Props = {
     }
 }
 
-export const AuthForm = ({ title, onSubmit, helpText, children, secondaryLink }: Props) => {
+export const AuthFormContainer = ({ title, onSubmit, helpText, children, secondaryLink }: Props) => {
     return (
         <div className="flex flex-col items-center w-full align-center justify-center sm:p-10 p-6">
             <h1 className="text-4xl font-bold pb-8 w-full text-center">{title}</h1>

@@ -1,7 +1,10 @@
 import { api } from "@/lib/axiosConfig"
-import type { AuthForgotUserPasswordForm, AuthLoginForm, AuthUpdateUserPasswordForm, AuthValidateUserTokenForm } from "../types"
-import type { GeneralResponse } from "@/shared/types"
-import { isAxiosError } from "axios"
+import type {
+  AuthForgotUserPasswordForm, AuthLoginForm,
+  AuthUpdateUserPasswordForm, AuthValidateUserTokenForm
+} from "../types"
+import type { GeneralResponse } from "types"
+import { handleApiError } from "@/utils/handleApiError"
 
 export async function login(formData: AuthLoginForm) {
   try {
@@ -18,48 +21,50 @@ export async function login(formData: AuthLoginForm) {
       // redireccionar, guardar estado, etc.
       return data.message
     }
-  } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      const err = error.response.data;
+  } catch (error: unknown) {
+    handleApiError(error);
 
-      if (!err) return
+    // if (isAxiosError(error) && error.response) {
+    //   const err = error.response.data;
 
-      // ❌ Errores por campo (fields)
-      // { 
-      //    "type": "error", 
-      //    "status": 400, 
-      //    "message": "Complete los campos faltantes", 
-      //    "fields": { 
-      //       "email": "El correo es obligatorio" 
-      //    } 
-      // }
+    //   if (!err) return
 
-      if (err.fields) {
-        throw {
-          type: 'FIELD_ERROR',
-          message: err.message,
-          fields: err.fields //* <--- Record<string, string>
-        }
-      }
-      // ❌ Error general (credenciales inválidas, etc.)
-      // { 
-      //   "type": "error", 
-      //   "status": 400, 
-      //   "message": "Las credenciales son inválidas, verifique su correo o contraseña" 
-      // }
-      if (err.message) {
-        throw {
-          type: 'GENERAL_ERROR',
-          message: err.message
-        }
-      }
-    }
+    //   // ❌ Errores por campo (fields)
+    //   // { 
+    //   //    "type": "error", 
+    //   //    "status": 400, 
+    //   //    "message": "Complete los campos faltantes", 
+    //   //    "fields": { 
+    //   //       "email": "El correo es obligatorio" 
+    //   //    } 
+    //   // }
 
-    // ❌ Error general (cuando no hay conexión a la API)
-    throw {
-      type: 'GENERAL_ERROR',
-      message: 'Ocurrió un error inesperado'
-    }
+    //   if (err.fields) {
+    //     throw {
+    //       type: 'FIELD_ERROR',
+    //       message: err.message,
+    //       fields: err.fields 
+    //     }
+    //   }
+    //   // ❌ Error general (credenciales inválidas, etc.)
+    //   // { 
+    //   //   "type": "error", 
+    //   //   "status": 400, 
+    //   //   "message": "Las credenciales son inválidas, verifique su correo o contraseña" 
+    //   // }
+    //   if (err.message) {
+    //     throw {
+    //       type: 'GENERAL_ERROR',
+    //       message: err.message
+    //     }
+    //   }
+    // }
+
+    // // ❌ Error general (cuando no hay conexión a la API)
+    // throw {
+    //   type: 'GENERAL_ERROR',
+    //   message: 'Ocurrió un error inesperado'
+    // }
   }
 }
 
@@ -75,30 +80,7 @@ export async function forgotUserPassword(formData: AuthForgotUserPasswordForm) {
       }
     }
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      const err = error.response.data;
-      if (!err) return
-
-      if (err.fields) {
-        throw {
-          type: 'FIELD_ERROR',
-          message: err.message,
-          fields: err.fields
-        }
-      }
-
-      if (err.message) {
-        throw {
-          type: 'GENERAL_ERROR',
-          message: err.message
-        }
-      }
-    }
-
-    throw {
-      type: 'GENERAL_ERROR',
-      message: 'Ocurrió un error inesperado'
-    }
+    handleApiError(error);
   }
 }
 
@@ -113,31 +95,8 @@ export async function validateUserToken(formData: AuthValidateUserTokenForm) {
         resetToken: data.secretField!
       }
     }
-  } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      const err = error.response.data;
-      if (!err) return
-
-      if (err.fields) {
-        throw {
-          type: 'FIELD_ERROR',
-          message: err.message,
-          fields: err.fields
-        }
-      }
-
-      if (err.message) {
-        throw {
-          type: 'GENERAL_ERROR',
-          message: err.message
-        }
-      }
-    }
-
-    throw {
-      type: 'GENERAL_ERROR',
-      message: 'Ocurrió un error inesperado'
-    }
+  } catch (error: unknown) {
+    handleApiError(error);
   }
 }
 
@@ -149,31 +108,8 @@ export async function updateUserPassword(formData: AuthUpdateUserPasswordForm) {
     if (data.type === 'success') {
       return data.message
     }
-  } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      const err = error.response.data;
-      if (!err) return
-
-      if (err.fields) {
-        throw {
-          type: 'FIELD_ERROR',
-          message: err.message,
-          fields: err.fields
-        }
-      }
-
-      if (err.message) {
-        throw {
-          type: 'GENERAL_ERROR',
-          message: err.message
-        }
-      }
-    }
-
-    throw {
-      type: 'GENERAL_ERROR',
-      message: 'Ocurrió un error inesperado'
-    }
+  } catch (error: unknown) {
+    handleApiError(error);
   }
 }
 
@@ -185,31 +121,8 @@ export async function logout() {
     if (data.type === 'success') {
       return data.message
     }
-  } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      const err = error.response.data;
-      if (!err) return
-
-      if (err.fields) {
-        throw {
-          type: 'FIELD_ERROR',
-          message: err.message,
-          fields: err.fields
-        }
-      }
-
-      if (err.message) {
-        throw {
-          type: 'GENERAL_ERROR',
-          message: err.message
-        }
-      }
-    }
-
-    throw {
-      type: 'GENERAL_ERROR',
-      message: 'Ocurrió un error inesperado'
-    }
+  } catch (error: unknown) {
+    handleApiError(error);
   }
 }
 
@@ -221,30 +134,7 @@ export async function currentSession() {
     if (data.type === 'success') {
       return data
     }
-  } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      const err = error.response.data;
-      if (!err) return
-
-      if (err.fields) {
-        throw {
-          type: 'FIELD_ERROR',
-          message: err.message,
-          fields: err.fields
-        }
-      }
-
-      if (err.message) {
-        throw {
-          type: 'GENERAL_ERROR',
-          message: err.message
-        }
-      }
-    }
-
-    throw {
-      type: 'GENERAL_ERROR',
-      message: 'Ocurrió un error inesperado'
-    }
+  } catch (error: unknown) {
+    handleApiError(error);
   }
 }

@@ -2,10 +2,21 @@
 
 type Props = {
     headers: string[];
+    isError: boolean
     children: React.ReactNode;
+    isEmpty: boolean;
 }
 
-export const TableHeaderContainer = ({ headers, children }: Props) => {
+export const TableHeaderContainer = ({ headers, children, isError, isEmpty }: Props) => {
+
+    if (isError) {
+        return <h1>Ha ocurrido un error</h1>
+    }
+
+    if (isEmpty) {
+        return <h1>No hay datos</h1>
+    }
+
     return (
         <table className='w-full border-collapse border border-gray-300 overflow-hidden'>
             <thead>

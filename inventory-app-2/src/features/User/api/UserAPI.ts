@@ -1,7 +1,6 @@
-// OBTENER PERFIL DEL USUARIO
 
 import { api } from "@/lib/axiosConfig";
-import type { DataResponse, GeneralResponse } from "@/shared/types";
+import type { DataResponse, GeneralResponse } from "types";
 import { isAxiosError } from "axios";
 import type { UserRegisterForm } from "../types";
 
@@ -89,6 +88,7 @@ export const listAllUsers = async (queryParams: ListAllUsersQueryParams) => {
     }
 }
 
+// OBTENER PERFIL DEL USUARIO
 
 export const getUserProfile = async () => {
     try {

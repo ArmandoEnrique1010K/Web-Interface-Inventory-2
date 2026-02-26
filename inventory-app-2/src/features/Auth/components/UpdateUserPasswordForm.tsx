@@ -4,12 +4,13 @@ import { useMutation } from '@tanstack/react-query'
 import { updateUserPassword } from '../api/AuthAPI'
 import { toast } from 'sonner'
 import { useNavigate } from 'react-router-dom'
-import { InputText } from '@/shared/ui/InputText'
-import { Button } from '@/shared/ui/Button'
+import { InputText } from '@/ui/InputText'
+import { Button } from '@/ui/Button'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateSecretToken } from '@/reducers/authSlice'
 import type { RootState } from '@/store/store'
-import { AuthForm } from '../components/AuthForm'
+import { AuthFormContainer } from '@/features/Auth/views/AuthFormContainer'
+import type { GeneralError } from 'types'
 
 export const UpdateUserPasswordForm = () => {
     const secretToken = useSelector((state: RootState) => state.auth.secretToken)
@@ -31,7 +32,7 @@ export const UpdateUserPasswordForm = () => {
 
     const { mutate } = useMutation({
         mutationFn: updateUserPassword,
-        onError: (error: any) => {
+        onError: (error: GeneralError) => {
 
             // Error de campo
             if (error.type === 'FIELD_ERROR') {
@@ -62,7 +63,7 @@ export const UpdateUserPasswordForm = () => {
 
     return (
 
-        <AuthForm
+        <AuthFormContainer
             title="Introduce tu nueva contraseña"
             onSubmit={handleSubmit((data) => mutate(data))}
             children={

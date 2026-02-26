@@ -25,3 +25,9 @@ export type MenuItem = {
     icon: React.ReactNode;
     to: string;
 }
+
+export type GeneralError = {
+    type: string,
+    message: string,
+    fields: Record<string, string>
+}

@@ -4,10 +4,11 @@ import { useMutation } from "@tanstack/react-query";
 import { registerCategory } from "../../api/CategoryAPI";
 import { toast } from "sonner";
 import type { CategoryForm } from "../../types";
-import { InputText } from "@/shared/ui/InputText";
-import { Button } from "@/shared/ui/Button";
-import { ListDataContainer } from "@/shared/components/ListDataContainer";
-import { FormContainer } from "@/shared/components/FormContainer";
+import { InputText } from "@/ui/InputText";
+import { Button } from "@/ui/Button";
+import { TitleContainer } from "@/components/TitleContainer";
+import { BaseForm } from "@/components/BaseForm";
+import type { GeneralError } from "types";
 
 export const CategoryAddForm = () => {
 
@@ -22,11 +23,9 @@ export const CategoryAddForm = () => {
     const navigate = useNavigate();
 
 
-    const { mutate } = useMutation({
+    const { mutate, isPending } = useMutation({
         mutationFn: registerCategory,
-
-        // TODO: SE PODRIA ESPECIFICAR EL TIPADO DE ERROR A: { type: string, message: string, fields: { [key: string]: string } }
-        onError: (error: { type: string, message: string, fields: { [key: string]: string } }) => {
+        onError: (error: GeneralError) => {
             // toast.error(error.message)
 
             // Error de campo
@@ -53,31 +52,34 @@ export const CategoryAddForm = () => {
             navigate('/products/categories')
         }
     })
+    if (isPending) return <h1>Espere</h1>
 
 
     return (
         <>
-            <ListDataContainer title="Añadir nueva categoria">
-                <FormContainer
+            <TitleContainer title="Añadir nueva categoria">
+                <BaseForm
                     onSubmit={handleSubmit((data) => mutate(data))}
+                    inputs={
+                        <>
+                            <InputText
+                                id="name"
+                                label="Nombre"
+                                placeholder="Nombre de la categoria"
+                                type="text"
+                                errorMessage={errors.name}
+                                functionEnabled={register('name')} />
+
+                        </>
+                    }
                     buttons={
                         <>
                             <Button size="large" text="Añadir categoria" type="submit" color="green" />
                             <Button size="large" text="Cancelar" type="link" color="gray" to="/products/categories" />
                         </>
                     }
-                >
-                    <InputText
-                        id="name"
-                        label="Nombre"
-                        placeholder="Nombre de la categoria"
-                        type="text"
-                        errorMessage={errors.name}
-                        functionEnabled={register('name')} />
-                </FormContainer>
-
-            </ListDataContainer>
-
+                />
+            </TitleContainer>
         </>
     )
 }

@@ -1,8 +1,8 @@
 
 import { api } from "@/lib/axiosConfig"
 import type { CategoryForm } from "../types"
-import type { DataResponse, GeneralResponse } from "@/shared/types"
-import { isAxiosError } from "axios"
+import type { DataResponse, GeneralResponse } from "types"
+import { handleApiError } from "@/utils/handleApiError"
 
 export async function registerCategory(formData: CategoryForm) {
     try {
@@ -13,26 +13,8 @@ export async function registerCategory(formData: CategoryForm) {
         if (data.type === 'success') {
             return data.message
         }
-    } catch (error) {
-        if (isAxiosError(error) && error.response) {
-            const err = error.response.data;
-            if (!err) return
-
-            if (err.fields) {
-                throw {
-                    type: 'FIELD_ERROR',
-                    message: err.message,
-                    fields: err.fields
-                }
-            }
-            if (err.message) {
-                throw {
-                    type: 'GENERAL_ERROR',
-                    message: err.message
-                }
-            }
-
-        }
+    } catch (error: unknown) {
+        handleApiError(error);
     }
 }
 
@@ -46,25 +28,7 @@ export async function listAllCategories() {
         )
         return data.data;
     } catch (error) {
-        if (isAxiosError(error) && error.response) {
-            const err = error.response.data;
-            if (!err) return
-
-            if (err.fields) {
-                throw {
-                    type: 'FIELD_ERROR',
-                    message: err.message,
-                    fields: err.fields
-                }
-            }
-            if (err.message) {
-                throw {
-                    type: 'GENERAL_ERROR',
-                    message: err.message
-                }
-            }
-
-        }
+        handleApiError(error);
     }
 }
 
@@ -78,25 +42,7 @@ export async function getCategory(id: string) {
         )
         return data.data;
     } catch (error) {
-        if (isAxiosError(error) && error.response) {
-            const err = error.response.data;
-            if (!err) return
-
-            if (err.fields) {
-                throw {
-                    type: 'FIELD_ERROR',
-                    message: err.message,
-                    fields: err.fields
-                }
-            }
-            if (err.message) {
-                throw {
-                    type: 'GENERAL_ERROR',
-                    message: err.message
-                }
-            }
-
-        }
+        handleApiError(error);
     }
 }
 
@@ -117,24 +63,6 @@ export async function updateCategory({ categoryId, formData }: UpdateCategoryPay
             return data.message
         }
     } catch (error) {
-        if (isAxiosError(error) && error.response) {
-            const err = error.response.data;
-            if (!err) return
-
-            if (err.fields) {
-                throw {
-                    type: 'FIELD_ERROR',
-                    message: err.message,
-                    fields: err.fields
-                }
-            }
-            if (err.message) {
-                throw {
-                    type: 'GENERAL_ERROR',
-                    message: err.message
-                }
-            }
-
-        }
+        handleApiError(error);
     }
 }

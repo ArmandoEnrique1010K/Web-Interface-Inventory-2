@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { getCategory } from "../../api/CategoryAPI";
 import { CategoryEditForm } from "./CategoryEditForm";
 
-export const CategoryGetData = () => {
+export const CategoryEditLoader = () => {
     const params = useParams();
     const categoryId = params.id!;
 

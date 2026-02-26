@@ -3,7 +3,7 @@ type Props = {
     isCenter?: boolean
 }
 
-export const TableDataCell = ({ data, isCenter }: Props) => {
+export const BaseTableCell = ({ data, isCenter }: Props) => {
     return (
         <td className={`
             border border-gray-300 px-4 py-3

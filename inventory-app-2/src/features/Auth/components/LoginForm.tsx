@@ -4,11 +4,12 @@ import { useNavigate } from "react-router-dom"
 import { useMutation } from "@tanstack/react-query"
 import { currentSession, login } from "../api/AuthAPI"
 import { toast } from "sonner"
-import { InputText } from "@/shared/ui/InputText"
-import { Button } from "@/shared/ui/Button"
-import { AuthForm } from "../components/AuthForm"
+import { InputText } from "@/ui/InputText"
+import { Button } from "@/ui/Button"
+import { AuthFormContainer } from "@/features/Auth/views/AuthFormContainer"
 import { useDispatch } from "react-redux"
 import { setAuthenticated, setUserRoles } from '@/reducers/authSlice';
+import type { GeneralError } from "types"
 
 export const LoginForm = () => {
 
@@ -27,7 +28,7 @@ export const LoginForm = () => {
 
     const { mutate } = useMutation({
         mutationFn: login,
-        onError: (error: any) => {
+        onError: (error: GeneralError) => {
             // toast.error(error.message)
 
             // Error de campo
@@ -59,7 +60,7 @@ export const LoginForm = () => {
     })
 
     return (
-        <AuthForm
+        <AuthFormContainer
             title="Inicio de sesión"
             onSubmit={handleSubmit((data) => mutate(data))}
             children={
