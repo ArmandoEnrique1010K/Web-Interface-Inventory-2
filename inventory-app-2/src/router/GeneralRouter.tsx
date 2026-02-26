@@ -16,7 +16,7 @@ import type { MenuItem } from '@/shared/types'
 import { DocumentDuplicateIcon, NewspaperIcon, RectangleGroupIcon, TagIcon } from '@heroicons/react/24/outline'
 import { CategoryAddForm } from '@/features/Product/views/category/CategoryAddForm'
 import { CategoryList } from '@/features/Product/views/category/CategoryList'
-import { CategoryEditForm } from '@/features/Product/views/category/CategoryEditForm'
+import { CategoryGetData } from '@/features/Product/views/category/CategoryGetData'
 
 const productItems: MenuItem[] = [
     {
@@ -89,7 +89,7 @@ export const GeneralRouter = () => {
                             {/* TODO: EN EL BACKEND, CREAR UN ENDPOINT PARA LISTAR PRODUCTOS Y NO MODELOS DE PRODUCTOS */}
                             <Route path="categories" element={<CategoryList />} />
                             <Route path="categories/new" element={<CategoryAddForm />} />
-                            <Route path="categories/edit/:id" element={<CategoryEditForm />} />
+                            <Route path="categories/edit/:id" element={<CategoryGetData />} />
 
                             <Route path="models" element={<h1>Pagina de lista de modelos</h1>} />
                             <Route path="models/new" element={<h1>Formulario de nuevo modelo</h1>} />

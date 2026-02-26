@@ -2,9 +2,12 @@ import { useQuery } from '@tanstack/react-query'
 import { listAllCategories } from '../../api/CategoryAPI'
 import type { CategoryItem } from '../../types'
 import { Button } from '@/shared/ui/Button'
+import { ListDataContainer } from '@/shared/components/ListDataContainer'
+import { TableHeaderContainer } from '@/shared/components/TableHeaderContainer'
+import { TableRow } from '@/shared/components/TableRow'
+import { TableDataCell } from '@/shared/components/TableDataCell'
 
 export const CategoryList = () => {
-
     const { data, isLoading } = useQuery({
         queryKey: ['list-categories'],
         queryFn: listAllCategories
@@ -14,12 +17,10 @@ export const CategoryList = () => {
         return <h1>Cargando...</h1>
     }
 
-
     return (
-        <div>
-            <h1 className='text-4xl font-bold pb-6'>Categorias</h1>
-
-            <div className='pb-8'>
+        <ListDataContainer
+            title="Categorias"
+            buttons={
                 <Button
                     size="large"
                     text="Nueva categoria"
@@ -27,23 +28,16 @@ export const CategoryList = () => {
                     to="/products/categories/new"
                     color="blue"
                 />
-            </div>
+            }>
 
-
-            <table className='w-full border-collapse border border-gray-300 overflow-hidden'>
-                <thead>
-                    <tr className='bg-gray-800 text-white'>
-                        <th className='border border-gray-300 px-4 py-3 text-left font-semibold '>ID</th>
-                        <th className='border border-gray-300 px-4 py-3 text-left font-semibold '>Nombre</th>
-                        <th className='border border-gray-300 px-4 py-3 text-left font-semibold '>Editar</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {data?.map((category: CategoryItem) => (
-                        <tr key={category.id} className='bg-white hover:bg-blue-100 transition-colors'>
-                            <td className='border border-gray-300 px-4 py-3'>{category.id}</td>
-                            <td className='border border-gray-300 px-4 py-3'>{category.name}</td>
-                            <td className='border border-gray-300  text-center'>
+            <TableHeaderContainer
+                headers={['ID', 'Nombre', 'Editar']}
+                children={
+                    data?.map((category: CategoryItem) => (
+                        <TableRow key={category.id}>
+                            <TableDataCell data={category.id} />
+                            <TableDataCell data={category.name} />
+                            <TableDataCell data={
                                 <Button
                                     size="small"
                                     text="Editar"
@@ -51,12 +45,11 @@ export const CategoryList = () => {
                                     to={`/products/categories/edit/${category.id}`}
                                     color="blue"
                                 />
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-
-        </div>
+                            } isCenter />
+                        </TableRow>
+                    ))
+                }
+            />
+        </ListDataContainer>
     )
 }

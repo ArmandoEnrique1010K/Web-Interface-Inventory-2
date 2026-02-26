@@ -100,3 +100,41 @@ export async function getCategory(id: string) {
     }
 }
 
+type UpdateCategoryPayload = {
+    categoryId: string;
+    formData: CategoryForm;
+}
+
+export async function updateCategory({ categoryId, formData }: UpdateCategoryPayload) {
+    try {
+        const url = `/categories/${categoryId}`
+        const { data } = await api.put<GeneralResponse>(url, formData,
+            {
+                withCredentials: true,
+            }
+        )
+        if (data.type === 'success') {
+            return data.message
+        }
+    } catch (error) {
+        if (isAxiosError(error) && error.response) {
+            const err = error.response.data;
+            if (!err) return
+
+            if (err.fields) {
+                throw {
+                    type: 'FIELD_ERROR',
+                    message: err.message,
+                    fields: err.fields
+                }
+            }
+            if (err.message) {
+                throw {
+                    type: 'GENERAL_ERROR',
+                    message: err.message
+                }
+            }
+
+        }
+    }
+}

@@ -6,6 +6,8 @@ import { toast } from "sonner";
 import type { CategoryForm } from "../../types";
 import { InputText } from "@/shared/ui/InputText";
 import { Button } from "@/shared/ui/Button";
+import { ListDataContainer } from "@/shared/components/ListDataContainer";
+import { FormContainer } from "@/shared/components/FormContainer";
 
 export const CategoryAddForm = () => {
 
@@ -55,22 +57,26 @@ export const CategoryAddForm = () => {
 
     return (
         <>
-            <h1 className="text-4xl font-bold mb-6">Añadir nueva categoria</h1>
-            <form onSubmit={handleSubmit((data) => mutate(data))} className="w-full" autoComplete="off" noValidate>
-                <InputText
-                    id="name"
-                    label="Nombre"
-                    placeholder="Nombre de la categoria"
-                    type="text"
-                    errorMessage={errors.name}
-                    functionEnabled={register('name')} />
+            <ListDataContainer title="Añadir nueva categoria">
+                <FormContainer
+                    onSubmit={handleSubmit((data) => mutate(data))}
+                    buttons={
+                        <>
+                            <Button size="large" text="Añadir categoria" type="submit" color="green" />
+                            <Button size="large" text="Cancelar" type="link" color="gray" to="/products/categories" />
+                        </>
+                    }
+                >
+                    <InputText
+                        id="name"
+                        label="Nombre"
+                        placeholder="Nombre de la categoria"
+                        type="text"
+                        errorMessage={errors.name}
+                        functionEnabled={register('name')} />
+                </FormContainer>
 
-                <div className="flex flex-row gap-2 justify-center pt-6">
-                    <Button size="large" text="Añadir categoria" type="submit" color="green" />
-                    <Button size="large" text="Volver" type="link" color="gray" to="/products/categories" />
-
-                </div>
-            </form>
+            </ListDataContainer>
 
         </>
     )
