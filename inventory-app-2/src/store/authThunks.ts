@@ -16,7 +16,7 @@ export const loadUserSession = () => async (dispatch: AppDispatch) => {
 
         }
 
-    } catch (error: any) {
+    } catch {
         dispatch(clearAuth())
     } finally {
         dispatch(setAuthChecked())

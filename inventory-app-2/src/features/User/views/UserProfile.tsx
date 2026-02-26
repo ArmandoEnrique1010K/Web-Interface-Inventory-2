@@ -3,8 +3,6 @@ import { getUserProfile } from "../api/UserAPI"
 import { Link } from "react-router-dom"
 
 export const UserProfile = () => {
-
-
     const { data, isLoading } = useQuery({
         queryKey: ['user-profile'],
         queryFn: getUserProfile
