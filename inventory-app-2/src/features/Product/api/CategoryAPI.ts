@@ -67,3 +67,36 @@ export async function listAllCategories() {
         }
     }
 }
+
+export async function getCategory(id: string) {
+    try {
+        const url = `/categories/${id}`
+        const { data } = await api.get<DataResponse>(url,
+            {
+                withCredentials: true,
+            }
+        )
+        return data.data;
+    } catch (error) {
+        if (isAxiosError(error) && error.response) {
+            const err = error.response.data;
+            if (!err) return
+
+            if (err.fields) {
+                throw {
+                    type: 'FIELD_ERROR',
+                    message: err.message,
+                    fields: err.fields
+                }
+            }
+            if (err.message) {
+                throw {
+                    type: 'GENERAL_ERROR',
+                    message: err.message
+                }
+            }
+
+        }
+    }
+}
+

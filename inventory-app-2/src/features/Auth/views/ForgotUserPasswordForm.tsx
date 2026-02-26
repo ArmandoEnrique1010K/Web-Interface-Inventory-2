@@ -67,7 +67,7 @@ export const ForgotUserPasswordForm = () => {
                         functionEnabled={register('email')} />
 
 
-                    <Button text="Enviar un token" type="submit" aditionalStyles="mt-4 w-full bg-green-800 hover:bg-green-700" />
+                    <Button size="large" text="Enviar un token" type="submit" aditionalStyles="mt-4 w-full bg-green-800 hover:bg-green-700" />
                 </>
             }
             secondaryLink={{

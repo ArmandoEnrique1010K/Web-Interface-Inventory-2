@@ -89,7 +89,7 @@ export const UpdateUserPasswordForm = () => {
                         functionEnabled={register('confirmNewPassword')} />
 
 
-                    <Button text="Cambiar contraseña" type="submit" aditionalStyles="mt-4 w-full bg-green-800 hover:bg-green-700" />
+                    <Button size="large" text="Cambiar contraseña" type="submit" aditionalStyles="mt-4 w-full bg-green-800 hover:bg-green-700" />
                 </>
             }
             secondaryLink={{

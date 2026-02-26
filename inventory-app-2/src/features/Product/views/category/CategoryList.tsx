@@ -17,15 +17,20 @@ export const CategoryList = () => {
 
     return (
         <div>
-            <h1 className='text-4xl font-bold mb-6'>Categorias</h1>
-            {/* <Link to="/products/categories/new" className='bg-blue-500 text-white px-4 py-2 rounded mb-4 inline-block'>Nueva categoria</Link> */}
+            <h1 className='text-4xl font-bold pb-6'>Categorias</h1>
 
-            <div className='mb-8'>
-                <Button text="Nueva categoria" type="link" aditionalStyles="bg-blue-600 hover:bg-blue-700" to="/products/categories/new" />
+            <div className='pb-8'>
+                <Button
+                    size="large"
+                    text="Nueva categoria"
+                    type="link"
+                    to="/products/categories/new"
+                    color="blue"
+                />
             </div>
 
 
-            <table className='w-full border-collapse border border-gray-300   overflow-hidden mt-5'>
+            <table className='w-full border-collapse border border-gray-300 overflow-hidden'>
                 <thead>
                     <tr className='bg-gray-800 text-white'>
                         <th className='border border-gray-300 px-4 py-3 text-left font-semibold '>ID</th>
@@ -39,7 +44,13 @@ export const CategoryList = () => {
                             <td className='border border-gray-300 px-4 py-3'>{category.id}</td>
                             <td className='border border-gray-300 px-4 py-3'>{category.name}</td>
                             <td className='border border-gray-300  text-center'>
-                                <Button text="Editar" type="link" aditionalStyles="bg-blue-600 hover:bg-blue-700" to={`/products/categories/edit/${category.id}`} />
+                                <Button
+                                    size="small"
+                                    text="Editar"
+                                    type="link"
+                                    to={`/products/categories/edit/${category.id}`}
+                                    color="blue"
+                                />
                             </td>
                         </tr>
                     ))}

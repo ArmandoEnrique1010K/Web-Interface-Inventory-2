@@ -1,11 +1,9 @@
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
 import { useMutation } from "@tanstack/react-query";
 import { registerCategory } from "../../api/CategoryAPI";
 import { toast } from "sonner";
 import type { CategoryForm } from "../../types";
-import { FormContainer } from "@/shared/components/FormContainer";
 import { InputText } from "@/shared/ui/InputText";
 import { Button } from "@/shared/ui/Button";
 
@@ -21,11 +19,12 @@ export const CategoryAddForm = () => {
 
     const navigate = useNavigate();
 
-    const dispatch = useDispatch();
 
     const { mutate } = useMutation({
         mutationFn: registerCategory,
-        onError: (error: any) => {
+
+        // TODO: SE PODRIA ESPECIFICAR EL TIPADO DE ERROR A: { type: string, message: string, fields: { [key: string]: string } }
+        onError: (error: { type: string, message: string, fields: { [key: string]: string } }) => {
             // toast.error(error.message)
 
             // Error de campo
@@ -55,27 +54,24 @@ export const CategoryAddForm = () => {
 
 
     return (
-        <div>
-            <FormContainer
-                title="Añadir nueva categoria"
-                onSubmit={handleSubmit((data) => mutate(data))}
-                children={
-                    <>
-                        <InputText
-                            id="name"
-                            label="Nombre"
-                            placeholder="Nombre de la categoria"
-                            type="text"
-                            errorMessage={errors.name}
-                            functionEnabled={register('name')} />
-                        <Button text="Añadir categoria" type="submit" aditionalStyles="bg-green-800 hover:bg-green-700" />
+        <>
+            <h1 className="text-4xl font-bold mb-6">Añadir nueva categoria</h1>
+            <form onSubmit={handleSubmit((data) => mutate(data))} className="w-full" autoComplete="off" noValidate>
+                <InputText
+                    id="name"
+                    label="Nombre"
+                    placeholder="Nombre de la categoria"
+                    type="text"
+                    errorMessage={errors.name}
+                    functionEnabled={register('name')} />
 
-                    </>
-                }
-            >
-            </FormContainer>
+                <div className="flex flex-row gap-2 justify-center pt-6">
+                    <Button size="large" text="Añadir categoria" type="submit" color="green" />
+                    <Button size="large" text="Volver" type="link" color="gray" to="/products/categories" />
 
-            <Button text="Volver" type="link" aditionalStyles="bg-gray-600 hover:bg-gray-700" to="/products/categories" />
-        </div>
+                </div>
+            </form>
+
+        </>
     )
 }
