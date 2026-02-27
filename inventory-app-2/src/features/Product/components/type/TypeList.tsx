@@ -1,27 +1,27 @@
 import { useQuery } from '@tanstack/react-query'
-import { listAllCategories } from '../../api/CategoryAPI'
-import type { CategoryItem } from '../../types'
+import type { TypeItem } from '../../types'
 import { Button } from '@/ui/Button'
 import { TitleContainer } from '@/components/TitleContainer'
 import { TableHeaderContainer } from '@/components/TableHeaderContainer'
 import { TableRowContainer } from '@/components/TableRowContainer'
 import { BaseTableCell } from '@/components/BaseTableCell'
+import { listAllTypes } from '../../api/TypeAPI'
 
-export const CategoryList = () => {
+export const TypeList = () => {
     const { data, isLoading, isError } = useQuery({
-        queryKey: ['list-categories'],
-        queryFn: listAllCategories
+        queryKey: ['list-types'],
+        queryFn: listAllTypes
     })
 
     return (
         <TitleContainer
-            title="Categorias"
+            title="Tipos"
             buttons={
                 <Button
                     size="large"
-                    text="Nueva categoria"
+                    text="Nuevo tipo"
                     type="link"
-                    to="/products/categories/new"
+                    to="/products/types/new"
                     color="blue"
                 />
             }>
@@ -29,20 +29,20 @@ export const CategoryList = () => {
             <TableHeaderContainer
                 headers={['ID', 'Nombre', 'Editar']}
                 isError={isError}
-                isLoading={isLoading}
                 isEmpty={!data?.length}
+                isLoading={isLoading}
             >
                 {
-                    data?.map((category: CategoryItem) => (
-                        <TableRowContainer key={category.id}>
-                            <BaseTableCell data={category.id} />
-                            <BaseTableCell data={category.name} />
+                    data?.map((type: TypeItem) => (
+                        <TableRowContainer key={type.id}>
+                            <BaseTableCell data={type.id} />
+                            <BaseTableCell data={type.name} />
                             <BaseTableCell data={
                                 <Button
                                     size="small"
                                     text="Editar"
                                     type="link"
-                                    to={`/products/categories/edit/${category.id}`}
+                                    to={`/products/types/edit/${type.id}`}
                                     color="blue"
                                 />
                             } isCenter />

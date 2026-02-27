@@ -11,7 +11,7 @@ export const TitleContainer = ({ title, buttons, children }: Props) => {
             <h1 className='text-4xl font-bold pb-6'>{title}</h1>
             {
                 buttons && (
-                    <div className='flex flex-row pb-6'>
+                    <div className='flex flex-row pb-8'>
                         {buttons}
                     </div>
                 )

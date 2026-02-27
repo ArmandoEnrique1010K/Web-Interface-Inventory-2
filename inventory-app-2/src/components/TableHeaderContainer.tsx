@@ -1,3 +1,4 @@
+import { TextMessage } from "./TextMessage";
 
 
 type Props = {
@@ -5,16 +6,21 @@ type Props = {
     isError: boolean
     children: React.ReactNode;
     isEmpty: boolean;
+    isLoading: boolean;
 }
 
-export const TableHeaderContainer = ({ headers, children, isError, isEmpty }: Props) => {
+export const TableHeaderContainer = ({ headers, children, isError, isEmpty, isLoading }: Props) => {
+
+    if (isLoading) {
+        return <TextMessage text="Cargando..." align="center" color="black" />
+    }
 
     if (isError) {
-        return <h1>Ha ocurrido un error</h1>
+        return <TextMessage text="Ha ocurrido un error" align="center" color="red" />
     }
 
     if (isEmpty) {
-        return <h1>No hay datos</h1>
+        return <TextMessage text="No hay datos" align="center" color="red" />
     }
 
     return (

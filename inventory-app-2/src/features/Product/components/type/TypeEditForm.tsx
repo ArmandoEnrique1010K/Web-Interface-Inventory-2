@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom"
-import { updateCategory } from "../../api/CategoryAPI";
-import type { CategoryForm } from "../../types";
+import type { CategoryForm, TypeForm } from "../../types";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { BaseForm } from "@/components/BaseForm";
@@ -9,17 +8,18 @@ import type { GeneralError } from "types";
 import { Button } from "@/ui/Button";
 import { InputText } from "@/ui/InputText";
 import { TitleContainer } from "@/components/TitleContainer";
+import { updateType } from "../../api/TypeAPI";
 import { TextMessage } from "@/components/TextMessage";
 
 type Props = {
     data: CategoryForm;
-    categoryId: string;
+    typeId: string;
 }
 
-export const CategoryEditForm = ({ data, categoryId }: Props) => {
+export const TypeEditForm = ({ data, typeId }: Props) => {
     const navigate = useNavigate();
 
-    const { register, handleSubmit, setError, formState: { errors } } = useForm<CategoryForm>({
+    const { register, handleSubmit, setError, formState: { errors } } = useForm<TypeForm>({
         defaultValues: {
             name: data.name
         }
@@ -28,7 +28,7 @@ export const CategoryEditForm = ({ data, categoryId }: Props) => {
     const queryClient = useQueryClient();
 
     const { mutate, isPending } = useMutation({
-        mutationFn: updateCategory,
+        mutationFn: updateType,
         onError: (error: GeneralError) => {
             // Error de campo
             if (error.type === 'FIELD_ERROR') {
@@ -50,17 +50,17 @@ export const CategoryEditForm = ({ data, categoryId }: Props) => {
             }
         },
         onSuccess: (data) => {
-            queryClient.invalidateQueries({ queryKey: ["list-categories"] })
-            queryClient.invalidateQueries({ queryKey: ["edit-category", categoryId] })
+            queryClient.invalidateQueries({ queryKey: ["list-types"] })
+            queryClient.invalidateQueries({ queryKey: ["edit-type", typeId] })
             toast.success(data)
-            navigate("/products/categories")
+            navigate("/products/types")
         }
     })
 
     const handleForm = (formData: CategoryForm) => {
         const data = {
             formData,
-            categoryId
+            typeId
         }
         mutate(data)
     }
@@ -69,20 +69,20 @@ export const CategoryEditForm = ({ data, categoryId }: Props) => {
 
     return (
         <>
-            <TitleContainer title={`Editar categoria ${categoryId}`}>
+            <TitleContainer title={`Editar tipo ${typeId}`}>
                 <BaseForm
                     onSubmit={handleSubmit(handleForm)}
                     buttons={
                         <>
-                            <Button size="large" text="Editar categoria" type="submit" color="green" />
-                            <Button size="large" text="Volver" type="link" color="gray" to="/products/categories" />
+                            <Button size="large" text="Editar tipo" type="submit" color="green" />
+                            <Button size="large" text="Volver" type="link" color="gray" to="/products/types" />
                         </>
                     }
                     inputs={
                         <InputText
                             id="name"
                             label="Nombre"
-                            placeholder="Nombre de la categoria"
+                            placeholder="Nombre del tipo"
                             type="text"
                             errorMessage={errors.name}
                             functionEnabled={register('name')} />

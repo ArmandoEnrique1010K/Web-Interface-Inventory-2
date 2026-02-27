@@ -1,23 +1,23 @@
 import { useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
-import { registerCategory } from "../../api/CategoryAPI";
 import { toast } from "sonner";
-import type { CategoryForm } from "../../types";
+import type { TypeForm } from "../../types";
 import { InputText } from "@/ui/InputText";
 import { Button } from "@/ui/Button";
 import { TitleContainer } from "@/components/TitleContainer";
 import { BaseForm } from "@/components/BaseForm";
 import type { GeneralError } from "types";
+import { registerType } from "../../api/TypeAPI";
 import { TextMessage } from "@/components/TextMessage";
 
-export const CategoryAddForm = () => {
+export const TypeAddForm = () => {
 
-    const initialValues: CategoryForm = {
+    const initialValues: TypeForm = {
         name: '',
     }
 
-    const { register, handleSubmit, setError, formState: { errors } } = useForm<CategoryForm>({
+    const { register, handleSubmit, setError, formState: { errors } } = useForm<TypeForm>({
         defaultValues: initialValues
     })
 
@@ -25,14 +25,14 @@ export const CategoryAddForm = () => {
 
 
     const { mutate, isPending } = useMutation({
-        mutationFn: registerCategory,
+        mutationFn: registerType,
         onError: (error: GeneralError) => {
             // toast.error(error.message)
 
             // Error de campo
             if (error.type === 'FIELD_ERROR') {
                 Object.entries(error.fields).forEach(([field, message]) => {
-                    setError(field as keyof CategoryForm, {
+                    setError(field as keyof TypeForm, {
                         type: 'server',
                         message: message as string,
                     })
@@ -50,15 +50,16 @@ export const CategoryAddForm = () => {
         },
         onSuccess: async (data) => {
             toast.success(data)
-            navigate('/products/categories')
+            navigate('/products/types')
         }
     })
 
     if (isPending) return <TextMessage text='Espere...' align='left' color='black' />
 
+
     return (
         <>
-            <TitleContainer title="Añadir nueva categoria">
+            <TitleContainer title="Añadir nuevo tipo">
                 <BaseForm
                     onSubmit={handleSubmit((data) => mutate(data))}
                     inputs={
@@ -66,7 +67,7 @@ export const CategoryAddForm = () => {
                             <InputText
                                 id="name"
                                 label="Nombre"
-                                placeholder="Nombre de la categoria"
+                                placeholder="Nombre del tipo"
                                 type="text"
                                 errorMessage={errors.name}
                                 functionEnabled={register('name')} />
@@ -75,8 +76,8 @@ export const CategoryAddForm = () => {
                     }
                     buttons={
                         <>
-                            <Button size="large" text="Añadir categoria" type="submit" color="green" />
-                            <Button size="large" text="Cancelar" type="link" color="gray" to="/products/categories" />
+                            <Button size="large" text="Añadir tipo" type="submit" color="green" />
+                            <Button size="large" text="Cancelar" type="link" color="gray" to="/products/types" />
                         </>
                     }
                 />

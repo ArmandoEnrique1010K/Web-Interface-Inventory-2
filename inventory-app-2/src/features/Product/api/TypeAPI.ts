@@ -1,11 +1,11 @@
-import { api } from "@/lib/axiosConfig"
-import type { CategoryForm } from "../types"
-import type { DataResponse, GeneralResponse } from "types"
-import { handleApiError } from "@/utils/handleApiError"
+import type { DataResponse, GeneralResponse } from "@/types/index";
+import type { TypeForm } from "../types";
+import { api } from "@/lib/axiosConfig";
+import { handleApiError } from "@/utils/handleApiError";
 
-export async function registerCategory(formData: CategoryForm) {
+export async function registerType(formData: TypeForm) {
     try {
-        const url = `/categories`
+        const url = `/types`
         const { data } = await api.post<GeneralResponse>(url, formData)
         if (data.type === 'success') {
             return data.message
@@ -15,9 +15,9 @@ export async function registerCategory(formData: CategoryForm) {
     }
 }
 
-export async function listAllCategories() {
+export async function listAllTypes() {
     try {
-        const url = `/categories`
+        const url = `/types`
         const { data } = await api.get<DataResponse>(url)
         return data.data;
     } catch (error) {
@@ -25,9 +25,9 @@ export async function listAllCategories() {
     }
 }
 
-export async function getCategory(id: string) {
+export async function getType(id: string) {
     try {
-        const url = `/categories/${id}`
+        const url = `/types/${id}`
         const { data } = await api.get<DataResponse>(url)
         return data.data;
     } catch (error) {
@@ -35,14 +35,14 @@ export async function getCategory(id: string) {
     }
 }
 
-type UpdateCategoryPayload = {
-    categoryId: string;
-    formData: CategoryForm;
+type UpdateTypePayload = {
+    typeId: string;
+    formData: TypeForm;
 }
 
-export async function updateCategory({ categoryId, formData }: UpdateCategoryPayload) {
+export async function updateType({ typeId, formData }: UpdateTypePayload) {
     try {
-        const url = `/categories/${categoryId}`
+        const url = `/types/${typeId}`
         const { data } = await api.put<GeneralResponse>(url, formData)
         if (data.type === 'success') {
             return data.message

@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form'
 import { validateUserToken } from '../api/AuthAPI'
 import { toast } from 'sonner'
 import { InputText } from '@/ui/InputText'
-import { Button } from '@/ui/Button'
 import { useDispatch, useSelector } from 'react-redux'
 import type { RootState } from '@/store/store'
 import { updateSecretToken } from '@/reducers/authSlice'
@@ -16,7 +15,6 @@ export const ValidateUserTokenForm = () => {
     const secretToken = useSelector((state: RootState) => state.auth.secretToken)
 
     const initialValues: AuthValidateUserTokenForm = {
-        requestId: secretToken,
         value: '',
     }
 
@@ -29,7 +27,10 @@ export const ValidateUserTokenForm = () => {
     const dispatch = useDispatch()
 
     const { mutate } = useMutation({
-        mutationFn: validateUserToken,
+        mutationFn: (data: AuthValidateUserTokenForm) => validateUserToken({
+            requestId: secretToken,
+            value: data.value
+        }),
         onError: (error: GeneralError) => {
             if (error.type === 'FIELD_ERROR') {
                 Object.entries(error.fields).forEach(([field, message]) => {
@@ -63,15 +64,16 @@ export const ValidateUserTokenForm = () => {
             title="Introduce el token"
             onSubmit={handleSubmit((data) => mutate(data))}
             helpText='Introduce el token de 6 digitos que se envio a tu correo electrónico, para reestablecer tu contraseña.'
-            children={
+            inputs={
                 <>
-                    <InputText
+                    {/* //* NO SE PERMITE EL USO DE INPUT DE TIPO HIDDEN */}
+                    {/* <InputText
                         id="requestId"
                         type="hidden"
                         errorMessage={errors.requestId}
                         defaultValue={secretToken}
                         functionEnabled={register('requestId')}
-                    />
+                    /> */}
 
                     {/* TODO: EN ALGUNA FUTURA ACTUALIZACION, SE PODRIA UTILIZAR CHACKRA UI PARA LIMITAR A 6 DIGITOS */}
                     <InputText
@@ -82,9 +84,9 @@ export const ValidateUserTokenForm = () => {
                         errorMessage={errors.value}
                         functionEnabled={register('value')} />
 
-                    <Button size="large" text="Validar token" type="submit" aditionalStyles="mt-4 w-full bg-green-800 hover:bg-green-700" />
                 </>
             }
+            buttonText="Validar token"
             secondaryLink={{
                 text: 'Necesitas un nuevo token de 6 digitos, ',
                 to: '/restore-password',

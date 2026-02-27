@@ -5,7 +5,6 @@ import { useMutation } from '@tanstack/react-query'
 import { forgotUserPassword } from '../api/AuthAPI'
 import { toast } from 'sonner'
 import { InputText } from '@/ui/InputText'
-import { Button } from '@/ui/Button'
 import { useDispatch } from 'react-redux'
 import { updateSecretToken } from '@/reducers/authSlice'
 import { AuthFormContainer } from '@/features/Auth/views/AuthFormContainer'
@@ -25,7 +24,7 @@ export const ForgotUserPasswordForm = () => {
 
     const dispatch = useDispatch()
 
-    const { mutate } = useMutation({
+    const { mutate, isPending } = useMutation({
         mutationFn: forgotUserPassword,
         onError: (error: GeneralError) => {
             if (error.type === 'FIELD_ERROR') {
@@ -48,6 +47,9 @@ export const ForgotUserPasswordForm = () => {
         onSuccess: (data) => {
             toast.success(data?.data)
             dispatch(updateSecretToken({ secretToken: data!.requestId }))
+            // requestAnimationFrame(() => {
+            //     navigate('/validate-token')
+            // })
             navigate('/validate-token')
         }
     })
@@ -56,8 +58,9 @@ export const ForgotUserPasswordForm = () => {
         <AuthFormContainer
             title="Reestablecer contraseña"
             onSubmit={handleSubmit((data) => mutate(data))}
+            isPending={isPending}
             helpText='Introduce tu correo electrónico y te enviaremos un token de 6 digitos para que puedas reestablecer tu contraseña.'
-            children={
+            inputs={
                 <>
                     <InputText
                         id="email"
@@ -66,16 +69,16 @@ export const ForgotUserPasswordForm = () => {
                         type="email"
                         errorMessage={errors.email}
                         functionEnabled={register('email')} />
-
-
-                    <Button size="large" text="Enviar un token" type="submit" aditionalStyles="mt-4 w-full bg-green-800 hover:bg-green-700" />
                 </>
             }
-            secondaryLink={{
-                text: 'Si recuerdas tu contraseña anterior, ',
-                to: '/',
-                linkText: 'Haz clic aqui para iniciar sesión'
-            }}
+            buttonText='Enviar un token'
+            secondaryLink={
+                {
+                    text: 'Si recuerdas tu contraseña anterior, ',
+                    to: '/',
+                    linkText: 'Haz clic aqui para iniciar sesión'
+                }
+            }
         />
     )
 }

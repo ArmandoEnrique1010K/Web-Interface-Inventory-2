@@ -17,6 +17,9 @@ import { CategoryAddForm } from '@/features/Product/components/category/Category
 import { CategoryList } from '@/features/Product/components/category/CategoryList'
 import { CategoryEditLoader } from '@/features/Product/components/category/CategoryEditLoader'
 import { NavbarContainer } from '@/components/NavbarContainer'
+import { TypeList } from '@/features/Product/components/type/TypeList'
+import { TypeAddForm } from '@/features/Product/components/type/TypeAddForm'
+import { TypeEditLoader } from '@/features/Product/components/type/TypeEditLoader'
 
 const productItems: MenuItem[] = [
     {
@@ -89,14 +92,14 @@ export const GeneralRouter = () => {
                             <Route path="categories" element={<CategoryList />} />
                             <Route path="categories/new" element={<CategoryAddForm />} />
                             <Route path="categories/edit/:id" element={<CategoryEditLoader />} />
+                            <Route path="types" element={<TypeList />} />
+                            <Route path="types/new" element={<TypeAddForm />} />
+                            <Route path="types/edit/:id" element={<TypeEditLoader />} />
+
 
                             <Route path="models" element={<h1>Pagina de lista de modelos</h1>} />
                             <Route path="models/new" element={<h1>Formulario de nuevo modelo</h1>} />
                             <Route path="models/edit/:id" element={<h1>Formulario de editar modelo</h1>} />
-
-                            <Route path="types" element={<h1>Pagina de lista de tipos</h1>} />
-                            <Route path="types/new" element={<h1>Formulario de nuevo tipo</h1>} />
-                            <Route path="types/edit/:id" element={<h1>Formulario de editar tipo</h1>} />
 
 
                         </Route>

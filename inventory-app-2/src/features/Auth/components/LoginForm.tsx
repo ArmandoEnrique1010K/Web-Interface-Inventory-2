@@ -5,7 +5,6 @@ import { useMutation } from "@tanstack/react-query"
 import { currentSession, login } from "../api/AuthAPI"
 import { toast } from "sonner"
 import { InputText } from "@/ui/InputText"
-import { Button } from "@/ui/Button"
 import { AuthFormContainer } from "@/features/Auth/views/AuthFormContainer"
 import { useDispatch } from "react-redux"
 import { setAuthenticated, setUserRoles } from '@/reducers/authSlice';
@@ -26,7 +25,7 @@ export const LoginForm = () => {
 
     const dispatch = useDispatch();
 
-    const { mutate } = useMutation({
+    const { mutate, isPending } = useMutation({
         mutationFn: login,
         onError: (error: GeneralError) => {
             // toast.error(error.message)
@@ -63,7 +62,8 @@ export const LoginForm = () => {
         <AuthFormContainer
             title="Inicio de sesión"
             onSubmit={handleSubmit((data) => mutate(data))}
-            children={
+            isPending={isPending}
+            inputs={
                 <>
                     <InputText
                         id="email"
@@ -72,7 +72,6 @@ export const LoginForm = () => {
                         type="email"
                         errorMessage={errors.email}
                         functionEnabled={register('email')} />
-
                     <InputText
                         id="password"
                         label="Contraseña"
@@ -80,10 +79,9 @@ export const LoginForm = () => {
                         type="password"
                         errorMessage={errors.password}
                         functionEnabled={register('password')} />
-
-                    <Button size="large" text="Iniciar sesión" type="submit" aditionalStyles="mt-4 w-full bg-green-800 hover:bg-green-700" />
                 </>
             }
+            buttonText="Iniciar sesión"
             secondaryLink={{
                 text: '¿Olvidastes tu contraseña?, ',
                 to: '/restore-password',

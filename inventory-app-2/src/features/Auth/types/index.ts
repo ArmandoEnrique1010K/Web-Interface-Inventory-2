@@ -14,5 +14,5 @@ type Auth = z.infer<typeof loginSchema>
 
 export type AuthLoginForm = Pick<Auth, "email" | "password">;
 export type AuthForgotUserPasswordForm = Pick<Auth, "email">;
-export type AuthValidateUserTokenForm = Pick<Auth, "value" | "requestId">;
-export type AuthUpdateUserPasswordForm = Pick<Auth, "newPassword" | "confirmNewPassword" | "resetToken">;
+export type AuthValidateUserTokenForm = Pick<Auth, "value">;
+export type AuthUpdateUserPasswordForm = Pick<Auth, "newPassword" | "confirmNewPassword">;

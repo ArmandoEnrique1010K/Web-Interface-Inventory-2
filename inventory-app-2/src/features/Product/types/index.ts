@@ -28,6 +28,7 @@ export const productSchema = z.object({
 })
 
 export const typeSchema = z.object({
+    id: z.number(),
     name: z.string(),
 })
 
@@ -41,4 +42,6 @@ export type CategoryForm = Pick<Category, "name">;
 export type ModelForm = Model;
 export type ProductCreateForm = Product;
 export type ProductUpdateForm = Pick<Product, "name" | "length" | "width" | "height" | "categoryId" | "typeId">;
-export type TypeForm = Type;
+
+export type TypeForm = Pick<Type, "name">;
+export type TypeItem = Type

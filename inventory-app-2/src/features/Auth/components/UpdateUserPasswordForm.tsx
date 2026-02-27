@@ -5,7 +5,6 @@ import { updateUserPassword } from '../api/AuthAPI'
 import { toast } from 'sonner'
 import { useNavigate } from 'react-router-dom'
 import { InputText } from '@/ui/InputText'
-import { Button } from '@/ui/Button'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateSecretToken } from '@/reducers/authSlice'
 import type { RootState } from '@/store/store'
@@ -16,7 +15,6 @@ export const UpdateUserPasswordForm = () => {
     const secretToken = useSelector((state: RootState) => state.auth.secretToken)
 
     const initialValues: AuthUpdateUserPasswordForm = {
-        resetToken: secretToken,
         newPassword: '',
         confirmNewPassword: ''
     }
@@ -31,7 +29,11 @@ export const UpdateUserPasswordForm = () => {
 
 
     const { mutate } = useMutation({
-        mutationFn: updateUserPassword,
+        mutationFn: (data: AuthUpdateUserPasswordForm) => updateUserPassword({
+            resetToken: secretToken,
+            newPassword: data.newPassword,
+            confirmNewPassword: data.confirmNewPassword
+        }),
         onError: (error: GeneralError) => {
 
             // Error de campo
@@ -66,14 +68,8 @@ export const UpdateUserPasswordForm = () => {
         <AuthFormContainer
             title="Introduce tu nueva contraseña"
             onSubmit={handleSubmit((data) => mutate(data))}
-            children={
+            inputs={
                 <>
-                    <InputText
-                        id="resetToken"
-                        type="hidden"
-                        errorMessage={errors.resetToken}
-                        functionEnabled={register('resetToken')} />
-
                     <InputText
                         id="newPassword"
                         label="Nueva contraseña"
@@ -88,11 +84,9 @@ export const UpdateUserPasswordForm = () => {
                         type="password"
                         errorMessage={errors.confirmNewPassword}
                         functionEnabled={register('confirmNewPassword')} />
-
-
-                    <Button size="large" text="Cambiar contraseña" type="submit" aditionalStyles="mt-4 w-full bg-green-800 hover:bg-green-700" />
                 </>
             }
+            buttonText='Cambiar contraseña'
             secondaryLink={{
                 text: 'Necesitas un nuevo token de 6 digitos, ',
                 to: '/restore-password',

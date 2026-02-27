@@ -3,9 +3,11 @@ import { Sidebar } from "../views/Sidebar"
 
 export const DashboardLayout = () => {
     return (
-        <div className="flex sm:flex-row flex-col bg-gray-300 h-screen flex-1">
+        <div className="flex flex-col sm:flex-row bg-gray-300 min-h-screen">
             <Sidebar />
-            <Outlet />
+            <main className="flex-1 overflow-y-auto">
+                <Outlet />
+            </main>
         </div>
     )
 }

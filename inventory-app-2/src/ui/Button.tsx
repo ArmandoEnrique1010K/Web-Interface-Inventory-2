@@ -7,10 +7,11 @@ type Props = {
     to?: string
     color?: 'blue' | 'green' | 'gray'
     isLarge?: boolean,
-    aditionalStyles?: string
+    aditionalStyles?: string,
+    disabled?: boolean
 }
 
-export const Button = ({ text, type, aditionalStyles, to, size, isLarge, color }: Props) => {
+export const Button = ({ text, type, aditionalStyles, to, size, isLarge, color, disabled }: Props) => {
 
     const stylesColor = () => {
         if (color === 'blue') {
@@ -34,11 +35,14 @@ export const Button = ({ text, type, aditionalStyles, to, size, isLarge, color }
                         text-white
                         cursor-pointer transition-colors
                         font-sans 
-                        ${size === 'small' ? 'rounded-md text-md px-3 py-2' : 'font-bold rounded-lg text-lg px-5 py-2.5'}
+                        ${size === 'small' ? 'rounded-md text-md px-3 py-2' : 'font-bold rounded-lg text-lg px-5 py-2'}
                         ${isLarge ? 'w-full' : ''}
                         ${stylesColor()}
-                        ${aditionalStyles}`
-                    }>
+                        ${aditionalStyles}
+                        ${disabled ? 'opacity-50 hover:cursor-not-allowed' : ''}
+                    `}
+                        disabled={disabled}
+                    >
                         {text}
                     </button>
                 )

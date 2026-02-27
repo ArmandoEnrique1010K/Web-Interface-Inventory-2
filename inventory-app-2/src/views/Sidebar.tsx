@@ -69,7 +69,7 @@ export const Sidebar = () => {
                     <a className="menu-item" href="/">Home</a>
                 </Menu>
             </div>
-            <div className="h-screen bg-gray-800 text-white hidden sm:flex flex-col justify-between">
+            <div className="min-h-screen bg-gray-800 text-white hidden sm:flex flex-col justify-between">
                 <div className="h-max">
                     <div className="flex flex-col items-center my-4">
                         <img src="/inventory.png" className="bg-white rounded-full p-2" alt="Logo" />

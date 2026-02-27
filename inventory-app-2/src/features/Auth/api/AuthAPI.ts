@@ -84,10 +84,13 @@ export async function forgotUserPassword(formData: AuthForgotUserPasswordForm) {
   }
 }
 
-export async function validateUserToken(formData: AuthValidateUserTokenForm) {
+export async function validateUserToken(payload: {
+  requestId: string,
+  value: AuthValidateUserTokenForm['value']
+}) {
   try {
     const url = `/auth/validate-token`
-    const { data } = await api.post<GeneralResponse>(url, formData)
+    const { data } = await api.post<GeneralResponse>(url, payload)
 
     if (data.type === 'success') {
       return {
@@ -100,10 +103,14 @@ export async function validateUserToken(formData: AuthValidateUserTokenForm) {
   }
 }
 
-export async function updateUserPassword(formData: AuthUpdateUserPasswordForm) {
+export async function updateUserPassword(payload: {
+  resetToken: string,
+  newPassword: AuthUpdateUserPasswordForm['newPassword'],
+  confirmNewPassword: AuthUpdateUserPasswordForm['confirmNewPassword']
+}) {
   try {
     const url = `/auth/change-password`
-    const { data } = await api.put<GeneralResponse>(url, formData)
+    const { data } = await api.put<GeneralResponse>(url, payload)
 
     if (data.type === 'success') {
       return data.message
