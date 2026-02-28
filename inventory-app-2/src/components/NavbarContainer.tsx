@@ -12,7 +12,7 @@ export const NavbarContainer = ({ menuItems, children }: Props) => {
 
     const styleToCurrentPath = (to: string) => {
         // Previamente se utilizo (location.pathname === to)
-        if (location.pathname.includes(to) && (to !== '/products' || location.pathname === '/products')) {
+        if (location.pathname.includes(to) && (to !== '/products' || location.pathname === '/products' || location.pathname === '/products/new')) {
             return 'bg-blue-700';
         }
         return 'bg-gray-500';

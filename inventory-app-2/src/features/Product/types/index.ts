@@ -13,10 +13,11 @@ export const modelSchema = z.object({
 })
 
 export const productSchema = z.object({
+    id: z.number(),
     name: z.string(),
-    length: z.number(),
-    width: z.number(),
-    height: z.number(),
+    length: z.string(),
+    width: z.string(),
+    height: z.string(),
 
     // Modelo
     modelName: z.string(),
@@ -40,7 +41,7 @@ type Type = z.infer<typeof typeSchema>
 export type CategoryItem = Category;
 export type CategoryForm = Pick<Category, "name">;
 export type ModelForm = Model;
-export type ProductCreateForm = Product;
+export type ProductCreateForm = Pick<Product, 'name' | 'length' | 'width' | 'height' | 'modelName' | 'modelImageUrl' | 'modelEntryDate' | 'modelCaducityDate' | 'categoryId' | 'typeId'>;
 export type ProductUpdateForm = Pick<Product, "name" | "length" | "width" | "height" | "categoryId" | "typeId">;
 
 export type TypeForm = Pick<Type, "name">;

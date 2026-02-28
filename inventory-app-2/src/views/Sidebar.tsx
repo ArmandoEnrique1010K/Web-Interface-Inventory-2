@@ -9,15 +9,16 @@ import { Link, useLocation, useNavigate } from "react-router-dom"
 import { toast } from "sonner";
 import { HomeIcon, ClipboardIcon, NewspaperIcon, ArchiveBoxIcon, ArrowsRightLeftIcon, UserGroupIcon, MapPinIcon, UserCircleIcon, ArrowRightStartOnRectangleIcon } from "@heroicons/react/24/solid"
 import { slide as Menu } from 'react-burger-menu'
+import { DocumentTextIcon } from "@heroicons/react/24/outline";
 
 const menuItems: MenuItem[] = [
-    { label: 'Dashboard', icon: <HomeIcon className="w-6 h-6" />, to: '/' },
-    { label: 'Ordenes', icon: <ClipboardIcon className="w-6 h-6" />, to: '/orders' },
-    { label: 'Productos', icon: <NewspaperIcon className="w-6 h-6" />, to: '/products' },
-    { label: 'Lotes de stock', icon: <ArchiveBoxIcon className="w-6 h-6" />, to: '/stock' },
-    { label: 'Movimientos', icon: <ArrowsRightLeftIcon className="w-6 h-6" />, to: '/movements' },
-    { label: 'Usuarios', icon: <UserGroupIcon className="w-6 h-6" />, to: '/users' },
-    { label: 'Ubicaciones', icon: <MapPinIcon className="w-6 h-6" />, to: '/locations' },
+    { label: 'Dashboard', icon: <HomeIcon className="size-6" />, to: '/' },
+    { label: 'Ordenes', icon: <ClipboardIcon className="size-6" />, to: '/orders' },
+    { label: 'Productos', icon: <NewspaperIcon className="size-6" />, to: '/products' },
+    { label: 'Lotes de stock', icon: <ArchiveBoxIcon className="size-6" />, to: '/stock' },
+    { label: 'Movimientos', icon: <ArrowsRightLeftIcon className="size-6" />, to: '/movements' },
+    { label: 'Usuarios', icon: <UserGroupIcon className="size-6" />, to: '/users' },
+    { label: 'Ubicaciones', icon: <MapPinIcon className="size-6" />, to: '/locations' },
 ]
 
 
@@ -91,8 +92,13 @@ export const Sidebar = () => {
                     <hr className="text-gray-300" />
 
                     <div className="flex flex-col justify-center items-center space-y-2 mt-2">
+                        <Link to={"/credits"} className={`flex flex-row items-center justify-center gap-2 w-full ${styleToCurrentPath("/credits")} hover:bg-gray-600 `}>
+                            <div><DocumentTextIcon className="size-6" /></div>
+                            <span className="py-1">Creditos del autor</span>
+                        </Link>
+
                         <Link to={"/profile"} className={`flex flex-row items-center justify-center gap-2 w-full ${styleToCurrentPath("/profile")} hover:bg-gray-600 `}>
-                            <div><UserCircleIcon className="w-6 h-6" /></div>
+                            <div><UserCircleIcon className="size-6" /></div>
                             <span className="py-1">Perfil</span>
                         </Link>
 
@@ -103,7 +109,7 @@ export const Sidebar = () => {
                                 mutate();
                             }}>
                             <button type="submit" className="flex flex-row items-center justify-center gap-2 w-full bg-gray-500 hover:bg-gray-600 hover:cursor-pointer">
-                                <div><ArrowRightStartOnRectangleIcon className="w-6 h-6" /></div>
+                                <div><ArrowRightStartOnRectangleIcon className="size-6" /></div>
                                 <span className="py-1">Cerrar sesión</span>
                             </button>
                         </form>

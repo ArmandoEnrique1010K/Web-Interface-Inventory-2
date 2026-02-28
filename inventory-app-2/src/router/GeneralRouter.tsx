@@ -20,6 +20,8 @@ import { NavbarContainer } from '@/components/NavbarContainer'
 import { TypeList } from '@/features/Product/components/type/TypeList'
 import { TypeAddForm } from '@/features/Product/components/type/TypeAddForm'
 import { TypeEditLoader } from '@/features/Product/components/type/TypeEditLoader'
+import { ProductAddForm } from '@/features/Product/components/product/ProductAddForm'
+import { ProductList } from '@/features/Product/components/product/ProductList'
 
 const productItems: MenuItem[] = [
     {
@@ -84,8 +86,8 @@ export const GeneralRouter = () => {
                                 <Outlet />
                             </NavbarContainer>
                         }>
-                            <Route index element={<h1>Pagina de lista de productos</h1>} />
-                            <Route path="new" element={<h1>Formulario de nuevo producto</h1>} />
+                            <Route index element={<ProductList />} />
+                            <Route path="new" element={<ProductAddForm />} />
                             <Route path="edit/:id" element={<h1>Formulario de editar producto</h1>} />
 
                             {/* TODO: EN EL BACKEND, CREAR UN ENDPOINT PARA LISTAR PRODUCTOS Y NO MODELOS DE PRODUCTOS */}
@@ -116,6 +118,7 @@ export const GeneralRouter = () => {
                         </Route>
 
 
+                        <Route path="/credits" element={<h1>Creditos del autor</h1>} />
 
                         <Route path="*" element={<Navigate to="/" replace />} />
                     </Route>

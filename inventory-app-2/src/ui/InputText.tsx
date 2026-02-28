@@ -42,7 +42,7 @@ export const InputText = ({ id, label, placeholder, type, defaultValue, errorMes
                     {
                         type === "password" && (
                             <button className="p-2 border border-gray-700 rounded bg-gray-100 hover:cursor-pointer hover:bg-gray-200" type="button" onClick={() => setShowPassword(!showPassword)}>
-                                {showPassword ? <EyeSlashIcon className="w-6 h-6" /> : <EyeIcon className="w-6 h-6" />}
+                                {showPassword ? <EyeSlashIcon className="size-6" /> : <EyeIcon className="size-6" />}
                             </button>
                         )
                     }
@@ -53,8 +53,6 @@ export const InputText = ({ id, label, placeholder, type, defaultValue, errorMes
                     </p>
                 </div>
             </div>
-
-
         </div>
     )
 }

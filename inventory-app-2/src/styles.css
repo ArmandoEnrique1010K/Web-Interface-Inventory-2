@@ -19,3 +19,18 @@
 :root {
     --font-sans: "Zalando Sans";
 }
+
+/* ESTILOS DE REACT DATEPICKER */
+.react-datepicker {
+    margin: auto;
+    width: 100%;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.react-datepicker__day--today {
+    background-color: red;
+}
