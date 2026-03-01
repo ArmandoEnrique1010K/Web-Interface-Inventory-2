@@ -67,6 +67,7 @@ export const ForgotUserPasswordForm = () => {
                         label="Correo"
                         placeholder="Introduce tu correo actual"
                         type="email"
+                        hasErrors={true}
                         errorMessage={errors.email}
                         functionEnabled={register('email')} />
                 </>

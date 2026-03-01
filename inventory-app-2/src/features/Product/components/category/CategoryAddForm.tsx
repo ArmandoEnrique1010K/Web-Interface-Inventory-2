@@ -68,6 +68,7 @@ export const CategoryAddForm = () => {
                                 label="Nombre"
                                 placeholder="Nombre de la categoria"
                                 type="text"
+                                hasErrors={true}
                                 errorMessage={errors.name}
                                 functionEnabled={register('name')} />
 

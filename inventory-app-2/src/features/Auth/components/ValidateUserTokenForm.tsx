@@ -79,6 +79,7 @@ export const ValidateUserTokenForm = () => {
                     <InputText
                         id="value"
                         label="Token"
+                        hasErrors={true}
                         placeholder="Introduce el token de 6 digitos"
                         type="number"
                         errorMessage={errors.value}

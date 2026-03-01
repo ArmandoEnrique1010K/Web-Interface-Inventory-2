@@ -70,6 +70,7 @@ export const LoginForm = () => {
                         label="Correo"
                         placeholder="Correo del usuario"
                         type="email"
+                        hasErrors={true} // Aunque no hay errores, se tiene que mostrar como si hubiera mensajes de errores
                         errorMessage={errors.email}
                         functionEnabled={register('email')} />
                     <InputText
@@ -77,6 +78,7 @@ export const LoginForm = () => {
                         label="Contraseña"
                         placeholder="Contraseña del usuario"
                         type="password"
+                        hasErrors={true}
                         errorMessage={errors.password}
                         functionEnabled={register('password')} />
                 </>

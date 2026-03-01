@@ -108,6 +108,7 @@ export const ProductEditForm = ({ data, productId }: Props) => {
                                 label="Nombre"
                                 placeholder="Nombre de la categoria"
                                 type="text"
+                                hasErrors={true}
                                 errorMessage={errors.name}
                                 functionEnabled={register('name')} />
 
@@ -117,6 +118,7 @@ export const ProductEditForm = ({ data, productId }: Props) => {
                                 label="Largo (cm.)"
                                 placeholder="Medida del largo del producto en cm"
                                 type="number"
+                                hasErrors={true}
                                 errorMessage={errors.length}
                                 functionEnabled={register('length')} />
 
@@ -125,6 +127,7 @@ export const ProductEditForm = ({ data, productId }: Props) => {
                                 label="Ancho (cm.)"
                                 placeholder="Medida del ancho del producto en cm"
                                 type="number"
+                                hasErrors={true}
                                 errorMessage={errors.width}
                                 functionEnabled={register('width')} />
 
@@ -133,6 +136,7 @@ export const ProductEditForm = ({ data, productId }: Props) => {
                                 label="Alto (cm.)"
                                 placeholder="Medida de la altura del producto en cm"
                                 type="number"
+                                hasErrors={true}
                                 errorMessage={errors.height}
                                 functionEnabled={register('height')} />
                             <SelectOption
@@ -141,7 +145,9 @@ export const ProductEditForm = ({ data, productId }: Props) => {
                                 errorMessage={errors.categoryId}
                                 functionEnabled={register('categoryId')}
                                 options={categories}
-                                value={data.categoryId}
+                                hasErrors={true}
+                                nullOption={true}
+                                textInNullOption="Seleccione una categoria"
                             />
 
                             <SelectOption
@@ -150,7 +156,9 @@ export const ProductEditForm = ({ data, productId }: Props) => {
                                 errorMessage={errors.typeId}
                                 functionEnabled={register('typeId')}
                                 options={types}
-                                value={data.typeId}
+                                hasErrors={true}
+                                nullOption={true}
+                                textInNullOption="Seleccione un tipo"
                             />
 
                         </>

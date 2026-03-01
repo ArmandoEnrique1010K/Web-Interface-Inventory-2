@@ -84,6 +84,7 @@ export const TypeEditForm = ({ data, typeId }: Props) => {
                             label="Nombre"
                             placeholder="Nombre del tipo"
                             type="text"
+                            hasErrors={true}
                             errorMessage={errors.name}
                             functionEnabled={register('name')} />
 

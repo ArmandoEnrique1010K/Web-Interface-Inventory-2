@@ -6,50 +6,61 @@ import { TableHeaderContainer } from '@/components/TableHeaderContainer'
 import type { CategoryItem, ProductItem, TypeItem } from '../../types'
 import { TableRowContainer } from '@/components/TableRowContainer'
 import { BaseTableCell } from '@/components/BaseTableCell'
-import { useState } from 'react'
 import { listAllCategories } from '../../api/CategoryAPI'
 import { listAllTypes } from '../../api/TypeAPI'
 import { ProductChangeStatus } from './ProductChangeStatus'
-
+import { useSearchParams } from 'react-router-dom'
+import { useEffectEvent, useState } from 'react'
+import { InputText } from '@/ui/InputText'
+import { SelectOption } from '@/ui/SelectOption'
+import { Paginator } from './Paginator'
 export const ProductList = () => {
-    const [inputValue, setInputValue] = useState('')
-    const [categoryId, setCategoryId] = useState<string | undefined>()
-    const [typeId, setTypeId] = useState<string | undefined>()
-    const [status, setStatus] = useState<boolean | undefined>()
 
     // TODO: PENDIENTE EL MANEJO DE PAGINACIÓN
-    const [page] = useState(0)
+    const [searchParams, setSearchParams] = useSearchParams()
+    const page = Number(searchParams.get('page') ?? 0)
+    const name = searchParams.get('name') ?? ''
+    const categoryId = searchParams.get('categoryId') ?? undefined
+    const typeId = searchParams.get('typeId') ?? undefined
 
-    const [searchValue, setSearchValue] = useState<{
-        name: string;
-        categoryId: string | undefined;
-        typeId: string | undefined;
-        status: boolean | undefined;
-        page: number;
-    }>({
-        name: '',
-        categoryId: undefined,
-        typeId: undefined,
-        status: undefined,
-        page: 0,
+    const statusParam = searchParams.get('status')
+    const status =
+        statusParam === null
+            ? undefined
+            : statusParam === 'true'
+
+    const [form, setForm] = useState({
+        page: page,
+        name: name,
+        categoryId: categoryId ?? '',
+        typeId: typeId ?? '',
+        status: status === undefined ? '' : String(status),
+    })
+
+
+    // En React 19 se utiliza el hook useEffectEvent en lugar del clasico useEffect
+
+    useEffectEvent(() => {
+        setForm({
+            page,
+            name,
+            categoryId: categoryId ?? '',
+            typeId: typeId ?? '',
+            status: status === undefined ? '' : String(status),
+        })
     })
 
 
     const { data, isLoading, isError } = useQuery({
-        queryKey: ['list-products', searchValue],
+        queryKey: ['list-products', { name, categoryId, typeId, status, page }],
 
-        // TODO: INVESTIGAR SOBRE LOS QUERYPARAMS
         queryFn: () => listAllProducts({
             page: page,
-            name: searchValue.name,
-            categoryId: searchValue.categoryId,
-            typeId: searchValue.typeId,
-            status: searchValue.status
+            name: name,
+            categoryId: categoryId,
+            typeId: typeId,
+            status: status
         }),
-
-        // TODO: DESHABILITA EL FUNCIONAMIENTO SI NO HAY PARAMETROS
-        // enabled: !!searchValue
-
     })
 
     const content = data?.content || []
@@ -75,18 +86,21 @@ export const ProductList = () => {
     })) || []
 
     const generateCaracterist = (product: ProductItem) => {
-        // TODO: CORREGIR EL TIPADO
-        if (product.categoryId == '1') {
+        if (+product.categoryId === 1) {
             return `${product.typeName}`
         }
 
-        if (product.categoryId != '1') {
+        if (+product.categoryId !== 1) {
             return `${product.typeName} de ${product.categoryName}`
         }
 
     }
 
-    console.log(status)
+    const statusOptions = [
+        { value: '', label: 'Todos los estados' },
+        { value: 'true', label: 'Activos' },
+        { value: 'false', label: 'Inactivos' },
+    ]
 
     return (
         <TitleContainer
@@ -100,33 +114,89 @@ export const ProductList = () => {
                     color="blue"
                 />
             }
-            // TODO: CORREGIR LOS PARAMETROS
             searchParams={
                 <form
                     onSubmit={(e) => {
                         e.preventDefault()
-                        setSearchValue({
-                            name: inputValue,
-                            categoryId: categoryId || undefined,
-                            typeId: typeId || undefined,
-                            status: status,
-                            page: page
-                        })
+
+                        const params = new URLSearchParams()
+
+                        if (form.name) params.set('name', form.name)
+                        if (form.categoryId) params.set('categoryId', form.categoryId)
+                        if (form.typeId) params.set('typeId', form.typeId)
+                        if (form.status !== '') params.set('status', form.status)
+
+                        if (form.page) params.set('page', form.page.toString())
+
+                        setSearchParams(params)
                     }}
                 >
-                    <input
+                    {/* <input
                         name="name"
                         type="text"
-                        value={inputValue}
+                        value={form.name}
                         placeholder="Buscar"
-                        onChange={(e) => setInputValue(e.target.value)}
+                        onChange={(e) =>
+                            setForm(prev => ({ ...prev, name: e.target.value }))
+                        }
+                    /> */}
+
+                    <InputText
+                        id='name'
+                        name='name'
+                        label='Nombre del producto:'
+                        hasErrors={false}
+                        placeholder='Buscar productos por nombre'
+                        type='text'
+                        onChange={(e) =>
+                            setForm(prev => ({ ...prev, name: e.target.value }))
+                        }
                     />
 
+                    <div className='flex flex-row gap-4'>
+                        <SelectOption
+                            id='categoryId'
+                            name='categoryId'
+                            label='Categoría:'
+                            hasErrors={false}
+                            options={categories}
+                            onChange={(e) =>
+                                setForm(prev => ({ ...prev, categoryId: e.target.value }))
+                            }
+                            nullOption={true}
+                            textInNullOption="Todas las categorias"
+                        />
+                        <SelectOption
+                            id='typeId'
+                            name='typeId'
+                            label='Tipo:'
+                            hasErrors={false}
+                            options={types}
+                            onChange={(e) =>
+                                setForm(prev => ({ ...prev, typeId: e.target.value }))
+                            }
+                            nullOption={true}
+                            textInNullOption="Todos los tipos"
+                        />
+                        <SelectOption
+                            id='status'
+                            name='status'
+                            label='Estado:'
+                            hasErrors={false}
+                            options={statusOptions}
+                            onChange={(e) =>
+                                setForm(prev => ({ ...prev, status: e.target.value }))
+                            }
+                            nullOption={false}
+                        />
 
-                    <select
+                    </div>
+                    {/* <select
                         name="categoryId"
-                        value={categoryId || ''}
-                        onChange={(e) => setCategoryId(e.target.value || undefined)}
+                        value={form.categoryId}
+                        onChange={(e) =>
+                            setForm(prev => ({ ...prev, categoryId: e.target.value }))
+                        }
                     >
                         <option value="">Seleccione una categoría</option>
 
@@ -135,12 +205,16 @@ export const ProductList = () => {
                                 {category.label}
                             </option>
                         ))}
-                    </select>
+                    </select> */}
 
-                    <select
+
+
+                    {/* <select
                         name="typeId"
-                        value={typeId || ''}
-                        onChange={(e) => setTypeId(e.target.value || undefined)}
+                        value={form.typeId}
+                        onChange={(e) =>
+                            setForm(prev => ({ ...prev, typeId: e.target.value }))
+                        }
                     >
                         <option value="" >
                             Seleccione un tipo
@@ -151,34 +225,26 @@ export const ProductList = () => {
                                 {type.label}
                             </option>
                         ))}
-                    </select>
+                    </select> */}
 
-                    Activos
 
-                    <select
+                    {/* <select
                         name="status"
-                        value={status === undefined ? "" : status ? "true" : "false"}
-                        onChange={(e) => {
-                            const value = e.target.value;
-                            if (value === "") {
-                                setStatus(undefined); // Sin filtro de estado
-                            } else if (value === "true") {
-                                setStatus(true); // true o false
-                            } else if (value === "false") {
-                                setStatus(false); // true o false
-                            }
-                        }}
+                        value={form.status}
+                        onChange={(e) =>
+                            setForm(prev => ({ ...prev, status: e.target.value }))
+                        }
                     >
                         <option value="">Todos los estados</option>
                         <option value="true">Activos</option>
                         <option value="false">Inactivos</option>
-                    </select>
+                    </select> */}
 
 
 
 
 
-                    <button type="submit">Filtrar</button>
+                    <Button text="Filtrar" type="submit" color='green' size='large' aditionalStyles='my-4' />
                 </form>}
         >
 
@@ -209,32 +275,35 @@ export const ProductList = () => {
                             } />
 
                             <BaseTableCell data={
-                                <Button
-                                    size="small"
-                                    text="Editar"
-                                    type="link"
-                                    to={`/products/edit/${product.id}`}
-                                    color="blue"
-                                />
+                                //* SOLAMENTE SI UN PRODUCTO ESTA ACTIVO, PUEDE SER EDITADO
+                                product.status === true ?
+                                    <Button
+                                        size="small"
+                                        text="Editar"
+                                        type="link"
+                                        to={`/products/edit/${product.id}`}
+                                        color="blue"
+                                    /> : 'No se puede editar'
                             } isCenter />
                         </TableRowContainer>
                     })
                 }
             </TableHeaderContainer>
-            <div>
-                {/* TODO: QUEDA PENDIENTE EL PAGINADOR */}
-                Pagina actual: {JSON.stringify(data?.page)}
-            </div>
 
-            <div>
-                Total de paginas: {JSON.stringify(data?.totalPages)}
-            </div>
-
-            <div>
-                Total de registros: {JSON.stringify(data?.totalElements)}
-            </div>
-
-
+            {
+                // TODO: PROBAR LA NAVEGACION ENTRE PÁGINAS
+                data && (
+                    <Paginator
+                        currentPage={data?.page}
+                        totalPages={data?.totalPages}
+                        totalElements={data?.totalElements}
+                        size={data?.size}
+                        isFirst={data?.first}
+                        isLast={data?.last}
+                        onPageChange={(page) => console.log(page)}
+                    />
+                )
+            }
         </TitleContainer>
 
 

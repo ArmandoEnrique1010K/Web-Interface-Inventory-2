@@ -69,6 +69,7 @@ export const TypeAddForm = () => {
                                 label="Nombre"
                                 placeholder="Nombre del tipo"
                                 type="text"
+                                hasErrors={true}
                                 errorMessage={errors.name}
                                 functionEnabled={register('name')} />
 

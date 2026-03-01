@@ -104,6 +104,7 @@ export const ProductAddForm = () => {
                                 label="Nombre"
                                 placeholder="Nombre del producto"
                                 type="text"
+                                hasErrors={true}
                                 errorMessage={errors.name}
                                 functionEnabled={register('name')} />
 
@@ -112,6 +113,7 @@ export const ProductAddForm = () => {
                                 label="Largo (cm.)"
                                 placeholder="Medida del largo del producto en cm"
                                 type="number"
+                                hasErrors={true}
                                 errorMessage={errors.length}
                                 functionEnabled={register('length')} />
 
@@ -120,6 +122,7 @@ export const ProductAddForm = () => {
                                 label="Ancho (cm.)"
                                 placeholder="Medida del ancho del producto en cm"
                                 type="number"
+                                hasErrors={true}
                                 errorMessage={errors.width}
                                 functionEnabled={register('width')} />
 
@@ -128,6 +131,7 @@ export const ProductAddForm = () => {
                                 label="Alto (cm.)"
                                 placeholder="Medida de la altura del producto en cm"
                                 type="number"
+                                hasErrors={true}
                                 errorMessage={errors.height}
                                 functionEnabled={register('height')} />
 
@@ -136,6 +140,7 @@ export const ProductAddForm = () => {
                                 label="Nombre del modelo"
                                 placeholder="Nombre del modelo"
                                 type="text"
+                                hasErrors={true}
                                 errorMessage={errors.modelName}
                                 functionEnabled={register('modelName')} />
 
@@ -145,6 +150,7 @@ export const ProductAddForm = () => {
                                 label="URL de la imagen"
                                 placeholder="URL de la imagen"
                                 type="text"
+                                hasErrors={true}
                                 errorMessage={errors.modelImageUrl}
                                 functionEnabled={register('modelImageUrl')} />
 
@@ -173,7 +179,10 @@ export const ProductAddForm = () => {
                                 errorMessage={errors.categoryId}
                                 functionEnabled={register('categoryId')}
                                 options={categories}
-                                defaultValue=""
+                                hasErrors={true}
+                                onChange={() => { }}
+                                nullOption={true}
+                                textInNullOption="Seleccione una categoria"
                             />
 
                             <SelectOption
@@ -182,7 +191,10 @@ export const ProductAddForm = () => {
                                 errorMessage={errors.typeId}
                                 functionEnabled={register('typeId')}
                                 options={types}
-                                defaultValue=""
+                                hasErrors={true}
+                                onChange={() => { }}
+                                nullOption={true}
+                                textInNullOption="Seleccione un tipo"
                             />
 
                         </>

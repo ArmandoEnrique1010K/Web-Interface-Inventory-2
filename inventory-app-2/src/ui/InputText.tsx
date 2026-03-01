@@ -4,15 +4,19 @@ import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 
 type Props = {
     id: string; // Id del input
+    name?: string,
     label?: string; // Etiqueta del input
+    hasErrors: boolean;
     placeholder?: string; // Texto que se muestra en el input
     type: 'text' | 'password' | 'email' | 'number' | 'hidden'; // Tipo de input (text, password, email, etc)
     defaultValue?: string; // Valor por defecto del input
-    errorMessage: FieldError | undefined, // Mensaje de error
-    functionEnabled: UseFormRegisterReturn // Funcion que se ejecuta al cambiar el valor del input
+    errorMessage?: FieldError | undefined, // Mensaje de error
+    functionEnabled?: UseFormRegisterReturn // Funcion que se ejecuta al cambiar el valor del input con react hook form
+    // Evento clasico que se utiliza
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-export const InputText = ({ id, label, placeholder, type, defaultValue, errorMessage, functionEnabled }: Props) => {
+export const InputText = ({ id, name, label, hasErrors, placeholder, type, defaultValue, errorMessage, functionEnabled, onChange }: Props) => {
 
     // Estado para ver contraseñas
     const [showPassword, setShowPassword] = useState(false);
@@ -36,8 +40,10 @@ export const InputText = ({ id, label, placeholder, type, defaultValue, errorMes
                         type={type === "password" && showPassword ? "text" : type}
                         placeholder={placeholder}
                         id={id}
+                        name={name}
                         {...functionEnabled}
-                        defaultValue={defaultValue}
+                        // defaultValue={defaultValue}
+                        onChange={functionEnabled?.onChange || onChange}
                     />
                     {
                         type === "password" && (
@@ -47,11 +53,16 @@ export const InputText = ({ id, label, placeholder, type, defaultValue, errorMes
                         )
                     }
                 </div>
-                <div className="min-h-6">
-                    <p className="text-red-700 text-sm">
-                        {errorMessage?.message}
-                    </p>
-                </div>
+
+                {
+                    hasErrors && (
+                        <div className="min-h-6">
+                            <p className="text-red-700 text-sm">
+                                {errorMessage?.message}
+                            </p>
+                        </div>
+                    )
+                }
             </div>
         </div>
     )

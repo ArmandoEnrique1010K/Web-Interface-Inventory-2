@@ -76,6 +76,7 @@ export const UpdateUserPasswordForm = () => {
                         placeholder="Introduce tu nueva contraseña"
                         type="password"
                         errorMessage={errors.newPassword}
+                        hasErrors={true}
                         functionEnabled={register('newPassword')} />
                     <InputText
                         id="confirmNewPassword"
@@ -83,6 +84,7 @@ export const UpdateUserPasswordForm = () => {
                         placeholder="Confirma la nueva contraseña"
                         type="password"
                         errorMessage={errors.confirmNewPassword}
+                        hasErrors={true}
                         functionEnabled={register('confirmNewPassword')} />
                 </>
             }
