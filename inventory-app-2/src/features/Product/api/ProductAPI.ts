@@ -1,6 +1,6 @@
 import { api } from "@/lib/axiosConfig";
-import type { ProductCreateForm } from "../types";
-import type { GeneralResponse } from "@/types/index";
+import type { ProductCreateForm, ProductUpdateForm } from "../types";
+import type { DataPageResponse, DataResponse, GeneralResponse } from "@/types/index";
 import { handleApiError } from "@/utils/handleApiError";
 
 export async function registerProduct(formData: ProductCreateForm) {
@@ -11,6 +11,63 @@ export async function registerProduct(formData: ProductCreateForm) {
             return data.message
         }
     } catch (error: unknown) {
+        handleApiError(error);
+    }
+}
+
+export type ProductQueryParams = {
+    page?: number;
+    name?: string;
+    status?: boolean;
+    categoryId?: string;
+    typeId?: string;
+}
+
+export async function listAllProducts(params: ProductQueryParams) {
+    try {
+        const url = `/products`
+        const { data } = await api.get<DataPageResponse>(url, { params: params })
+        return data.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+}
+
+export async function getProduct(id: string) {
+    try {
+        const url = `/products/${id}`
+        const { data } = await api.get<DataResponse>(url)
+        return data.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+}
+
+type UpdateProductPayload = {
+    productId: string;
+    formData: ProductUpdateForm;
+}
+
+export async function updateProduct({ productId, formData }: UpdateProductPayload) {
+    try {
+        const url = `/products/${productId}`
+        const { data } = await api.put<GeneralResponse>(url, formData)
+        if (data.type === 'success') {
+            return data.message
+        }
+    } catch (error) {
+        handleApiError(error);
+    }
+}
+
+export async function changeStatusProduct(productId: string) {
+    try {
+        const url = `/products/${productId}/status`
+        const { data } = await api.patch<GeneralResponse>(url)
+        if (data.type === 'success') {
+            return data.message
+        }
+    } catch (error) {
         handleApiError(error);
     }
 }

@@ -22,6 +22,7 @@ import { TypeAddForm } from '@/features/Product/components/type/TypeAddForm'
 import { TypeEditLoader } from '@/features/Product/components/type/TypeEditLoader'
 import { ProductAddForm } from '@/features/Product/components/product/ProductAddForm'
 import { ProductList } from '@/features/Product/components/product/ProductList'
+import { ProductEditLoader } from '@/features/Product/components/product/ProductEditLoader'
 
 const productItems: MenuItem[] = [
     {
@@ -88,7 +89,7 @@ export const GeneralRouter = () => {
                         }>
                             <Route index element={<ProductList />} />
                             <Route path="new" element={<ProductAddForm />} />
-                            <Route path="edit/:id" element={<h1>Formulario de editar producto</h1>} />
+                            <Route path="edit/:id" element={<ProductEditLoader />} />
 
                             {/* TODO: EN EL BACKEND, CREAR UN ENDPOINT PARA LISTAR PRODUCTOS Y NO MODELOS DE PRODUCTOS */}
                             <Route path="categories" element={<CategoryList />} />

@@ -21,16 +21,42 @@
 }
 
 /* ESTILOS DE REACT DATEPICKER */
+/* POR DEFECTO SE APLICAN ESTOS ESTILOS
 .react-datepicker {
-    margin: auto;
-    width: 100%;
-    position: relative;
-    justify-content: center;
-    align-items: center;
-    display: flex;
-    flex-direction: column;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    transform: translate(476.667px, 844.444px);
+} */
+/* .react-datepicker - Contenedor principal del calendario
+.react-datepicker__day--selected - Fecha seleccionada
+.react-datepicker__day--today - Fecha actual
+.react-datepicker__day - Cada día del calendario
+.react-datepicker__header - Encabezado del calendario
+.react-datepicker__month-container - Contenedor del mes */
+
+.react-datepicker {
+    margin: 0.5rem
+}
+
+.react-datepicker__header {
+    background-color: rgb(30, 41, 57);
+}
+
+.react-datepicker__current-month {
+    background-color: rgb(30, 41, 57);
+    color: white;
+}
+
+.react-datepicker__day-name,
+.react-datepicker__day {
+    font-size: 14px;
 }
 
 .react-datepicker__day--today {
-    background-color: red;
+    background-color: rgb(209, 213, 220);
+}
+
+.react-datepicker__day--selected {
+    background-color: rgb(20, 71, 230);
 }

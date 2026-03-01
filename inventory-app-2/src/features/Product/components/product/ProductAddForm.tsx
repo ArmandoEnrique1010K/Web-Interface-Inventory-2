@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import type { ProductCreateForm } from "../../types";
+import type { CategoryItem, ProductCreateForm, TypeItem } from "../../types";
 import { TextMessage } from "@/components/TextMessage";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type { GeneralError } from "@/types/index";
 import { registerProduct } from "../../api/ProductAPI";
 import { toast } from "sonner";
@@ -11,6 +11,9 @@ import { BaseForm } from "@/components/BaseForm";
 import { InputText } from "@/ui/InputText";
 import { Button } from "@/ui/Button";
 import { InputDate } from "@/ui/InputDate";
+import { SelectOption } from "@/ui/SelectOption";
+import { listAllCategories } from "../../api/CategoryAPI";
+import { listAllTypes } from "../../api/TypeAPI";
 
 export const ProductAddForm = () => {
 
@@ -21,10 +24,11 @@ export const ProductAddForm = () => {
         height: '',
         modelName: '',
         modelImageUrl: '',
-        modelEntryDate: new Date(),
-        modelCaducityDate: new Date(),
-        categoryId: 0,
-        typeId: 0,
+        // SELECCIONA LA FECHA DE HOY EN DIA
+        modelEntryDate: new Date(new Date().setHours(12)).toISOString().split('T')[0],
+        modelCaducityDate: new Date(new Date().setHours(12)).toISOString().split('T')[0],
+        categoryId: '',
+        typeId: '',
     }
     const { register, handleSubmit, setError, control, formState: { errors } } = useForm<ProductCreateForm>({
         defaultValues: initialValues
@@ -36,7 +40,7 @@ export const ProductAddForm = () => {
         mutationFn: registerProduct,
         onError: (error: GeneralError) => {
             // toast.error(error.message)
-
+            console.log(error)
             // Error de campo
             if (error.type === 'FIELD_ERROR') {
                 Object.entries(error.fields).forEach(([field, message]) => {
@@ -46,6 +50,7 @@ export const ProductAddForm = () => {
                     })
                 })
 
+                console.log(error)
                 toast.error(error.message)
                 return
             }
@@ -58,10 +63,29 @@ export const ProductAddForm = () => {
         },
         onSuccess: async (data) => {
             toast.success(data)
-            navigate('/products/categories')
-            console.log(data)
+            navigate('/products')
         }
     })
+    const { data: categoriesData } = useQuery({
+        queryKey: ['list-categories'],
+        queryFn: listAllCategories
+    })
+    const { data: typesData } = useQuery({
+        queryKey: ['list-types'],
+        queryFn: listAllTypes
+    })
+
+    const categories = categoriesData?.map((category: CategoryItem) => ({
+        value: category.id,
+        label: category.name,
+    })) || []
+
+
+    const types = typesData?.map((type: TypeItem) => ({
+        value: type.id,
+        label: type.name,
+    })) || []
+
 
     if (isPending) return <TextMessage text='Espere...' align='left' color='black' />
 
@@ -71,8 +95,6 @@ export const ProductAddForm = () => {
             <TitleContainer title="Añadir nuevo producto">
                 <BaseForm
                     onSubmit={handleSubmit((data) => {
-                        // TODO: DEPURACIÓN, ELIMINAR ESTO
-                        console.log('Datos del formulario:', data);
                         mutate(data)
                     })}
                     inputs={
@@ -89,7 +111,7 @@ export const ProductAddForm = () => {
                                 id="length"
                                 label="Largo (cm.)"
                                 placeholder="Medida del largo del producto en cm"
-                                type="text"
+                                type="number"
                                 errorMessage={errors.length}
                                 functionEnabled={register('length')} />
 
@@ -97,7 +119,7 @@ export const ProductAddForm = () => {
                                 id="width"
                                 label="Ancho (cm.)"
                                 placeholder="Medida del ancho del producto en cm"
-                                type="text"
+                                type="number"
                                 errorMessage={errors.width}
                                 functionEnabled={register('width')} />
 
@@ -105,7 +127,7 @@ export const ProductAddForm = () => {
                                 id="height"
                                 label="Alto (cm.)"
                                 placeholder="Medida de la altura del producto en cm"
-                                type="text"
+                                type="number"
                                 errorMessage={errors.height}
                                 functionEnabled={register('height')} />
 
@@ -129,6 +151,7 @@ export const ProductAddForm = () => {
 
                             {/* TODO: AÑADIR 1 CAMPO PARA SUBIR UNA IMAGEN, 2 CAMPOS PARA FECHAS Y 2 CAMPOS PARA SELECCIONAR UN ID DE CATEGORIA Y TIPO */}
 
+
                             <InputDate<ProductCreateForm>
                                 id="modelEntryDate"
                                 label="Fecha de entrada del modelo"
@@ -143,20 +166,24 @@ export const ProductAddForm = () => {
                                 control={control}
                                 errorMessage={errors.modelCaducityDate?.message}
                             />
-                            <InputText
+
+                            <SelectOption
                                 id="categoryId"
-                                label="ID de la categoria"
-                                placeholder="ID de la categoria"
-                                type="number"
+                                label="Categoria"
                                 errorMessage={errors.categoryId}
-                                functionEnabled={register('categoryId')} />
-                            <InputText
+                                functionEnabled={register('categoryId')}
+                                options={categories}
+                                defaultValue=""
+                            />
+
+                            <SelectOption
                                 id="typeId"
-                                label="ID del tipo"
-                                placeholder="ID del tipo"
-                                type="number"
+                                label="Tipo"
                                 errorMessage={errors.typeId}
-                                functionEnabled={register('typeId')} />
+                                functionEnabled={register('typeId')}
+                                options={types}
+                                defaultValue=""
+                            />
 
                         </>
                     }

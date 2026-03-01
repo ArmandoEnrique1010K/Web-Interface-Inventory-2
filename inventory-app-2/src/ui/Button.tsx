@@ -5,7 +5,7 @@ type Props = {
     text: string
     type: 'submit' | 'button' | 'link'
     to?: string
-    color?: 'blue' | 'green' | 'gray'
+    color?: 'blue' | 'green' | 'gray' | 'red'
     isLarge?: boolean,
     aditionalStyles?: string,
     disabled?: boolean
@@ -20,6 +20,10 @@ export const Button = ({ text, type, aditionalStyles, to, size, isLarge, color, 
 
         if (color === 'green') {
             return "bg-green-600 hover:bg-green-700"
+        }
+
+        if (color === 'red') {
+            return "bg-red-600 hover:bg-red-700"
         }
 
         if (color === 'gray') {
