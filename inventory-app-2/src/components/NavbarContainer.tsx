@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import type { MenuItem } from 'types'
+import { useMediaQuery } from 'react-responsive'
 
 type Props = {
     title?: string;
@@ -18,29 +19,23 @@ export const NavbarContainer = ({ menuItems, children }: Props) => {
         return 'bg-gray-500';
     }
 
-    // const getLabelFromPath = (path: string) => {
-    //     const endpath = path.split('/').pop() || '';
-
-    //     const found = menuItems?.find(item => item.to.includes(endpath));
-    //     return found?.label || '';
-    // }
-
-
-    // console.log(getLabelFromPath(location.pathname))
+    // React responsive establece unos "puntos de cortes" en donde se aplicara una condición de acuerdo al ancho de pantalla
+    const isSmallScreen = useMediaQuery({ query: '(max-width: 705px)' })
+    const isExtraSmallScreen = useMediaQuery({ query: '(max-width: 420px)' })
 
     return (
-        <div className='flex flex-col '>
+        <div className='flex flex-col flex-1'>
             <div className='flex flex-row text-white bg-gray-500'>
                 {
                     menuItems && menuItems.map((item) => (
-                        <Link to={item.to} className={`flex flex-row items-center gap-2 ${styleToCurrentPath(item.to)} px-5 py-2`} key={item.label}>
-                            {item.icon}
-                            <h1>{item.label}</h1>
+                        <Link to={item.to} className={`flex flex-row items-center gap-2 ${styleToCurrentPath(item.to)} px-4 py-2`} key={item.label}>
+                            <span>{!isSmallScreen && item.icon}{isExtraSmallScreen && item.icon}</span>
+                            <h1 className={``}>{!isExtraSmallScreen && item.label}</h1>
                         </Link>
                     ))
                 }
             </div>
-            <div className='p-4'>
+            <div className='flex flex-col p-4'>
                 {children}
             </div>
         </div>

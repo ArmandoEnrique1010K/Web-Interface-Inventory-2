@@ -91,7 +91,6 @@ export const GeneralRouter = () => {
                             <Route path="new" element={<ProductAddForm />} />
                             <Route path="edit/:id" element={<ProductEditLoader />} />
 
-                            {/* TODO: EN EL BACKEND, CREAR UN ENDPOINT PARA LISTAR PRODUCTOS Y NO MODELOS DE PRODUCTOS */}
                             <Route path="categories" element={<CategoryList />} />
                             <Route path="categories/new" element={<CategoryAddForm />} />
                             <Route path="categories/edit/:id" element={<CategoryEditLoader />} />

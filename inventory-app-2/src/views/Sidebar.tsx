@@ -74,7 +74,8 @@ export const Sidebar = () => {
                 <div className="h-max">
                     <div className="flex flex-col items-center my-4">
                         <img src="/inventory.png" className="bg-white rounded-full p-2" alt="Logo" />
-                        <h1 className="mx-4 my-2 text-xl">Empresa sin nombre</h1>
+                        {/* whitespace-nowrap evita que el texto tenga saltos de linea */}
+                        <h1 className="mx-4 my-2 text-xl whitespace-nowrap text-center">Empresa sin nombre</h1>
                     </div>
 
                     <hr className="text-gray-300" />

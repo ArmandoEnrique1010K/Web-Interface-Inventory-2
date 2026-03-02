@@ -9,7 +9,6 @@ import type { GeneralError } from "types";
 import { Button } from "@/ui/Button";
 import { InputText } from "@/ui/InputText";
 import { TitleContainer } from "@/components/TitleContainer";
-import { TextMessage } from "@/components/TextMessage";
 
 type Props = {
     data: CategoryForm;
@@ -27,7 +26,7 @@ export const CategoryEditForm = ({ data, categoryId }: Props) => {
 
     const queryClient = useQueryClient();
 
-    const { mutate, isPending } = useMutation({
+    const { mutate } = useMutation({
         mutationFn: updateCategory,
         onError: (error: GeneralError) => {
             // Error de campo
@@ -64,8 +63,6 @@ export const CategoryEditForm = ({ data, categoryId }: Props) => {
         }
         mutate(data)
     }
-
-    if (isPending) return <TextMessage text='Espere...' align='left' color='black' />
 
     return (
         <>

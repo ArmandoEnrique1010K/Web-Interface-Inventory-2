@@ -28,7 +28,7 @@ export const UpdateUserPasswordForm = () => {
     const dispatch = useDispatch()
 
 
-    const { mutate } = useMutation({
+    const { mutate, isPending } = useMutation({
         mutationFn: (data: AuthUpdateUserPasswordForm) => updateUserPassword({
             resetToken: secretToken,
             newPassword: data.newPassword,
@@ -68,6 +68,7 @@ export const UpdateUserPasswordForm = () => {
         <AuthFormContainer
             title="Introduce tu nueva contraseña"
             onSubmit={handleSubmit((data) => mutate(data))}
+            isPending={isPending}
             inputs={
                 <>
                     <InputText

@@ -14,9 +14,9 @@ import { useEffectEvent, useState } from 'react'
 import { InputText } from '@/ui/InputText'
 import { SelectOption } from '@/ui/SelectOption'
 import { Paginator } from './Paginator'
-export const ProductList = () => {
+import { useMediaQuery } from 'react-responsive'
 
-    // TODO: PENDIENTE EL MANEJO DE PAGINACIÓN
+export const ProductList = () => {
     const [searchParams, setSearchParams] = useSearchParams()
     const page = Number(searchParams.get('page') ?? 0)
     const name = searchParams.get('name') ?? ''
@@ -50,7 +50,7 @@ export const ProductList = () => {
     })
 
 
-    const { data, isLoading, isError } = useQuery({
+    const { data, isError } = useQuery({
         queryKey: ['list-products', { name, categoryId, typeId, status, page }],
 
         queryFn: () => listAllProducts({
@@ -95,11 +95,43 @@ export const ProductList = () => {
 
     }
 
+
+    const generateSizes = (product: ProductItem) => {
+        const sizes: string[] = []
+
+        if (Number(product.length) > 0) {
+            sizes.push(`${product.length} cm. (L)`)
+        }
+
+        if (Number(product.width) > 0) {
+            sizes.push(`${product.width} cm. (An)`)
+        }
+
+        if (Number(product.height) > 0) {
+            sizes.push(`${product.height} cm. (Al)`)
+        }
+
+        if (sizes.length === 0) {
+            return <span className="text-xs">—</span>
+        }
+
+        return (
+            <div className="text-xs">
+                {sizes.join(' x ')}
+            </div>
+        )
+    }
+
+
     const statusOptions = [
         { value: '', label: 'Todos los estados' },
         { value: 'true', label: 'Activos' },
         { value: 'false', label: 'Inactivos' },
     ]
+
+    const isSmallScreen = useMediaQuery({ query: '(max-width: 479px)' })
+
+
 
     return (
         <TitleContainer
@@ -115,6 +147,7 @@ export const ProductList = () => {
             }
             searchParams={
                 <form
+                    className='border border-gray-700 rounded-xl px-4 py-2 mb-8'
                     autoComplete="off" noValidate
                     onSubmit={(e) => {
                         e.preventDefault()
@@ -130,16 +163,6 @@ export const ProductList = () => {
                         setSearchParams(params)
                     }}
                 >
-                    {/* <input
-                        name="name"
-                        type="text"
-                        value={form.name}
-                        placeholder="Buscar"
-                        onChange={(e) =>
-                            setForm(prev => ({ ...prev, name: e.target.value }))
-                        }
-                    /> */}
-
                     <InputText
                         id='name'
                         name='name'
@@ -153,7 +176,7 @@ export const ProductList = () => {
                         }
                     />
 
-                    <div className='flex flex-row gap-4'>
+                    <div className={`flex ${isSmallScreen ? 'flex-col' : 'flex-row gap-4'}`}>
                         <SelectOption
                             id='categoryId'
                             name='categoryId'
@@ -194,71 +217,20 @@ export const ProductList = () => {
                         />
 
                     </div>
-                    {/* <select
-                        name="categoryId"
-                        value={form.categoryId}
-                        onChange={(e) =>
-                            setForm(prev => ({ ...prev, categoryId: e.target.value }))
-                        }
-                    >
-                        <option value="">Seleccione una categoría</option>
+                    <div className='flex justify-end'>
+                        <Button text="Filtrar" type="submit" color='green' size='large' aditionalStyles='mt-6 mb-2' />
 
-                        {categories.map((category: { value: string; label: string }) => (
-                            <option key={category.value} value={category.value}>
-                                {category.label}
-                            </option>
-                        ))}
-                    </select> */}
-
-
-
-                    {/* <select
-                        name="typeId"
-                        value={form.typeId}
-                        onChange={(e) =>
-                            setForm(prev => ({ ...prev, typeId: e.target.value }))
-                        }
-                    >
-                        <option value="" >
-                            Seleccione un tipo
-                        </option>
-
-                        {types?.map((type: { value: string; label: string }) => (
-                            <option key={type.value} value={type.value}>
-                                {type.label}
-                            </option>
-                        ))}
-                    </select> */}
-
-
-                    {/* <select
-                        name="status"
-                        value={form.status}
-                        onChange={(e) =>
-                            setForm(prev => ({ ...prev, status: e.target.value }))
-                        }
-                    >
-                        <option value="">Todos los estados</option>
-                        <option value="true">Activos</option>
-                        <option value="false">Inactivos</option>
-                    </select> */}
-
-
-
-
-
-                    <Button text="Filtrar" type="submit" color='green' size='large' aditionalStyles='my-4' />
+                    </div>
                 </form>}
         >
             {
-                data && <div>Se han encontrado {data?.totalElements} productos, mostrando los primeros {!data!.last ? data!.size * (data!.page + 1) : data!.totalElements} elementos, omitiendo {data!.size * (data!.page)} elementos </div>
+                data && <div className='text-sm pb-2 '>Se han encontrado {data?.totalElements} elementos ♦ Se obtuvierón los primeros {!data!.last ? data!.size * (data!.page + 1) : data!.totalElements} elementos ♦ Omitiendo {data!.size * (data!.page)} elementos</div>
 
             }
 
             <TableHeaderContainer
                 headers={['ID', 'Nombre', 'Característica', 'Medidas', 'Estado', 'Editar']}
                 isError={isError}
-                isLoading={isLoading}
                 isEmpty={!content?.length}
             >
                 {
@@ -275,7 +247,7 @@ export const ProductList = () => {
                                 generateCaracterist(product)
 
                             } />
-                            <BaseTableCell data={`${product.length} cm. x ${product.width} cm. x ${product.height} cm.`} />
+                            <BaseTableCell data={generateSizes(product)} />
 
                             <BaseTableCell data={
                                 <ProductChangeStatus productId={product.id.toString()} value={product.status ? 'Activo' : 'Inactivo'} />
@@ -298,8 +270,7 @@ export const ProductList = () => {
             </TableHeaderContainer>
 
             {
-                // TODO: PROBAR LA NAVEGACION ENTRE PÁGINAS
-                data && (
+                (content?.length && data) ? (
                     <Paginator
                         currentPage={data?.page}
                         totalPages={data?.totalPages}
@@ -323,7 +294,7 @@ export const ProductList = () => {
 
                         }}
                     />
-                )
+                ) : null
             }
         </TitleContainer>
 

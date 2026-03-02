@@ -41,6 +41,7 @@ export const InputText = ({ id, name, label, hasErrors, placeholder, type, error
                         placeholder={placeholder}
                         id={id}
                         name={name}
+                        onWheel={(e) => e.currentTarget.blur()}
                         {...functionEnabled}
                         // defaultValue={defaultValue}
                         onChange={functionEnabled?.onChange || onChange}

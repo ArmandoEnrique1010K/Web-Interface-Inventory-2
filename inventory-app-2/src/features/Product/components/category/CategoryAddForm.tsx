@@ -9,7 +9,6 @@ import { Button } from "@/ui/Button";
 import { TitleContainer } from "@/components/TitleContainer";
 import { BaseForm } from "@/components/BaseForm";
 import type { GeneralError } from "types";
-import { TextMessage } from "@/components/TextMessage";
 
 export const CategoryAddForm = () => {
 
@@ -24,11 +23,9 @@ export const CategoryAddForm = () => {
     const navigate = useNavigate();
 
 
-    const { mutate, isPending } = useMutation({
+    const { mutate } = useMutation({
         mutationFn: registerCategory,
         onError: (error: GeneralError) => {
-            // toast.error(error.message)
-
             // Error de campo
             if (error.type === 'FIELD_ERROR') {
                 Object.entries(error.fields).forEach(([field, message]) => {
@@ -54,8 +51,6 @@ export const CategoryAddForm = () => {
         }
     })
 
-    if (isPending) return <TextMessage text='Espere...' align='left' color='black' />
-
     return (
         <>
             <TitleContainer title="Añadir nueva categoria">
@@ -76,7 +71,7 @@ export const CategoryAddForm = () => {
                     }
                     buttons={
                         <>
-                            <Button size="large" text="Añadir categoria" type="submit" color="green" />
+                            <Button size="large" text='Añadir categoria' type="submit" color="green" />
                             <Button size="large" text="Cancelar" type="link" color="gray" to="/products/categories" />
                         </>
                     }

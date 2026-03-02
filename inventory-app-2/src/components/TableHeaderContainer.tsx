@@ -6,14 +6,9 @@ type Props = {
     isError: boolean
     children: React.ReactNode;
     isEmpty: boolean;
-    isLoading: boolean;
 }
 
-export const TableHeaderContainer = ({ headers, children, isError, isEmpty, isLoading }: Props) => {
-
-    if (isLoading) {
-        return <TextMessage text="Cargando..." align="center" color="black" />
-    }
+export const TableHeaderContainer = ({ headers, children, isError, isEmpty }: Props) => {
 
     if (isError) {
         return <TextMessage text="Ha ocurrido un error" align="center" color="red" />

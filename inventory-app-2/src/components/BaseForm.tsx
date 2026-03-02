@@ -9,7 +9,13 @@ type Props = {
 // Componente generico para mostrar un formulario
 export const BaseForm = ({ onSubmit, helpText, inputs, buttons }: Props) => {
     return (
-        <form onSubmit={onSubmit} className="w-full" autoComplete="off" noValidate>
+        <form onSubmit={
+            // (e) => {
+            //     e.preventDefault();
+            //     onSubmit(e);
+            // }
+            onSubmit
+        } className="w-full" autoComplete="off" noValidate>
             {
                 helpText && (
                     <p className='pb-6 w-full'>

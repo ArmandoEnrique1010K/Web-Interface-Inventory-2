@@ -26,7 +26,7 @@ export const ValidateUserTokenForm = () => {
 
     const dispatch = useDispatch()
 
-    const { mutate } = useMutation({
+    const { mutate, isPending } = useMutation({
         mutationFn: (data: AuthValidateUserTokenForm) => validateUserToken({
             requestId: secretToken,
             value: data.value
@@ -63,6 +63,7 @@ export const ValidateUserTokenForm = () => {
         <AuthFormContainer
             title="Introduce el token"
             onSubmit={handleSubmit((data) => mutate(data))}
+            isPending={isPending}
             helpText='Introduce el token de 6 digitos que se envio a tu correo electrónico, para reestablecer tu contraseña.'
             inputs={
                 <>

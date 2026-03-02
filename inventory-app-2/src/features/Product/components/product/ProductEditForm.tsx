@@ -5,7 +5,6 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { updateProduct } from '../../api/ProductAPI';
 import type { GeneralError } from '@/types/index';
 import { toast } from 'sonner';
-import { TextMessage } from '@/components/TextMessage';
 import { BaseForm } from '@/components/BaseForm';
 import { TitleContainer } from '@/components/TitleContainer';
 import { Button } from '@/ui/Button';
@@ -36,7 +35,7 @@ export const ProductEditForm = ({ data, productId }: Props) => {
 
     const queryClient = useQueryClient();
 
-    const { mutate, isPending } = useMutation({
+    const { mutate } = useMutation({
         mutationFn: updateProduct,
         onError: (error: GeneralError) => {
             // Error de campo
@@ -94,7 +93,6 @@ export const ProductEditForm = ({ data, productId }: Props) => {
     })) || []
 
 
-    if (isPending) return <TextMessage text='Espere...' align='left' color='black' />
 
     return (
         <>
@@ -148,6 +146,7 @@ export const ProductEditForm = ({ data, productId }: Props) => {
                                 hasErrors={true}
                                 nullOption={true}
                                 textInNullOption="Seleccione una categoria"
+                                value={data.categoryId}
                             />
 
                             <SelectOption
@@ -159,6 +158,7 @@ export const ProductEditForm = ({ data, productId }: Props) => {
                                 hasErrors={true}
                                 nullOption={true}
                                 textInNullOption="Seleccione un tipo"
+                                value={data.typeId}
                             />
 
                         </>

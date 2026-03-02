@@ -9,7 +9,6 @@ import { TitleContainer } from "@/components/TitleContainer";
 import { BaseForm } from "@/components/BaseForm";
 import type { GeneralError } from "types";
 import { registerType } from "../../api/TypeAPI";
-import { TextMessage } from "@/components/TextMessage";
 
 export const TypeAddForm = () => {
 
@@ -24,11 +23,9 @@ export const TypeAddForm = () => {
     const navigate = useNavigate();
 
 
-    const { mutate, isPending } = useMutation({
+    const { mutate } = useMutation({
         mutationFn: registerType,
         onError: (error: GeneralError) => {
-            // toast.error(error.message)
-
             // Error de campo
             if (error.type === 'FIELD_ERROR') {
                 Object.entries(error.fields).forEach(([field, message]) => {
@@ -53,9 +50,6 @@ export const TypeAddForm = () => {
             navigate('/products/types')
         }
     })
-
-    if (isPending) return <TextMessage text='Espere...' align='left' color='black' />
-
 
     return (
         <>

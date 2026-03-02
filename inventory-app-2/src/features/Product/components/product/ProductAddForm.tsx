@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import type { CategoryItem, ProductCreateForm, TypeItem } from "../../types";
-import { TextMessage } from "@/components/TextMessage";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import type { GeneralError } from "@/types/index";
 import { registerProduct } from "../../api/ProductAPI";
@@ -19,9 +18,9 @@ export const ProductAddForm = () => {
 
     const initialValues: ProductCreateForm = {
         name: '',
-        length: '',
-        width: '',
-        height: '',
+        length: '0',
+        width: '0',
+        height: '0',
         modelName: '',
         modelImageUrl: '',
         // SELECCIONA LA FECHA DE HOY EN DIA
@@ -36,7 +35,7 @@ export const ProductAddForm = () => {
 
     const navigate = useNavigate();
 
-    const { mutate, isPending } = useMutation({
+    const { mutate } = useMutation({
         mutationFn: registerProduct,
         onError: (error: GeneralError) => {
             // toast.error(error.message)
@@ -86,8 +85,6 @@ export const ProductAddForm = () => {
         label: type.name,
     })) || []
 
-
-    if (isPending) return <TextMessage text='Espere...' align='left' color='black' />
 
 
     return (
@@ -153,9 +150,6 @@ export const ProductAddForm = () => {
                                 hasErrors={true}
                                 errorMessage={errors.modelImageUrl}
                                 functionEnabled={register('modelImageUrl')} />
-
-
-                            {/* TODO: AÑADIR 1 CAMPO PARA SUBIR UNA IMAGEN, 2 CAMPOS PARA FECHAS Y 2 CAMPOS PARA SELECCIONAR UN ID DE CATEGORIA Y TIPO */}
 
 
                             <InputDate<ProductCreateForm>
