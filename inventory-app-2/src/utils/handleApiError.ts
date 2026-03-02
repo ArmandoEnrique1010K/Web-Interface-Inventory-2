@@ -18,10 +18,16 @@ export function handleApiError(error: unknown): never {
                 message: err.message
             };
         }
+    } else {
+        throw {
+            type: 'GENERAL_ERROR',
+            message: 'Error inesperado'
+        };
     }
 
     throw {
         type: 'GENERAL_ERROR',
-        message: 'Error inesperado'
+        message: 'Error de conexión interrumpida'
     };
 }
+

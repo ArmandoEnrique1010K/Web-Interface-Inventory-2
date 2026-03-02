@@ -9,9 +9,10 @@ type Props = {
     isLarge?: boolean,
     aditionalStyles?: string,
     disabled?: boolean
+    onClick?: () => void
 }
 
-export const Button = ({ text, type, aditionalStyles, to, size, isLarge, color, disabled }: Props) => {
+export const Button = ({ text, type, aditionalStyles, to, size, isLarge, color, disabled, onClick }: Props) => {
 
     const stylesColor = () => {
         if (color === 'blue') {
@@ -46,6 +47,7 @@ export const Button = ({ text, type, aditionalStyles, to, size, isLarge, color, 
                         ${disabled ? 'opacity-50 hover:cursor-not-allowed' : ''}
                     `}
                         disabled={disabled}
+                        onClick={onClick || undefined}
                     >
                         {text}
                     </button>

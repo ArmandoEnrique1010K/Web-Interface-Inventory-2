@@ -30,7 +30,7 @@ export const ProductChangeStatus = ({ productId, value }: { productId: string, v
     return (
 
         <>
-            <form onSubmit={handleSubmit(() => mutate())} >
+            <form onSubmit={handleSubmit(() => mutate())} className="flex justify-center" >
                 <Button size="small" text={value} type="submit" color={value === 'Activo' ? 'green' : 'red'} />
             </form>
         </>

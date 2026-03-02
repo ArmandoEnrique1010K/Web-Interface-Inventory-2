@@ -22,7 +22,6 @@ export const ProductList = () => {
     const name = searchParams.get('name') ?? ''
     const categoryId = searchParams.get('categoryId') ?? undefined
     const typeId = searchParams.get('typeId') ?? undefined
-
     const statusParam = searchParams.get('status')
     const status =
         statusParam === null
@@ -42,8 +41,8 @@ export const ProductList = () => {
 
     useEffectEvent(() => {
         setForm({
-            page,
-            name,
+            page: page,
+            name: name,
             categoryId: categoryId ?? '',
             typeId: typeId ?? '',
             status: status === undefined ? '' : String(status),
@@ -116,6 +115,7 @@ export const ProductList = () => {
             }
             searchParams={
                 <form
+                    autoComplete="off" noValidate
                     onSubmit={(e) => {
                         e.preventDefault()
 
@@ -126,7 +126,6 @@ export const ProductList = () => {
                         if (form.typeId) params.set('typeId', form.typeId)
                         if (form.status !== '') params.set('status', form.status)
 
-                        if (form.page) params.set('page', form.page.toString())
 
                         setSearchParams(params)
                     }}
@@ -148,6 +147,7 @@ export const ProductList = () => {
                         hasErrors={false}
                         placeholder='Buscar productos por nombre'
                         type='text'
+                        value={form.name}
                         onChange={(e) =>
                             setForm(prev => ({ ...prev, name: e.target.value }))
                         }
@@ -165,6 +165,7 @@ export const ProductList = () => {
                             }
                             nullOption={true}
                             textInNullOption="Todas las categorias"
+                            value={form.categoryId}
                         />
                         <SelectOption
                             id='typeId'
@@ -177,6 +178,7 @@ export const ProductList = () => {
                             }
                             nullOption={true}
                             textInNullOption="Todos los tipos"
+                            value={form.typeId}
                         />
                         <SelectOption
                             id='status'
@@ -188,6 +190,7 @@ export const ProductList = () => {
                                 setForm(prev => ({ ...prev, status: e.target.value }))
                             }
                             nullOption={false}
+                            value={form.status}
                         />
 
                     </div>
@@ -247,6 +250,10 @@ export const ProductList = () => {
                     <Button text="Filtrar" type="submit" color='green' size='large' aditionalStyles='my-4' />
                 </form>}
         >
+            {
+                data && <div>Se han encontrado {data?.totalElements} productos, mostrando los primeros {!data!.last ? data!.size * (data!.page + 1) : data!.totalElements} elementos, omitiendo {data!.size * (data!.page)} elementos </div>
+
+            }
 
             <TableHeaderContainer
                 headers={['ID', 'Nombre', 'Característica', 'Medidas', 'Estado', 'Editar']}
@@ -283,7 +290,7 @@ export const ProductList = () => {
                                         type="link"
                                         to={`/products/edit/${product.id}`}
                                         color="blue"
-                                    /> : 'No se puede editar'
+                                    /> : ''
                             } isCenter />
                         </TableRowContainer>
                     })
@@ -296,11 +303,25 @@ export const ProductList = () => {
                     <Paginator
                         currentPage={data?.page}
                         totalPages={data?.totalPages}
-                        totalElements={data?.totalElements}
-                        size={data?.size}
                         isFirst={data?.first}
                         isLast={data?.last}
-                        onPageChange={(page) => console.log(page)}
+                        onPageChange={(page) => {
+                            setForm(prev => ({
+                                ...prev,
+                                page
+                            }))
+                            const params = new URLSearchParams()
+
+                            if (form.name) params.set('name', form.name)
+                            if (form.categoryId) params.set('categoryId', form.categoryId)
+                            if (form.typeId) params.set('typeId', form.typeId)
+                            if (form.status !== '') params.set('status', form.status)
+
+                            params.set('page', page.toString())
+
+                            setSearchParams(params)
+
+                        }}
                     />
                 )
             }

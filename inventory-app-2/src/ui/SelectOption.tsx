@@ -3,17 +3,16 @@ type Props = {
     id: string; // Id del input
     name?: string
     label?: string; // Etiqueta del input
-    defaultValue?: string; // Valor por defecto del input
     hasErrors: boolean // Verifica si existen mensajes de errores
     errorMessage?: FieldError | undefined, // Mensaje de error
     functionEnabled?: UseFormRegisterReturn // Funcion que se ejecuta al cambiar el valor del input
     options: { value: string, label: string }[],
-    value?: string,
     onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void,
     nullOption?: boolean,
-    textInNullOption?: string
+    textInNullOption?: string,
+    value?: string //* SOLAMENTE EN CAMPOS QUE NO TENGAN REACT HOOK FORM
 }
-export const SelectOption = ({ id, name, label, hasErrors, errorMessage, functionEnabled, options, defaultValue, value, onChange, nullOption, textInNullOption }: Props) => {
+export const SelectOption = ({ id, name, label, hasErrors, errorMessage, functionEnabled, options, onChange, nullOption, textInNullOption, value }: Props) => {
     return (
         <div className="flex flex-col space-y-1 w-full pt-2">
             <label className="text-md font-bold" htmlFor={id}>{label}</label>
@@ -25,13 +24,15 @@ export const SelectOption = ({ id, name, label, hasErrors, errorMessage, functio
                         name={name}
                         // NOTA: functionEnabled tiene unas propiedades internas, en la cual una de ellas es el name
                         {...functionEnabled}
-                        // NOTA: SOLAMENTE SE UTILIZA value EN FORMULARIOS QUE SIRVEN PARA EDITAR UN REGISTRO
+                        // NOTA: NO SE DEBEN UTILIZAR LAS PROPS value Y defaultValue, REACT HOOK FORM ya tiene esas props
                         // defaultValue={defaultValue}
                         // value={value || defaultValue}
+                        value={value}
 
 
                         onChange={functionEnabled?.onChange || onChange}
                     >
+                        {/* TODO: LA VISTA PARPADEA AL CARGAR LA OPCION SELECCIONADA POR VALUE */}
                         {nullOption && <option value="">
                             {textInNullOption || "Seleccione una opción"}
                         </option>}

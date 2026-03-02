@@ -29,8 +29,8 @@ export const NavbarContainer = ({ menuItems, children }: Props) => {
     // console.log(getLabelFromPath(location.pathname))
 
     return (
-        <div className='flex flex-col flex-1'>
-            <div className='flex flex-row text-white  bg-gray-500'>
+        <div className='flex flex-col '>
+            <div className='flex flex-row text-white bg-gray-500'>
                 {
                     menuItems && menuItems.map((item) => (
                         <Link to={item.to} className={`flex flex-row items-center gap-2 ${styleToCurrentPath(item.to)} px-5 py-2`} key={item.label}>

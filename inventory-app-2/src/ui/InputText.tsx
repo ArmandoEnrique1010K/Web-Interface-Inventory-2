@@ -9,14 +9,14 @@ type Props = {
     hasErrors: boolean;
     placeholder?: string; // Texto que se muestra en el input
     type: 'text' | 'password' | 'email' | 'number' | 'hidden'; // Tipo de input (text, password, email, etc)
-    defaultValue?: string; // Valor por defecto del input
     errorMessage?: FieldError | undefined, // Mensaje de error
     functionEnabled?: UseFormRegisterReturn // Funcion que se ejecuta al cambiar el valor del input con react hook form
     // Evento clasico que se utiliza
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+    value?: string //* SOLAMENTE EN CAMPOS QUE NO TENGAN REACT HOOK FORM
 }
 
-export const InputText = ({ id, name, label, hasErrors, placeholder, type, defaultValue, errorMessage, functionEnabled, onChange }: Props) => {
+export const InputText = ({ id, name, label, hasErrors, placeholder, type, errorMessage, functionEnabled, onChange, value }: Props) => {
 
     // Estado para ver contraseñas
     const [showPassword, setShowPassword] = useState(false);
@@ -44,6 +44,7 @@ export const InputText = ({ id, name, label, hasErrors, placeholder, type, defau
                         {...functionEnabled}
                         // defaultValue={defaultValue}
                         onChange={functionEnabled?.onChange || onChange}
+                        value={value}
                     />
                     {
                         type === "password" && (

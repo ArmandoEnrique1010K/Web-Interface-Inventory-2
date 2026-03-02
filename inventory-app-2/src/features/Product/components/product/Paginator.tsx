@@ -1,9 +1,8 @@
+import { Button } from "@/ui/Button"
 
 type Props = {
     currentPage: number
     totalPages: number
-    totalElements: number
-    size: number
     isFirst: boolean
     isLast: boolean
     onPageChange: (page: number) => void
@@ -12,8 +11,6 @@ type Props = {
 export const Paginator = ({
     currentPage,
     totalPages,
-    totalElements,
-    size,
     isFirst,
     isLast,
     onPageChange
@@ -23,50 +20,110 @@ export const Paginator = ({
     const goLast = () => onPageChange(totalPages - 1)
     const goPrev = () => onPageChange(currentPage - 1)
     const goNext = () => onPageChange(currentPage + 1)
+    const goToPage = (page: number) => onPageChange(page);
 
 
     return (
         <div className="flex flex-col gap-2 mt-4 text-center">
-            <div className="text-sm">
-                En total hay {totalElements} elementos · {totalPages === 1 ? 'Existe 1 página' : 'Existen ' + totalPages + ' páginas'} · {size} elementos por página
-            </div>
-
-            <div className="flex items-center gap-2 font-bold justify-center">
-                <button
+            <div className="flex items-center gap-2 justify-center">
+                <Button
+                    text="Primera"
+                    type="button"
+                    color="blue"
                     disabled={isFirst}
                     onClick={goFirst}
-                    className="px-2 py-1 border disabled:opacity-40"
-                >
-                    Primera
-                </button>
-
-                <button
+                    size="small"
+                    aditionalStyles="px-4"
+                />
+                <Button
+                    text="Anterior"
+                    type="button"
+                    color="blue"
                     disabled={isFirst}
                     onClick={goPrev}
-                    className="px-2 py-1 border disabled:opacity-40"
-                >
-                    Anterior
-                </button>
+                    size="small"
+                    aditionalStyles="px-4"
+                />
 
-                <span className="px-3">
-                    {currentPage + 1} / {totalPages}
-                </span>
+                {
+                    !(currentPage - 2 < 0) && (
+                        <Button
+                            text={(currentPage - 1).toString()}
+                            type="button"
+                            color="blue"
+                            onClick={() => goToPage(currentPage - 2)}
+                            size="small"
+                            aditionalStyles="px-4"
+                        />
+                    )
+                }
+                {
+                    !(currentPage - 1 < 0) && (
+                        <Button
+                            text={(currentPage).toString()}
+                            type="button"
+                            color="blue"
+                            onClick={() => goToPage(currentPage - 1)}
+                            size="small"
+                            aditionalStyles="px-4"
+                        />
+                    )
+                }
+                <Button
+                    text={(currentPage + 1).toString()}
+                    type="button"
+                    color="green"
+                    disabled={true}
+                    size="small"
+                    aditionalStyles="px-4"
+                />
 
-                <button
+                {
+                    !(currentPage + 1 >= totalPages) && (
+                        <Button
+                            text={(currentPage + 2).toString()}
+                            type="button"
+                            color="blue"
+                            onClick={() => goToPage(currentPage + 1)}
+                            size="small"
+                            aditionalStyles="px-4"
+                        />
+                    )
+                }
+
+                {
+                    !(currentPage + 2 >= totalPages) && (
+                        <Button
+                            text={(currentPage + 3).toString()}
+                            type="button"
+                            color="blue"
+                            onClick={() => goToPage(currentPage + 2)}
+                            size="small"
+                            aditionalStyles="px-4"
+                        />
+                    )
+                }
+
+
+                <Button
+                    text="Siguiente"
+                    type="button"
+                    color="blue"
                     disabled={isLast}
                     onClick={goNext}
-                    className="px-2 py-1 border disabled:opacity-40"
-                >
-                    Siguiente
-                </button>
+                    size="small"
+                    aditionalStyles="px-4"
+                />
 
-                <button
+                <Button
+                    text="Última"
+                    type="button"
+                    color="blue"
                     disabled={isLast}
                     onClick={goLast}
-                    className="px-2 py-1 border disabled:opacity-40"
-                >
-                    Última
-                </button>
+                    size="small"
+                    aditionalStyles="px-4"
+                />
             </div>
         </div>
     )
