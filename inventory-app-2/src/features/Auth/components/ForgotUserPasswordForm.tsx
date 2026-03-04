@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
 import { forgotUserPassword } from '../api/AuthAPI'
 import { toast } from 'sonner'
-import { InputText } from '@/ui/InputText'
+import { InputText } from '@/ui/fields/InputText'
 import { useDispatch } from 'react-redux'
 import { updateSecretToken } from '@/reducers/authSlice'
 import { AuthFormContainer } from '@/features/Auth/views/AuthFormContainer'
@@ -67,7 +67,6 @@ export const ForgotUserPasswordForm = () => {
                         label="Correo"
                         placeholder="Introduce tu correo actual"
                         type="email"
-                        hasErrors={true}
                         errorMessage={errors.email}
                         functionEnabled={register('email')} />
                 </>

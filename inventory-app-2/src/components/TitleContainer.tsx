@@ -9,10 +9,10 @@ type Props = {
 export const TitleContainer = ({ title, buttons, searchParams, children }: Props) => {
     return (
         <>
-            <h1 className='text-4xl font-bold pb-6'>{title}</h1>
+            <h1 className='text-4xl font-bold mb-6'>{title}</h1>
             {
                 buttons && (
-                    <div className='flex flex-row pb-8'>
+                    <div className='flex flex-row mb-6 gap-4'>
                         {buttons}
                     </div>
                 )

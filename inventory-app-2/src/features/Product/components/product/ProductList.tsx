@@ -1,5 +1,4 @@
 import { TitleContainer } from '@/components/TitleContainer'
-import { Button } from '@/ui/Button'
 import { useQuery } from '@tanstack/react-query'
 import { listAllProducts } from '../../api/ProductAPI'
 import { TableHeaderContainer } from '@/components/TableHeaderContainer'
@@ -9,12 +8,16 @@ import { BaseTableCell } from '@/components/BaseTableCell'
 import { listAllCategories } from '../../api/CategoryAPI'
 import { listAllTypes } from '../../api/TypeAPI'
 import { ProductChangeStatus } from './ProductChangeStatus'
-import { useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { useEffectEvent, useState } from 'react'
-import { InputText } from '@/ui/InputText'
-import { SelectOption } from '@/ui/SelectOption'
-import { Paginator } from './Paginator'
+import { Paginator } from '../../../../components/Paginator'
 import { useMediaQuery } from 'react-responsive'
+import { SearchCounter } from '@/components/SearchCounter'
+import { FiltersFormContainer } from '@/components/FiltersFormContainer'
+import { ButtonLink } from '@/ui/ButtonLink'
+import { generateSizes } from '@/utils/generateSizes'
+import { InputTextFilter } from '@/ui/filters/InputTextFilter'
+import { SelectOptionFilter } from '@/ui/filters/SelectOptionFilter'
 
 export const ProductList = () => {
     const [searchParams, setSearchParams] = useSearchParams()
@@ -96,32 +99,6 @@ export const ProductList = () => {
     }
 
 
-    const generateSizes = (product: ProductItem) => {
-        const sizes: string[] = []
-
-        if (Number(product.length) > 0) {
-            sizes.push(`${product.length} cm. (L)`)
-        }
-
-        if (Number(product.width) > 0) {
-            sizes.push(`${product.width} cm. (An)`)
-        }
-
-        if (Number(product.height) > 0) {
-            sizes.push(`${product.height} cm. (Al)`)
-        }
-
-        if (sizes.length === 0) {
-            return <span className="text-xs">—</span>
-        }
-
-        return (
-            <div className="text-xs">
-                {sizes.join(' x ')}
-            </div>
-        )
-    }
-
 
     const statusOptions = [
         { value: '', label: 'Todos los estados' },
@@ -131,25 +108,20 @@ export const ProductList = () => {
 
     const isSmallScreen = useMediaQuery({ query: '(max-width: 479px)' })
 
-
-
     return (
         <TitleContainer
             title="Productos"
             buttons={
-                <Button
+                <ButtonLink
                     size="large"
                     text="Nuevo producto"
-                    type="link"
                     to="/products/new"
                     color="blue"
                 />
             }
             searchParams={
-                <form
-                    className='border border-gray-700 rounded-xl px-4 py-2 mb-8'
-                    autoComplete="off" noValidate
-                    onSubmit={(e) => {
+                <FiltersFormContainer onSubmit={
+                    (e) => {
                         e.preventDefault()
 
                         const params = new URLSearchParams()
@@ -159,15 +131,12 @@ export const ProductList = () => {
                         if (form.typeId) params.set('typeId', form.typeId)
                         if (form.status !== '') params.set('status', form.status)
 
-
                         setSearchParams(params)
-                    }}
-                >
-                    <InputText
-                        id='name'
+                    }
+                }>
+                    <InputTextFilter
                         name='name'
                         label='Nombre del producto:'
-                        hasErrors={false}
                         placeholder='Buscar productos por nombre'
                         type='text'
                         value={form.name}
@@ -177,55 +146,43 @@ export const ProductList = () => {
                     />
 
                     <div className={`flex ${isSmallScreen ? 'flex-col' : 'flex-row gap-4'}`}>
-                        <SelectOption
-                            id='categoryId'
+                        <SelectOptionFilter
                             name='categoryId'
                             label='Categoría:'
-                            hasErrors={false}
                             options={categories}
                             onChange={(e) =>
                                 setForm(prev => ({ ...prev, categoryId: e.target.value }))
                             }
-                            nullOption={true}
                             textInNullOption="Todas las categorias"
                             value={form.categoryId}
                         />
-                        <SelectOption
-                            id='typeId'
+                        <SelectOptionFilter
                             name='typeId'
                             label='Tipo:'
-                            hasErrors={false}
                             options={types}
                             onChange={(e) =>
                                 setForm(prev => ({ ...prev, typeId: e.target.value }))
                             }
-                            nullOption={true}
                             textInNullOption="Todos los tipos"
                             value={form.typeId}
                         />
-                        <SelectOption
-                            id='status'
+                        <SelectOptionFilter
                             name='status'
                             label='Estado:'
-                            hasErrors={false}
                             options={statusOptions}
                             onChange={(e) =>
                                 setForm(prev => ({ ...prev, status: e.target.value }))
                             }
-                            nullOption={false}
                             value={form.status}
                         />
 
                     </div>
-                    <div className='flex justify-end'>
-                        <Button text="Filtrar" type="submit" color='green' size='large' aditionalStyles='mt-6 mb-2' />
 
-                    </div>
-                </form>}
+                </FiltersFormContainer>
+            }
         >
             {
-                data && <div className='text-sm pb-2 '>Se han encontrado {data?.totalElements} elementos ♦ Se obtuvierón los primeros {!data!.last ? data!.size * (data!.page + 1) : data!.totalElements} elementos ♦ Omitiendo {data!.size * (data!.page)} elementos</div>
-
+                data && <SearchCounter totalElements={data.totalElements} page={data.page} size={data.size} last={data.last} />
             }
 
             <TableHeaderContainer
@@ -239,7 +196,8 @@ export const ProductList = () => {
                             <BaseTableCell data={product.id} />
                             <BaseTableCell data={
                                 <div className='flex flex-col gap-1'>
-                                    <p>{product.name}</p>
+                                    {/* TODO: EL ENLACE SE PODRIA AÑADIR EN OTRA PARTE */}
+                                    <Link to={`/products/${product.id}`} className='hover:text-blue-900'>{product.name}</Link>
                                     <p className='text-xs'>{product.quantityModels === 1 ? '1 modelo' : `${product.quantityModels} modelos`}</p>
                                 </div>
                             } />
@@ -247,7 +205,7 @@ export const ProductList = () => {
                                 generateCaracterist(product)
 
                             } />
-                            <BaseTableCell data={generateSizes(product)} />
+                            <BaseTableCell data={<div className='text-xs'>{generateSizes(product)}</div>} />
 
                             <BaseTableCell data={
                                 <ProductChangeStatus productId={product.id.toString()} value={product.status ? 'Activo' : 'Inactivo'} />
@@ -256,10 +214,9 @@ export const ProductList = () => {
                             <BaseTableCell data={
                                 //* SOLAMENTE SI UN PRODUCTO ESTA ACTIVO, PUEDE SER EDITADO
                                 product.status === true ?
-                                    <Button
+                                    <ButtonLink
                                         size="small"
                                         text="Editar"
-                                        type="link"
                                         to={`/products/edit/${product.id}`}
                                         color="blue"
                                     /> : ''

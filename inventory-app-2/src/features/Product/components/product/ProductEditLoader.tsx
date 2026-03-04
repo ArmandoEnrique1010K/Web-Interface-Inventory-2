@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { getProduct } from "../../api/ProductAPI";
 import { TextMessage } from "@/components/TextMessage";
 import { ProductEditForm } from "./ProductEditForm";
+import { Error } from "@/views/Error";
 
 export const ProductEditLoader = () => {
     const params = useParams();
@@ -20,7 +21,7 @@ export const ProductEditLoader = () => {
     }
 
     if (isError) {
-        return <TextMessage text='Ha ocurrido un error' align='left' color='red' />
+        return <Error />
     }
 
     if (data) return (

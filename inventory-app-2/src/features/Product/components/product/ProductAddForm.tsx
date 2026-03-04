@@ -7,12 +7,13 @@ import { registerProduct } from "../../api/ProductAPI";
 import { toast } from "sonner";
 import { TitleContainer } from "@/components/TitleContainer";
 import { BaseForm } from "@/components/BaseForm";
-import { InputText } from "@/ui/InputText";
+import { InputText } from "@/ui/fields/InputText";
 import { Button } from "@/ui/Button";
-import { InputDate } from "@/ui/InputDate";
-import { SelectOption } from "@/ui/SelectOption";
+import { InputDate } from "@/ui/fields/InputDate";
+import { SelectOption } from "@/ui/fields/SelectOption";
 import { listAllCategories } from "../../api/CategoryAPI";
 import { listAllTypes } from "../../api/TypeAPI";
+import { ButtonLink } from "@/ui/ButtonLink";
 
 export const ProductAddForm = () => {
 
@@ -101,7 +102,6 @@ export const ProductAddForm = () => {
                                 label="Nombre"
                                 placeholder="Nombre del producto"
                                 type="text"
-                                hasErrors={true}
                                 errorMessage={errors.name}
                                 functionEnabled={register('name')} />
 
@@ -110,7 +110,6 @@ export const ProductAddForm = () => {
                                 label="Largo (cm.)"
                                 placeholder="Medida del largo del producto en cm"
                                 type="number"
-                                hasErrors={true}
                                 errorMessage={errors.length}
                                 functionEnabled={register('length')} />
 
@@ -119,7 +118,6 @@ export const ProductAddForm = () => {
                                 label="Ancho (cm.)"
                                 placeholder="Medida del ancho del producto en cm"
                                 type="number"
-                                hasErrors={true}
                                 errorMessage={errors.width}
                                 functionEnabled={register('width')} />
 
@@ -128,7 +126,6 @@ export const ProductAddForm = () => {
                                 label="Alto (cm.)"
                                 placeholder="Medida de la altura del producto en cm"
                                 type="number"
-                                hasErrors={true}
                                 errorMessage={errors.height}
                                 functionEnabled={register('height')} />
 
@@ -137,7 +134,6 @@ export const ProductAddForm = () => {
                                 label="Nombre del modelo"
                                 placeholder="Nombre del modelo"
                                 type="text"
-                                hasErrors={true}
                                 errorMessage={errors.modelName}
                                 functionEnabled={register('modelName')} />
 
@@ -147,7 +143,6 @@ export const ProductAddForm = () => {
                                 label="URL de la imagen"
                                 placeholder="URL de la imagen"
                                 type="text"
-                                hasErrors={true}
                                 errorMessage={errors.modelImageUrl}
                                 functionEnabled={register('modelImageUrl')} />
 
@@ -173,9 +168,6 @@ export const ProductAddForm = () => {
                                 errorMessage={errors.categoryId}
                                 functionEnabled={register('categoryId')}
                                 options={categories}
-                                hasErrors={true}
-                                onChange={() => { }}
-                                nullOption={true}
                                 textInNullOption="Seleccione una categoria"
                             />
 
@@ -185,9 +177,6 @@ export const ProductAddForm = () => {
                                 errorMessage={errors.typeId}
                                 functionEnabled={register('typeId')}
                                 options={types}
-                                hasErrors={true}
-                                onChange={() => { }}
-                                nullOption={true}
                                 textInNullOption="Seleccione un tipo"
                             />
 
@@ -196,7 +185,7 @@ export const ProductAddForm = () => {
                     buttons={
                         <>
                             <Button size="large" text="Añadir producto" type="submit" color="green" />
-                            <Button size="large" text="Cancelar" type="link" color="gray" to="/products" />
+                            <ButtonLink size="large" text="Cancelar" color="gray" to="/products" />
                         </>
                     }
                 />

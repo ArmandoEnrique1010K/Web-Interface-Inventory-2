@@ -3,16 +3,13 @@ type Props = {
     id: string; // Id del input
     name?: string
     label?: string; // Etiqueta del input
-    hasErrors: boolean // Verifica si existen mensajes de errores
     errorMessage?: FieldError | undefined, // Mensaje de error
     functionEnabled?: UseFormRegisterReturn // Funcion que se ejecuta al cambiar el valor del input
     options: { value: string, label: string }[],
-    onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void,
-    nullOption?: boolean,
     textInNullOption?: string,
-    value?: string //* SOLAMENTE EN CAMPOS QUE NO TENGAN REACT HOOK FORM
+    editableValue?: string //* SOLAMENTE EN CAMPOS QUE NO TENGAN REACT HOOK FORM
 }
-export const SelectOption = ({ id, name, label, hasErrors, errorMessage, functionEnabled, options, onChange, nullOption, textInNullOption, value }: Props) => {
+export const SelectOption = ({ id, name, label, errorMessage, functionEnabled, options, textInNullOption, editableValue }: Props) => {
     return (
         <div className="flex flex-col space-y-1 w-full pt-2">
             <label className="text-md font-bold" htmlFor={id}>{label}</label>
@@ -27,13 +24,11 @@ export const SelectOption = ({ id, name, label, hasErrors, errorMessage, functio
                         // NOTA: NO SE DEBEN UTILIZAR LAS PROPS value Y defaultValue, REACT HOOK FORM ya tiene esas props
                         // defaultValue={defaultValue}
                         // value={value || defaultValue}
-                        value={value}
+                        value={editableValue}
 
-
-                        onChange={functionEnabled?.onChange || onChange}
                     >
                         {/* TODO: LA VISTA PARPADEA AL CARGAR LA OPCION SELECCIONADA POR VALUE */}
-                        {nullOption && <option value="">
+                        {textInNullOption && <option value="">
                             {textInNullOption || "Seleccione una opción"}
                         </option>}
 
@@ -48,13 +43,12 @@ export const SelectOption = ({ id, name, label, hasErrors, errorMessage, functio
 
                 </div>
                 {
-                    hasErrors && (
-                        <div className="min-h-6">
-                            <p className="text-red-700 text-sm">
-                                {errorMessage?.message}
-                            </p>
-                        </div>
-                    )
+
+                    <div className="min-h-6">
+                        <p className="text-red-700 text-sm">
+                            {errorMessage?.message}
+                        </p>
+                    </div>
                 }
             </div>
         </div>

@@ -8,10 +8,11 @@ import { toast } from 'sonner';
 import { BaseForm } from '@/components/BaseForm';
 import { TitleContainer } from '@/components/TitleContainer';
 import { Button } from '@/ui/Button';
-import { InputText } from '@/ui/InputText';
-import { SelectOption } from '@/ui/SelectOption';
+import { InputText } from '@/ui/fields/InputText';
+import { SelectOption } from '@/ui/fields/SelectOption';
 import { listAllCategories } from '../../api/CategoryAPI';
 import { listAllTypes } from '../../api/TypeAPI';
+import { ButtonLink } from '@/ui/ButtonLink';
 
 type Props = {
     data: ProductUpdateForm;
@@ -106,7 +107,6 @@ export const ProductEditForm = ({ data, productId }: Props) => {
                                 label="Nombre"
                                 placeholder="Nombre de la categoria"
                                 type="text"
-                                hasErrors={true}
                                 errorMessage={errors.name}
                                 functionEnabled={register('name')} />
 
@@ -116,7 +116,6 @@ export const ProductEditForm = ({ data, productId }: Props) => {
                                 label="Largo (cm.)"
                                 placeholder="Medida del largo del producto en cm"
                                 type="number"
-                                hasErrors={true}
                                 errorMessage={errors.length}
                                 functionEnabled={register('length')} />
 
@@ -125,7 +124,6 @@ export const ProductEditForm = ({ data, productId }: Props) => {
                                 label="Ancho (cm.)"
                                 placeholder="Medida del ancho del producto en cm"
                                 type="number"
-                                hasErrors={true}
                                 errorMessage={errors.width}
                                 functionEnabled={register('width')} />
 
@@ -134,7 +132,6 @@ export const ProductEditForm = ({ data, productId }: Props) => {
                                 label="Alto (cm.)"
                                 placeholder="Medida de la altura del producto en cm"
                                 type="number"
-                                hasErrors={true}
                                 errorMessage={errors.height}
                                 functionEnabled={register('height')} />
                             <SelectOption
@@ -143,10 +140,8 @@ export const ProductEditForm = ({ data, productId }: Props) => {
                                 errorMessage={errors.categoryId}
                                 functionEnabled={register('categoryId')}
                                 options={categories}
-                                hasErrors={true}
-                                nullOption={true}
                                 textInNullOption="Seleccione una categoria"
-                                value={data.categoryId}
+                                editableValue={data.categoryId}
                             />
 
                             <SelectOption
@@ -155,10 +150,8 @@ export const ProductEditForm = ({ data, productId }: Props) => {
                                 errorMessage={errors.typeId}
                                 functionEnabled={register('typeId')}
                                 options={types}
-                                hasErrors={true}
-                                nullOption={true}
                                 textInNullOption="Seleccione un tipo"
-                                value={data.typeId}
+                                editableValue={data.typeId}
                             />
 
                         </>
@@ -166,7 +159,7 @@ export const ProductEditForm = ({ data, productId }: Props) => {
                     buttons={
                         <>
                             <Button size="large" text="Editar producto" type="submit" color="green" />
-                            <Button size="large" text="Cancelar" type="link" color="gray" to="/products" />
+                            <ButtonLink size="large" text="Cancelar" color="gray" to="/products" />
                         </>
                     }
 

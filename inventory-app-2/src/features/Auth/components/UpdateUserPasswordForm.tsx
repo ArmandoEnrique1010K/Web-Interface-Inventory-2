@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query'
 import { updateUserPassword } from '../api/AuthAPI'
 import { toast } from 'sonner'
 import { useNavigate } from 'react-router-dom'
-import { InputText } from '@/ui/InputText'
+import { InputText } from '@/ui/fields/InputText'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateSecretToken } from '@/reducers/authSlice'
 import type { RootState } from '@/store/store'
@@ -77,7 +77,6 @@ export const UpdateUserPasswordForm = () => {
                         placeholder="Introduce tu nueva contraseña"
                         type="password"
                         errorMessage={errors.newPassword}
-                        hasErrors={true}
                         functionEnabled={register('newPassword')} />
                     <InputText
                         id="confirmNewPassword"
@@ -85,7 +84,6 @@ export const UpdateUserPasswordForm = () => {
                         placeholder="Confirma la nueva contraseña"
                         type="password"
                         errorMessage={errors.confirmNewPassword}
-                        hasErrors={true}
                         functionEnabled={register('confirmNewPassword')} />
                 </>
             }

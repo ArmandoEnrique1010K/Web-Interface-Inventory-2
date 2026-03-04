@@ -6,9 +6,10 @@ import { toast } from "sonner";
 import { BaseForm } from "@/components/BaseForm";
 import type { GeneralError } from "types";
 import { Button } from "@/ui/Button";
-import { InputText } from "@/ui/InputText";
+import { InputText } from "@/ui/fields/InputText";
 import { TitleContainer } from "@/components/TitleContainer";
 import { updateType } from "../../api/TypeAPI";
+import { ButtonLink } from "@/ui/ButtonLink";
 
 type Props = {
     data: CategoryForm;
@@ -72,7 +73,7 @@ export const TypeEditForm = ({ data, typeId }: Props) => {
                     buttons={
                         <>
                             <Button size="large" text="Editar tipo" type="submit" color="green" />
-                            <Button size="large" text="Volver" type="link" color="gray" to="/products/types" />
+                            <ButtonLink size="large" text="Volver" color="gray" to="/products/types" />
                         </>
                     }
                     inputs={
@@ -81,7 +82,6 @@ export const TypeEditForm = ({ data, typeId }: Props) => {
                             label="Nombre"
                             placeholder="Nombre del tipo"
                             type="text"
-                            hasErrors={true}
                             errorMessage={errors.name}
                             functionEnabled={register('name')} />
 

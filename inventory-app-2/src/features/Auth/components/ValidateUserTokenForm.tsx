@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { validateUserToken } from '../api/AuthAPI'
 import { toast } from 'sonner'
-import { InputText } from '@/ui/InputText'
+import { InputText } from '@/ui/fields/InputText'
 import { useDispatch, useSelector } from 'react-redux'
 import type { RootState } from '@/store/store'
 import { updateSecretToken } from '@/reducers/authSlice'
@@ -80,7 +80,6 @@ export const ValidateUserTokenForm = () => {
                     <InputText
                         id="value"
                         label="Token"
-                        hasErrors={true}
                         placeholder="Introduce el token de 6 digitos"
                         type="number"
                         errorMessage={errors.value}

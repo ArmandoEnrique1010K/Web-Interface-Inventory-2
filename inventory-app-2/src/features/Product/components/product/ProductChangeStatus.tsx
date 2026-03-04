@@ -28,12 +28,10 @@ export const ProductChangeStatus = ({ productId, value }: { productId: string, v
 
     // TODO: EN ALGUNA FUTURA ACTUALIZACION, PODRIA CAMBIAR EL DISEÑO DEL BOTON A UN BORDEADO SIN COLOR DE RELLENO
     return (
-
-        <>
-            <form onSubmit={handleSubmit(() => mutate())} className="flex justify-center" >
-                <Button size="small" text={value} type="submit" color={value === 'Activo' ? 'green' : 'red'} />
-            </form>
-        </>
+        // TODO: ¿PODRIA EXISTIR ALGUNA ALTERNATIVA EN LUGAR DE USAR UN OPERADOR ! EN TAILWIND PARA APLICAR UN ESTILO IMPORTANTE
+        <form onSubmit={handleSubmit(() => mutate())} className="flex justify-center">
+            <Button text={value} type="submit" size="small" isLarge={false} color={value === 'Activo' ? 'green' : 'red'} aditionalStyles="!py-1.5" />
+        </form>
     )
 }
 

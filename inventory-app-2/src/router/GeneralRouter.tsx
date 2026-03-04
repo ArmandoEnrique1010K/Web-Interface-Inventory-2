@@ -23,6 +23,7 @@ import { TypeEditLoader } from '@/features/Product/components/type/TypeEditLoade
 import { ProductAddForm } from '@/features/Product/components/product/ProductAddForm'
 import { ProductList } from '@/features/Product/components/product/ProductList'
 import { ProductEditLoader } from '@/features/Product/components/product/ProductEditLoader'
+import { ProductDetails } from '@/features/Product/components/product/ProductDetails'
 
 const productItems: MenuItem[] = [
     {
@@ -88,6 +89,7 @@ export const GeneralRouter = () => {
                             </NavbarContainer>
                         }>
                             <Route index element={<ProductList />} />
+                            <Route path=":id" element={<ProductDetails />} />
                             <Route path="new" element={<ProductAddForm />} />
                             <Route path="edit/:id" element={<ProductEditLoader />} />
 

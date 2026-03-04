@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom"
 import { useMutation } from "@tanstack/react-query"
 import { currentSession, login } from "../api/AuthAPI"
 import { toast } from "sonner"
-import { InputText } from "@/ui/InputText"
+import { InputText } from "@/ui/fields/InputText"
 import { AuthFormContainer } from "@/features/Auth/views/AuthFormContainer"
 import { useDispatch } from "react-redux"
 import { setAuthenticated, setUserRoles } from '@/reducers/authSlice';
@@ -70,7 +70,6 @@ export const LoginForm = () => {
                         label="Correo"
                         placeholder="Correo del usuario"
                         type="email"
-                        hasErrors={true} // Aunque no hay errores, se tiene que mostrar como si hubiera mensajes de errores
                         errorMessage={errors.email}
                         functionEnabled={register('email')} />
                     <InputText
@@ -78,7 +77,6 @@ export const LoginForm = () => {
                         label="Contraseña"
                         placeholder="Contraseña del usuario"
                         type="password"
-                        hasErrors={true}
                         errorMessage={errors.password}
                         functionEnabled={register('password')} />
                 </>

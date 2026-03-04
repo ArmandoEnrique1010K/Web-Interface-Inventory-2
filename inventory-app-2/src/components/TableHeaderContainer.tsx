@@ -19,9 +19,9 @@ export const TableHeaderContainer = ({ headers, children, isError, isEmpty }: Pr
     }
 
     return (
-        <div className='overflow-x-auto' >
+        <div className='overflow-x-auto mt-2 mb-6'>
 
-            <table className=' border-collapse border border-gray-300 overflow-hidden w-full'>
+            <table className=' border-collapse border border-gray-300 overflow-hidden w-full '>
                 <thead>
                     <tr className='bg-gray-800 text-white'>
                         {headers.map((header, index) => (

@@ -1,14 +1,14 @@
 import { useQuery } from '@tanstack/react-query'
 import { listAllCategories } from '../../api/CategoryAPI'
 import type { CategoryItem } from '../../types'
-import { Button } from '@/ui/Button'
 import { TitleContainer } from '@/components/TitleContainer'
 import { TableHeaderContainer } from '@/components/TableHeaderContainer'
 import { TableRowContainer } from '@/components/TableRowContainer'
 import { BaseTableCell } from '@/components/BaseTableCell'
+import { ButtonLink } from '@/ui/ButtonLink'
 
 export const CategoryList = () => {
-    const { data, isLoading, isError } = useQuery({
+    const { data, isError } = useQuery({
         queryKey: ['list-categories'],
         queryFn: listAllCategories
     })
@@ -17,10 +17,9 @@ export const CategoryList = () => {
         <TitleContainer
             title="Categorias"
             buttons={
-                <Button
+                <ButtonLink
                     size="large"
                     text="Nueva categoria"
-                    type="link"
                     to="/products/categories/new"
                     color="blue"
                 />
@@ -29,7 +28,6 @@ export const CategoryList = () => {
             <TableHeaderContainer
                 headers={['ID', 'Nombre', 'Editar']}
                 isError={isError}
-                isLoading={isLoading}
                 isEmpty={!data?.length}
             >
                 {
@@ -38,10 +36,9 @@ export const CategoryList = () => {
                             <BaseTableCell data={category.id} />
                             <BaseTableCell data={category.name} />
                             <BaseTableCell data={
-                                <Button
+                                <ButtonLink
                                     size="small"
                                     text="Editar"
-                                    type="link"
                                     to={`/products/categories/edit/${category.id}`}
                                     color="blue"
                                 />

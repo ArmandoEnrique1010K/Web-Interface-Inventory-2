@@ -6,17 +6,13 @@ type Props = {
     id: string; // Id del input
     name?: string,
     label?: string; // Etiqueta del input
-    hasErrors: boolean;
     placeholder?: string; // Texto que se muestra en el input
     type: 'text' | 'password' | 'email' | 'number' | 'hidden'; // Tipo de input (text, password, email, etc)
     errorMessage?: FieldError | undefined, // Mensaje de error
     functionEnabled?: UseFormRegisterReturn // Funcion que se ejecuta al cambiar el valor del input con react hook form
-    // Evento clasico que se utiliza
-    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
-    value?: string //* SOLAMENTE EN CAMPOS QUE NO TENGAN REACT HOOK FORM
 }
 
-export const InputText = ({ id, name, label, hasErrors, placeholder, type, errorMessage, functionEnabled, onChange, value }: Props) => {
+export const InputText = ({ id, name, label, placeholder, type, errorMessage, functionEnabled }: Props) => {
 
     // Estado para ver contraseñas
     const [showPassword, setShowPassword] = useState(false);
@@ -43,9 +39,6 @@ export const InputText = ({ id, name, label, hasErrors, placeholder, type, error
                         name={name}
                         onWheel={(e) => e.currentTarget.blur()}
                         {...functionEnabled}
-                        // defaultValue={defaultValue}
-                        onChange={functionEnabled?.onChange || onChange}
-                        value={value}
                     />
                     {
                         type === "password" && (
@@ -57,13 +50,11 @@ export const InputText = ({ id, name, label, hasErrors, placeholder, type, error
                 </div>
 
                 {
-                    hasErrors && (
-                        <div className="min-h-6">
-                            <p className="text-red-700 text-sm">
-                                {errorMessage?.message}
-                            </p>
-                        </div>
-                    )
+                    <div className="min-h-6">
+                        <p className="text-red-700 text-sm">
+                            {errorMessage?.message}
+                        </p>
+                    </div>
                 }
             </div>
         </div>

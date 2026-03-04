@@ -3,12 +3,13 @@ import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import type { TypeForm } from "../../types";
-import { InputText } from "@/ui/InputText";
+import { InputText } from "@/ui/fields/InputText";
 import { Button } from "@/ui/Button";
 import { TitleContainer } from "@/components/TitleContainer";
 import { BaseForm } from "@/components/BaseForm";
 import type { GeneralError } from "types";
 import { registerType } from "../../api/TypeAPI";
+import { ButtonLink } from "@/ui/ButtonLink";
 
 export const TypeAddForm = () => {
 
@@ -63,7 +64,6 @@ export const TypeAddForm = () => {
                                 label="Nombre"
                                 placeholder="Nombre del tipo"
                                 type="text"
-                                hasErrors={true}
                                 errorMessage={errors.name}
                                 functionEnabled={register('name')} />
 
@@ -72,7 +72,7 @@ export const TypeAddForm = () => {
                     buttons={
                         <>
                             <Button size="large" text="Añadir tipo" type="submit" color="green" />
-                            <Button size="large" text="Cancelar" type="link" color="gray" to="/products/types" />
+                            <ButtonLink size="large" text="Cancelar" color="gray" to="/products/types" />
                         </>
                     }
                 />

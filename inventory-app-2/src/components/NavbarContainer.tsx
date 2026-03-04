@@ -13,7 +13,13 @@ export const NavbarContainer = ({ menuItems, children }: Props) => {
 
     const styleToCurrentPath = (to: string) => {
         // Previamente se utilizo (location.pathname === to)
-        if (location.pathname.includes(to) && (to !== '/products' || location.pathname === '/products' || location.pathname === '/products/new' || location.pathname.includes('/products/edit'))) {
+        if (location.pathname.includes(to) && (
+            to !== '/products' ||
+            location.pathname === '/products' ||
+            location.pathname === '/products/new' ||
+            location.pathname.includes('/products/edit') ||
+            (location.pathname.includes('/products/') && /\/\d+$/.test(location.pathname)) // Si termina en un numero
+        )) {
             return 'bg-blue-700';
         }
         return 'bg-gray-500';
@@ -24,7 +30,8 @@ export const NavbarContainer = ({ menuItems, children }: Props) => {
     const isExtraSmallScreen = useMediaQuery({ query: '(max-width: 420px)' })
 
     return (
-        <div className='flex flex-col flex-1'>
+        // TODO: INVESTIGAR SOBRE min-h-dvh EN TAILWIND V4
+        <div className='min-h-dvh flex flex-col'>
             <div className='flex flex-row text-white bg-gray-500'>
                 {
                     menuItems && menuItems.map((item) => (
@@ -35,7 +42,7 @@ export const NavbarContainer = ({ menuItems, children }: Props) => {
                     ))
                 }
             </div>
-            <div className='flex flex-col p-4'>
+            <div className='flex flex-col flex-1 p-4'>
                 {children}
             </div>
         </div>

@@ -27,7 +27,7 @@ export const Paginator = ({
 
     //* En dispositivos moviles no se mostraran los botones de las paginas x - 2, x - 1, x + 1, x + 2, donde x es la pagina actual
     return (
-        <div className="flex flex-col gap-2 mt-4 text-center">
+        <div className="flex flex-col gap-2 text-center">
             <div className="flex items-center gap-2 justify-center">
                 <Button
                     text="|<"

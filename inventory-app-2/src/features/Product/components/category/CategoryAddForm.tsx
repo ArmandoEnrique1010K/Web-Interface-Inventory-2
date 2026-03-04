@@ -4,11 +4,12 @@ import { useMutation } from "@tanstack/react-query";
 import { registerCategory } from "../../api/CategoryAPI";
 import { toast } from "sonner";
 import type { CategoryForm } from "../../types";
-import { InputText } from "@/ui/InputText";
+import { InputText } from "@/ui/fields/InputText";
 import { Button } from "@/ui/Button";
 import { TitleContainer } from "@/components/TitleContainer";
 import { BaseForm } from "@/components/BaseForm";
 import type { GeneralError } from "types";
+import { ButtonLink } from "@/ui/ButtonLink";
 
 export const CategoryAddForm = () => {
 
@@ -63,7 +64,6 @@ export const CategoryAddForm = () => {
                                 label="Nombre"
                                 placeholder="Nombre de la categoria"
                                 type="text"
-                                hasErrors={true}
                                 errorMessage={errors.name}
                                 functionEnabled={register('name')} />
 
@@ -72,7 +72,7 @@ export const CategoryAddForm = () => {
                     buttons={
                         <>
                             <Button size="large" text='Añadir categoria' type="submit" color="green" />
-                            <Button size="large" text="Cancelar" type="link" color="gray" to="/products/categories" />
+                            <ButtonLink size="large" text="Cancelar" color="gray" to="/products/categories" />
                         </>
                     }
                 />
