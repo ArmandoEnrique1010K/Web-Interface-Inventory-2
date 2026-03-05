@@ -2,7 +2,7 @@
 import { api } from "@/lib/axiosConfig";
 import type { DataResponse, GeneralResponse } from "types";
 import { isAxiosError } from "axios";
-import type { UserRegisterForm } from "../types";
+import type { UserProfileForm, UserRegisterForm } from "../types";
 
 
 export const registerUser = async (formData: UserRegisterForm) => {
@@ -121,6 +121,43 @@ export const getUserProfile = async () => {
             }
         }
 
+        throw {
+            type: 'GENERAL_ERROR',
+            message: 'Ocurrió un error inesperado'
+        }
+    }
+}
+export const updateUserProfile = async (formData: UserProfileForm) => {
+    try {
+        const url = `/users/profile`
+        const { data } = await api.put<GeneralResponse>(url, formData, {
+            withCredentials: true
+        })
+
+        if (data.type === 'success') {
+            return data.message
+        }
+
+    } catch (error) {
+        if (isAxiosError(error) && error.response) {
+            const err = error.response.data;
+
+            if (!err) return
+
+            if (err.fields) {
+                throw {
+                    type: 'FIELD_ERROR',
+                    message: err.message,
+                    fields: err.fields
+                }
+            }
+            if (err.message) {
+                throw {
+                    type: 'GENERAL_ERROR',
+                    message: err.message
+                }
+            }
+        }
         throw {
             type: 'GENERAL_ERROR',
             message: 'Ocurrió un error inesperado'

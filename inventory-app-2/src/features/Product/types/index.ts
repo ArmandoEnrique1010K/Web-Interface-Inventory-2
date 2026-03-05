@@ -6,10 +6,15 @@ export const categorySchema = z.object({
 })
 
 export const modelSchema = z.object({
+    id: z.number(),
     name: z.string(),
     imageUrl: z.string(),
     entryDate: z.string(),
     caducityDate: z.string(),
+    totalQuantityAvailable: z.number(),
+    totalQuantityReceived: z.number(),
+    totalQuantityDelivered: z.number(),
+    status: z.boolean(),
 })
 
 export const productSchema = z.object({
@@ -52,6 +57,8 @@ export type ModelForm = Model;
 export type ProductCreateForm = Pick<Product, 'name' | 'length' | 'width' | 'height' | 'modelName' | 'modelImageUrl' | 'modelEntryDate' | 'modelCaducityDate' | 'categoryId' | 'typeId'>;
 export type ProductUpdateForm = Pick<Product, "name" | "length" | "width" | "height" | "categoryId" | "typeId">;
 export type ProductItem = Pick<Product, "id" | "name" | "length" | "width" | "height" | "quantityModels" | "status" | "categoryId" | "categoryName" | "typeId" | "typeName">;
+
+export type ModelItem = Pick<Model, "id" | "name" | "imageUrl" | "entryDate" | "caducityDate" | "totalQuantityAvailable" | "totalQuantityReceived" | "totalQuantityDelivered" | "status">;
 
 export type TypeForm = Pick<Type, "name">;
 export type TypeItem = Type

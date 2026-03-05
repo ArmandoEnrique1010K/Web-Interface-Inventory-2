@@ -4,7 +4,7 @@ export const userSchema = z.object({
     firstname: z.string(),
     lastname: z.string(),
     email: z.string(),
-    dni: z.number(),
+    dni: z.string(),
     password: z.string(),
 
     operator: z.boolean(),

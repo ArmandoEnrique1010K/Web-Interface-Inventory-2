@@ -4,10 +4,11 @@ import type { GeneralError } from "@/types/index"
 import { toast } from "sonner"
 import { Button } from "@/ui/Button"
 import { useForm } from "react-hook-form"
+import { useNavigate } from "react-router-dom"
 
-export const ProductChangeStatus = ({ productId, value }: { productId: string, value: string }) => {
+export const ProductChangeStatus = ({ from, productId, value }: { from?: string, productId: string, value: string }) => {
     const { handleSubmit } = useForm();
-
+    const navigate = useNavigate();
     const queryClient = useQueryClient();
 
     const { mutate } = useMutation({
@@ -20,8 +21,15 @@ export const ProductChangeStatus = ({ productId, value }: { productId: string, v
             }
         },
         onSuccess: async (data) => {
-            queryClient.invalidateQueries({ queryKey: ["list-products"] })
             toast.success(data)
+            queryClient.invalidateQueries({ queryKey: ["list-products"] })
+
+            if (from === 'product-details') {
+                console.log('REDIRECCIONANDO')
+                navigate('/products')
+            }
+
+
         }
     })
 

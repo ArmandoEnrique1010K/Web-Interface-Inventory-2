@@ -9,7 +9,7 @@ import { ValidateUserTokenForm } from '@/features/Auth/components/ValidateUserTo
 import { UpdateUserPasswordForm } from '@/features/Auth/components/UpdateUserPasswordForm'
 import { useSelector } from 'react-redux'
 import type { RootState } from '@/store/store'
-import { UserProfile } from '@/features/User/views/UserProfile'
+import { UserProfile } from '@/features/User/components/UserProfile'
 import { Loading } from '@/views/Loading'
 import type { MenuItem } from 'types'
 import { DocumentDuplicateIcon, NewspaperIcon, RectangleGroupIcon, TagIcon } from '@heroicons/react/24/outline'
@@ -24,6 +24,7 @@ import { ProductAddForm } from '@/features/Product/components/product/ProductAdd
 import { ProductList } from '@/features/Product/components/product/ProductList'
 import { ProductEditLoader } from '@/features/Product/components/product/ProductEditLoader'
 import { ProductDetails } from '@/features/Product/components/product/ProductDetails'
+import { ProfileEditLoader } from '@/features/User/components/ProfileEditLoader'
 
 const productItems: MenuItem[] = [
     {
@@ -113,10 +114,9 @@ export const GeneralRouter = () => {
                             <NavbarContainer title='Perfil del usuario'>
                                 <Outlet />
                             </NavbarContainer>
-
                         }>
                             <Route index element={<UserProfile />} />
-                            <Route path='update' element={<h1> ACTUALIZAR PERFIL</h1>} />
+                            <Route path='update' element={<ProfileEditLoader />} />
                         </Route>
 
 

@@ -32,7 +32,6 @@ export const ProductEditForm = ({ data, productId }: Props) => {
             typeId: data.typeId,
         }
     })
-    console.log(data.categoryId);
 
     const queryClient = useQueryClient();
 
