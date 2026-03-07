@@ -75,6 +75,7 @@ export const ProductDetails = () => {
             buttons={
                 <>
                     <ButtonLink size="large" to={`/products/new-model/${id}`} color="green" text="Añadir modelo" />
+                    {/* TODO: PODRIA RENDERIZAR UNA VENTANA MODAL EN LUGAR DE REDIRECCIONAR A LA PAGINA DE EDITAR PRODUCTO */}
                     <ButtonLink size="large" to={`/products/edit/${id}`} color="blue" text="Editar" />
                     {/* <ButtonLink size="large" to={`/products/status/${id}`} color="red" text={productData!.status ? 'Desactivar' : 'Activar'} /> */}
 

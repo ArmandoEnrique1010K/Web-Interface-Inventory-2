@@ -60,7 +60,7 @@ export const UserProfile = () => {
                 </div>
                 <div className="flex flex-row  bg-white border border-blue-600">
                     <div className="font-semibold bg-blue-500 text-white p-2 w-30">Roles</div>
-                    <div className="flex flex-row justify-center items-center gap-2 m-2">
+                    <div className="flex flex-col  items-start gap-2 m-2">
                         {/* APLICAR UN FORMATO DE COLOR A CADA ROL */}
                         {
                             data.roles?.map((role: string) => {

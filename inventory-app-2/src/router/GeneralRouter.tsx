@@ -25,6 +25,7 @@ import { ProductList } from '@/features/Product/components/product/ProductList'
 import { ProductEditLoader } from '@/features/Product/components/product/ProductEditLoader'
 import { ProductDetails } from '@/features/Product/components/product/ProductDetails'
 import { ProfileEditLoader } from '@/features/User/components/ProfileEditLoader'
+import { CreditsDetails } from '@/features/Credits/components/CreditsDetails'
 
 const productItems: MenuItem[] = [
     {
@@ -119,8 +120,15 @@ export const GeneralRouter = () => {
                             <Route path='update' element={<ProfileEditLoader />} />
                         </Route>
 
+                        <Route path="credits" element={
+                            <NavbarContainer title='Creditos del autor'>
+                                <Outlet />
+                            </NavbarContainer>
+                        }>
+                            <Route index element={<CreditsDetails />} />
+                        </Route>
 
-                        <Route path="/credits" element={<h1>Creditos del autor</h1>} />
+
 
                         <Route path="*" element={<Navigate to="/" replace />} />
                     </Route>
