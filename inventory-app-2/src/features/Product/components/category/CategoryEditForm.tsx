@@ -10,6 +10,7 @@ import { Button } from "@/ui/Button";
 import { InputText } from "@/ui/fields/InputText";
 import { TitleContainer } from "@/components/TitleContainer";
 import { ButtonLink } from "@/ui/ButtonLink";
+import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 
 type Props = {
     data: CategoryForm;
@@ -72,8 +73,8 @@ export const CategoryEditForm = ({ data, categoryId }: Props) => {
                     onSubmit={handleSubmit(handleForm)}
                     buttons={
                         <>
-                            <Button size="large" text="Editar categoria" type="submit" color="green" />
-                            <ButtonLink size="large" text="Volver" color="gray" to="/products/categories" />
+                            <Button icon={<ArrowUpCircleIcon />} size="large" text="Editar categoria" type="submit" color="green" />
+                            <ButtonLink icon={<XCircleIcon />} size="large" text="Volver" color="gray" to="/products/categories" />
                         </>
                     }
                     inputs={

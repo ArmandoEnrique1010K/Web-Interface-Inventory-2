@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { TextMessage } from "@/components/TextMessage";
-import { getUserProfile } from "../api/UserAPI";
 import { UpdateProfileForm } from "./UpdateProfileForm";
+import { getUserProfile } from "../api/ProfileAPI";
 
 export const ProfileEditLoader = () => {
     const { data, isLoading, isError } = useQuery({

@@ -12,9 +12,8 @@ export const userSchema = z.object({
     admin: z.boolean(),
 })
 
-type User = z.infer<typeof userSchema>
+export type User = z.infer<typeof userSchema>
 
 export type UserRegisterForm = User;
-export type UserProfileForm = Pick<User, "firstname" | "lastname" | "email" | "dni">;
 export type RolesForm = Pick<User, "operator" | "secretary" | "admin">;
 

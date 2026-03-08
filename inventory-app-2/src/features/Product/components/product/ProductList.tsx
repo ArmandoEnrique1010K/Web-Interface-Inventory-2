@@ -18,6 +18,7 @@ import { ButtonLink } from '@/ui/ButtonLink'
 import { generateSizes } from '@/utils/generateSizes'
 import { InputTextFilter } from '@/ui/filters/InputTextFilter'
 import { SelectOptionFilter } from '@/ui/filters/SelectOptionFilter'
+import { PlusCircleIcon } from '@heroicons/react/24/outline'
 
 export const ProductList = () => {
     const [searchParams, setSearchParams] = useSearchParams()
@@ -113,6 +114,7 @@ export const ProductList = () => {
             title="Productos"
             buttons={
                 <ButtonLink
+                    icon={<PlusCircleIcon />}
                     size="large"
                     text="Nuevo producto"
                     to="/products/new"
@@ -145,7 +147,7 @@ export const ProductList = () => {
                         }
                     />
 
-                    <div className={`flex ${isSmallScreen ? 'flex-col' : 'flex-row gap-4'}`}>
+                    <div className={`flex ${isSmallScreen ? 'flex-col gap-2' : 'flex-row gap-4'}`}>
                         <SelectOptionFilter
                             name='categoryId'
                             label='Categoría:'
@@ -208,7 +210,7 @@ export const ProductList = () => {
                             <BaseTableCell data={<div className='text-xs'>{generateSizes(product)}</div>} />
 
                             <BaseTableCell data={
-                                <ProductChangeStatus productId={product.id.toString()} value={product.status ? 'Activo' : 'Inactivo'} />
+                                <ProductChangeStatus size="small" productId={product.id.toString()} value={product.status ? 'Activo' : 'Inactivo'} />
                             } />
 
                             <BaseTableCell data={
@@ -220,7 +222,7 @@ export const ProductList = () => {
                                         to={`/products/edit/${product.id}`}
                                         color="blue"
                                     /> : ''
-                            } isCenter />
+                            } />
                         </TableRowContainer>
                     })
                 }

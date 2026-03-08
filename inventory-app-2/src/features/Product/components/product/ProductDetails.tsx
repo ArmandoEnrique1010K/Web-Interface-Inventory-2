@@ -9,6 +9,10 @@ import { generateSizes } from "@/utils/generateSizes"
 import { Button } from "@/ui/Button"
 import { useSearchParams } from "react-router-dom"
 import type { ModelItem } from '../../types/index';
+import { TableHeaderContainer } from "@/components/TableHeaderContainer"
+import { TableRowContainer } from "@/components/TableRowContainer"
+import { BaseTableCell } from "@/components/BaseTableCell"
+import { PencilSquareIcon, PlusCircleIcon } from "@heroicons/react/24/outline"
 import { ProductChangeStatus } from "./ProductChangeStatus"
 
 export const ProductDetails = () => {
@@ -23,7 +27,7 @@ export const ProductDetails = () => {
         enabled: !!id
     })
 
-    const { data: modelsData = [], isLoading: isModelsLoading } = useQuery({
+    const { data: modelsData = [], isLoading: isModelsLoading, isError: isModelsError } = useQuery({
         queryKey: ['models', id],
         queryFn: () => listAllModelsByProductId(id!),
         enabled: !!id
@@ -74,79 +78,139 @@ export const ProductDetails = () => {
             title={productData!.name}
             buttons={
                 <>
-                    <ButtonLink size="large" to={`/products/new-model/${id}`} color="green" text="Añadir modelo" />
-                    {/* TODO: PODRIA RENDERIZAR UNA VENTANA MODAL EN LUGAR DE REDIRECCIONAR A LA PAGINA DE EDITAR PRODUCTO */}
-                    <ButtonLink size="large" to={`/products/edit/${id}`} color="blue" text="Editar" />
-                    {/* <ButtonLink size="large" to={`/products/status/${id}`} color="red" text={productData!.status ? 'Desactivar' : 'Activar'} /> */}
-
-                    <ProductChangeStatus from='product-details' productId={id!} value={productData!.status ? 'Activo' : 'Inactivo'} />
+                    <ButtonLink icon={<PlusCircleIcon />} size="large" to={`/products/new-model/${id}`} color="green" text="Añadir modelo" />
+                    <ButtonLink icon={<PencilSquareIcon />} size="large" to={`/products/edit/${id}`} color="blue" text="Editar" />
+                    {/* TODO: EDITAR ESTE BOTON */}
+                    <ProductChangeStatus from='product-details' size="large" productId={id!} value={productData!.status ? 'Desactivar' : 'Activar'} />
                 </>
             }
             children={
                 <div className="flex flex-col gap-2">
-                    <h2 className="text-3xl font-bold">Características</h2>
 
-                    <div className="flex flex-row gap-4">
-                        <div className="flex-col">
-                            <div>Categoria: {productData!.categoryName}</div>
-                            <div>Tipo: {productData!.typeName}</div>
-                            <div className="flex flex-col">
-                                <div className="size-80 bg-white rounded-4xl p-6 flex items-center justify-center">
-                                    {selectedModel?.imageUrl
-                                        ? <img src={selectedModel.imageUrl} alt={selectedModel.name} className="max-h-full max-w-full object-contain" />
-                                        : <span>Sin imagen</span>
-                                    }
+                    <div className="flex flex-col justify-center items-center">
+                        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {/* Características */}
+                            <div className="bg-white rounded-2xl shadow-sm p-6 flex flex-col gap-4">
+                                <h2 className="text-2xl font-bold border-b pb-2">Características</h2>
+                                <div className="text-sm space-y-1">
+                                    <div><span className="font-semibold">Categoría:</span> {productData!.categoryName}</div>
+                                    <div><span className="font-semibold">Tipo:</span> {productData!.typeName}</div>
                                 </div>
-                                <div>Medidas: {generateSizes(productData!)}</div>
-                            </div>
-                        </div>
-                        <div className="flex-col">
-                            <h2 className="text-2xl font-bold">Modelos</h2>
-                            <div className="flex flex-row gap-2">
-                                <Button
-                                    text="ANTERIOR"
-                                    type="button"
-                                    color="blue"
-                                    onClick={handlePrevious}
-                                    disabled={!hasPrevious}
-                                />
+                                <div className="flex flex-col items-center gap-3">
+                                    <div className="w-72 h-72 bg-gray-50 rounded-xl border flex items-center justify-center overflow-hidden">
+                                        {selectedModel?.imageUrl
+                                            ? (
+                                                <img
+                                                    src={selectedModel.imageUrl}
+                                                    alt={selectedModel.name}
+                                                    className="max-h-full max-w-full object-contain"
+                                                />
+                                            )
+                                            : <span className="text-gray-400 text-sm">Sin imagen</span>
+                                        }
+                                    </div>
 
-                                <Button
-                                    text={`${modelsData.length ? idModel + 1 : 0} de ${modelsData.length}`}
-                                    type="button"
-                                    color="green"
-                                    disabled
-                                />
-
-                                <Button
-                                    text="SIGUIENTE"
-                                    type="button"
-                                    color="blue"
-                                    onClick={handleNext}
-                                    disabled={!hasNext}
-                                />
-                            </div>
-                            {selectedModel && (
-                                <div className="flex flex-col gap-1 text-sm">
-                                    <div>ID modelo: {selectedModel.id}</div>
-                                    <div>Nombre modelo: {selectedModel.name}</div>
-                                    <div>Fecha de entrada: {selectedModel.entryDate}</div>
-                                    <div>Fecha límite de caducidad: {selectedModel.caducityDate}</div>
-                                    <div>Total disponible: {selectedModel.totalQuantityAvailable}</div>
-                                    <div>Total recibido: {selectedModel.totalQuantityReceived}</div>
-                                    <div>Total entregado: {selectedModel.totalQuantityDelivered}</div>
-                                    <div>
-                                        Estado: {selectedModel.status ? 'HABILITADO' : 'DESHABILITADO'}
+                                    <div className="text-sm text-gray-600 text-center">
+                                        <span className="font-semibold">Medidas:</span> {generateSizes(productData!)}
                                     </div>
                                 </div>
-                            )}
+                            </div>
+                            {/* Modelo seleccionado */}
+                            <div className="bg-white rounded-2xl shadow-sm p-6 flex flex-col gap-4">
+                                <h2 className="text-2xl font-bold border-b pb-2">
+                                    Modelo seleccionado
+                                </h2>
+                                {/* Navegación modelos */}
+                                <div className="flex items-center justify-center gap-3">
+                                    <Button
+                                        text="◄"
+                                        type="button"
+                                        color="blue"
+                                        onClick={handlePrevious}
+                                        disabled={!hasPrevious}
+                                        size="small"
+                                    />
+
+                                    <span className="text-sm font-medium px-3 py-1 bg-gray-100 rounded-lg">
+                                        {modelsData.length ? idModel + 1 : 0} de {modelsData.length}
+                                    </span>
+
+                                    <Button
+                                        text="►"
+                                        type="button"
+                                        size="small"
+                                        color="blue"
+                                        onClick={handleNext}
+                                        disabled={!hasNext}
+                                    />
+                                </div>
+                                {selectedModel && (
+                                    <div className="grid grid-cols-2 gap-y-2 text-sm mt-2">
+
+                                        <div className="font-semibold">ID:</div>
+                                        <div>{selectedModel.id}</div>
+
+                                        <div className="font-semibold">Nombre:</div>
+                                        <div>{selectedModel.name}</div>
+
+                                        <div className="font-semibold">Fecha entrada:</div>
+                                        <div>{selectedModel.entryDate}</div>
+
+                                        <div className="font-semibold">Caducidad:</div>
+                                        <div>{selectedModel.caducityDate}</div>
+
+                                        <div className="font-semibold">Disponible:</div>
+                                        <div>{selectedModel.totalQuantityAvailable}</div>
+
+                                        <div className="font-semibold">Recibido:</div>
+                                        <div>{selectedModel.totalQuantityReceived}</div>
+
+                                        <div className="font-semibold">Entregado:</div>
+                                        <div>{selectedModel.totalQuantityDelivered}</div>
+
+                                        <div className="font-semibold">Estado:</div>
+                                        <div>
+                                            <Button
+                                                text={selectedModel.status ? 'Habilitado' : 'Deshabilitado'}
+                                                type="button"
+                                                color="blue"
+                                                size="small"
+                                            />
+                                        </div>
+
+                                        <div className="font-semibold">QR:</div>
+                                        <div>
+                                            <Button
+                                                text="Obtener QR"
+                                                type="button"
+                                                color="blue"
+                                                size="small"
+                                            />
+                                        </div>
+
+                                    </div>
+                                )}
+                            </div>
+
                         </div>
                     </div>
 
 
-                    <h2 className="text-2xl">Modelo encontrado</h2>
-                    {JSON.stringify(selectedModel!, null, 2)}
 
+
+                    <h2 className="text-2xl">Tabla resumen</h2>
+
+                    <TableHeaderContainer headers={['ID', 'Nombre', 'Fecha de entrada', 'Total disponible']} isError={isModelsError} isEmpty={!modelsData?.length}>
+                        {modelsData?.map((model: ModelItem) => (
+                            <TableRowContainer key={model.id}>
+                                <BaseTableCell data={model.id} />
+                                <BaseTableCell data={model.name} />
+                                <BaseTableCell data={model.entryDate} />
+                                <BaseTableCell data={model.totalQuantityAvailable} />
+                            </TableRowContainer>
+
+                        ))}
+                    </TableHeaderContainer>
                 </div>
             }>
 

@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
-import { getUserProfile } from "../api/UserAPI"
 import { TitleContainer } from "@/components/TitleContainer"
 import { ButtonLink } from "@/ui/ButtonLink"
+import { getUserProfile } from "../api/ProfileAPI";
 
 const rolesColors: { role: string; style: string }[] = [
     {

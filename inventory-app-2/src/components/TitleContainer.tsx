@@ -8,7 +8,7 @@ type Props = {
 // Componente generico para mostrar datos en una lista
 export const TitleContainer = ({ title, buttons, searchParams, children }: Props) => {
     return (
-        <>
+        <div className='p-4'>
             <h1 className='text-4xl font-bold mb-6'>{title}</h1>
             {
                 buttons && (
@@ -19,6 +19,6 @@ export const TitleContainer = ({ title, buttons, searchParams, children }: Props
             }
             {searchParams}
             {children}
-        </>
+        </div>
     )
 }

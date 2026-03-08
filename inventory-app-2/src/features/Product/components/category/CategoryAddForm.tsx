@@ -10,6 +10,7 @@ import { TitleContainer } from "@/components/TitleContainer";
 import { BaseForm } from "@/components/BaseForm";
 import type { GeneralError } from "types";
 import { ButtonLink } from "@/ui/ButtonLink";
+import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 
 export const CategoryAddForm = () => {
 
@@ -71,8 +72,8 @@ export const CategoryAddForm = () => {
                     }
                     buttons={
                         <>
-                            <Button size="large" text='Añadir categoria' type="submit" color="green" />
-                            <ButtonLink size="large" text="Cancelar" color="gray" to="/products/categories" />
+                            <Button icon={<ArrowUpCircleIcon />} size="large" text='Añadir categoria' type="submit" color="green" />
+                            <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to="/products/categories" />
                         </>
                     }
                 />

@@ -10,6 +10,7 @@ import { BaseForm } from "@/components/BaseForm";
 import type { GeneralError } from "types";
 import { registerType } from "../../api/TypeAPI";
 import { ButtonLink } from "@/ui/ButtonLink";
+import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 
 export const TypeAddForm = () => {
 
@@ -71,8 +72,8 @@ export const TypeAddForm = () => {
                     }
                     buttons={
                         <>
-                            <Button size="large" text="Añadir tipo" type="submit" color="green" />
-                            <ButtonLink size="large" text="Cancelar" color="gray" to="/products/types" />
+                            <Button icon={<ArrowUpCircleIcon />} size="large" text="Añadir tipo" type="submit" color="green" />
+                            <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to="/products/types" />
                         </>
                     }
                 />

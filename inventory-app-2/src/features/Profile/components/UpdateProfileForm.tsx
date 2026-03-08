@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 import type { UserProfileForm } from "../types";
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateUserProfile } from "../api/UserAPI";
 import type { GeneralError } from "@/types/index";
 import { toast } from "sonner";
 import { TitleContainer } from "@/components/TitleContainer";
@@ -10,6 +9,7 @@ import { BaseForm } from "@/components/BaseForm";
 import { InputText } from "@/ui/fields/InputText";
 import { Button } from "@/ui/Button";
 import { ButtonLink } from "@/ui/ButtonLink";
+import { updateUserProfile } from "../api/ProfileAPI";
 
 export const UpdateProfileForm = ({ data }: { data: UserProfileForm }) => {
 

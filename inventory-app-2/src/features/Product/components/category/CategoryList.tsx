@@ -6,6 +6,7 @@ import { TableHeaderContainer } from '@/components/TableHeaderContainer'
 import { TableRowContainer } from '@/components/TableRowContainer'
 import { BaseTableCell } from '@/components/BaseTableCell'
 import { ButtonLink } from '@/ui/ButtonLink'
+import { PlusCircleIcon } from '@heroicons/react/24/outline'
 
 export const CategoryList = () => {
     const { data, isError } = useQuery({
@@ -18,6 +19,7 @@ export const CategoryList = () => {
             title="Categorias"
             buttons={
                 <ButtonLink
+                    icon={<PlusCircleIcon />}
                     size="large"
                     text="Nueva categoria"
                     to="/products/categories/new"

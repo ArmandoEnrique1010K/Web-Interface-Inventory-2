@@ -6,6 +6,7 @@ import { TableRowContainer } from '@/components/TableRowContainer'
 import { BaseTableCell } from '@/components/BaseTableCell'
 import { listAllTypes } from '../../api/TypeAPI'
 import { ButtonLink } from '@/ui/ButtonLink'
+import { PlusCircleIcon } from '@heroicons/react/24/outline'
 
 export const TypeList = () => {
     const { data, isError } = useQuery({
@@ -18,6 +19,7 @@ export const TypeList = () => {
             title="Tipos"
             buttons={
                 <ButtonLink
+                    icon={<PlusCircleIcon />}
                     size="large"
                     text="Nuevo tipo"
                     to="/products/types/new"

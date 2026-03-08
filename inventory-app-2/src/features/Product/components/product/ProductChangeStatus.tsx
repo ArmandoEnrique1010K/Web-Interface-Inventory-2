@@ -5,8 +5,9 @@ import { toast } from "sonner"
 import { Button } from "@/ui/Button"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
+import { XMarkIcon } from "@heroicons/react/24/outline"
 
-export const ProductChangeStatus = ({ from, productId, value }: { from?: string, productId: string, value: string }) => {
+export const ProductChangeStatus = ({ from, productId, value, size }: { from?: string, productId: string, value: string, size: 'small' | 'large' }) => {
     const { handleSubmit } = useForm();
     const navigate = useNavigate();
     const queryClient = useQueryClient();
@@ -33,12 +34,12 @@ export const ProductChangeStatus = ({ from, productId, value }: { from?: string,
         }
     })
 
-
+    /* aditionalStyles="!py-1.5" */ /* aditionalStyles="!py-1.5"  aditionalStyles={`${size === 'small' ? '!py-1.5' : '!py-2.5'}`} */
     // TODO: EN ALGUNA FUTURA ACTUALIZACION, PODRIA CAMBIAR EL DISEÑO DEL BOTON A UN BORDEADO SIN COLOR DE RELLENO
     return (
         // TODO: ¿PODRIA EXISTIR ALGUNA ALTERNATIVA EN LUGAR DE USAR UN OPERADOR ! EN TAILWIND PARA APLICAR UN ESTILO IMPORTANTE
-        <form onSubmit={handleSubmit(() => mutate())} className="flex justify-center">
-            <Button text={value} type="submit" size="small" isLarge={false} color={value === 'Activo' ? 'green' : 'red'} aditionalStyles="!py-1.5" />
+        <form onSubmit={handleSubmit(() => mutate())} className="text-center ">
+            <Button icon={size === 'large' && <XMarkIcon />} text={value} type="submit" size={size} color={value === 'Activo' ? 'green' : 'red'} />
         </form>
     )
 }

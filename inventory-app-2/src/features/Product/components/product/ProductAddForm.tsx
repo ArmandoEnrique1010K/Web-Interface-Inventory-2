@@ -14,6 +14,7 @@ import { SelectOption } from "@/ui/fields/SelectOption";
 import { listAllCategories } from "../../api/CategoryAPI";
 import { listAllTypes } from "../../api/TypeAPI";
 import { ButtonLink } from "@/ui/ButtonLink";
+import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 
 export const ProductAddForm = () => {
 
@@ -184,8 +185,8 @@ export const ProductAddForm = () => {
                     }
                     buttons={
                         <>
-                            <Button size="large" text="Añadir producto" type="submit" color="green" />
-                            <ButtonLink size="large" text="Cancelar" color="gray" to="/products" />
+                            <Button icon={<ArrowUpCircleIcon />} size="large" text="Añadir producto" type="submit" color="green" />
+                            <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to="/products" />
                         </>
                     }
                 />

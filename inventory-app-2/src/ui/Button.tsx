@@ -1,36 +1,73 @@
 import { handleApplyStyleColor } from "@/utils/handleApplyStyleColor"
+import { useMediaQuery } from "react-responsive"
 
 type Props = {
-    size?: 'small' | 'large'
-    text: string
-    type: 'submit' | 'button'
-    color: 'blue' | 'green' | 'gray' | 'red'
-    isLarge?: boolean,
-    aditionalStyles?: string,
-    disabled?: boolean
-    onClick?: () => void
+    size?: 'small' | 'large' // Tamaño
+    text: string // Texto
+    type: 'submit' | 'button' // Tipo
+    color: 'blue' | 'green' | 'gray' | 'red' // Color
+    isLarge?: boolean, // ¿Ocupa todo el ancho?
+    aditionalStyles?: string, // Estilos adicionales
+    disabled?: boolean // Deshabilitado
+    onClick?: () => void // Función al hacer clic
+    icon?: React.ReactNode // Icono
 }
 
-export const Button = ({ text, type, aditionalStyles, size, isLarge, color, disabled, onClick }: Props) => {
+export const Button = ({
+    text,
+    type,
+    aditionalStyles,
+    size,
+    isLarge,
+    color,
+    disabled,
+    onClick,
+    icon
+}: Props) => {
+
+    // TODO: CORREGIR EL ANCHO DE PANTALLA
+    const isSmallScreen = useMediaQuery({ query: '(max-width: 42px)' })
+
+    const baseStyles = `
+        inline-flex items-center justify-center 
+        text-white
+        cursor-pointer
+        transition-all duration-200
+        font-sans
+        select-none
+        whitespace-nowrap
+        focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
+        active:scale-95
+    `
+    // active añade un estilo cuando el usuario mantiene pulsado el botón
+
+    const sizeStyles = size === 'small'
+        ? 'text-sm px-3 py-1.5 rounded-md'
+        : 'text-lg font-semibold py-2 px-3 rounded-lg'
+
+    const widthStyles = isLarge ? 'w-full' : ''
+
 
     return (
-        <>
-            {
-                <button type={type} className={`
-                        text-white
-                        cursor-pointer transition-colors
-                        font-sans 
-                        ${size === 'small' ? 'rounded-md text-md px-3 py-2' : 'font-bold rounded-lg text-lg px-5 py-2'}
-                        ${isLarge ? 'w-full' : ''}
-                        ${handleApplyStyleColor(color)}
-                        ${aditionalStyles}
-                        ${disabled ? 'opacity-50 hover:cursor-not-allowed' : ''}`}
-                    disabled={disabled}
-                    onClick={onClick || undefined}
-                >
-                    {text}
-                </button>
-            }
-        </>
+        <button
+            type={type}
+            className={`
+                ${baseStyles}
+                ${sizeStyles}
+                ${widthStyles}
+                ${handleApplyStyleColor(color)}
+                ${aditionalStyles}
+                ${disabled ? 'opacity-50 hover:cursor-not-allowed' : ''}
+            `}
+            disabled={disabled}
+            onClick={onClick}
+        >
+            {icon && (
+                <span className={`flex items-center justify-center size-8 ${isSmallScreen ? '' : 'mr-2'}`}>
+                    {icon}
+                </span>
+            )}
+            <span>{isSmallScreen && icon || text}</span>
+        </button>
     )
 }

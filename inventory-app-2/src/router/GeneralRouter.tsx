@@ -9,7 +9,7 @@ import { ValidateUserTokenForm } from '@/features/Auth/components/ValidateUserTo
 import { UpdateUserPasswordForm } from '@/features/Auth/components/UpdateUserPasswordForm'
 import { useSelector } from 'react-redux'
 import type { RootState } from '@/store/store'
-import { UserProfile } from '@/features/User/components/UserProfile'
+import { UserProfile } from '@/features/Profile/components/UserProfile'
 import { Loading } from '@/views/Loading'
 import type { MenuItem } from 'types'
 import { DocumentDuplicateIcon, NewspaperIcon, RectangleGroupIcon, TagIcon } from '@heroicons/react/24/outline'
@@ -24,8 +24,8 @@ import { ProductAddForm } from '@/features/Product/components/product/ProductAdd
 import { ProductList } from '@/features/Product/components/product/ProductList'
 import { ProductEditLoader } from '@/features/Product/components/product/ProductEditLoader'
 import { ProductDetails } from '@/features/Product/components/product/ProductDetails'
-import { ProfileEditLoader } from '@/features/User/components/ProfileEditLoader'
 import { CreditsDetails } from '@/features/Credits/components/CreditsDetails'
+import { ProfileEditLoader } from '@/features/Profile/components/ProfileEditLoader'
 
 const productItems: MenuItem[] = [
     {
@@ -80,9 +80,7 @@ export const GeneralRouter = () => {
                 {isAuthenticated && (
                     <Route path="/" element={<DashboardLayout />}>
                         <Route index element={
-                            <NavbarContainer title="Bienvenido">
-                                <h1>TODO: CREAR DASHBOARD LAYOUT</h1>
-                            </NavbarContainer>
+                            <h1>TODO: AQUI SE COLOCA EL DASHBOARD PRINCIPAL</h1>
                         } />
 
                         <Route path="products" element={
@@ -112,7 +110,7 @@ export const GeneralRouter = () => {
 
 
                         <Route path="profile" element={
-                            <NavbarContainer title='Perfil del usuario'>
+                            <NavbarContainer >
                                 <Outlet />
                             </NavbarContainer>
                         }>
@@ -121,7 +119,7 @@ export const GeneralRouter = () => {
                         </Route>
 
                         <Route path="credits" element={
-                            <NavbarContainer title='Creditos del autor'>
+                            <NavbarContainer >
                                 <Outlet />
                             </NavbarContainer>
                         }>

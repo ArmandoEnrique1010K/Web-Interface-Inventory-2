@@ -10,6 +10,7 @@ import { InputText } from "@/ui/fields/InputText";
 import { TitleContainer } from "@/components/TitleContainer";
 import { updateType } from "../../api/TypeAPI";
 import { ButtonLink } from "@/ui/ButtonLink";
+import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 
 type Props = {
     data: CategoryForm;
@@ -72,8 +73,8 @@ export const TypeEditForm = ({ data, typeId }: Props) => {
                     onSubmit={handleSubmit(handleForm)}
                     buttons={
                         <>
-                            <Button size="large" text="Editar tipo" type="submit" color="green" />
-                            <ButtonLink size="large" text="Volver" color="gray" to="/products/types" />
+                            <Button icon={<ArrowUpCircleIcon />} size="large" text="Editar tipo" type="submit" color="green" />
+                            <ButtonLink icon={<XCircleIcon />} size="large" text="Volver" color="gray" to="/products/types" />
                         </>
                     }
                     inputs={

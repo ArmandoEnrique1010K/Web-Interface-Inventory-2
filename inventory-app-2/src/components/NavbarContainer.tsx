@@ -3,7 +3,6 @@ import type { MenuItem } from 'types'
 import { useMediaQuery } from 'react-responsive'
 
 type Props = {
-    title?: string;
     menuItems?: MenuItem[];
     children: React.ReactNode
 }
@@ -11,14 +10,15 @@ type Props = {
 export const NavbarContainer = ({ menuItems, children }: Props) => {
     const location = useLocation();
 
+    // TODO: ESTA FUNCIÓN SE PODRIA TRASLADAR A LA CARPETA UTILS
     const styleToCurrentPath = (to: string) => {
         // Previamente se utilizo (location.pathname === to)
         if (location.pathname.includes(to) && (
             to !== '/products' ||
             location.pathname === '/products' ||
             location.pathname === '/products/new' ||
-            location.pathname.includes('/products/edit') ||
-            (location.pathname.includes('/products/') && /\/\d+$/.test(location.pathname)) // Si termina en un numero
+            (location.pathname.includes('/products/edit') && /\/\d+$/.test(location.pathname)) || // Si termina en un numero (editar)
+            (location.pathname.includes('/products') && /\/\d+$/.test(location.pathname)) // obtener producto
         )) {
             return 'bg-blue-700';
         }
@@ -30,7 +30,10 @@ export const NavbarContainer = ({ menuItems, children }: Props) => {
     const isExtraSmallScreen = useMediaQuery({ query: '(max-width: 420px)' })
 
     return (
-        // TODO: INVESTIGAR SOBRE min-h-dvh EN TAILWIND V4
+        // min-h-dvh es una clase de utilidad que establece la altura mínima de un elemento al 100% de la altura de la 
+        // Ventana Gráfica Dinámica (Dynamic Viewport Height - dvh). Esto asegura que el elemento sea al menos tan alto 
+        // como la pantalla, ajustándose automáticamente si las barras de herramientas del navegador (como en móviles) 
+        // se contraen o expanden
         <div className='min-h-dvh flex flex-col'>
             <div className='flex flex-row text-white bg-gray-500'>
                 {
@@ -42,9 +45,7 @@ export const NavbarContainer = ({ menuItems, children }: Props) => {
                     ))
                 }
             </div>
-            <div className='flex flex-col flex-1 p-4'>
-                {children}
-            </div>
+            {children}
         </div>
     )
 }

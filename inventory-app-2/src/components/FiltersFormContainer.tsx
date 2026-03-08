@@ -1,4 +1,5 @@
 import { Button } from "@/ui/Button"
+import { MagnifyingGlassCircleIcon } from "@heroicons/react/24/outline"
 
 type Props = {
     onSubmit: (e: React.FormEvent<HTMLFormElement>) => void
@@ -18,7 +19,7 @@ export const FiltersFormContainer = ({
             {children}
 
             <div className='flex justify-end'>
-                <Button text="Filtrar" type="submit" color='green' size='large' aditionalStyles='mt-4 m' />
+                <Button text="Filtrar" icon={<MagnifyingGlassCircleIcon />} type="submit" color='green' size='large' aditionalStyles='mt-4 m' />
             </div>
         </form>
     )
