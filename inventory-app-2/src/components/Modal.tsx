@@ -27,7 +27,7 @@ export const Modal = ({ isOpen, onClose, title, children, size = 'md' }: ModalPr
                         <Dialog.Title className="text-lg font-semibold mb-4 mr-8">{title}</Dialog.Title>
                     )}
                     <Dialog.Close className="absolute right-4 top-4 border-none  rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none">
-                        <XMarkIcon className="size-8" />
+                        <XMarkIcon className="size-8 hover:cursor-pointer" />
                         <span className="sr-only">Close</span>
                     </Dialog.Close>
                     {children}

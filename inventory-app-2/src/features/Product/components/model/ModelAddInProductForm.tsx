@@ -21,7 +21,7 @@ export const ModelAddInProductForm = () => {
         imageUrl: '',
         // SELECCIONA LA FECHA DE HOY EN DIA
         entryDate: new Date(new Date().setHours(12)).toISOString().split('T')[0],
-        caducityDate: new Date(new Date().setHours(12)).toISOString().split('T')[0],
+        caducityDate: '' // new Date(new Date().setHours(12)).toISOString().split('T')[0],
     }
 
     const { register, handleSubmit, setError, control, formState: { errors } } = useForm<ModelInProductForm>({

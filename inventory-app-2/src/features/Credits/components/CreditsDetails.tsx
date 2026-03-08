@@ -1,17 +1,69 @@
-import { TitleContainer } from '@/components/TitleContainer'
+import { TitleContainer } from "@/components/TitleContainer"
+import { CreditSection } from "./CreditSection"
+import { CreditItem } from './CreditItem';
 
 export const CreditsDetails = () => {
     return (
         <TitleContainer title="Creditos">
-            <p>Gracias por usar Inventory App</p>
-            <p>Desarrollado por Armando Enrique</p>
-            <p>Version 1.0.0</p>
-            <p>Fecha de lanzamiento: 2026-03-04</p>
+            <CreditSection title="Información" type='text'>
+                <CreditItem type="div">Gracias por usar Inventory App</CreditItem>
+                <CreditItem type="div">Desarrollado por {
+                    <a
+                        href={'https://github.com/ArmandoEnrique1010K'}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className=" hover:text-blue-700 underline"
+                    >
+                        ArmandoEnrique1010k
+                    </a>
+
+                }</CreditItem>
+                <CreditItem type="div">Version 1.0.0</CreditItem>
+                <CreditItem type="div">Fecha de lanzamiento: 2026-03-04</CreditItem>
+                <CreditItem type="div">© {new Date().getFullYear()}</CreditItem>
+            </CreditSection>
+
+            <CreditSection title="Tecnologías Frontend" type='list'>
+                <CreditItem type="li" url="https://react.dev/">React</CreditItem>
+                <CreditItem type="li" url="https://tailwindcss.com/">TailwindCSS</CreditItem>
+                <CreditItem type="li" url="https://redux.js.org/">Redux</CreditItem>
+                <CreditItem type="li" url="https://axios-http.com/">Axios</CreditItem>
+                <CreditItem type="li" url="https://zod.dev/">Zod</CreditItem>
+                <CreditItem type="li" url="https://react-hook-form.com/">React Hook Form</CreditItem>
+                <CreditItem type="li" url="https://react-query.tanstack.com/">TanStack React Query</CreditItem>
+                <CreditItem type="li" url="https://www.radix-ui.com/">Radix UI</CreditItem>
+                <CreditItem type="li" url="https://heroicons.com/">Heroicons</CreditItem>
+            </CreditSection>
+
+            <CreditSection title="Tecnologías Backend" type='list'>
+                <CreditItem type="li" url="https://dev.mysql.com/doc/">MySQL</CreditItem>
+                <CreditItem type="li" url="https://spring.io/projects/spring-boot">Spring Boot</CreditItem>
+                <CreditItem type="li" url="https://projectlombok.org/">Lombok</CreditItem>
+                <CreditItem type="li" url="https://spring.io/projects/spring-data-jpa">Spring Data JPA</CreditItem>
+                <CreditItem type="li" url="https://spring.io/projects/spring-validation">Spring Validation</CreditItem>
+                <CreditItem type="li" url="https://spring.io/projects/spring-security">Spring Security</CreditItem>
+                <CreditItem type="li" url="https://github.com/jwtk/jjwt">JJWT</CreditItem>
+                <CreditItem type="li" url="https://www.mailersend.com/">Mailersend</CreditItem>
+            </CreditSection>
+
+            <CreditSection title="Recursos" type='list'>
+                <CreditItem type="li" url="https://icons8.com/icon/13133/trolley">
+                    Icono de Inventario de Icons8
+                </CreditItem>
+
+                <CreditItem type='li' url="https://www.flaticon.es/icono-gratis/imprenta_9414966?term=imprenta&page=1&position=20&origin=tag&related_id=9414966">
+                    Icono de imprenta creado por Paul J., de Flaticon
+                </CreditItem>
+
+                <CreditItem type='li' url="https://fonts.google.com/specimen/Zalando+Sans">
+                    Fuente de Google Fonts, autor Zalando Sans
+                </CreditItem>
+
+                <CreditItem type="li" url="https://cssloaders.github.io/">
+                    Loader obtenido de CSS Loaders
+                </CreditItem>
+            </CreditSection>
+
         </TitleContainer>
     )
 }
-// TODO: AGREGAR CREDITOS
-//             <a target="_blank" href="https://icons8.com/icon/13133/trolley">Inventario</a> icono de <a target="_blank" href="https://icons8.com">Icons8</a>
-// <a href="https://www.flaticon.es/iconos-gratis/imprenta" title="imprenta iconos">Imprenta iconos creados por Paul J. - Flaticon</a>
-// https://fonts.google.com/specimen/Zalando+Sans?categoryFilters=Feeling:%2FExpressive%2FBusiness
-// https://cssloaders.github.io/

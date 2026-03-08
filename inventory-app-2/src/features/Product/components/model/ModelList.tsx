@@ -24,8 +24,8 @@ export const ModelList = () => {
 
     const page = Number(searchParams.get('page') ?? 0)
     const keyword = searchParams.get('keyword') ?? ''
-    const minStock = Number(searchParams.get('minStock') ?? 0)
-    const maxStock = Number(searchParams.get('maxStock') ?? 0)
+    const minStock = searchParams.get('minStock') ?? ''
+    const maxStock = searchParams.get('maxStock') ?? ''
     const minEntryDate = searchParams.get('minEntryDate') ?? ''
     const maxEntryDate = searchParams.get('maxEntryDate') ?? ''
     const categoryId = searchParams.get('categoryId') ?? undefined
@@ -136,60 +136,72 @@ export const ModelList = () => {
                         setSearchParams(params)
                     }
                 }>
-                    <InputTextFilter
-                        name='keyword'
-                        label='Nombre del modelo o producto:'
-                        placeholder='Buscar modelos por nombre y/o nombre del producto'
-                        type='text'
-                        value={form.keyword}
-                        onChange={(e) =>
-                            setForm(prev => ({ ...prev, keyword: e.target.value }))
-                        }
-                    />
-
-                    {/* TODO: CONTINUAR APLICANDO ESTILOS AL FORMULARIO DE FILTROS */}
-                    <div className={`flex whitespace-nowrap flex-col`}>
-
+                    <div>
                         <InputTextFilter
-                            name='minStock'
-                            label='Stock mínimo:'
-                            placeholder='Stock mínimo'
-                            type='number'
-                            value={form.minStock.toString()}
+                            name='keyword'
+                            label='Nombre del modelo o producto:'
+                            placeholder='Buscar modelos por nombre y/o nombre del producto'
+                            type='text'
+                            value={form.keyword}
                             onChange={(e) =>
-                                setForm(prev => ({ ...prev, minStock: parseInt(e.target.value) }))
-                            }
-                        />
-                        <InputTextFilter
-                            name='maxStock'
-                            label='Stock máximo:'
-                            placeholder='Stock máximo'
-                            type='number'
-                            value={form.maxStock.toString()}
-                            onChange={(e) =>
-                                setForm(prev => ({ ...prev, maxStock: parseInt(e.target.value) }))
+                                setForm(prev => ({ ...prev, keyword: e.target.value }))
                             }
                         />
                     </div>
+                    {/* TODO: CONTINUAR APLICANDO ESTILOS AL FORMULARIO DE FILTROS */}
+                    <div className={`flex flex-row gap-4`}>
+                        <div className='flex-row w-full'>
+                            <InputTextFilter
+                                name='minStock'
+                                label='Stock mínimo:'
+                                placeholder='Stock mínimo'
+                                type='number'
+                                value={form.minStock.toString()}
+                                onChange={(e) =>
+                                    setForm(prev => ({ ...prev, minStock: e.target.value }))
+                                }
+                            />
+
+                        </div>
+                        <div className='flex-row w-full'>
+                            <InputTextFilter
+                                name='maxStock'
+                                label='Stock máximo:'
+                                placeholder='Stock máximo'
+                                type='number'
+                                value={form.maxStock.toString()}
+                                onChange={(e) =>
+                                    setForm(prev => ({ ...prev, maxStock: e.target.value }))
+                                }
+                            />
+
+                        </div>
+                    </div>
+
 
                     {/* TODO: AÑADIR LOS CAMPOS DE FECHA LIMITE MINIMA Y MAXIMA */}
-                    <div className={`flex ${isSmallScreen ? 'flex-col gap-2' : 'flex-row gap-4'}`}>
-                        <InputDateFilter
-                            name='minEntryDate'
-                            label='Fecha minima de entrada:'
-                            value={form.minEntryDate}
-                            onChange={(e) =>
-                                setForm(prev => ({ ...prev, minEntryDate: e.target.value }))
-                            }
-                        />
-                        <InputDateFilter
-                            name='maxEntryDate'
-                            label='Fecha máxima de entrada:'
-                            value={form.maxEntryDate}
-                            onChange={(e) =>
-                                setForm(prev => ({ ...prev, maxEntryDate: e.target.value }))
-                            }
-                        />
+                    <div className={`flex flex-row gap-4`}>
+                        <div className='flex-row w-full'>
+
+                            <InputDateFilter
+                                name='minEntryDate'
+                                label='Fecha minima de entrada:'
+                                value={form.minEntryDate}
+                                onChange={(e) =>
+                                    setForm(prev => ({ ...prev, minEntryDate: e.target.value }))
+                                }
+                            />
+                        </div>
+                        <div className='flex-row w-full'>
+                            <InputDateFilter
+                                name='maxEntryDate'
+                                label='Fecha máxima de entrada:'
+                                value={form.maxEntryDate}
+                                onChange={(e) =>
+                                    setForm(prev => ({ ...prev, maxEntryDate: e.target.value }))
+                                }
+                            />
+                        </div>
                     </div>
 
 

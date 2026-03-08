@@ -207,7 +207,7 @@ export const ProductList = () => {
                                 generateCaracterist(product)
 
                             } />
-                            <BaseTableCell data={<div className='text-xs'>{generateSizes(product)}</div>} />
+                            <BaseTableCell data={<div className='text-sm'>{generateSizes(product)}</div>} />
 
                             <BaseTableCell data={
                                 <ProductChangeStatus size="small" productId={product.id.toString()} value={product.status ? 'Activo' : 'Inactivo'} />

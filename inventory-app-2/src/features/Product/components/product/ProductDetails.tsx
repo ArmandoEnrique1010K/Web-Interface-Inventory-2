@@ -198,8 +198,13 @@ export const ProductDetails = () => {
                                         <div className="font-semibold">Fecha entrada:</div>
                                         <div>{selectedModel.entryDate}</div>
 
-                                        <div className="font-semibold">Caducidad:</div>
-                                        <div>{selectedModel.caducityDate}</div>
+                                        {
+                                            selectedModel.caducityDate &&
+                                            <>
+                                                <div className="font-semibold">Caducidad:</div>
+                                                <div>{selectedModel.caducityDate}</div>
+                                            </>
+                                        }
 
                                         <div className="font-semibold">Cantidad disponible:</div>
                                         <div>{selectedModel.totalQuantityAvailable}</div>

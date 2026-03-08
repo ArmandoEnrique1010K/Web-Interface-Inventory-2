@@ -124,9 +124,7 @@ export const GeneralRouter = () => {
                         </Route>
 
                         <Route path="credits" element={
-                            <NavbarContainer >
-                                <Outlet />
-                            </NavbarContainer>
+                            <Outlet />
                         }>
                             <Route index element={<CreditsDetails />} />
                         </Route>

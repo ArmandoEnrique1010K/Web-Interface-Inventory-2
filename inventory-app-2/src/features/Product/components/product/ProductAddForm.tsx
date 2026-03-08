@@ -20,14 +20,14 @@ export const ProductAddForm = () => {
 
     const initialValues: ProductCreateForm = {
         name: '',
-        length: '0',
-        width: '0',
-        height: '0',
+        length: '',
+        width: '',
+        height: '',
         modelName: '',
         modelImageUrl: '',
         // SELECCIONA LA FECHA DE HOY EN DIA
         modelEntryDate: new Date(new Date().setHours(12)).toISOString().split('T')[0],
-        modelCaducityDate: new Date(new Date().setHours(12)).toISOString().split('T')[0],
+        modelCaducityDate: '', //new Date(new Date().setHours(12)).toISOString().split('T')[0],
         categoryId: '',
         typeId: '',
     }

@@ -29,8 +29,8 @@ export async function listAllModelsByProductId(productId: string) {
 export type ModelQueryParams = {
     page?: number;
     keyword?: string;
-    minStock?: number;
-    maxStock?: number;
+    minStock?: string;
+    maxStock?: string;
     minEntryDate?: string;
     maxEntryDate?: string;
     status?: boolean;

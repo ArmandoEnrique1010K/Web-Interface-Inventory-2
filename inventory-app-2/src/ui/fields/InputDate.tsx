@@ -29,7 +29,7 @@ export function InputDate<T extends FieldValues>({
     return (
         <div className="flex flex-col space-y-1 w-full pt-2">
             <label className="text-md font-bold" htmlFor={id}>{label}</label>
-            <div className="flex flex-col w-full">
+            <div className="flex flex-col w-full gap-1">
                 <div className="flex flex-row w-full">
                     <Controller
                         name={name}
