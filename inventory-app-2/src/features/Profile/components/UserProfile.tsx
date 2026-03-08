@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query"
 import { TitleContainer } from "@/components/TitleContainer"
 import { ButtonLink } from "@/ui/ButtonLink"
 import { getUserProfile } from "../api/ProfileAPI";
+import { UserIcon } from "@heroicons/react/24/outline";
 
 const rolesColors: { role: string; style: string }[] = [
     {
@@ -38,7 +39,7 @@ export const UserProfile = () => {
         <TitleContainer
             title={"Perfil del usuario"}
             buttons={
-                <ButtonLink to={'/profile/update'} size={"large"} text={"Actualizar Perfil"} color={"blue"} />
+                <ButtonLink icon={<UserIcon />} to={'/profile/update'} size={"large"} text={"Actualizar Perfil"} color={"blue"} />
             }
         >
             <div className="w-full border-blue-600 border-2">

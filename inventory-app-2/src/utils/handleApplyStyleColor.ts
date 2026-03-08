@@ -1,4 +1,4 @@
-export const handleApplyStyleColor = (color: 'blue' | 'green' | 'red' | 'gray') => {
+export const handleApplyStyleColor = (color: 'blue' | 'green' | 'red' | 'gray' | 'none') => {
     if (color === 'blue') {
         return "bg-blue-600 hover:bg-blue-700"
     }
@@ -13,6 +13,10 @@ export const handleApplyStyleColor = (color: 'blue' | 'green' | 'red' | 'gray') 
 
     if (color === 'gray') {
         return "bg-gray-600 hover:bg-gray-700"
+    }
+
+    if (color === 'none') {
+        return 'bg-gray-100! text-black! opacity-100!'
     }
 }
 

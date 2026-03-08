@@ -10,6 +10,7 @@ import { InputText } from "@/ui/fields/InputText";
 import { Button } from "@/ui/Button";
 import { ButtonLink } from "@/ui/ButtonLink";
 import { updateUserProfile } from "../api/ProfileAPI";
+import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 
 export const UpdateProfileForm = ({ data }: { data: UserProfileForm }) => {
 
@@ -98,8 +99,8 @@ export const UpdateProfileForm = ({ data }: { data: UserProfileForm }) => {
                     }
                     buttons={
                         <>
-                            <Button size="large" text='Actualizar perfil' type="submit" color="green" />
-                            <ButtonLink size="large" text="Cancelar" color="gray" to="/profile" />
+                            <Button icon={<ArrowUpCircleIcon />} size="large" text='Actualizar perfil' type="submit" color="green" />
+                            <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to="/profile" />
                         </>
                     }
                 />

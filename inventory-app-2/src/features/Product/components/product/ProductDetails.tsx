@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { getProduct } from "../../api/ProductAPI"
-import { useParams } from "react-router-dom"
+import { useLocation, useParams } from "react-router-dom"
 import { TitleContainer } from "@/components/TitleContainer"
 import type { ProductItem } from "../../types"
 import { listAllModelsByProductId } from "../../api/ModelAPI"
@@ -14,23 +14,42 @@ import { TableRowContainer } from "@/components/TableRowContainer"
 import { BaseTableCell } from "@/components/BaseTableCell"
 import { PencilSquareIcon, PlusCircleIcon } from "@heroicons/react/24/outline"
 import { ProductChangeStatus } from "./ProductChangeStatus"
+// import { useMediaQuery } from "react-responsive"
+import { useState } from "react"
+import { QRModal } from "../QRModal"
+import { ModelChangeStatus } from "../model/ModelChangeStatus"
 
 export const ProductDetails = () => {
+    // const isLargeScreen = useMediaQuery({ query: '(min-width: 1024px)' })
+    // const isMediumScreen = useMediaQuery({ query: '(min-width: 850px)' })
+    // const isSmallScreen = useMediaQuery({ query: '(min-width: 900px)' })
+
     const [searchParams, setSearchParams] = useSearchParams()
     const modelIdParam = searchParams.get("modelId")
 
-    const { id } = useParams()
+    const [isQRModalOpen, setIsQRModalOpen] = useState(false)
+    const handleOpenQR = () => {
+        setIsQRModalOpen(true)
+    }
+
+    const location = useLocation();
+    const path = location.pathname;
+    const queryParams = location.search;
+
+
+
+    const { id: productId } = useParams()
     const { data: productData, isLoading: isProductLoading } = useQuery<ProductItem>({
-        queryKey: ['product-details', id],
-        queryFn: () => getProduct(id!),
+        queryKey: ['product-details', productId],
+        queryFn: () => getProduct(productId!),
         // Si el id existe, ejecuta la función getProduct, de lo contrario no lo va a ejecutar
-        enabled: !!id
+        enabled: !!productId
     })
 
     const { data: modelsData = [], isLoading: isModelsLoading, isError: isModelsError } = useQuery({
-        queryKey: ['models', id],
-        queryFn: () => listAllModelsByProductId(id!),
-        enabled: !!id
+        queryKey: ['models-in-product', productId],
+        queryFn: () => listAllModelsByProductId(productId!),
+        enabled: !!productId
     })
 
     // ¿Qué pasa si ponen manualmente ? modelId = 999 ?
@@ -61,6 +80,22 @@ export const ProductDetails = () => {
         }
     }
 
+
+    // TODO: PROBAR SI LA IMAGEN SE ADAPTA AL ANCHO, DE LO CONTRARIO HABILITAR ESTA FUNCIÓN
+    // Función para ajustar el tamaño de la imagen de acuerdo al ancho de pantalla
+    // const handleChangeSizeImage = () => {
+    //     if (isLargeScreen) {
+    //         return 'size-100'
+    //     } else if (isMediumScreen) {
+    //         return 'size-80'
+    //     } else if (isSmallScreen) {
+    //         return 'size-64'
+    //     } else {
+    //         return 'size-52'
+    //     }
+    // }
+
+
     if (isProductLoading || isModelsLoading) {
         return <div>Cargando...</div>
     }
@@ -70,6 +105,7 @@ export const ProductDetails = () => {
     }
 
 
+    console.log(selectedModel)
 
     // TODO: CORREGIR LA API REST, SI UN PRODUCTO ESTA DESACTIVADO, TODAVIA PUEDE SER EDITADO Y VISTO POR UN ADMINISTRADOR
     // TODO: SI UN PRODUCTO ESTA DESACTIVADO NO PODRA SER VISTO POR LOS USUARIOS
@@ -78,26 +114,28 @@ export const ProductDetails = () => {
             title={productData!.name}
             buttons={
                 <>
-                    <ButtonLink icon={<PlusCircleIcon />} size="large" to={`/products/new-model/${id}`} color="green" text="Añadir modelo" />
-                    <ButtonLink icon={<PencilSquareIcon />} size="large" to={`/products/edit/${id}`} color="blue" text="Editar" />
+                    <ButtonLink icon={<PlusCircleIcon />} size="large" to={`/products/${productId}/models/new`} color="green" text="Añadir modelo" />
+                    <ButtonLink icon={<PencilSquareIcon />} size="large" to={`/products/edit/${productId}`} color="blue" text="Editar" />
                     {/* TODO: EDITAR ESTE BOTON */}
-                    <ProductChangeStatus from='product-details' size="large" productId={id!} value={productData!.status ? 'Desactivar' : 'Activar'} />
+                    <ProductChangeStatus from='product-details' size="large" productId={productId!} value={productData!.status ? 'Desactivar' : 'Activar'} />
                 </>
             }
             children={
-                <div className="flex flex-col gap-2">
+                <>
 
                     <div className="flex flex-col justify-center items-center">
-                        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-8 gap-6 w-full">
+
                             {/* Características */}
-                            <div className="bg-white rounded-2xl shadow-sm p-6 flex flex-col gap-4">
-                                <h2 className="text-2xl font-bold border-b pb-2">Características</h2>
-                                <div className="text-sm space-y-1">
+                            <div className="bg-white rounded-2xl shadow-sm p-4 flex flex-col gap-4 lg:col-span-5">
+                                <h2 className="text-3xl font-bold">Características</h2>
+                                <div className="space-y-1">
                                     <div><span className="font-semibold">Categoría:</span> {productData!.categoryName}</div>
                                     <div><span className="font-semibold">Tipo:</span> {productData!.typeName}</div>
                                 </div>
                                 <div className="flex flex-col items-center gap-3">
-                                    <div className="w-72 h-72 bg-gray-50 rounded-xl border flex items-center justify-center overflow-hidden">
+                                    {/* El tamaño de la imagen es variable */}
+                                    <div className={`w-full h-auto object-contain bg-gray-50 rounded-xl border flex items-center justify-center overflow-hidden`}>
                                         {selectedModel?.imageUrl
                                             ? (
                                                 <img
@@ -110,16 +148,16 @@ export const ProductDetails = () => {
                                         }
                                     </div>
 
-                                    <div className="text-sm text-gray-600 text-center">
+                                    <div className="text-sm text-center">
                                         <span className="font-semibold">Medidas:</span> {generateSizes(productData!)}
                                     </div>
                                 </div>
                             </div>
+
+
                             {/* Modelo seleccionado */}
-                            <div className="bg-white rounded-2xl shadow-sm p-6 flex flex-col gap-4">
-                                <h2 className="text-2xl font-bold border-b pb-2">
-                                    Modelo seleccionado
-                                </h2>
+                            <div className="bg-white rounded-2xl shadow-sm p-4 flex flex-col gap-4 lg:col-span-3">
+                                <h2 className="text-3xl font-bold">Modelo seleccionado</h2>
                                 {/* Navegación modelos */}
                                 <div className="flex items-center justify-center gap-3">
                                     <Button
@@ -131,9 +169,13 @@ export const ProductDetails = () => {
                                         size="small"
                                     />
 
-                                    <span className="text-sm font-medium px-3 py-1 bg-gray-100 rounded-lg">
-                                        {modelsData.length ? idModel + 1 : 0} de {modelsData.length}
-                                    </span>
+                                    <Button
+                                        text={`${modelsData.length ? idModel + 1 : 0} de ${modelsData.length}`}
+                                        type="button"
+                                        color="none"
+                                        size="small"
+                                        disabled
+                                    />
 
                                     <Button
                                         text="►"
@@ -159,35 +201,56 @@ export const ProductDetails = () => {
                                         <div className="font-semibold">Caducidad:</div>
                                         <div>{selectedModel.caducityDate}</div>
 
-                                        <div className="font-semibold">Disponible:</div>
+                                        <div className="font-semibold">Cantidad disponible:</div>
                                         <div>{selectedModel.totalQuantityAvailable}</div>
 
-                                        <div className="font-semibold">Recibido:</div>
+                                        <div className="font-semibold">Cantidad recibida:</div>
                                         <div>{selectedModel.totalQuantityReceived}</div>
 
-                                        <div className="font-semibold">Entregado:</div>
+                                        <div className="font-semibold">Cantidad entregada:</div>
                                         <div>{selectedModel.totalQuantityDelivered}</div>
 
                                         <div className="font-semibold">Estado:</div>
-                                        <div>
-                                            <Button
-                                                text={selectedModel.status ? 'Habilitado' : 'Deshabilitado'}
-                                                type="button"
-                                                color="blue"
-                                                size="small"
-                                            />
+                                        <div className="flex justify-start">
+                                            <ModelChangeStatus modelId={selectedModel.id} productId={productId!} value={selectedModel.status ? 'Activo' : 'Inactivo'} size={"small"} />
                                         </div>
 
                                         <div className="font-semibold">QR:</div>
                                         <div>
+                                            {/* TODO: ESTE BOTON DEBE MOSTRAR EL CODIGO QR EN UNA VENTANA MODAL */}
                                             <Button
                                                 text="Obtener QR"
                                                 type="button"
                                                 color="blue"
                                                 size="small"
+                                                onClick={handleOpenQR}
                                             />
+
+                                            <QRModal
+                                                isOpen={isQRModalOpen}
+                                                onClose={() => setIsQRModalOpen(false)}
+                                                // TODO: CORREGIR EL NOMBRE DEL DOMINIO EN UN FUTURO
+                                                url={'http://localhost:5173' + path + queryParams}
+                                                title={`Código QR del producto ${productData?.name}, ${selectedModel?.name}`}
+                                            />
+
                                         </div>
 
+                                        {
+                                            selectedModel.status && <>
+                                                <div className="font-semibold">Editar</div>
+
+                                                <div>
+                                                    <ButtonLink
+                                                        size="small"
+                                                        text="Editar modelo"
+                                                        to={`/products/${productId}/models/edit/${selectedModel.id}`}
+                                                        color="blue"
+                                                    />
+                                                </div>
+
+                                            </>
+                                        }
                                     </div>
                                 )}
                             </div>
@@ -196,9 +259,7 @@ export const ProductDetails = () => {
                     </div>
 
 
-
-
-                    <h2 className="text-2xl">Tabla resumen</h2>
+                    <h2 className="text-3xl font-bold pt-8 pb-2">Tabla resumen de modelos</h2>
 
                     <TableHeaderContainer headers={['ID', 'Nombre', 'Fecha de entrada', 'Total disponible']} isError={isModelsError} isEmpty={!modelsData?.length}>
                         {modelsData?.map((model: ModelItem) => (
@@ -211,7 +272,7 @@ export const ProductDetails = () => {
 
                         ))}
                     </TableHeaderContainer>
-                </div>
+                </>
             }>
 
         </TitleContainer>

@@ -1,13 +1,11 @@
 import { TitleContainer } from '@/components/TitleContainer'
 import { useQuery } from '@tanstack/react-query'
-import { listAllProducts } from '../../api/ProductAPI'
 import { TableHeaderContainer } from '@/components/TableHeaderContainer'
-import type { CategoryItem, ProductItem, TypeItem } from '../../types'
+import type { CategoryItem, ModelItem, TypeItem } from '../../types'
 import { TableRowContainer } from '@/components/TableRowContainer'
 import { BaseTableCell } from '@/components/BaseTableCell'
 import { listAllCategories } from '../../api/CategoryAPI'
 import { listAllTypes } from '../../api/TypeAPI'
-import { ProductChangeStatus } from './ProductChangeStatus'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useEffectEvent, useState } from 'react'
 import { Paginator } from '../../../../components/Paginator'
@@ -15,15 +13,21 @@ import { useMediaQuery } from 'react-responsive'
 import { SearchCounter } from '@/components/SearchCounter'
 import { FiltersFormContainer } from '@/components/FiltersFormContainer'
 import { ButtonLink } from '@/ui/ButtonLink'
-import { generateSizes } from '@/utils/generateSizes'
 import { InputTextFilter } from '@/ui/filters/InputTextFilter'
 import { SelectOptionFilter } from '@/ui/filters/SelectOptionFilter'
-import { PlusCircleIcon } from '@heroicons/react/24/outline'
+import { listAllModels } from '../../api/ModelAPI'
+import { ProductChangeStatus } from '../product/ProductChangeStatus'
+import { InputDateFilter } from '@/ui/filters/InputDateFilter'
 
-export const ProductList = () => {
+export const ModelList = () => {
     const [searchParams, setSearchParams] = useSearchParams()
+
     const page = Number(searchParams.get('page') ?? 0)
-    const name = searchParams.get('name') ?? ''
+    const keyword = searchParams.get('keyword') ?? ''
+    const minStock = Number(searchParams.get('minStock') ?? 0)
+    const maxStock = Number(searchParams.get('maxStock') ?? 0)
+    const minEntryDate = searchParams.get('minEntryDate') ?? ''
+    const maxEntryDate = searchParams.get('maxEntryDate') ?? ''
     const categoryId = searchParams.get('categoryId') ?? undefined
     const typeId = searchParams.get('typeId') ?? undefined
     const statusParam = searchParams.get('status')
@@ -34,7 +38,11 @@ export const ProductList = () => {
 
     const [form, setForm] = useState({
         page: page,
-        name: name,
+        keyword: keyword,
+        minStock: minStock,
+        maxStock: maxStock,
+        minEntryDate: minEntryDate,
+        maxEntryDate: maxEntryDate,
         categoryId: categoryId ?? '',
         typeId: typeId ?? '',
         status: status === undefined ? '' : String(status),
@@ -46,7 +54,11 @@ export const ProductList = () => {
     useEffectEvent(() => {
         setForm({
             page: page,
-            name: name,
+            keyword: keyword,
+            minStock: minStock,
+            maxStock: maxStock,
+            minEntryDate: minEntryDate,
+            maxEntryDate: maxEntryDate,
             categoryId: categoryId ?? '',
             typeId: typeId ?? '',
             status: status === undefined ? '' : String(status),
@@ -55,11 +67,15 @@ export const ProductList = () => {
 
 
     const { data, isError } = useQuery({
-        queryKey: ['list-products', { name, categoryId, typeId, status, page }],
+        queryKey: ['list-models', { keyword, minStock, maxStock, minEntryDate, maxEntryDate, categoryId, typeId, status, page }],
 
-        queryFn: () => listAllProducts({
+        queryFn: () => listAllModels({
             page: page,
-            name: name,
+            keyword: keyword,
+            minStock: minStock,
+            maxStock: maxStock,
+            minEntryDate: minEntryDate,
+            maxEntryDate: maxEntryDate,
             categoryId: categoryId,
             typeId: typeId,
             status: status
@@ -67,6 +83,7 @@ export const ProductList = () => {
     })
 
     const content = data?.content || []
+
     // OBTENER LAS CARACTERISTICAS Y LOS TIPOS
     const { data: categoriesData } = useQuery({
         queryKey: ['list-categories'],
@@ -88,19 +105,6 @@ export const ProductList = () => {
         label: type.name,
     })) || []
 
-    const generateCaracterist = (product: ProductItem) => {
-        if (+product.categoryId === 1) {
-            return `${product.typeName}`
-        }
-
-        if (+product.categoryId !== 1) {
-            return `${product.typeName} de ${product.categoryName}`
-        }
-
-    }
-
-
-
     const statusOptions = [
         { value: '', label: 'Todos los estados' },
         { value: 'true', label: 'Activos' },
@@ -109,18 +113,10 @@ export const ProductList = () => {
 
     const isSmallScreen = useMediaQuery({ query: '(max-width: 479px)' })
 
+    // TODO: AÑADIR EN LA API REST, EN LA RESPUESTA DE OBTENER TODOS LOS MODELOS, EL NOMBRE DEL PRODUCTO EN UN CAMPO SEPARADO
     return (
         <TitleContainer
-            title="Productos"
-            buttons={
-                <ButtonLink
-                    icon={<PlusCircleIcon />}
-                    size="large"
-                    text="Nuevo producto"
-                    to="/products/new"
-                    color="blue"
-                />
-            }
+            title="Modelos"
             searchParams={
                 <FiltersFormContainer onSubmit={
                     (e) => {
@@ -128,7 +124,11 @@ export const ProductList = () => {
 
                         const params = new URLSearchParams()
 
-                        if (form.name) params.set('name', form.name)
+                        if (form.keyword) params.set('keyword', form.keyword)
+                        if (form.minStock) params.set('minStock', form.minStock.toString())
+                        if (form.maxStock) params.set('maxStock', form.maxStock.toString())
+                        if (form.minEntryDate) params.set('minEntryDate', form.minEntryDate)
+                        if (form.maxEntryDate) params.set('maxEntryDate', form.maxEntryDate)
                         if (form.categoryId) params.set('categoryId', form.categoryId)
                         if (form.typeId) params.set('typeId', form.typeId)
                         if (form.status !== '') params.set('status', form.status)
@@ -137,15 +137,62 @@ export const ProductList = () => {
                     }
                 }>
                     <InputTextFilter
-                        name='name'
-                        label='Nombre del producto:'
-                        placeholder='Buscar productos por nombre'
+                        name='keyword'
+                        label='Nombre del modelo o producto:'
+                        placeholder='Buscar modelos por nombre y/o nombre del producto'
                         type='text'
-                        value={form.name}
+                        value={form.keyword}
                         onChange={(e) =>
-                            setForm(prev => ({ ...prev, name: e.target.value }))
+                            setForm(prev => ({ ...prev, keyword: e.target.value }))
                         }
                     />
+
+                    {/* TODO: CONTINUAR APLICANDO ESTILOS AL FORMULARIO DE FILTROS */}
+                    <div className={`flex whitespace-nowrap flex-col`}>
+
+                        <InputTextFilter
+                            name='minStock'
+                            label='Stock mínimo:'
+                            placeholder='Stock mínimo'
+                            type='number'
+                            value={form.minStock.toString()}
+                            onChange={(e) =>
+                                setForm(prev => ({ ...prev, minStock: parseInt(e.target.value) }))
+                            }
+                        />
+                        <InputTextFilter
+                            name='maxStock'
+                            label='Stock máximo:'
+                            placeholder='Stock máximo'
+                            type='number'
+                            value={form.maxStock.toString()}
+                            onChange={(e) =>
+                                setForm(prev => ({ ...prev, maxStock: parseInt(e.target.value) }))
+                            }
+                        />
+                    </div>
+
+                    {/* TODO: AÑADIR LOS CAMPOS DE FECHA LIMITE MINIMA Y MAXIMA */}
+                    <div className={`flex ${isSmallScreen ? 'flex-col gap-2' : 'flex-row gap-4'}`}>
+                        <InputDateFilter
+                            name='minEntryDate'
+                            label='Fecha minima de entrada:'
+                            value={form.minEntryDate}
+                            onChange={(e) =>
+                                setForm(prev => ({ ...prev, minEntryDate: e.target.value }))
+                            }
+                        />
+                        <InputDateFilter
+                            name='maxEntryDate'
+                            label='Fecha máxima de entrada:'
+                            value={form.maxEntryDate}
+                            onChange={(e) =>
+                                setForm(prev => ({ ...prev, maxEntryDate: e.target.value }))
+                            }
+                        />
+                    </div>
+
+
 
                     <div className={`flex ${isSmallScreen ? 'flex-col gap-2' : 'flex-row gap-4'}`}>
                         <SelectOptionFilter
@@ -188,40 +235,43 @@ export const ProductList = () => {
             }
 
             <TableHeaderContainer
-                headers={['ID', 'Nombre', 'Característica', 'Medidas', 'Estado', 'Editar']}
+                headers={['ID', 'Nombre', 'Cantidad disponible', 'Fechas', 'Estado', 'Editar']}
                 isError={isError}
                 isEmpty={!content?.length}
             >
                 {
-                    content?.map((product: ProductItem) => {
-                        return <TableRowContainer key={product.id}>
-                            <BaseTableCell data={product.id} />
+                    content?.map((model: ModelItem) => {
+                        return <TableRowContainer key={model.id}>
+                            <BaseTableCell data={model.id} />
                             <BaseTableCell data={
                                 <div className='flex flex-col gap-1'>
                                     {/* TODO: EL ENLACE SE PODRIA AÑADIR EN OTRA PARTE */}
-                                    <Link to={`/products/${product.id}`} className='hover:text-blue-900'>{product.name}</Link>
-                                    <p className='text-xs'>{product.quantityModels === 1 ? '1 modelo' : `${product.quantityModels} modelos`}</p>
+                                    <Link to={`/products/${model.id}`} className='hover:text-blue-900'>
+                                        <div>{model.name}</div>
+                                        <div className='text-sm text-gray-500'>{model.productName}</div>
+                                        <div className='text-sm text-gray-500'>{model.categoryName} - {model.typeName}</div>
+                                    </Link>
                                 </div>
                             } />
-                            <BaseTableCell data={
-                                generateCaracterist(product)
+                            <BaseTableCell data={model.totalQuantityAvailable} />
 
-                            } />
-                            <BaseTableCell data={<div className='text-xs'>{generateSizes(product)}</div>} />
+                            <BaseTableCell data={<div className='flex flex-col text-sm'>
+                                <div>Entrada: {model.entryDate}</div>
+                                <div>Caducidad: {model.caducityDate}</div>
+                            </div>} />
 
                             <BaseTableCell data={
-                                <ProductChangeStatus size="small" productId={product.id.toString()} value={product.status ? 'Activo' : 'Inactivo'} />
+                                <ProductChangeStatus size="small" productId={model.id.toString()} value={model.status ? 'Activo' : 'Inactivo'} />
                             } />
 
                             <BaseTableCell isCenter data={
                                 //* SOLAMENTE SI UN PRODUCTO ESTA ACTIVO, PUEDE SER EDITADO
-                                product.status === true ?
+                                model.status === true ?
                                     <ButtonLink
                                         size="small"
                                         text="Editar"
-                                        to={`/products/edit/${product.id}`}
+                                        to={`/models/edit/${model.id}`}
                                         color="blue"
-
                                     /> : ''
                             } />
                         </TableRowContainer>
@@ -243,7 +293,13 @@ export const ProductList = () => {
                             }))
                             const params = new URLSearchParams()
 
-                            if (form.name) params.set('name', form.name)
+                            if (form.keyword) params.set('keyword', form.keyword)
+
+                            if (form.minStock) params.set('minStock', form.minStock.toString())
+                            if (form.maxStock) params.set('maxStock', form.maxStock.toString())
+                            if (form.minEntryDate) params.set('minEntryDate', form.minEntryDate)
+                            if (form.maxEntryDate) params.set('maxEntryDate', form.maxEntryDate)
+
                             if (form.categoryId) params.set('categoryId', form.categoryId)
                             if (form.typeId) params.set('typeId', form.typeId)
                             if (form.status !== '') params.set('status', form.status)

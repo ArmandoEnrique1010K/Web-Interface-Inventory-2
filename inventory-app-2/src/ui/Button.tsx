@@ -5,7 +5,7 @@ type Props = {
     size?: 'small' | 'large' // Tamaño
     text: string // Texto
     type: 'submit' | 'button' // Tipo
-    color: 'blue' | 'green' | 'gray' | 'red' // Color
+    color: 'blue' | 'green' | 'gray' | 'red' | 'none' // Color
     isLarge?: boolean, // ¿Ocupa todo el ancho?
     aditionalStyles?: string, // Estilos adicionales
     disabled?: boolean // Deshabilitado
@@ -37,7 +37,7 @@ export const Button = ({
         select-none
         whitespace-nowrap
         focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
-        active:scale-95
+        ${disabled || 'active:scale-95'} 
     `
     // active añade un estilo cuando el usuario mantiene pulsado el botón
 
@@ -58,6 +58,7 @@ export const Button = ({
                 ${handleApplyStyleColor(color)}
                 ${aditionalStyles}
                 ${disabled ? 'opacity-50 hover:cursor-not-allowed' : ''}
+                ${color === 'none' && 'hover:cursor-auto!'}
             `}
             disabled={disabled}
             onClick={onClick}

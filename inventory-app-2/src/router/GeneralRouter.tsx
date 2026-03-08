@@ -26,6 +26,9 @@ import { ProductEditLoader } from '@/features/Product/components/product/Product
 import { ProductDetails } from '@/features/Product/components/product/ProductDetails'
 import { CreditsDetails } from '@/features/Credits/components/CreditsDetails'
 import { ProfileEditLoader } from '@/features/Profile/components/ProfileEditLoader'
+import { ModelList } from '@/features/Product/components/model/ModelList'
+import { ModelAddInProductForm } from '@/features/Product/components/model/ModelAddInProductForm'
+import { ModelEditLoader } from '@/features/Product/components/model/ModelEditLoader'
 
 const productItems: MenuItem[] = [
     {
@@ -92,6 +95,11 @@ export const GeneralRouter = () => {
                             <Route path=":id" element={<ProductDetails />} />
                             <Route path="new" element={<ProductAddForm />} />
                             <Route path="edit/:id" element={<ProductEditLoader />} />
+                            <Route path=":id/models/new" element={<ModelAddInProductForm />} />
+                            <Route path=":productId/models/edit/:modelId" element={<ModelEditLoader />} />
+
+
+                            <Route path="models" element={<ModelList />} />
 
                             <Route path="categories" element={<CategoryList />} />
                             <Route path="categories/new" element={<CategoryAddForm />} />
@@ -101,9 +109,6 @@ export const GeneralRouter = () => {
                             <Route path="types/edit/:id" element={<TypeEditLoader />} />
 
 
-                            <Route path="models" element={<h1>Pagina de lista de modelos</h1>} />
-                            <Route path="models/new" element={<h1>Formulario de nuevo modelo</h1>} />
-                            <Route path="models/edit/:id" element={<h1>Formulario de editar modelo</h1>} />
 
 
                         </Route>

@@ -15,6 +15,10 @@ export const modelSchema = z.object({
     totalQuantityReceived: z.number(),
     totalQuantityDelivered: z.number(),
     status: z.boolean(),
+
+    productName: z.string(),
+    categoryName: z.string(),
+    typeName: z.string(),
 })
 
 export const productSchema = z.object({
@@ -53,12 +57,14 @@ type Type = z.infer<typeof typeSchema>
 
 export type CategoryItem = Category;
 export type CategoryForm = Pick<Category, "name">;
-export type ModelForm = Model;
+export type ModelInProductForm = Pick<Model, 'name' | 'imageUrl' | 'entryDate' | 'caducityDate'>;
 export type ProductCreateForm = Pick<Product, 'name' | 'length' | 'width' | 'height' | 'modelName' | 'modelImageUrl' | 'modelEntryDate' | 'modelCaducityDate' | 'categoryId' | 'typeId'>;
 export type ProductUpdateForm = Pick<Product, "name" | "length" | "width" | "height" | "categoryId" | "typeId">;
 export type ProductItem = Pick<Product, "id" | "name" | "length" | "width" | "height" | "quantityModels" | "status" | "categoryId" | "categoryName" | "typeId" | "typeName">;
 
-export type ModelItem = Pick<Model, "id" | "name" | "imageUrl" | "entryDate" | "caducityDate" | "totalQuantityAvailable" | "totalQuantityReceived" | "totalQuantityDelivered" | "status">;
+export type ModelItem = Pick<Model,
+    "id" | "name" | "imageUrl" | "entryDate" | "caducityDate" |
+    "totalQuantityAvailable" | "totalQuantityReceived" | "totalQuantityDelivered" | "status" | "productName" | "categoryName" | "typeName">;
 
 export type TypeForm = Pick<Type, "name">;
 export type TypeItem = Type

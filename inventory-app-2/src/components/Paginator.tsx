@@ -30,7 +30,7 @@ export const Paginator = ({
         <div className="flex flex-col gap-2 text-center">
             <div className="flex items-center gap-2 justify-center">
                 <Button
-                    text="|<"
+                    text="◄◄"
                     type="button"
                     color="blue"
                     disabled={isFirst}
@@ -39,7 +39,7 @@ export const Paginator = ({
                     aditionalStyles="px-2"
                 />
                 <Button
-                    text="<"
+                    text="◄"
                     type="button"
                     color="blue"
                     disabled={isFirst}
@@ -84,8 +84,7 @@ export const Paginator = ({
                 <Button
                     text={(currentPage + 1).toString()}
                     type="button"
-                    color="green"
-                    disabled={true}
+                    color="none"
                     size="small"
                     aditionalStyles="px-2"
                 />
@@ -126,7 +125,7 @@ export const Paginator = ({
 
 
                 <Button
-                    text=">"
+                    text="►"
                     type="button"
                     color="blue"
                     disabled={isLast}
@@ -136,7 +135,7 @@ export const Paginator = ({
                 />
 
                 <Button
-                    text=">|"
+                    text="►►"
                     type="button"
                     color="blue"
                     disabled={isLast}

@@ -1,6 +1,8 @@
-import type { ProductItem } from "@/features/Product/types"
-
-export const generateSizes = (product: ProductItem): React.ReactNode => {
+export const generateSizes = (product: {
+    length: string
+    width: string
+    height: string
+}): React.ReactNode => {
     const sizes: string[] = []
 
     if (Number(product.length) > 0) {
