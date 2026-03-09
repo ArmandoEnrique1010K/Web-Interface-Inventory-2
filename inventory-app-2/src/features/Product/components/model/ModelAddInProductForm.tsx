@@ -63,7 +63,7 @@ export const ModelAddInProductForm = () => {
 
     return (
         <>
-            <TitleContainer title={`Añadir nuevo modelo al producto # ${location.pathname.split('/')[2]}`}>
+            <TitleContainer title={`Añadir nuevo modelo al producto ${location.pathname.split('/')[2]}`}>
                 <BaseForm
                     onSubmit={handleSubmit((data) => {
                         mutate(data)

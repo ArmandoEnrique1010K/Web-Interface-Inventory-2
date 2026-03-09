@@ -5,10 +5,13 @@ import { Button } from "@/ui/Button"
 import { useForm } from "react-hook-form"
 import { XMarkIcon } from "@heroicons/react/24/outline"
 import { changeStatusModel } from "../../api/ModelAPI"
+import { useNavigate } from "react-router-dom"
 
-export const ModelChangeStatus = ({ modelId, productId, value, size }: { from?: string, modelId: string, productId: string, value: string, size: 'small' | 'large' }) => {
+export const ModelChangeStatus = ({ from, modelId, productId, value, size }: { from?: string, modelId: string, productId: string, value: string, size: 'small' | 'large' }) => {
     const { handleSubmit } = useForm();
     const queryClient = useQueryClient();
+
+    const navigate = useNavigate();
 
     const { mutate } = useMutation({
         mutationFn: () => changeStatusModel(modelId),
@@ -23,11 +26,11 @@ export const ModelChangeStatus = ({ modelId, productId, value, size }: { from?: 
             toast.success(data)
             queryClient.invalidateQueries({ queryKey: ['product-details', productId] })
             queryClient.invalidateQueries({ queryKey: ['models-in-product', productId] })
+            queryClient.invalidateQueries({ queryKey: ['list-models'] })
 
-            // if (from === 'product-details') {
-            //     console.log('REDIRECCIONANDO')
-            //     navigate('/products')
-            // }
+            if (from === 'model-details') {
+                navigate('/products/models')
+            }
 
 
         }

@@ -105,7 +105,6 @@ export const ProductDetails = () => {
     }
 
 
-    console.log(selectedModel)
 
     // TODO: CORREGIR LA API REST, SI UN PRODUCTO ESTA DESACTIVADO, TODAVIA PUEDE SER EDITADO Y VISTO POR UN ADMINISTRADOR
     // TODO: SI UN PRODUCTO ESTA DESACTIVADO NO PODRA SER VISTO POR LOS USUARIOS
@@ -115,21 +114,21 @@ export const ProductDetails = () => {
             buttons={
                 <>
                     <ButtonLink icon={<PlusCircleIcon />} size="large" to={`/products/${productId}/models/new`} color="green" text="Añadir modelo" />
-                    <ButtonLink icon={<PencilSquareIcon />} size="large" to={`/products/edit/${productId}`} color="blue" text="Editar" />
+                    <ButtonLink icon={<PencilSquareIcon />} size="large" to={`/products/edit/${productId}`} color="blue" text="Editar producto" />
                     {/* TODO: EDITAR ESTE BOTON */}
-                    <ProductChangeStatus from='product-details' size="large" productId={productId!} value={productData!.status ? 'Desactivar' : 'Activar'} />
+                    <ProductChangeStatus from='product-details' size="large" productId={productId!} value={productData!.status ? 'Desactivar producto' : 'Activar producto'} />
                 </>
             }
             children={
                 <>
-
                     <div className="flex flex-col justify-center items-center">
                         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-8 gap-6 w-full">
 
                             {/* Características */}
                             <div className="bg-white rounded-2xl shadow-sm p-4 flex flex-col gap-4 lg:col-span-5">
-                                <h2 className="text-3xl font-bold">Características</h2>
+                                <h2 className="text-3xl font-bold">Características del producto</h2>
                                 <div className="space-y-1">
+                                    <div><span className="font-semibold">ID:</span> {productData!.id}</div>
                                     <div><span className="font-semibold">Categoría:</span> {productData!.categoryName}</div>
                                     <div><span className="font-semibold">Tipo:</span> {productData!.typeName}</div>
                                 </div>
@@ -215,12 +214,12 @@ export const ProductDetails = () => {
                                         <div className="font-semibold">Cantidad entregada:</div>
                                         <div>{selectedModel.totalQuantityDelivered}</div>
 
-                                        <div className="font-semibold">Estado:</div>
+                                        <div className="font-semibold">Estado del modelo:</div>
                                         <div className="flex justify-start">
                                             <ModelChangeStatus modelId={selectedModel.id} productId={productId!} value={selectedModel.status ? 'Activo' : 'Inactivo'} size={"small"} />
                                         </div>
 
-                                        <div className="font-semibold">QR:</div>
+                                        <div className="font-semibold">Código QR:</div>
                                         <div>
                                             {/* TODO: ESTE BOTON DEBE MOSTRAR EL CODIGO QR EN UNA VENTANA MODAL */}
                                             <Button
@@ -243,12 +242,12 @@ export const ProductDetails = () => {
 
                                         {
                                             selectedModel.status && <>
-                                                <div className="font-semibold">Editar</div>
+                                                <div className="font-semibold">Editar modelo:</div>
 
                                                 <div>
                                                     <ButtonLink
                                                         size="small"
-                                                        text="Editar modelo"
+                                                        text="Editar"
                                                         to={`/products/${productId}/models/edit/${selectedModel.id}`}
                                                         color="blue"
                                                     />

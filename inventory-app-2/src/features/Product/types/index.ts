@@ -16,8 +16,17 @@ export const modelSchema = z.object({
     totalQuantityDelivered: z.number(),
     status: z.boolean(),
 
+    productId: z.string(),
     productName: z.string(),
+    productLength: z.string(),
+    productWidth: z.string(),
+    productHeight: z.string(),
+    productStatus: z.boolean(),
+
+    categoryId: z.string(),
     categoryName: z.string(),
+
+    typeId: z.string(),
     typeName: z.string(),
 })
 
@@ -55,16 +64,20 @@ type Model = z.infer<typeof modelSchema>
 type Product = z.infer<typeof productSchema>
 type Type = z.infer<typeof typeSchema>
 
-export type CategoryItem = Category;
 export type CategoryForm = Pick<Category, "name">;
 export type ModelInProductForm = Pick<Model, 'name' | 'imageUrl' | 'entryDate' | 'caducityDate'>;
-export type ProductCreateForm = Pick<Product, 'name' | 'length' | 'width' | 'height' | 'modelName' | 'modelImageUrl' | 'modelEntryDate' | 'modelCaducityDate' | 'categoryId' | 'typeId'>;
+export type ProductCreateForm = Pick<Product, 'name' | 'length' | 'width' | 'height' | 'modelName' | 'modelImageUrl' |
+    'modelEntryDate' | 'modelCaducityDate' | 'categoryId' | 'typeId'>;
 export type ProductUpdateForm = Pick<Product, "name" | "length" | "width" | "height" | "categoryId" | "typeId">;
-export type ProductItem = Pick<Product, "id" | "name" | "length" | "width" | "height" | "quantityModels" | "status" | "categoryId" | "categoryName" | "typeId" | "typeName">;
-
-export type ModelItem = Pick<Model,
-    "id" | "name" | "imageUrl" | "entryDate" | "caducityDate" |
-    "totalQuantityAvailable" | "totalQuantityReceived" | "totalQuantityDelivered" | "status" | "productName" | "categoryName" | "typeName">;
-
 export type TypeForm = Pick<Type, "name">;
+
+export type CategoryItem = Category;
+export type ModelItem = Pick<Model, "id" | "name" | "imageUrl" | "entryDate" | "caducityDate" | "totalQuantityAvailable" |
+    "totalQuantityReceived" | "totalQuantityDelivered" | "status" | "productId" | "productName" | "typeName" | "categoryName">
+export type ModelDetailsItem = Pick<Model,
+    "id" | "name" | "imageUrl" | "entryDate" | "caducityDate" | "totalQuantityAvailable" | "totalQuantityReceived" |
+    "totalQuantityDelivered" | "status" | "productId" | "productName" | "productLength" | "productWidth" | "productHeight" |
+    "productStatus" | "categoryId" | "categoryName" | "typeId" | "typeName">;
+export type ProductItem = Pick<Product, "id" | "name" | "length" | "width" | "height" | "quantityModels" | "status" |
+    "categoryId" | "categoryName" | "typeId" | "typeName">;
 export type TypeItem = Type

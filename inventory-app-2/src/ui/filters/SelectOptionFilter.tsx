@@ -11,7 +11,7 @@ type Props = {
 
 export const SelectOptionFilter = ({ name, label, options, onChange, textInNullOption, value }: Props) => {
     return (
-        <div className="flex flex-col space-y-1 w-full">
+        <div className="flex flex-col w-full">
             <label className="text-md font-bold" htmlFor={name}>{label}</label>
             <div className="flex flex-row gap-1">
 

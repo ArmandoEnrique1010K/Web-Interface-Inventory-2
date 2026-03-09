@@ -12,7 +12,7 @@ import type { RootState } from '@/store/store'
 import { UserProfile } from '@/features/Profile/components/UserProfile'
 import { Loading } from '@/views/Loading'
 import type { MenuItem } from 'types'
-import { DocumentDuplicateIcon, NewspaperIcon, RectangleGroupIcon, TagIcon } from '@heroicons/react/24/outline'
+import { CubeIcon, DocumentDuplicateIcon, NewspaperIcon, RectangleGroupIcon, TagIcon, TruckIcon } from '@heroicons/react/24/outline'
 import { CategoryAddForm } from '@/features/Product/components/category/CategoryAddForm'
 import { CategoryList } from '@/features/Product/components/category/CategoryList'
 import { CategoryEditLoader } from '@/features/Product/components/category/CategoryEditLoader'
@@ -29,6 +29,13 @@ import { ProfileEditLoader } from '@/features/Profile/components/ProfileEditLoad
 import { ModelList } from '@/features/Product/components/model/ModelList'
 import { ModelAddInProductForm } from '@/features/Product/components/model/ModelAddInProductForm'
 import { ModelEditLoader } from '@/features/Product/components/model/ModelEditLoader'
+import { CompanyList } from '@/features/StockLot/components/company/CompanyList'
+import { CompanyAddForm } from '@/features/StockLot/components/company/CompanyAddForm'
+import { CompanyEditLoader } from '@/features/StockLot/components/company/CompanyEditLoader'
+import { ModelDetails } from '@/features/Product/components/model/ModelDetails'
+import { StockLotList } from '@/features/StockLot/components/stocklot/StockLotList'
+import { StockLotRegisterForm } from '@/features/StockLot/components/stocklot/StockLotRegisterForm'
+import { StockLotIncreaseForm } from '@/features/StockLot/components/stocklot/StockLotIncreaseForm'
 
 const productItems: MenuItem[] = [
     {
@@ -53,16 +60,30 @@ const productItems: MenuItem[] = [
     }
 ]
 
+const stockLotsItems: MenuItem[] = [
+    {
+        label: 'Lotes de stock',
+        icon: <CubeIcon className='size-6' />,
+        to: '/stocklots'
+    },
+    {
+        label: 'Empresas importadoras',
+        icon: <TruckIcon className='size-6' />,
+        to: '/stocklots/companies'
+    }
+]
+
 export const GeneralRouter = () => {
 
     const { isAuthenticated, authChecked } = useSelector(
         (state: RootState) => state.auth
     )
 
+
+
     if (!authChecked) {
         return <Loading />
     }
-
 
     return (
         <BrowserRouter>
@@ -87,7 +108,7 @@ export const GeneralRouter = () => {
                         } />
 
                         <Route path="products" element={
-                            <NavbarContainer menuItems={productItems}>
+                            <NavbarContainer menuItems={productItems} keyword='products'>
                                 <Outlet />
                             </NavbarContainer>
                         }>
@@ -95,11 +116,11 @@ export const GeneralRouter = () => {
                             <Route path=":id" element={<ProductDetails />} />
                             <Route path="new" element={<ProductAddForm />} />
                             <Route path="edit/:id" element={<ProductEditLoader />} />
+
                             <Route path=":id/models/new" element={<ModelAddInProductForm />} />
                             <Route path=":productId/models/edit/:modelId" element={<ModelEditLoader />} />
-
-
                             <Route path="models" element={<ModelList />} />
+                            <Route path=":productId/models/:modelId" element={<ModelDetails />} />
 
                             <Route path="categories" element={<CategoryList />} />
                             <Route path="categories/new" element={<CategoryAddForm />} />
@@ -107,17 +128,24 @@ export const GeneralRouter = () => {
                             <Route path="types" element={<TypeList />} />
                             <Route path="types/new" element={<TypeAddForm />} />
                             <Route path="types/edit/:id" element={<TypeEditLoader />} />
+                        </Route>
 
-
-
-
+                        <Route path='stocklots' element={
+                            <NavbarContainer menuItems={stockLotsItems} keyword='stocklots'>
+                                <Outlet />
+                            </NavbarContainer>
+                        }>
+                            <Route index element={<StockLotList />} />
+                            <Route path="new" element={<StockLotRegisterForm />} />
+                            <Route path=":id/increase" element={<StockLotIncreaseForm />} />
+                            <Route path="companies" element={<CompanyList />} />
+                            <Route path="companies/new" element={<CompanyAddForm />} />
+                            <Route path="companies/edit/:id" element={<CompanyEditLoader />} />
                         </Route>
 
 
                         <Route path="profile" element={
-                            <NavbarContainer >
-                                <Outlet />
-                            </NavbarContainer>
+                            <Outlet />
                         }>
                             <Route index element={<UserProfile />} />
                             <Route path='update' element={<ProfileEditLoader />} />

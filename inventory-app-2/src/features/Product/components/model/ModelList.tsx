@@ -16,8 +16,8 @@ import { ButtonLink } from '@/ui/ButtonLink'
 import { InputTextFilter } from '@/ui/filters/InputTextFilter'
 import { SelectOptionFilter } from '@/ui/filters/SelectOptionFilter'
 import { listAllModels } from '../../api/ModelAPI'
-import { ProductChangeStatus } from '../product/ProductChangeStatus'
 import { InputDateFilter } from '@/ui/filters/InputDateFilter'
+import { ModelChangeStatus } from './ModelChangeStatus'
 
 export const ModelList = () => {
     const [searchParams, setSearchParams] = useSearchParams()
@@ -257,8 +257,8 @@ export const ModelList = () => {
                             <BaseTableCell data={model.id} />
                             <BaseTableCell data={
                                 <div className='flex flex-col gap-1'>
-                                    {/* TODO: EL ENLACE SE PODRIA AÑADIR EN OTRA PARTE */}
-                                    <Link to={`/products/${model.id}`} className='hover:text-blue-900'>
+                                    {/* TODO: CORREGIR EL ENLACE Y CREAR UN COMPONENTE PARA MOSTRAR LOS DATOS DEL MODELO */}
+                                    <Link to={`/products/${model.productId}/models/${model.id}`} className='hover:text-blue-900'>
                                         <div>{model.name}</div>
                                         <div className='text-sm text-gray-500'>{model.productName}</div>
                                         <div className='text-sm text-gray-500'>{model.categoryName} - {model.typeName}</div>
@@ -273,7 +273,7 @@ export const ModelList = () => {
                             </div>} />
 
                             <BaseTableCell data={
-                                <ProductChangeStatus size="small" productId={model.id.toString()} value={model.status ? 'Activo' : 'Inactivo'} />
+                                <ModelChangeStatus size="small" modelId={model.id.toString()} productId={model.productId} value={model.status ? 'Activo' : 'Inactivo'} />
                             } />
 
                             <BaseTableCell isCenter data={
@@ -282,7 +282,7 @@ export const ModelList = () => {
                                     <ButtonLink
                                         size="small"
                                         text="Editar"
-                                        to={`/models/edit/${model.id}`}
+                                        to={`/products/${model.productId}/models/edit/${model.id}`}
                                         color="blue"
                                     /> : ''
                             } />

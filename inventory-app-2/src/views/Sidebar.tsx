@@ -15,7 +15,7 @@ const menuItems: MenuItem[] = [
     { label: 'Dashboard', icon: <HomeIcon className="size-6" />, to: '/' },
     { label: 'Ordenes', icon: <ClipboardIcon className="size-6" />, to: '/orders' },
     { label: 'Productos', icon: <NewspaperIcon className="size-6" />, to: '/products' },
-    { label: 'Lotes de stock', icon: <ArchiveBoxIcon className="size-6" />, to: '/stock' },
+    { label: 'Lotes de stock', icon: <ArchiveBoxIcon className="size-6" />, to: '/stocklots' },
     { label: 'Movimientos', icon: <ArrowsRightLeftIcon className="size-6" />, to: '/movements' },
     { label: 'Usuarios', icon: <UserGroupIcon className="size-6" />, to: '/users' },
     { label: 'Ubicaciones', icon: <MapPinIcon className="size-6" />, to: '/locations' },
@@ -48,8 +48,6 @@ export const Sidebar = () => {
             dispatch(clearAuth())
         }
     })
-
-
 
     return (
         <>
