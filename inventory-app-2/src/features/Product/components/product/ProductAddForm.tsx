@@ -40,7 +40,6 @@ export const ProductAddForm = () => {
     const { mutate } = useMutation({
         mutationFn: registerProduct,
         onError: (error: GeneralError) => {
-            // toast.error(error.message)
             console.log(error)
             // Error de campo
             if (error.type === 'FIELD_ERROR') {

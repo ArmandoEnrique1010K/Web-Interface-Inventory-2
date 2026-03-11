@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { useEffectEvent, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { listAllStockLots } from '../../api/StockLotAPI'
 import { listAllCategories } from '@/features/Product/api/CategoryAPI'
 import { listAllTypes } from '@/features/Product/api/TypeAPI'
@@ -293,7 +293,9 @@ export const StockLotList = () => {
                         return <TableRowContainer key={stockLot.id}>
                             <BaseTableCell data={stockLot.id} />
                             <BaseTableCell data={
-                                <span className='text-sm'>{stockLot.batch}</span>
+
+                                <Link to={`/stocklots/${stockLot.id}`} className='hover:text-blue-900'>{stockLot.batch}</Link>
+
                             } />
                             <BaseTableCell data={
                                 <div>
@@ -312,9 +314,9 @@ export const StockLotList = () => {
                                 //* SOLAMENTE SI UN PRODUCTO ESTA ACTIVO, PUEDE SER EDITADO
                                 <div className='flex flex-col gap-2'>
                                     <ButtonLink size='small' text='Agregar' to={`/stocklots/${stockLot.id}/increase`} color='green' />
-                                    <ButtonLink size='small' text='Disminuir' to='' color='red' />
-                                    <ButtonLink size='small' text='Recuperar' to='' color='blue' />
-                                    <ButtonLink size='small' text='Transferir' to='' color='blue' />
+                                    <ButtonLink size='small' text='Disminuir' to={`/stocklots/${stockLot.id}/decrease`} color='red' />
+                                    <ButtonLink size='small' text='Recuperar' to={`/stocklots/${stockLot.id}/recovery`} color='blue' />
+                                    <ButtonLink size='small' text='Transferir' to={`/stocklots/${stockLot.id}/transfer`} color='blue' />
                                 </div>
 
                             } />

@@ -3,7 +3,23 @@ import type { DataPageResponse, DataResponse, GeneralResponse } from "@/types/in
 import { handleApiError } from "@/utils/handleApiError";
 import type { ModelInProductForm } from "../types";
 
-export async function registerModelInProduct(productId: string, formData: ModelInProductForm) {
+export type ModelRequest = {
+    name: string,
+    entryDate: string | null,
+    caducityDate: string | null
+}
+
+export async function registerModelInProduct(productId: string, data: ModelRequest, file: File) {
+    // Configuracion para enviar los datos del formulario por separado: los datos y la imagen
+    const formData = new FormData()
+    formData.append("name", data.name)
+    formData.append("entryDate", data.entryDate ?? '')
+    formData.append("caducityDate", data.caducityDate ?? '')
+
+    if (file) {
+        formData.append("file", file)
+    }
+
     try {
         const url = `/models/product/${productId}`
         const { data } = await api.post<GeneralResponse>(url, formData)

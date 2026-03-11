@@ -2,7 +2,6 @@ import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import type { StockLotAdjustmentForm } from "../../types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { increaseStockLot } from "../../api/StockLotAPI";
 import type { GeneralError } from "@/types/index";
 import { toast } from "sonner";
 import { TitleContainer } from "@/components/TitleContainer";
@@ -11,8 +10,9 @@ import { Button } from "@/ui/Button";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { ButtonLink } from "@/ui/ButtonLink";
 import { InputText } from "@/ui/fields/InputText";
+import { decreaseStockLot } from "../../api/StockLotAPI";
 
-export const StockLotIncreaseForm = () => {
+export const StockLotDecreaseForm = () => {
 
     const params = useParams();
     const stockLotId = params.id!;
@@ -28,7 +28,7 @@ export const StockLotIncreaseForm = () => {
     const queryClient = useQueryClient();
 
     const { mutate } = useMutation({
-        mutationFn: increaseStockLot,
+        mutationFn: decreaseStockLot,
         onError: (error: GeneralError) => {
             // Error de campo
             if (error.type === 'FIELD_ERROR') {
@@ -66,13 +66,13 @@ export const StockLotIncreaseForm = () => {
 
     return (
         <>
-            <TitleContainer title={`Agregar cantidad al lote de stock ${stockLotId}`}>
+            <TitleContainer title={`Eliminar 'x' unidades del lote de stock ${stockLotId}`}>
 
                 <BaseForm
                     onSubmit={handleSubmit(handleForm)}
                     buttons={
                         <>
-                            <Button icon={<ArrowUpCircleIcon />} size="large" text="Agregar cantidad" type="submit" color="green" />
+                            <Button icon={<ArrowUpCircleIcon />} size="large" text="Disminuir cantidad" type="submit" color="green" />
                             <ButtonLink icon={<XCircleIcon />} size="large" text="Volver" color="gray" to="/stocklots" />
                         </>
                     }

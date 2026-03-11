@@ -1,8 +1,7 @@
-import type { ModelInProductForm } from '../../types'
 import { useForm } from 'react-hook-form'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
-import { registerModelInProduct } from '../../api/ModelAPI'
+import { registerModelInProduct, type ModelRequest } from '../../api/ModelAPI';
 import type { GeneralError } from '@/types/index'
 import { toast } from 'sonner'
 import { TitleContainer } from '@/components/TitleContainer'
@@ -12,32 +11,33 @@ import { InputDate } from '@/ui/fields/InputDate'
 import { Button } from '@/ui/Button'
 import { ButtonLink } from '@/ui/ButtonLink'
 import { ArrowUpCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
+import { useState } from 'react'
 
 export const ModelAddInProductForm = () => {
     const { id } = useParams();
-
-    const initialValues: ModelInProductForm = {
+    const [file, setFile] = useState<File | null>(null)
+    const [preview, setPreview] = useState<string | null>(null)
+    const initialValues: ModelRequest = {
         name: '',
-        imageUrl: '',
         // SELECCIONA LA FECHA DE HOY EN DIA
         entryDate: new Date(new Date().setHours(12)).toISOString().split('T')[0],
         caducityDate: '' // new Date(new Date().setHours(12)).toISOString().split('T')[0],
     }
 
-    const { register, handleSubmit, setError, control, formState: { errors } } = useForm<ModelInProductForm>({
+    const { register, handleSubmit, setError, control, formState: { errors } } = useForm<ModelRequest & { file: File }>({
         defaultValues: initialValues
     })
     const navigate = useNavigate();
     const location = useLocation();
 
     const { mutate } = useMutation({
-        mutationFn: (data: ModelInProductForm) => registerModelInProduct(id!, data),
+        mutationFn: (data: ModelRequest) => registerModelInProduct(id!, data, file as File),
         onError: (error: GeneralError) => {
             console.log(error)
             // Error de campo
             if (error.type === 'FIELD_ERROR') {
                 Object.entries(error.fields).forEach(([field, message]) => {
-                    setError(field as keyof ModelInProductForm, {
+                    setError(field as keyof ModelRequest, {
                         type: 'server',
                         message: message as string,
                     })
@@ -66,7 +66,17 @@ export const ModelAddInProductForm = () => {
             <TitleContainer title={`Añadir nuevo modelo al producto ${location.pathname.split('/')[2]}`}>
                 <BaseForm
                     onSubmit={handleSubmit((data) => {
-                        mutate(data)
+
+                        const formatDate = (date: Date | null) =>
+                            date ? date.toISOString().split("T")[0] : null;
+
+                        const payload: ModelRequest = {
+                            ...data,
+                            entryDate: formatDate(data.entryDate as unknown as Date),
+                            caducityDate: formatDate(data.caducityDate as unknown as Date)
+                        }
+
+                        mutate(payload)
                     })}
                     inputs={
                         <>
@@ -80,23 +90,46 @@ export const ModelAddInProductForm = () => {
 
 
                             {/* TODO: CAMPO DE PRUEBA, ELIMINARLO */}
-                            <InputText
+                            {/* <InputText
                                 id="imageUrl"
                                 label="URL de la imagen"
                                 placeholder="URL de la imagen"
                                 type="text"
                                 errorMessage={errors.imageUrl}
-                                functionEnabled={register('imageUrl')} />
+                                functionEnabled={register('imageUrl')} /> */}
+                            <input
+                                type="file"
+                                accept="image/*"
+                                {...register("file", {
+                                    onChange: (e) => {
+                                        const selectedFile = e.target.files?.[0]
 
+                                        if (selectedFile) {
+                                            setFile(selectedFile)
+                                            setPreview(URL.createObjectURL(selectedFile))
+                                        }
+                                    }
+                                })}
+                            />
+                            {preview && (
+                                <img
+                                    src={preview}
+                                    alt="preview"
+                                    className="w-40 mt-2 rounded"
+                                />
+                            )}
 
-                            <InputDate<ModelInProductForm>
+                            {/* TODO: QUITAR EL TIPADO DE FILE */}
+                            <InputDate<ModelRequest & { file: File }>
                                 id="entryDate"
                                 label="Fecha de entrada del modelo"
                                 name="entryDate"
                                 control={control}
                                 errorMessage={errors.entryDate?.message}
                             />
-                            <InputDate<ModelInProductForm>
+
+                            {/* TODO: PROBLEMA CON LA FECHA DE CADUCIDAD */}
+                            <InputDate<ModelRequest & { file: File }>
                                 id="caducityDate"
                                 label="Fecha de caducidad del modelo"
                                 name="caducityDate"

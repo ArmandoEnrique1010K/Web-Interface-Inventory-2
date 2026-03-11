@@ -36,6 +36,10 @@ import { ModelDetails } from '@/features/Product/components/model/ModelDetails'
 import { StockLotList } from '@/features/StockLot/components/stocklot/StockLotList'
 import { StockLotRegisterForm } from '@/features/StockLot/components/stocklot/StockLotRegisterForm'
 import { StockLotIncreaseForm } from '@/features/StockLot/components/stocklot/StockLotIncreaseForm'
+import { StockLotDecreaseForm } from '../features/StockLot/components/stocklot/StockLotDecreaseForm';
+import { StockLotRecoveryForm } from '@/features/StockLot/components/stocklot/StockLotRecoveryForm'
+import { StockLotTransferStocksLoader } from '@/features/StockLot/components/stocklot/StockLotTransferStocksLoader'
+import { StockLotDetails } from '@/features/StockLot/components/stocklot/StockLotDetails'
 
 const productItems: MenuItem[] = [
     {
@@ -137,7 +141,12 @@ export const GeneralRouter = () => {
                         }>
                             <Route index element={<StockLotList />} />
                             <Route path="new" element={<StockLotRegisterForm />} />
+                            <Route path=":id" element={<StockLotDetails />} />
                             <Route path=":id/increase" element={<StockLotIncreaseForm />} />
+                            <Route path=":id/decrease" element={<StockLotDecreaseForm />} />
+                            <Route path=":id/recovery" element={<StockLotRecoveryForm />} />
+                            <Route path=":id/transfer" element={<StockLotTransferStocksLoader />} />
+
                             <Route path="companies" element={<CompanyList />} />
                             <Route path="companies/new" element={<CompanyAddForm />} />
                             <Route path="companies/edit/:id" element={<CompanyEditLoader />} />

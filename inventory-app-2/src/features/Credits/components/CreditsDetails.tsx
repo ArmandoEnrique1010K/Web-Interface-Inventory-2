@@ -25,6 +25,7 @@ export const CreditsDetails = () => {
 
             <CreditSection title="Tecnologías Frontend" type='list'>
                 <CreditItem type="li" url="https://react.dev/">React</CreditItem>
+                <CreditItem type="li" url="https://reactrouter.com/">React Router DOM</CreditItem>
                 <CreditItem type="li" url="https://tailwindcss.com/">TailwindCSS</CreditItem>
                 <CreditItem type="li" url="https://redux.js.org/">Redux</CreditItem>
                 <CreditItem type="li" url="https://axios-http.com/">Axios</CreditItem>
@@ -43,7 +44,11 @@ export const CreditsDetails = () => {
                 <CreditItem type="li" url="https://spring.io/projects/spring-validation">Spring Validation</CreditItem>
                 <CreditItem type="li" url="https://spring.io/projects/spring-security">Spring Security</CreditItem>
                 <CreditItem type="li" url="https://github.com/jwtk/jjwt">JJWT</CreditItem>
+            </CreditSection>
+
+            <CreditSection title="Backend como servicio" type='list'>
                 <CreditItem type="li" url="https://www.mailersend.com/">Mailersend</CreditItem>
+                <CreditItem type="li" url="https://cloudinary.com/">Cloudinary</CreditItem>
             </CreditSection>
 
             <CreditSection title="Recursos" type='list'>

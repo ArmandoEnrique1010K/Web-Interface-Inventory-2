@@ -3,7 +3,6 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"
 import { registerLocale } from "react-datepicker";
 import { es } from 'date-fns/locale/es';
-import { handleFormatDate } from "@/utils/handleFormatDate";
 
 // Registrar el idioma español para el calendario
 registerLocale('spanish', es)
@@ -32,21 +31,24 @@ export function InputDate<T extends FieldValues>({
             <div className="flex flex-col w-full gap-1">
                 <div className="flex flex-row w-full">
                     <Controller
+
                         name={name}
                         control={control}
                         render={({ field }) => (
                             <DatePicker
                                 id={id}
                                 // Modifica el selected para convertir string a Date si es necesario
-                                selected={field.value ? new Date(field.value + "T12:00:00") : null}
+                                // selected={field.value ? new Date(field.value + "T12:00:00") : null}
+                                selected={field.value ?? null}
                                 // Modifica el onChange para convertir Date a string YYYY-MM-DD
-                                onChange={(date: Date | null) => {
-                                    if (date) {
-                                        field.onChange(handleFormatDate(date));
-                                    } else {
-                                        field.onChange(null);
-                                    }
-                                }}
+                                // onChange={(date: Date | null) => {
+                                //     if (date) {
+                                //         field.onChange(handleFormatDate(date));
+                                //     } else {
+                                //         field.onChange(null);
+                                //     }
+                                // }}
+                                onChange={(date: Date | null) => field.onChange(date)}
 
                                 onBlur={field.onBlur}
                                 // TODO: EN ALGUNA FUTURA ACTUALIZACIÓN SE PUEDE CORREGIR EL FORMATO DE FECHA
