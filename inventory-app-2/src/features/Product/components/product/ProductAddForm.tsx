@@ -15,8 +15,12 @@ import { listAllCategories } from "../../api/CategoryAPI";
 import { listAllTypes } from "../../api/TypeAPI";
 import { ButtonLink } from "@/ui/ButtonLink";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
+import { useState } from "react";
+import { UploadImage } from "@/ui/fields/UploadImage";
 
 export const ProductAddForm = () => {
+    const [file, setFile] = useState<File | null>(null)
+    const [preview, setPreview] = useState<string | null>(null)
 
     const initialValues: ProductCreateForm = {
         name: '',
@@ -24,14 +28,13 @@ export const ProductAddForm = () => {
         width: '',
         height: '',
         modelName: '',
-        modelImageUrl: '',
         // SELECCIONA LA FECHA DE HOY EN DIA
         modelEntryDate: new Date(new Date().setHours(12)).toISOString().split('T')[0],
         modelCaducityDate: '', //new Date(new Date().setHours(12)).toISOString().split('T')[0],
         categoryId: '',
         typeId: '',
     }
-    const { register, handleSubmit, setError, control, formState: { errors } } = useForm<ProductCreateForm>({
+    const { register, handleSubmit, setError, control, formState: { errors } } = useForm<ProductCreateForm & { file: File }>({
         defaultValues: initialValues
     })
 
@@ -66,6 +69,8 @@ export const ProductAddForm = () => {
             navigate('/products')
         }
     })
+
+    // TODO: EN ALGUNA FUTURA ACTUALIZACION SE PUEDE HACER QUE SE MUESTRE UNA NOTIFICACION MIENTRAS SE SUBE LA IMAGEN
     const { data: categoriesData } = useQuery({
         queryKey: ['list-categories'],
         queryFn: listAllCategories
@@ -87,13 +92,16 @@ export const ProductAddForm = () => {
     })) || []
 
 
-
     return (
         <>
             <TitleContainer title="Añadir nuevo producto">
                 <BaseForm
                     onSubmit={handleSubmit((data) => {
-                        mutate(data)
+
+                        mutate({
+                            data: data,
+                            ...(file && { file })
+                        })
                     })}
                     inputs={
                         <>
@@ -137,24 +145,49 @@ export const ProductAddForm = () => {
                                 errorMessage={errors.modelName}
                                 functionEnabled={register('modelName')} />
 
-                            {/* TODO: CAMPO DE PRUEBA, ELIMINARLO */}
-                            <InputText
-                                id="modelImageUrl"
-                                label="URL de la imagen"
-                                placeholder="URL de la imagen"
-                                type="text"
-                                errorMessage={errors.modelImageUrl}
-                                functionEnabled={register('modelImageUrl')} />
+                            {/* TODO: INPUT DE TIPO IMAGE ANTES DE SEPARARLO EN UN COMPONENTE APARTE */}
+
+                            {/* <input
+                                type="file"
+                                accept="image/*"
+                                {...register("file", {
+                                    onChange: (e) => {
+                                        const selectedFile = e.target.files?.[0]
+
+                                        if (selectedFile) {
+                                            setFile(selectedFile)
+                                            setPreview(URL.createObjectURL(selectedFile))
+                                        }
+                                    }
+                                })}
+                            />
+                            {preview && (
+                                <img
+                                    src={preview}
+                                    alt="preview"
+                                    className="w-40 mt-2 rounded"
+                                />
+                            )} */}
+
+                            {/* Componente para cargar la imagen, contiene el boton y la previsualizacion de la imagen */}
+                            <UploadImage id='file' label="Suba una imagen"
+                                register={register('file')}
+                                previewImage={preview}
+                                setFile={setFile}
+                                setPreview={setPreview}
+
+                            />
 
 
-                            <InputDate<ProductCreateForm>
+                            {/** TODO: SI NO SUBE UNA FECHA DE ENTRADA, SE ESTABLECERA LA FECHA DE HOY DIA */}
+                            <InputDate<ProductCreateForm & { file: File }>
                                 id="modelEntryDate"
                                 label="Fecha de entrada del modelo"
                                 name="modelEntryDate"
                                 control={control}
                                 errorMessage={errors.modelEntryDate?.message}
                             />
-                            <InputDate<ProductCreateForm>
+                            <InputDate<ProductCreateForm & { file: File }>
                                 id="modelCaducityDate"
                                 label="Fecha de caducidad del modelo"
                                 name="modelCaducityDate"

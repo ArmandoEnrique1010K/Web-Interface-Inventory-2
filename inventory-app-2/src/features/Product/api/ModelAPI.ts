@@ -3,13 +3,15 @@ import type { DataPageResponse, DataResponse, GeneralResponse } from "@/types/in
 import { handleApiError } from "@/utils/handleApiError";
 import type { ModelInProductForm } from "../types";
 
-export type ModelRequest = {
-    name: string,
-    entryDate: string | null,
-    caducityDate: string | null
+
+type RegisterModelInProductPayload = {
+    productId: string;
+    data: ModelInProductForm;
+    file?: File;
 }
 
-export async function registerModelInProduct(productId: string, data: ModelRequest, file: File) {
+
+export async function registerModelInProduct({ productId, data, file }: RegisterModelInProductPayload) {
     // Configuracion para enviar los datos del formulario por separado: los datos y la imagen
     const formData = new FormData()
     formData.append("name", data.name)
@@ -76,10 +78,21 @@ export async function getModel(id: string) {
 
 type UpdateModelPayload = {
     modelId: string;
-    formData: ModelInProductForm;
+    data: ModelInProductForm;
+    file?: File;
 }
 
-export async function updateModel({ modelId, formData }: UpdateModelPayload) {
+export async function updateModel({ modelId, data, file }: UpdateModelPayload) {
+
+    const formData = new FormData()
+    formData.append("name", data.name)
+    formData.append("entryDate", data.entryDate ?? '')
+    formData.append("caducityDate", data.caducityDate ?? '')
+
+    if (file) {
+        formData.append("file", file)
+    }
+
     try {
         const url = `/models/${modelId}`
         const { data } = await api.put<GeneralResponse>(url, formData)
@@ -90,6 +103,9 @@ export async function updateModel({ modelId, formData }: UpdateModelPayload) {
         handleApiError(error);
     }
 }
+
+
+
 
 export async function changeStatusModel(id: string) {
     try {

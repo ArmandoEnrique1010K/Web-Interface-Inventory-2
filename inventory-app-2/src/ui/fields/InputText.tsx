@@ -4,7 +4,6 @@ import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 
 type Props = {
     id: string; // Id del input
-    name?: string,
     label?: string; // Etiqueta del input
     placeholder?: string; // Texto que se muestra en el input
     type: 'text' | 'password' | 'email' | 'number' | 'hidden'; // Tipo de input (text, password, email, etc)
@@ -12,7 +11,7 @@ type Props = {
     functionEnabled?: UseFormRegisterReturn // Funcion que se ejecuta al cambiar el valor del input con react hook form
 }
 
-export const InputText = ({ id, name, label, placeholder, type, errorMessage, functionEnabled }: Props) => {
+export const InputText = ({ id, label, placeholder, type, errorMessage, functionEnabled }: Props) => {
 
     // Estado para ver contraseñas
     const [showPassword, setShowPassword] = useState(false);
@@ -36,7 +35,6 @@ export const InputText = ({ id, name, label, placeholder, type, errorMessage, fu
                         type={type === "password" && showPassword ? "text" : type}
                         placeholder={placeholder}
                         id={id}
-                        name={name}
                         onWheel={(e) => e.currentTarget.blur()}
                         {...functionEnabled}
                     />

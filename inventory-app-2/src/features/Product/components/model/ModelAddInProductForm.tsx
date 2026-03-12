@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
-import { registerModelInProduct, type ModelRequest } from '../../api/ModelAPI';
+import { registerModelInProduct } from '../../api/ModelAPI';
 import type { GeneralError } from '@/types/index'
 import { toast } from 'sonner'
 import { TitleContainer } from '@/components/TitleContainer'
@@ -12,32 +12,36 @@ import { Button } from '@/ui/Button'
 import { ButtonLink } from '@/ui/ButtonLink'
 import { ArrowUpCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
 import { useState } from 'react'
+import type { ModelInProductForm } from '../../types';
+import { UploadImage } from '@/ui/fields/UploadImage';
 
 export const ModelAddInProductForm = () => {
     const { id } = useParams();
     const [file, setFile] = useState<File | null>(null)
     const [preview, setPreview] = useState<string | null>(null)
-    const initialValues: ModelRequest = {
+    const initialValues: ModelInProductForm = {
         name: '',
-        // SELECCIONA LA FECHA DE HOY EN DIA
-        entryDate: new Date(new Date().setHours(12)).toISOString().split('T')[0],
-        caducityDate: '' // new Date(new Date().setHours(12)).toISOString().split('T')[0],
+        // SELECCIONA LA FECHA DE HOY EN DIA (Valor por defecto), Tambien debe ser una fecha pasada o de hoy o ningun valor
+        entryDate: new Date(new Date().setHours(12)).toISOString().split('T')[0], // 2026-03-11 -> String
+        // La fecha de caducidad debe ser futura o ningun valor
+        caducityDate: ''
     }
 
-    const { register, handleSubmit, setError, control, formState: { errors } } = useForm<ModelRequest & { file: File }>({
+
+    const { register, handleSubmit, setError, control, formState: { errors } } = useForm<ModelInProductForm & { file: File }>({
         defaultValues: initialValues
     })
     const navigate = useNavigate();
     const location = useLocation();
 
     const { mutate } = useMutation({
-        mutationFn: (data: ModelRequest) => registerModelInProduct(id!, data, file as File),
+        mutationFn: registerModelInProduct,
         onError: (error: GeneralError) => {
             console.log(error)
             // Error de campo
             if (error.type === 'FIELD_ERROR') {
                 Object.entries(error.fields).forEach(([field, message]) => {
-                    setError(field as keyof ModelRequest, {
+                    setError(field as keyof ModelInProductForm, {
                         type: 'server',
                         message: message as string,
                     })
@@ -60,23 +64,17 @@ export const ModelAddInProductForm = () => {
         }
     })
 
-
+    // EFECTO QUE SE EJECUTA SI HAY UNA IMAGEN QUE SE ESTA SUBIENDO
     return (
         <>
             <TitleContainer title={`Añadir nuevo modelo al producto ${location.pathname.split('/')[2]}`}>
                 <BaseForm
                     onSubmit={handleSubmit((data) => {
-
-                        const formatDate = (date: Date | null) =>
-                            date ? date.toISOString().split("T")[0] : null;
-
-                        const payload: ModelRequest = {
-                            ...data,
-                            entryDate: formatDate(data.entryDate as unknown as Date),
-                            caducityDate: formatDate(data.caducityDate as unknown as Date)
-                        }
-
-                        mutate(payload)
+                        mutate({
+                            productId: id!,  // ← Add this line
+                            data: data,
+                            ...(file && { file })
+                        })
                     })}
                     inputs={
                         <>
@@ -89,15 +87,7 @@ export const ModelAddInProductForm = () => {
                                 functionEnabled={register('name')} />
 
 
-                            {/* TODO: CAMPO DE PRUEBA, ELIMINARLO */}
-                            {/* <InputText
-                                id="imageUrl"
-                                label="URL de la imagen"
-                                placeholder="URL de la imagen"
-                                type="text"
-                                errorMessage={errors.imageUrl}
-                                functionEnabled={register('imageUrl')} /> */}
-                            <input
+                            {/* <input
                                 type="file"
                                 accept="image/*"
                                 {...register("file", {
@@ -117,10 +107,18 @@ export const ModelAddInProductForm = () => {
                                     alt="preview"
                                     className="w-40 mt-2 rounded"
                                 />
-                            )}
+                            )} */}
+
+                            <UploadImage id='file' label="Suba una imagen"
+                                register={register('file')}
+                                previewImage={preview}
+                                setFile={setFile}
+                                setPreview={setPreview}
+                            />
+
 
                             {/* TODO: QUITAR EL TIPADO DE FILE */}
-                            <InputDate<ModelRequest & { file: File }>
+                            <InputDate<ModelInProductForm & { file: File }>
                                 id="entryDate"
                                 label="Fecha de entrada del modelo"
                                 name="entryDate"
@@ -129,7 +127,7 @@ export const ModelAddInProductForm = () => {
                             />
 
                             {/* TODO: PROBLEMA CON LA FECHA DE CADUCIDAD */}
-                            <InputDate<ModelRequest & { file: File }>
+                            <InputDate<ModelInProductForm & { file: File }>
                                 id="caducityDate"
                                 label="Fecha de caducidad del modelo"
                                 name="caducityDate"

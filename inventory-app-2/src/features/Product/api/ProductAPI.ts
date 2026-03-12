@@ -3,7 +3,28 @@ import type { ProductCreateForm, ProductUpdateForm } from "../types";
 import type { DataPageResponse, DataResponse, GeneralResponse } from "@/types/index";
 import { handleApiError } from "@/utils/handleApiError";
 
-export async function registerProduct(formData: ProductCreateForm) {
+type ProductCreatePayload = {
+    data: ProductCreateForm,
+    file?: File
+}
+
+export async function registerProduct({ data, file }: ProductCreatePayload) {
+
+    const formData = new FormData()
+    formData.append("name", data.name)
+    formData.append("length", data.length)
+    formData.append("width", data.width)
+    formData.append("height", data.height)
+    formData.append("modelName", data.modelName)
+    formData.append("modelEntryDate", data.modelEntryDate)
+    formData.append("modelCaducityDate", data.modelCaducityDate)
+    formData.append("categoryId", data.categoryId)
+    formData.append("typeId", data.typeId)
+
+    if (file) {
+        formData.append("file", file)
+    }
+
     try {
         const url = `/products`
         const { data } = await api.post<GeneralResponse>(url, formData)

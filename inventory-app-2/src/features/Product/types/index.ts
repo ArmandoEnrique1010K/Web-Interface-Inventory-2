@@ -9,8 +9,9 @@ export const modelSchema = z.object({
     id: z.number(),
     name: z.string(),
     imageUrl: z.string(),
-    entryDate: z.string(),
-    caducityDate: z.string(),
+    // en Zod, nullable permite que un campo tenga el valor null, mientras que optional hace que el campo sea completamente opcional, es decir que podria no existir
+    entryDate: z.string().nullable(),
+    caducityDate: z.string().nullable(),
     totalQuantityAvailable: z.number(),
     totalQuantityReceived: z.number(),
     totalQuantityDelivered: z.number(),
@@ -65,8 +66,8 @@ type Product = z.infer<typeof productSchema>
 type Type = z.infer<typeof typeSchema>
 
 export type CategoryForm = Pick<Category, "name">;
-export type ModelInProductForm = Pick<Model, 'name' | 'imageUrl' | 'entryDate' | 'caducityDate'>;
-export type ProductCreateForm = Pick<Product, 'name' | 'length' | 'width' | 'height' | 'modelName' | 'modelImageUrl' |
+export type ModelInProductForm = Pick<Model, 'name' | 'entryDate' | 'caducityDate'>;
+export type ProductCreateForm = Pick<Product, 'name' | 'length' | 'width' | 'height' | 'modelName' |
     'modelEntryDate' | 'modelCaducityDate' | 'categoryId' | 'typeId'>;
 export type ProductUpdateForm = Pick<Product, "name" | "length" | "width" | "height" | "categoryId" | "typeId">;
 export type TypeForm = Pick<Type, "name">;

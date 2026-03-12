@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import type { ModelInProductForm } from '../../types';
+import type { ModelInProductForm, ModelItem } from '../../types';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { updateModel } from '../../api/ModelAPI';
@@ -12,9 +12,11 @@ import { InputDate } from '@/ui/fields/InputDate';
 import { ArrowUpCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { Button } from '@/ui/Button';
 import { ButtonLink } from '@/ui/ButtonLink';
+import { useState } from 'react';
+import { UploadImage } from '@/ui/fields/UploadImage';
 
 type Props = {
-    data: ModelInProductForm;
+    data: ModelItem & { file: File };
     modelId: string;
     productId: string;
 }
@@ -22,14 +24,18 @@ type Props = {
 export const ModelEditForm = ({ data, modelId, productId }: Props) => {
     const navigate = useNavigate();
 
-    const { register, handleSubmit, setError, control, formState: { errors } } = useForm<ModelInProductForm>({
+    const { register, handleSubmit, setError, control, formState: { errors } } = useForm<ModelInProductForm & { file: File }>({
         defaultValues: {
             name: data.name,
-            imageUrl: data.imageUrl,
             entryDate: data.entryDate,
             caducityDate: data.caducityDate
         }
     })
+
+    const [file, setFile] = useState<File | null>(null)
+    const [preview, setPreview] = useState<string | null>(data.imageUrl)
+
+
 
     const queryClient = useQueryClient();
 
@@ -63,10 +69,12 @@ export const ModelEditForm = ({ data, modelId, productId }: Props) => {
         }
     })
 
-    const handleForm = (formData: ModelInProductForm) => {
+
+    const handleForm = (formData: ModelInProductForm & { file: File }) => {
         const data = {
-            formData,
-            modelId
+            data: formData,
+            modelId,
+            ...(file && { file }) // Only include file if it exists
         }
         mutate(data)
     }
@@ -76,7 +84,12 @@ export const ModelEditForm = ({ data, modelId, productId }: Props) => {
         <>
             <TitleContainer title={`Editar modelo ${modelId}`}>
                 <BaseForm
-                    onSubmit={handleSubmit(handleForm)}
+                    onSubmit={handleSubmit((data) => {
+                        handleForm({
+                            ...data,
+                            file: file || data.file // Use new file or original file
+                        })
+                    })}
                     inputs={
                         <>
                             <InputText
@@ -86,21 +99,45 @@ export const ModelEditForm = ({ data, modelId, productId }: Props) => {
                                 type="text"
                                 errorMessage={errors.name}
                                 functionEnabled={register('name')} />
-                            <InputText
-                                id="imageUrl"
-                                label="Imagen"
-                                placeholder="Imagen del modelo"
-                                type="text"
-                                errorMessage={errors.imageUrl}
-                                functionEnabled={register('imageUrl')} />
-                            <InputDate<ModelInProductForm>
+
+
+                            {/* <input
+                                type="file"
+                                accept="image/*"
+                                {...register("file", {
+                                    onChange: (e) => {
+                                        const selectedFile = e.target.files?.[0]
+
+                                        if (selectedFile) {
+                                            setFile(selectedFile)
+                                            setPreview(URL.createObjectURL(selectedFile))
+                                        }
+                                    }
+                                })}
+                            />
+                            {preview && (
+                                <img
+                                    src={preview}
+                                    alt="preview"
+                                    className="w-40 mt-2 rounded"
+                                />
+                            )} */}
+                            <UploadImage id='file' label="Reemplazo de la imagen"
+                                register={register('file')}
+                                previewImage={preview}
+                                setFile={setFile}
+                                setPreview={setPreview}
+                            />
+
+
+                            <InputDate<ModelInProductForm & { file: File }>
                                 id="entryDate"
                                 label="Fecha de entrada del modelo"
                                 name="entryDate"
                                 control={control}
                                 errorMessage={errors.entryDate?.message}
                             />
-                            <InputDate<ModelInProductForm>
+                            <InputDate<ModelInProductForm & { file: File }>
                                 id="caducityDate"
                                 label="Fecha de caducidad del modelo"
                                 name="caducityDate"
