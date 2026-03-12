@@ -76,14 +76,15 @@ export const ValidateUserTokenForm = () => {
                         functionEnabled={register('requestId')}
                     /> */}
 
-                    {/* TODO: EN ALGUNA FUTURA ACTUALIZACION, SE PODRIA UTILIZAR CHACKRA UI PARA LIMITAR A 6 DIGITOS */}
                     <InputText
                         id="value"
                         label="Token"
                         placeholder="Introduce el token de 6 digitos"
                         type="number"
                         errorMessage={errors.value}
-                        functionEnabled={register('value')} />
+                        functionEnabled={register('value')}
+                        // Se limita a 6 digitos
+                        max={6} />
 
                 </>
             }

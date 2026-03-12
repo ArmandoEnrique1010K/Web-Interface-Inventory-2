@@ -21,7 +21,7 @@ export const SelectOptionFilter = ({ name, label, options, onChange, textInNullO
                     value={value}
                     onChange={onChange}
                 >
-                    {/* TODO: LA VISTA PARPADEA AL CARGAR LA OPCION SELECCIONADA POR VALUE */}
+                    {/* NOTA: LA VISTA PARPADEA AL CARGAR LA OPCION SELECCIONADA POR VALUE */}
                     {textInNullOption && <option value="">
                         {textInNullOption || "Seleccione una opción"}
                     </option>}

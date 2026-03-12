@@ -9,9 +9,10 @@ type Props = {
     type: 'text' | 'password' | 'email' | 'number' | 'hidden'; // Tipo de input (text, password, email, etc)
     errorMessage?: FieldError | undefined, // Mensaje de error
     functionEnabled?: UseFormRegisterReturn // Funcion que se ejecuta al cambiar el valor del input con react hook form
+    max?: number
 }
 
-export const InputText = ({ id, label, placeholder, type, errorMessage, functionEnabled }: Props) => {
+export const InputText = ({ id, label, placeholder, type, errorMessage, functionEnabled, max }: Props) => {
 
     // Estado para ver contraseñas
     const [showPassword, setShowPassword] = useState(false);
@@ -36,7 +37,21 @@ export const InputText = ({ id, label, placeholder, type, errorMessage, function
                         placeholder={placeholder}
                         id={id}
                         onWheel={(e) => e.currentTarget.blur()}
+
+                        // Controla el valor introducido si es de tipo number y si hay un valor para la prop max
+                        onInput={(e) => {
+                            if (type === "number" && max) {
+                                const target = e.currentTarget
+                                if (target.value.length > max) {
+                                    // Acorta el valor introducido a 6 caracteres
+                                    target.value = target.value.slice(0, max)
+                                }
+                            }
+                        }}
+
                         {...functionEnabled}
+                        {...(type === "number" ? { max } : {})}
+
                     />
                     {
                         type === "password" && (

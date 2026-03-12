@@ -116,19 +116,25 @@ export const GeneralRouter = () => {
                                 <Outlet />
                             </NavbarContainer>
                         }>
+                            {/* RELACIONADO A PRODUCTS */}
                             <Route index element={<ProductList />} />
                             <Route path=":id" element={<ProductDetails />} />
                             <Route path="new" element={<ProductAddForm />} />
                             <Route path="edit/:id" element={<ProductEditLoader />} />
 
+                            {/* RELACIONADO A MODELS */}
+                            <Route path="models" element={<ModelList />} />
+                            {/* :id es el ID del producto que corresponde al modelo */}
                             <Route path=":id/models/new" element={<ModelAddInProductForm />} />
                             <Route path=":productId/models/edit/:modelId" element={<ModelEditLoader />} />
-                            <Route path="models" element={<ModelList />} />
                             <Route path=":productId/models/:modelId" element={<ModelDetails />} />
 
+                            {/* RELACIONADO A CATEGORIES */}
                             <Route path="categories" element={<CategoryList />} />
                             <Route path="categories/new" element={<CategoryAddForm />} />
                             <Route path="categories/edit/:id" element={<CategoryEditLoader />} />
+
+                            {/* RELACIONADO A TYPES */}
                             <Route path="types" element={<TypeList />} />
                             <Route path="types/new" element={<TypeAddForm />} />
                             <Route path="types/edit/:id" element={<TypeEditLoader />} />
@@ -139,6 +145,7 @@ export const GeneralRouter = () => {
                                 <Outlet />
                             </NavbarContainer>
                         }>
+                            {/* RELACIONADO A STOCKLOT */}
                             <Route index element={<StockLotList />} />
                             <Route path="new" element={<StockLotRegisterForm />} />
                             <Route path=":id" element={<StockLotDetails />} />
@@ -147,12 +154,14 @@ export const GeneralRouter = () => {
                             <Route path=":id/recovery" element={<StockLotRecoveryForm />} />
                             <Route path=":id/transfer" element={<StockLotTransferStocksLoader />} />
 
+                            {/* RELACIONADO A COMPANIES */}
                             <Route path="companies" element={<CompanyList />} />
                             <Route path="companies/new" element={<CompanyAddForm />} />
                             <Route path="companies/edit/:id" element={<CompanyEditLoader />} />
                         </Route>
 
 
+                        {/* RELACIONADO A PROFILE */}
                         <Route path="profile" element={
                             <Outlet />
                         }>
@@ -160,18 +169,17 @@ export const GeneralRouter = () => {
                             <Route path='update' element={<ProfileEditLoader />} />
                         </Route>
 
+                        {/* RELACIONADO A CREDITS */}
                         <Route path="credits" element={
                             <Outlet />
                         }>
                             <Route index element={<CreditsDetails />} />
                         </Route>
 
-
-
+                        {/* CUALQUIER OTRA RUTA */}
                         <Route path="*" element={<Navigate to="/" replace />} />
                     </Route>
                 )}
-
             </Routes>
         </BrowserRouter>
     )

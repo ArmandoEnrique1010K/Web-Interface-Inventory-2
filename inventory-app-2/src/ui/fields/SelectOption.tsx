@@ -27,7 +27,7 @@ export const SelectOption = ({ id, name, label, errorMessage, functionEnabled, o
                         value={editableValue}
 
                     >
-                        {/* TODO: LA VISTA PARPADEA AL CARGAR LA OPCION SELECCIONADA POR VALUE */}
+                        {/* NOTA: LA VISTA PARPADEA AL CARGAR LA OPCION SELECCIONADA POR VALUE */}
                         {textInNullOption && <option value="">
                             {textInNullOption || "Seleccione una opción"}
                         </option>}

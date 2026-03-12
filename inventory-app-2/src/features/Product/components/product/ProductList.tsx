@@ -198,7 +198,7 @@ export const ProductList = () => {
                             <BaseTableCell data={product.id} />
                             <BaseTableCell data={
                                 <div className='flex flex-col gap-1'>
-                                    {/* TODO: EL ENLACE SE PODRIA AÑADIR EN OTRA PARTE */}
+                                    {/* TODO: EL ENLACE SE PODRIA AÑADIR EN OTRA PARTE O SE PUEDE HACER MÁS RESALTADO COMO EN EL NOMBRE DEL PRODUCTO*/}
                                     <Link to={`/products/${product.id}`} className='hover:text-blue-900'>{product.name}</Link>
                                     <p className='text-xs'>{product.quantityModels === 1 ? '1 modelo' : `${product.quantityModels} modelos`}</p>
                                 </div>

@@ -12,8 +12,6 @@ import { ProductChangeStatus } from '../product/ProductChangeStatus'
 import { ModelChangeStatus } from './ModelChangeStatus';
 
 export const ModelDetails = () => {
-
-    // TODO: CORREGIR EL ID DEL PRODUCTO
     const { modelId, productId } = useParams()
 
     const { data, isLoading } = useQuery<ModelDetailsItem>({
@@ -136,7 +134,7 @@ export const ModelDetails = () => {
 
                                 <div className="font-semibold">Código QR:</div>
                                 <div>
-                                    {/* TODO: ESTE BOTON DEBE MOSTRAR EL CODIGO QR EN UNA VENTANA MODAL */}
+                                    {/* ESTE BOTON MUESTRA EL CODIGO QR EN UNA VENTANA MODAL */}
                                     <Button
                                         text="Obtener QR"
                                         type="button"

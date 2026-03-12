@@ -114,7 +114,6 @@ export const ProductDetails = () => {
                 <>
                     <ButtonLink icon={<PlusCircleIcon />} size="large" to={`/products/${productId}/models/new`} color="green" text="Añadir modelo" />
                     <ButtonLink icon={<PencilSquareIcon />} size="large" to={`/products/edit/${productId}`} color="blue" text="Editar producto" />
-                    {/* TODO: EDITAR ESTE BOTON */}
                     <ProductChangeStatus from='product-details' size="large" productId={productId!} value={productData!.status ? 'Desactivar producto' : 'Activar producto'} />
                 </>
             }

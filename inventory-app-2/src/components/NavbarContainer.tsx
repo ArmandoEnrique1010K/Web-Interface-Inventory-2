@@ -11,19 +11,30 @@ type Props = {
 export const NavbarContainer = ({ menuItems, children, keyword }: Props) => {
     const location = useLocation();
 
-    // TODO: ESTA FUNCIÓN SE PODRIA TRASLADAR A LA CARPETA UTILS
+    // TODO: ESTA FUNCIÓN SE PODRIA TRASLADAR A LA CARPETA UTILS EN UNA FUTURA ACTUALIZACIÓN
     const styleToCurrentPath = (to: string) => {
-        // Previamente se utilizo (location.pathname === to)
-        if (location.pathname.includes(to) && (
-            to !== `/${keyword}` ||
-            location.pathname === `/${keyword}` ||
-            location.pathname === `/${keyword}/new` ||
-            (location.pathname.includes(`/${keyword}/edit`) && /\/\d+$/.test(location.pathname)) || // Si termina en un numero (editar)
-            (location.pathname.includes(`/${keyword}`) && /\/\d+$/.test(location.pathname)) // obtener producto
-        )) {
+        const path = location.pathname;
+
+        // Caso especial: boton Productos
+        if (to === `/${keyword}`) {
+            if (
+                path === `/${keyword}` ||
+                path.startsWith(`/${keyword}/new`) ||
+                path.match(new RegExp(`^/${keyword}/\\d+`)) ||
+                path.match(new RegExp(`^/${keyword}/edit/\\d+`))
+            ) {
+                return 'bg-blue-700';
+            }
+            return 'bg-gray-500';
+        }
+
+        // Otros modulos (models, categories, types)
+        if (path.startsWith(to)) {
             return 'bg-blue-700';
         }
+
         return 'bg-gray-500';
+
     }
 
     // React responsive establece unos "puntos de cortes" en donde se aplicara una condición de acuerdo al ancho de pantalla
@@ -43,6 +54,8 @@ export const NavbarContainer = ({ menuItems, children, keyword }: Props) => {
                             <span>{!isSmallScreen && item.icon}{isExtraSmallScreen && item.icon}</span>
                             <h1 className={``}>{!isExtraSmallScreen && item.label}</h1>
                         </Link>
+
+
                     ))
                 }
             </div>

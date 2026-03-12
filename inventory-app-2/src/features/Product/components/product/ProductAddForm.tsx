@@ -179,7 +179,7 @@ export const ProductAddForm = () => {
                             />
 
 
-                            {/** TODO: SI NO SUBE UNA FECHA DE ENTRADA, SE ESTABLECERA LA FECHA DE HOY DIA */}
+                            {/** NOTA: SI NO SUBE UNA FECHA DE ENTRADA, SE ESTABLECERA LA FECHA DE HOY DIA */}
                             <InputDate<ProductCreateForm & { file: File }>
                                 id="modelEntryDate"
                                 label="Fecha de entrada del modelo"
