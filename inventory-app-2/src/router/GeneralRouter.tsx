@@ -12,7 +12,7 @@ import type { RootState } from '@/store/store'
 import { UserProfile } from '@/features/Profile/components/UserProfile'
 import { Loading } from '@/views/Loading'
 import type { MenuItem } from 'types'
-import { CubeIcon, DocumentDuplicateIcon, NewspaperIcon, RectangleGroupIcon, TagIcon, TruckIcon } from '@heroicons/react/24/outline'
+import { CubeIcon, DocumentDuplicateIcon, FlagIcon, MapIcon, MapPinIcon, NewspaperIcon, RectangleGroupIcon, TagIcon, TruckIcon } from '@heroicons/react/24/outline'
 import { CategoryAddForm } from '@/features/Product/components/category/CategoryAddForm'
 import { CategoryList } from '@/features/Product/components/category/CategoryList'
 import { CategoryEditLoader } from '@/features/Product/components/category/CategoryEditLoader'
@@ -40,6 +40,9 @@ import { StockLotDecreaseForm } from '../features/StockLot/components/stocklot/S
 import { StockLotRecoveryForm } from '@/features/StockLot/components/stocklot/StockLotRecoveryForm'
 import { StockLotTransferStocksLoader } from '@/features/StockLot/components/stocklot/StockLotTransferStocksLoader'
 import { StockLotDetails } from '@/features/StockLot/components/stocklot/StockLotDetails'
+import { RegionList } from '@/features/Location/components/region/RegionList'
+import { RegionAddForm } from '@/features/Location/components/region/RegionAddForm'
+import { RegionEditLoader } from '@/features/Location/components/region/RegionEditLoader'
 
 const productItems: MenuItem[] = [
     {
@@ -76,6 +79,27 @@ const stockLotsItems: MenuItem[] = [
         to: '/stocklots/companies'
     }
 ]
+
+const locationItems: MenuItem[] = [
+    {
+        label: 'Ubicaciones',
+        icon: <MapPinIcon className='size-6' />,
+        to: '/locations'
+    },
+    {
+        label: 'Subregiones',
+        icon: <MapIcon className='size-6' />,
+        to: '/locations/subregions'
+    },
+    {
+        label: 'Regiones',
+        icon: <FlagIcon className='size-6' />,
+        to: '/locations/regions'
+    }
+
+]
+
+
 
 export const GeneralRouter = () => {
 
@@ -160,6 +184,26 @@ export const GeneralRouter = () => {
                             <Route path="companies/edit/:id" element={<CompanyEditLoader />} />
                         </Route>
 
+
+                        <Route path='locations' element={
+                            <NavbarContainer menuItems={locationItems} keyword='locations'>
+                                <Outlet />
+                            </NavbarContainer>
+                        }>
+                            <Route index element={<h1>Lista de ubicaciones</h1>} />
+                            <Route path="new" element={<h1>Formulario de nueva ubicacion</h1>} />
+                            <Route path="edit/:id" element={<h1>Formulario de editar ubicacion</h1>} />
+
+                            <Route path="regions" element={<RegionList />} />
+                            <Route path="regions/new" element={<RegionAddForm />} />
+                            <Route path="regions/edit/:id" element={<RegionEditLoader />} />
+
+                            {/* TODO: CORREGIR EN LA API REST EL ENDPOINT, EL ID DEBE SER UN QUERY PARAM */}
+                            <Route path="subregions/region/:id" element={<h1>Subregiones por una region</h1>} />
+
+                            <Route path="subregions" element={<h1>Formulario de nueva subregion</h1>} />
+                            <Route path="subregions/edit/:id" element={<h1>Actualizar subregion</h1>} />
+                        </Route>
 
                         {/* RELACIONADO A PROFILE */}
                         <Route path="profile" element={

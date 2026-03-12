@@ -113,7 +113,6 @@ export const ModelList = () => {
 
     const isSmallScreen = useMediaQuery({ query: '(max-width: 479px)' })
 
-    // TODO: AÑADIR EN LA API REST, EN LA RESPUESTA DE OBTENER TODOS LOS MODELOS, EL NOMBRE DEL PRODUCTO EN UN CAMPO SEPARADO
     return (
         <TitleContainer
             title="Modelos"
@@ -148,7 +147,6 @@ export const ModelList = () => {
                             }
                         />
                     </div>
-                    {/* TODO: CONTINUAR APLICANDO ESTILOS AL FORMULARIO DE FILTROS */}
                     <div className={`flex flex-row gap-4`}>
                         <div className='flex-row w-full'>
                             <InputTextFilter
@@ -179,7 +177,6 @@ export const ModelList = () => {
                     </div>
 
 
-                    {/* TODO: AÑADIR LOS CAMPOS DE FECHA LIMITE MINIMA Y MAXIMA */}
                     <div className={`flex flex-row gap-4`}>
                         <div className='flex-row w-full'>
 

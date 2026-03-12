@@ -126,7 +126,6 @@ export const ModelAddInProductForm = () => {
                                 errorMessage={errors.entryDate?.message}
                             />
 
-                            {/* TODO: PROBLEMA CON LA FECHA DE CADUCIDAD */}
                             <InputDate<ModelInProductForm & { file: File }>
                                 id="caducityDate"
                                 label="Fecha de caducidad del modelo"
@@ -134,8 +133,6 @@ export const ModelAddInProductForm = () => {
                                 control={control}
                                 errorMessage={errors.caducityDate?.message}
                             />
-
-
                         </>
                     }
                     buttons={
