@@ -7,9 +7,8 @@ type Props = {
     functionEnabled?: UseFormRegisterReturn // Funcion que se ejecuta al cambiar el valor del input
     options: { value: string, label: string }[],
     textInNullOption?: string,
-    editableValue?: string //* SOLAMENTE EN CAMPOS QUE NO TENGAN REACT HOOK FORM
 }
-export const SelectOption = ({ id, name, label, errorMessage, functionEnabled, options, textInNullOption, editableValue }: Props) => {
+export const SelectOption = ({ id, name, label, errorMessage, functionEnabled, options, textInNullOption }: Props) => {
     return (
         <div className="flex flex-col space-y-1 w-full pt-2">
             <label className="text-md font-bold" htmlFor={id}>{label}</label>
@@ -21,10 +20,17 @@ export const SelectOption = ({ id, name, label, errorMessage, functionEnabled, o
                         name={name}
                         // NOTA: functionEnabled tiene unas propiedades internas, en la cual una de ellas es el name
                         {...functionEnabled}
-                        // NOTA: NO SE DEBEN UTILIZAR LAS PROPS value Y defaultValue, REACT HOOK FORM ya tiene esas props
-                        // defaultValue={defaultValue}
-                        // value={value || defaultValue}
-                        value={editableValue}
+
+                    // SI UTILIZO DEFAULT VALUE, MUESTRA EL VALOR, PERO AL RECARGAR LA PAGINA SE PIERDE
+                    // defaultValue={editableValue}
+
+                    // PERO SI UTILIZO VALUE, NO PERMITE CAMBIAR EL VALOR
+                    // value={editableValue}
+
+                    // Solución, utiliza value cuando no utilices React Hook Form
+                    // {...(!functionEnabled && editableValue !== undefined
+                    //     ? { value: editableValue }
+                    //     : {})}
 
                     >
                         {/* NOTA: LA VISTA PARPADEA AL CARGAR LA OPCION SELECCIONADA POR VALUE */}

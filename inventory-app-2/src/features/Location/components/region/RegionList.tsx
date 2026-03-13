@@ -14,8 +14,6 @@ export const RegionList = () => {
         queryFn: listAllRegions
     })
 
-
-
     return (
         <TitleContainer
             title="Regiones"

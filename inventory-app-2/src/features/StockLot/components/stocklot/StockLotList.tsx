@@ -183,6 +183,32 @@ export const StockLotList = () => {
                             setForm(prev => ({ ...prev, name: e.target.value }))
                         }
                     />
+                    <div className={`flex flex-row gap-4`}>
+                        <div className='flex-row w-full'>
+                            <InputTextFilter
+                                name='minQuantityAvailable'
+                                label='Cantidad minima disponible:'
+                                placeholder='Cantidad minima disponible'
+                                type='number'
+                                value={form.minQuantityAvailable.toString()}
+                                onChange={(e) =>
+                                    setForm(prev => ({ ...prev, minQuantityAvailable: e.target.value }))
+                                }
+                            />
+                        </div>
+                        <div className='flex-row w-full'>
+                            <InputTextFilter
+                                name='maxQuantityAvailable'
+                                label='Cantidad maxima disponible:'
+                                placeholder='Cantidad maxima disponible'
+                                type='number'
+                                value={form.maxQuantityAvailable.toString()}
+                                onChange={(e) =>
+                                    setForm(prev => ({ ...prev, maxQuantityAvailable: e.target.value }))
+                                }
+                            />
+                        </div>
+                    </div>
 
                     <div className={`flex flex-row gap-4`}>
                         <div className='flex-row w-full'>
@@ -212,32 +238,6 @@ export const StockLotList = () => {
                     </div>
 
 
-                    <div className={`flex flex-row gap-4`}>
-                        <div className='flex-row w-full'>
-                            <InputTextFilter
-                                name='minQuantityAvailable'
-                                label='Cantidad minima disponible:'
-                                placeholder='Cantidad minima disponible'
-                                type='number'
-                                value={form.minQuantityAvailable.toString()}
-                                onChange={(e) =>
-                                    setForm(prev => ({ ...prev, minQuantityAvailable: e.target.value }))
-                                }
-                            />
-                        </div>
-                        <div className='flex-row w-full'>
-                            <InputTextFilter
-                                name='maxQuantityAvailable'
-                                label='Cantidad maxima disponible:'
-                                placeholder='Cantidad maxima disponible'
-                                type='number'
-                                value={form.maxQuantityAvailable.toString()}
-                                onChange={(e) =>
-                                    setForm(prev => ({ ...prev, maxQuantityAvailable: e.target.value }))
-                                }
-                            />
-                        </div>
-                    </div>
 
 
                     <div className={`flex ${isSmallScreen ? 'flex-col gap-2' : 'flex-row gap-4'}`}>
@@ -304,7 +304,10 @@ export const StockLotList = () => {
                                 </div>
                             } />
                             <BaseTableCell data={
-                                <span className='text-lg'>{stockLot.quantityAvailable}</span>
+                                <div>
+                                    <div className='text-xl'>{stockLot.quantityAvailable} u.</div>
+                                    <div className='text-sm'>de {stockLot.quantityReceived} u. recibidas</div>
+                                </div>
                             } />
                             <BaseTableCell data={
                                 handleFormatDate(new Date(stockLot.createdAt))

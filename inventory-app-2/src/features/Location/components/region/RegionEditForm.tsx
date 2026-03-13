@@ -67,28 +67,26 @@ export const RegionEditForm = ({ data, regionId }: Props) => {
     }
 
     return (
-        <>
-            <TitleContainer title={`Editar región ${regionId}`}>
-                <BaseForm
-                    onSubmit={handleSubmit(handleForm)}
-                    buttons={
-                        <>
-                            <Button icon={<ArrowUpCircleIcon />} size="large" text="Editar región" type="submit" color="green" />
-                            <ButtonLink icon={<XCircleIcon />} size="large" text="Volver" color="gray" to="/locations/regions" />
-                        </>
-                    }
-                    inputs={
-                        <InputText
-                            id="name"
-                            label="Nombre"
-                            placeholder="Nombre de la región"
-                            type="text"
-                            errorMessage={errors.name}
-                            functionEnabled={register('name')} />
+        <TitleContainer title={`Editar región ${regionId}`}>
+            <BaseForm
+                onSubmit={handleSubmit(handleForm)}
+                buttons={
+                    <>
+                        <Button icon={<ArrowUpCircleIcon />} size="large" text="Editar región" type="submit" color="green" />
+                        <ButtonLink icon={<XCircleIcon />} size="large" text="Volver" color="gray" to="/locations/regions" />
+                    </>
+                }
+                inputs={
+                    <InputText
+                        id="name"
+                        label="Nombre"
+                        placeholder="Nombre de la región"
+                        type="text"
+                        errorMessage={errors.name}
+                        functionEnabled={register('name')} />
 
-                    }
-                />
-            </TitleContainer>
-        </>
+                }
+            />
+        </TitleContainer>
     )
 }

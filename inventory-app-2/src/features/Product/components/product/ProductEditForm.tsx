@@ -14,6 +14,7 @@ import { listAllCategories } from '../../api/CategoryAPI';
 import { listAllTypes } from '../../api/TypeAPI';
 import { ButtonLink } from '@/ui/ButtonLink';
 import { ArrowUpCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import { TextMessage } from '@/components/TextMessage';
 
 type Props = {
     data: ProductUpdateForm;
@@ -73,11 +74,11 @@ export const ProductEditForm = ({ data, productId }: Props) => {
         }
         mutate(data)
     }
-    const { data: categoriesData } = useQuery({
+    const { data: categoriesData, isLoading: categoriesLoading } = useQuery({
         queryKey: ['list-categories'],
         queryFn: listAllCategories
     })
-    const { data: typesData } = useQuery({
+    const { data: typesData, isLoading: typesLoading } = useQuery({
         queryKey: ['list-types'],
         queryFn: listAllTypes
     })
@@ -93,7 +94,10 @@ export const ProductEditForm = ({ data, productId }: Props) => {
         label: type.name,
     })) || []
 
-
+    // NO OLVIDAR esperar a que se cargue la lista para mostrarla en la vista del usuario
+    if (categoriesLoading || typesLoading) {
+        return <TextMessage text="Cargando..." align="left" color="black" />
+    }
 
     return (
         <>
@@ -141,7 +145,6 @@ export const ProductEditForm = ({ data, productId }: Props) => {
                                 functionEnabled={register('categoryId')}
                                 options={categories}
                                 textInNullOption="Seleccione una categoria"
-                                editableValue={data.categoryId}
                             />
 
                             <SelectOption
@@ -151,7 +154,6 @@ export const ProductEditForm = ({ data, productId }: Props) => {
                                 functionEnabled={register('typeId')}
                                 options={types}
                                 textInNullOption="Seleccione un tipo"
-                                editableValue={data.typeId}
                             />
 
                         </>

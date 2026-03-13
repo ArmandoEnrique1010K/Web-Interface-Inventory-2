@@ -56,9 +56,9 @@ export const Button = ({
                 ${sizeStyles}
                 ${widthStyles}
                 ${handleApplyStyleColor(color)}
-                ${aditionalStyles}
                 ${disabled ? 'opacity-50 hover:cursor-not-allowed' : ''}
                 ${color === 'none' && 'hover:cursor-auto!'}
+                ${aditionalStyles}
             `}
             disabled={disabled}
             onClick={onClick}

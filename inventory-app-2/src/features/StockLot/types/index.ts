@@ -51,7 +51,7 @@ export type StockLotTransferForm = Pick<StockLot, "quantity" | "comment" | "stoc
 export type StockLotAdjustmentForm = Pick<StockLot, "quantity" | "comment">;
 
 export type CompanyItem = Company;
-export type StockLotItem = Pick<StockLot, "id" | "batch" | "quantityAvailable" | "createdAt" | "modelId" | "modelName" | "modelImageUrl" | "productId" | "productName">
+export type StockLotItem = Pick<StockLot, "id" | "batch" | "quantityAvailable" | "quantityReceived" | "createdAt" | "modelId" | "modelName" | "modelImageUrl" | "productId" | "productName">
 export type StockLotDetailsItem = Pick<StockLot, "id" | "batch" | "quantityReceived" | "quantityAvailable" |
     "quantityDelivered" | "quantityLost" | "quantityRecovered" | "temporary" | "createdAt" | "updatedAt" | "modelId" |
     "modelName" | "modelImageUrl" | "companyId" | "companyName" | "productId" | "productName" | "typeId" | "typeName" |

@@ -43,6 +43,10 @@ import { StockLotDetails } from '@/features/StockLot/components/stocklot/StockLo
 import { RegionList } from '@/features/Location/components/region/RegionList'
 import { RegionAddForm } from '@/features/Location/components/region/RegionAddForm'
 import { RegionEditLoader } from '@/features/Location/components/region/RegionEditLoader'
+import { SubregionList } from '@/features/Location/components/subregion/SubregionList'
+import { SubregionAddForm } from '@/features/Location/components/subregion/SubregionAddForm'
+import { SubregionEditLoader } from '@/features/Location/components/subregion/SubregionEditLoader'
+import { LocationList } from '@/features/Location/components/location/LocationList'
 
 const productItems: MenuItem[] = [
     {
@@ -190,7 +194,7 @@ export const GeneralRouter = () => {
                                 <Outlet />
                             </NavbarContainer>
                         }>
-                            <Route index element={<h1>Lista de ubicaciones</h1>} />
+                            <Route index element={<LocationList />} />
                             <Route path="new" element={<h1>Formulario de nueva ubicacion</h1>} />
                             <Route path="edit/:id" element={<h1>Formulario de editar ubicacion</h1>} />
 
@@ -198,11 +202,9 @@ export const GeneralRouter = () => {
                             <Route path="regions/new" element={<RegionAddForm />} />
                             <Route path="regions/edit/:id" element={<RegionEditLoader />} />
 
-                            {/* TODO: CORREGIR EN LA API REST EL ENDPOINT, EL ID DEBE SER UN QUERY PARAM */}
-                            <Route path="subregions/region/:id" element={<h1>Subregiones por una region</h1>} />
-
-                            <Route path="subregions" element={<h1>Formulario de nueva subregion</h1>} />
-                            <Route path="subregions/edit/:id" element={<h1>Actualizar subregion</h1>} />
+                            <Route path="subregions" element={<SubregionList />} />
+                            <Route path="subregions/add" element={<SubregionAddForm />} />
+                            <Route path="subregions/edit/:id" element={<SubregionEditLoader />} />
                         </Route>
 
                         {/* RELACIONADO A PROFILE */}
