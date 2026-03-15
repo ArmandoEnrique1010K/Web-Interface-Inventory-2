@@ -183,15 +183,44 @@ export const ProductList = () => {
                 </FiltersFormContainer>
             }
         >
-            {
-                data && <SearchCounter totalElements={data.totalElements} page={data.page} size={data.size} last={data.last} />
-            }
-
             <TableHeaderContainer
                 headers={['ID', 'Nombre', 'Característica', 'Medidas', 'Estado', 'Editar']}
                 isError={isError}
                 isEmpty={!content?.length}
+                itemsCounter={
+                    data && <SearchCounter totalElements={data.totalElements} page={data.page} size={data.size} last={data.last} />
+                }
+                paginator={
+                    (content?.length && data) ? (
+                        <Paginator
+                            currentPage={data?.page}
+                            totalPages={data?.totalPages}
+                            isFirst={data?.first}
+                            isLast={data?.last}
+                            onPageChange={(page) => {
+                                setForm(prev => ({
+                                    ...prev,
+                                    page
+                                }))
+                                const params = new URLSearchParams()
+
+                                if (form.name) params.set('name', form.name)
+                                if (form.categoryId) params.set('categoryId', form.categoryId)
+                                if (form.typeId) params.set('typeId', form.typeId)
+                                if (form.status !== '') params.set('status', form.status)
+
+                                params.set('page', page.toString())
+
+                                setSearchParams(params)
+
+                            }}
+                        />
+                    ) : null
+
+                }
+
             >
+
                 {
                     content?.map((product: ProductItem) => {
                         return <TableRowContainer key={product.id}>
@@ -229,33 +258,6 @@ export const ProductList = () => {
                 }
             </TableHeaderContainer>
 
-            {
-                (content?.length && data) ? (
-                    <Paginator
-                        currentPage={data?.page}
-                        totalPages={data?.totalPages}
-                        isFirst={data?.first}
-                        isLast={data?.last}
-                        onPageChange={(page) => {
-                            setForm(prev => ({
-                                ...prev,
-                                page
-                            }))
-                            const params = new URLSearchParams()
-
-                            if (form.name) params.set('name', form.name)
-                            if (form.categoryId) params.set('categoryId', form.categoryId)
-                            if (form.typeId) params.set('typeId', form.typeId)
-                            if (form.status !== '') params.set('status', form.status)
-
-                            params.set('page', page.toString())
-
-                            setSearchParams(params)
-
-                        }}
-                    />
-                ) : null
-            }
         </TitleContainer>
 
 

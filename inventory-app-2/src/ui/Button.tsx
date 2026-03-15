@@ -5,7 +5,7 @@ type Props = {
     size?: 'small' | 'large' // Tamaño
     text: string // Texto
     type: 'submit' | 'button' // Tipo
-    color: 'blue' | 'green' | 'gray' | 'red' | 'none' // Color
+    color: 'blue' | 'green' | 'gray' | 'red' | 'none' | 'green-outline' | 'red-outline' // Color
     isLarge?: boolean, // ¿Ocupa todo el ancho?
     aditionalStyles?: string, // Estilos adicionales
     disabled?: boolean // Deshabilitado
@@ -26,24 +26,25 @@ export const Button = ({
 }: Props) => {
 
     // TODO: CORREGIR EL ANCHO DE PANTALLA
-    const isSmallScreen = useMediaQuery({ query: '(max-width: 42px)' })
+    const isSmallScreen = useMediaQuery({ query: '(max-width: 640px)' })
 
     const baseStyles = `
         inline-flex items-center justify-center 
-        text-white
-        cursor-pointer
-        transition-all duration-200
-        font-sans
+        font-medium
         select-none
         whitespace-nowrap
+        cursor-pointer
+        transition-all duration-200
         focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
-        ${disabled || 'active:scale-95'} 
+        
+        ${!disabled ? 'active:scale-95' : ''}
     `
     // active añade un estilo cuando el usuario mantiene pulsado el botón
 
-    const sizeStyles = size === 'small'
-        ? 'text-sm px-3 py-1.5 rounded-md'
-        : 'text-lg font-semibold py-2 px-3 rounded-lg'
+    const sizeStyles =
+        size === 'small'
+            ? 'text-sm px-3 py-1.5 rounded-md'
+            : 'text-lg px-4 py-2 rounded-lg'
 
     const widthStyles = isLarge ? 'w-full' : ''
 

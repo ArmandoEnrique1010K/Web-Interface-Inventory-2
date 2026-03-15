@@ -39,13 +39,13 @@ export const StockLotList = () => {
 
     const [form, setForm] = useState({
         page: page,
+        keyword: keyword,
         minQuantityReceived: minQuantityReceived,
         maxQuantityReceived: maxQuantityReceived,
         minQuantityAvailable: minQuantityAvailable,
         maxQuantityAvailable: maxQuantityAvailable,
         minCreatedAt: minCreatedAt,
         maxCreatedAt: maxCreatedAt,
-        keyword: keyword,
         companyId: companyId ?? '',
         categoryId: categoryId ?? '',
         typeId: typeId ?? '',
@@ -55,13 +55,14 @@ export const StockLotList = () => {
     useEffectEvent(() => {
         setForm({
             page: page,
+            keyword: keyword,
+
             minQuantityReceived: minQuantityReceived,
             maxQuantityReceived: maxQuantityReceived,
             minQuantityAvailable: minQuantityAvailable,
             maxQuantityAvailable: maxQuantityAvailable,
             minCreatedAt: minCreatedAt,
             maxCreatedAt: maxCreatedAt,
-            keyword: keyword,
             companyId: companyId ?? '',
             categoryId: categoryId ?? '',
             typeId: typeId ?? '',
@@ -163,13 +164,13 @@ export const StockLotList = () => {
                     }
                 }>
                     <InputTextFilter
-                        name='name'
+                        name='keyword'
                         label='Nombre del producto o modelo:'
                         placeholder='Buscar lotes de stock por nombre de producto y/o modelo'
                         type='text'
                         value={form.keyword}
                         onChange={(e) =>
-                            setForm(prev => ({ ...prev, name: e.target.value }))
+                            setForm(prev => ({ ...prev, keyword: e.target.value }))
                         }
                     />
 
@@ -180,7 +181,7 @@ export const StockLotList = () => {
                         type='text'
                         value={form.modelId}
                         onChange={(e) =>
-                            setForm(prev => ({ ...prev, name: e.target.value }))
+                            setForm(prev => ({ ...prev, modelId: e.target.value }))
                         }
                     />
                     <div className={`flex flex-row gap-4`}>

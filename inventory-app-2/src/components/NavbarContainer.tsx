@@ -23,18 +23,17 @@ export const NavbarContainer = ({ menuItems, children, keyword }: Props) => {
                 path.match(new RegExp(`^/${keyword}/\\d+`)) ||
                 path.match(new RegExp(`^/${keyword}/edit/\\d+`))
             ) {
-                return 'bg-blue-700';
+                return 'border-b-2 border-blue-600 text-blue-600 bg-blue-50';
             }
-            return 'bg-gray-500';
+            return 'text-slate-600 hover:text-blue-600 hover:bg-slate-100';
         }
 
         // Otros modulos (models, categories, types)
         if (path.startsWith(to)) {
-            return 'bg-blue-700';
+            return 'border-b-2 border-blue-600 text-blue-600 bg-blue-50';
         }
 
-        return 'bg-gray-500';
-
+        return 'text-slate-600 hover:text-blue-600 hover:bg-slate-100'
     }
 
     // React responsive establece unos "puntos de cortes" en donde se aplicara una condición de acuerdo al ancho de pantalla
@@ -47,10 +46,16 @@ export const NavbarContainer = ({ menuItems, children, keyword }: Props) => {
         // como la pantalla, ajustándose automáticamente si las barras de herramientas del navegador (como en móviles) 
         // se contraen o expanden
         <div className='min-h-dvh flex flex-col'>
-            <div className='flex flex-row text-white bg-gray-500'>
+            <div className="flex flex-row bg-white border-b border-slate-200 text-slate-700">
                 {
                     menuItems && menuItems.map((item) => (
-                        <Link to={item.to} className={`flex flex-row items-center gap-2 ${styleToCurrentPath(item.to)} px-4 py-2`} key={item.label}>
+                        <Link to={item.to} className={`
+                        flex items-center gap-2 
+                        px-4 py-3 
+                        font-medium 
+                        transition-colors
+                        ${styleToCurrentPath(item.to)} 
+                        `} key={item.label}>
                             <span>{!isSmallScreen && item.icon}{isExtraSmallScreen && item.icon}</span>
                             <h1 className={``}>{!isExtraSmallScreen && item.label}</h1>
                         </Link>
@@ -59,7 +64,9 @@ export const NavbarContainer = ({ menuItems, children, keyword }: Props) => {
                     ))
                 }
             </div>
+
             {children}
+
         </div>
     )
 }

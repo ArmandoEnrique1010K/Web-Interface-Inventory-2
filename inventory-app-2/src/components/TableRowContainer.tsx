@@ -5,7 +5,7 @@ type Props = {
 
 export const TableRowContainer = ({ children }: Props) => {
     return (
-        <tr className='bg-white hover:bg-blue-100 transition-colors'>
+        <tr className='bg-white hover:bg-slate-50 transition-colors'>
             {children}
         </tr>
     )

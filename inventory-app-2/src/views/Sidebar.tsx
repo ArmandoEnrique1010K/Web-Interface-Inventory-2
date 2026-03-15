@@ -33,9 +33,11 @@ export const Sidebar = () => {
     const styleToCurrentPath = (to: string) => {
         // Previamente se utilizo (location.pathname === to)
         if (location.pathname.includes(to) && (to !== '/' || location.pathname === '/')) {
-            return 'bg-blue-700';
+            return 'bg-blue-600 text-white';
         }
-        return 'bg-gray-500';
+
+        // Color de fondo cuando no esta seleccionado
+        return 'bg-slate-600';
     }
 
     const { mutate } = useMutation({
@@ -49,6 +51,7 @@ export const Sidebar = () => {
         }
     })
 
+    // TODO: VERIFICAR LOS ESTILOS DEL PANEL IZQUIERDO
     return (
         <>
             <div className="sm:hidden block h-20 relative  items-center justify-center">
@@ -68,7 +71,7 @@ export const Sidebar = () => {
                     <a className="menu-item" href="/">Home</a>
                 </Menu>
             </div>
-            <div className="min-h-screen bg-gray-800 text-white hidden sm:flex flex-col justify-between">
+            <div className="min-h-screen bg-slate-900 text-slate-300 hidden sm:flex flex-col justify-between border-r border-slate-800">
                 <div className="h-max">
                     <div className="flex flex-col items-center my-4">
                         <img src="/inventory.png" className="bg-white rounded-full p-2" alt="Logo" />
@@ -76,10 +79,15 @@ export const Sidebar = () => {
                         <h1 className="mx-4 my-2 text-xl whitespace-nowrap text-center">Empresa sin nombre</h1>
                     </div>
 
-                    <hr className="text-gray-300" />
-                    <nav className="flex flex-col justify-center items-center space-y-2 mt-2">
+                    <nav className="flex flex-col justify-center items-center space-y-1 mb-1">
                         {menuItems.map((item) => (
-                            <Link key={item.label} to={item.to} className={`flex flex-row items-center justify-center gap-2 w-full ${styleToCurrentPath(item.to)} hover:bg-gray-600 `}>
+                            <Link key={item.label} to={item.to} className={`
+                            flex items-center justify-center gap-3 px-4 py-2 w-full 
+                            text-slate-300
+                            hover:bg-slate-800 hover:text-white
+                            transition-colors
+                            ${styleToCurrentPath(item.to)}
+                            `}>
                                 <div>{item.icon}</div>
                                 <span className="py-1">{item.label}</span>
                             </Link>
@@ -88,15 +96,25 @@ export const Sidebar = () => {
                 </div>
 
                 <div>
-                    <hr className="text-gray-300" />
 
-                    <div className="flex flex-col justify-center items-center space-y-2 mt-2">
-                        <Link to={"/credits"} className={`flex flex-row items-center justify-center gap-2 w-full ${styleToCurrentPath("/credits")} hover:bg-gray-600 `}>
+                    <div className="flex flex-col justify-center items-center space-y-1">
+                        <Link to={"/credits"} className={`
+                            flex items-center justify-center gap-3 px-4 py-2 w-full 
+                            text-slate-300
+                            hover:bg-slate-800 hover:text-white
+                            transition-colors
+                            ${styleToCurrentPath("/credits")}
+                             `}>
                             <div><DocumentTextIcon className="size-6" /></div>
                             <span className="py-1">Creditos del autor</span>
                         </Link>
 
-                        <Link to={"/profile"} className={`flex flex-row items-center justify-center gap-2 w-full ${styleToCurrentPath("/profile")} hover:bg-gray-600 `}>
+                        <Link to={"/profile"} className={`
+                            flex items-center justify-center gap-3 px-4 py-2 w-full 
+                            text-slate-300
+                            hover:bg-slate-800 hover:text-white
+                            transition-colors                            
+                            ${styleToCurrentPath("/profile")}`}>
                             <div><UserCircleIcon className="size-6" /></div>
                             <span className="py-1">Perfil</span>
                         </Link>
@@ -107,7 +125,13 @@ export const Sidebar = () => {
                                 e.preventDefault();
                                 mutate();
                             }}>
-                            <button type="submit" className="flex flex-row items-center justify-center gap-2 w-full bg-gray-500 hover:bg-gray-600 hover:cursor-pointer">
+                            <button type="submit" className="
+                            flex items-center justify-center gap-3 px-4 py-2 w-full 
+                            text-slate-300
+                            hover:bg-slate-800 hover:text-white
+                            transition-colors bg-slate-600
+                            hover:cursor-pointer
+                            ">
                                 <div><ArrowRightStartOnRectangleIcon className="size-6" /></div>
                                 <span className="py-1">Cerrar sesión</span>
                             </button>
