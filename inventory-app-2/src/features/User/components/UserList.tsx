@@ -58,7 +58,7 @@ export const UserList = () => {
     })
 
     const roles = rolesData?.map((role: RoleItem) => ({
-        value: role.id,
+        value: role.id.toString(),
         label: role.label,
     })) || []
 
@@ -84,7 +84,12 @@ export const UserList = () => {
                         const params = new URLSearchParams()
 
                         if (form.name) params.set('name', form.name)
-                        if (form.idRoles) params.set('idRoles', form.idRoles.toString())
+                        // if (form.idRoles) params.set('idRoles', form.idRoles.toString())
+
+
+                        // Se corrige el problema de la URL en la que se reemplaza las comas (,)
+                        // Resultado: http://localhost:5173/users?idRoles=4&idRoles=3
+                        if (form.idRoles) form.idRoles.forEach(role => params.append('idRoles', role.toString()))
 
                         setSearchParams(params)
                     }
@@ -104,7 +109,7 @@ export const UserList = () => {
                     <div className={`flex ${isSmallScreen ? 'flex-col gap-2' : 'flex-row gap-4'}`}>
                         <SelectCheckboxFilter
                             name='idRoles'
-                            label='Categoría:'
+                            label='Roles:'
                             options={roles}
                             onChange={(selectedValues) =>
                                 setForm(prev => ({ ...prev, idRoles: selectedValues.map(Number) }))
@@ -145,7 +150,7 @@ export const UserList = () => {
                                     <ButtonLink
                                         size="small"
                                         text="Alterar roles"
-                                        to={`/products/${user.id}/status`}
+                                        to={`/users/${user.id}/alter`}
                                         color="red"
                                     /> : ''
                             } />
@@ -171,7 +176,8 @@ export const UserList = () => {
 
 
                             if (form.name) params.set('name', form.name)
-                            if (form.idRoles) params.set('idRoles', form.idRoles.toString())
+                            // if (form.idRoles) params.set('idRoles', form.idRoles.toString())
+                            if (form.idRoles) params.getAll('idRoles')
                             params.set('page', page.toString())
 
                             setSearchParams(params)

@@ -12,13 +12,14 @@ export const SelectCheckboxFilter = ({ name, label, options, onChange, value }: 
 
         if (isChecked) {
             // Agregar el valor si está marcado
-            newSelectedValues = [...value, optionValue];
+            newSelectedValues = [...value, optionValue.toString()];
         } else {
             // Remover el valor si está desmarcado
-            newSelectedValues = value.filter(v => v !== optionValue);
+            newSelectedValues = value.filter(v => v !== optionValue.toString());
         }
 
         onChange?.(newSelectedValues);
+        // console.log(newSelectedValues)
     }
 
     return (

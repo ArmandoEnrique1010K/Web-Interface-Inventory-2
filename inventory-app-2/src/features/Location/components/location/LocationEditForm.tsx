@@ -76,7 +76,7 @@ export const LocationEditForm = ({ data, locationId }: Props) => {
 
 
     // FACIL: SE OBTIENE EL ID DE LA SUBREGIÓN
-    console.log(data.subregionId)
+    // console.log(data.subregionId)
 
 
     const [selectedRegionId, setSelectedRegionId] = useState<string>(data.regionId);

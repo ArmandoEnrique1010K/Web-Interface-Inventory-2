@@ -50,6 +50,8 @@ import { LocationList } from '@/features/Location/components/location/LocationLi
 import { LocationAddForm } from '@/features/Location/components/location/LocationAddForm'
 import { LocationEditLoader } from '@/features/Location/components/location/LocationEditLoader'
 import { UserList } from '@/features/User/components/UserList'
+import { UserAddForm } from '@/features/User/components/UserAddForm'
+import { UserAlterRolesLoader } from '@/features/User/components/UserAlterRolesLoader'
 
 const productItems: MenuItem[] = [
     {
@@ -215,6 +217,9 @@ export const GeneralRouter = () => {
                             <Outlet />
                         }>
                             <Route index element={<UserList />} />
+                            <Route path='new' element={<UserAddForm />} />
+                            <Route path=':id/alter' element={<UserAlterRolesLoader />} />
+
                         </Route>
 
 

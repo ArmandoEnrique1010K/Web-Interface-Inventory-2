@@ -42,6 +42,7 @@ export type ListFirstTenUsersByKeywordQueryParams = {
     name: string
 }
 
+// TODO: ESTE ENDPOINT SE VA A UTILIZAR CUANDO SE CREE UNA ORDEN DE ENTREGA
 export const listFirstTenUsersByKeyword = async (params: ListFirstTenUsersByKeywordQueryParams) => {
 
     try {
@@ -56,6 +57,18 @@ export const listFirstTenUsersByKeyword = async (params: ListFirstTenUsersByKeyw
 type UpdateUserRolesPayload = {
     userId: string;
     formData: RolesForm
+}
+
+
+export const getUserRoles = async (id: string) => {
+    try {
+        const url = `/users/${id}/roles`
+        const { data } = await api.get<DataResponse>(url)
+        return data.data
+    } catch (error) {
+        handleApiError(error)
+    }
+
 }
 
 export const updateUserRoles = async ({ userId, formData }: UpdateUserRolesPayload) => {

@@ -33,3 +33,4 @@ export type RoleItem = Pick<Role, 'id' | 'label'>
 export type UserItem = Pick<User, 'id' | 'firstname' | 'lastname' | 'dni' | 'roles' | 'status'>
 export type UserByRoleUserItem = Pick<User, 'id' | 'fullName' | 'email' | 'dni'>
 export type UserDetailsItem = Pick<User, 'firstname' | 'lastname' | 'email' | 'dni' | 'roles'>
+export type UserRolesDetails = Pick<Role, "operator" | "secretary" | "admin">
