@@ -47,6 +47,9 @@ import { SubregionList } from '@/features/Location/components/subregion/Subregio
 import { SubregionAddForm } from '@/features/Location/components/subregion/SubregionAddForm'
 import { SubregionEditLoader } from '@/features/Location/components/subregion/SubregionEditLoader'
 import { LocationList } from '@/features/Location/components/location/LocationList'
+import { LocationAddForm } from '@/features/Location/components/location/LocationAddForm'
+import { LocationEditLoader } from '@/features/Location/components/location/LocationEditLoader'
+import { UserList } from '@/features/User/components/UserList'
 
 const productItems: MenuItem[] = [
     {
@@ -195,8 +198,8 @@ export const GeneralRouter = () => {
                             </NavbarContainer>
                         }>
                             <Route index element={<LocationList />} />
-                            <Route path="new" element={<h1>Formulario de nueva ubicacion</h1>} />
-                            <Route path="edit/:id" element={<h1>Formulario de editar ubicacion</h1>} />
+                            <Route path="new" element={<LocationAddForm />} />
+                            <Route path="edit/:id" element={<LocationEditLoader />} />
 
                             <Route path="regions" element={<RegionList />} />
                             <Route path="regions/new" element={<RegionAddForm />} />
@@ -206,6 +209,14 @@ export const GeneralRouter = () => {
                             <Route path="subregions/add" element={<SubregionAddForm />} />
                             <Route path="subregions/edit/:id" element={<SubregionEditLoader />} />
                         </Route>
+
+                        {/* RELACIONADO A USER */}
+                        <Route path='users' element={
+                            <Outlet />
+                        }>
+                            <Route index element={<UserList />} />
+                        </Route>
+
 
                         {/* RELACIONADO A PROFILE */}
                         <Route path="profile" element={
@@ -222,7 +233,7 @@ export const GeneralRouter = () => {
                             <Route index element={<CreditsDetails />} />
                         </Route>
 
-                        {/* CUALQUIER OTRA RUTA */}
+                        {/* CUALQUIER OTRA RUTA REDIRIGIRA AL LOGIN O AL DASHBOARD (SI HA INICIADO SESION) */}
                         <Route path="*" element={<Navigate to="/" replace />} />
                     </Route>
                 )}

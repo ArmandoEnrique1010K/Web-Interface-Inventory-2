@@ -18,7 +18,9 @@ export const locationSchema = z.object({
     address: z.string(),
     status: z.boolean(),
     subregionId: z.string(),
-    subregionName: z.string()
+    subregionName: z.string(),
+
+    regionId: z.string(),
 })
 
 type Region = z.infer<typeof regionSchema>

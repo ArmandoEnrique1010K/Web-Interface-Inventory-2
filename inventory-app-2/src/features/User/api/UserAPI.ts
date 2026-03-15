@@ -1,44 +1,20 @@
 
 import { api } from "@/lib/axiosConfig";
 import type { DataResponse, GeneralResponse } from "types";
-import { isAxiosError } from "axios";
-import type { UserRegisterForm } from "../types";
+import type { RolesForm, UserRegisterForm } from "../types";
+import { handleApiError } from "@/utils/handleApiError";
 
 
 export const registerUser = async (formData: UserRegisterForm) => {
     try {
         const url = `/users/register`
-        const { data } = await api.post<GeneralResponse>(url, formData, {
-            withCredentials: true
-        })
+        const { data } = await api.post<GeneralResponse>(url, formData)
 
         if (data.type === 'success') {
             return data.message
         }
     } catch (error) {
-        if (isAxiosError(error) && error.response) {
-            const err = error.response.data;
-
-            if (!err) return
-
-            if (err.fields) {
-                throw {
-                    type: 'FIELD_ERROR',
-                    message: err.message,
-                    fields: err.fields
-                }
-            }
-            if (err.message) {
-                throw {
-                    type: 'GENERAL_ERROR',
-                    message: err.message
-                }
-            }
-        }
-        throw {
-            type: 'GENERAL_ERROR',
-            message: 'Ocurrió un error inesperado'
-        }
+        handleApiError(error)
     }
 }
 
@@ -51,40 +27,58 @@ export type ListAllUsersQueryParams = {
     idRoles?: number[]
 }
 
-export const listAllUsers = async (queryParams: ListAllUsersQueryParams) => {
+export const listAllUsers = async (params: ListAllUsersQueryParams) => {
     try {
         const url = `/users`
-        const { data } = await api.get<DataResponse>(url, {
-            withCredentials: true,
-            params: queryParams
-        })
+        const { data } = await api.get<DataResponse>(url, { params: params })
 
         return data.data
     } catch (error) {
-        if (isAxiosError(error) && error.response) {
-            const err = error.response.data;
-
-            if (!err) return
-
-            if (err.fields) {
-                throw {
-                    type: 'FIELD_ERROR',
-                    message: err.message,
-                    fields: err.fields
-                }
-            }
-            if (err.message) {
-                throw {
-                    type: 'GENERAL_ERROR',
-                    message: err.message
-                }
-            }
-        }
-
-        throw {
-            type: 'GENERAL_ERROR',
-            message: 'Ocurrió un error inesperado'
-        }
+        handleApiError(error)
     }
 }
 
+export type ListFirstTenUsersByKeywordQueryParams = {
+    name: string
+}
+
+export const listFirstTenUsersByKeyword = async (params: ListFirstTenUsersByKeywordQueryParams) => {
+
+    try {
+        const url = `/users/role/user`
+        const { data } = await api.get<DataResponse>(url, { params: params })
+        return data.data
+    } catch (error) {
+        handleApiError(error)
+    }
+}
+
+type UpdateUserRolesPayload = {
+    userId: string;
+    formData: RolesForm
+}
+
+export const updateUserRoles = async ({ userId, formData }: UpdateUserRolesPayload) => {
+    try {
+        const url = `/users/${userId}/roles`
+        const { data } = await api.put<GeneralResponse>(url, formData)
+
+        if (data.type === 'success') {
+            return data.message
+        }
+    } catch (error) {
+        handleApiError(error)
+    }
+}
+
+export async function changeStatusUser(userId: string) {
+    try {
+        const url = `/users/${userId}/status`
+        const { data } = await api.patch<GeneralResponse>(url)
+        if (data.type === 'success') {
+            return data.message
+        }
+    } catch (error) {
+        handleApiError(error);
+    }
+}

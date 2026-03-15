@@ -7,20 +7,22 @@ type Props = {
     functionEnabled?: UseFormRegisterReturn // Funcion que se ejecuta al cambiar el valor del input
     options: { value: string, label: string }[],
     textInNullOption?: string,
+    disabled?: boolean
 }
-export const SelectOption = ({ id, name, label, errorMessage, functionEnabled, options, textInNullOption }: Props) => {
+export const SelectOption = ({ id, name, label, errorMessage, functionEnabled, options, textInNullOption, disabled }: Props) => {
     return (
         <div className="flex flex-col space-y-1 w-full pt-2">
             <label className="text-md font-bold" htmlFor={id}>{label}</label>
             <div className="flex flex-col gap-1">
                 <div className="flex flex-row gap-1">
 
-                    <select className="outline-none focus:outline-none p-2 border border-gray-700 bg-gray-100 rounded w-full"
+                    <select className={`outline-none focus:outline-none p-2 border border-gray-700 bg-gray-100 rounded w-full ${disabled ? 'cursor-not-allowed text-gray-400' : 'cursor-pointer text-black'} `}
                         id={id}
                         name={name}
                         // NOTA: functionEnabled tiene unas propiedades internas, en la cual una de ellas es el name
                         {...functionEnabled}
 
+                        disabled={disabled}
                     // SI UTILIZO DEFAULT VALUE, MUESTRA EL VALOR, PERO AL RECARGAR LA PAGINA SE PIERDE
                     // defaultValue={editableValue}
 
@@ -31,6 +33,8 @@ export const SelectOption = ({ id, name, label, errorMessage, functionEnabled, o
                     // {...(!functionEnabled && editableValue !== undefined
                     //     ? { value: editableValue }
                     //     : {})}
+
+                    // Pero como siempre es un componente de React HOOK FORM, se puede omitir la condicion
 
                     >
                         {/* NOTA: LA VISTA PARPADEA AL CARGAR LA OPCION SELECCIONADA POR VALUE */}
@@ -57,7 +61,7 @@ export const SelectOption = ({ id, name, label, errorMessage, functionEnabled, o
                     </div>
                 }
             </div>
-        </div>
+        </div >
     )
 }
 

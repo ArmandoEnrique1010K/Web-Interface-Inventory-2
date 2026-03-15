@@ -46,9 +46,11 @@ export const SubregionAddForm = () => {
                 return
             }
         },
-        onSuccess: async (data) => {
+
+        // Dato: onSucess tiene un segundo parametro que es el objeto que pasastes a la funcion mutate
+        onSuccess: async (data, variables) => {
             toast.success(data)
-            navigate('/locations/subregions')
+            navigate(`/locations/subregions?regionId=${variables.regionId}`)
         }
     })
     const { data: regionsData } = useQuery({
@@ -62,11 +64,14 @@ export const SubregionAddForm = () => {
     })) || []
 
 
+
     return (
         <>
             <TitleContainer title="Añadir nueva subregión">
                 <BaseForm
-                    onSubmit={handleSubmit((data) => mutate(data))}
+                    onSubmit={handleSubmit((data) => {
+                        mutate(data)
+                    })}
                     inputs={
                         <>
                             <InputText

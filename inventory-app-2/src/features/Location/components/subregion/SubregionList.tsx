@@ -10,11 +10,21 @@ import { TableRowContainer } from '@/components/TableRowContainer'
 import { BaseTableCell } from '@/components/BaseTableCell'
 import { listAllRegions } from '../../api/RegionAPI'
 import { Button } from '@/ui/Button'
+import { useEffect } from 'react'
 
 export const SubregionList = () => {
 
     const [searchParams, setSearchParams] = useSearchParams()
     const regionId = searchParams.get('regionId') ?? 1
+
+    // Forzar el queryParam regionId cuando el componente carga si no existe en la URL
+    useEffect(() => {
+        if (!searchParams.get('regionId')) {
+            const params = new URLSearchParams(searchParams)
+            params.set('regionId', '1') // Valor por defecto 1
+            setSearchParams(params)
+        }
+    }, [searchParams, setSearchParams])
 
     const { data, isError } = useQuery({
         queryKey: ['list-subregions-by-region', regionId],

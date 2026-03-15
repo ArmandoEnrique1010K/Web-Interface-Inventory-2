@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { useEffectEvent, useState } from "react"
-import { Link, useSearchParams } from "react-router-dom"
+import { useSearchParams } from "react-router-dom"
 import { listAllLocations } from "../../api/LocationAPI"
 import { listAllRegions } from "../../api/RegionAPI"
 import { listAllSubregionsByRegionId } from "../../api/SubregionAPI"
@@ -17,6 +17,7 @@ import { TableHeaderContainer } from "@/components/TableHeaderContainer"
 import { TableRowContainer } from "@/components/TableRowContainer"
 import { BaseTableCell } from "@/components/BaseTableCell"
 import { Paginator } from "@/components/Paginator"
+import { LocationChangeStatus } from "./LocationChangeStatus"
 
 export const LocationList = () => {
     const [searchParams, setSearchParams] = useSearchParams()
@@ -49,7 +50,7 @@ export const LocationList = () => {
     })
 
     const { data, isError } = useQuery({
-        queryKey: ['list-products', { name, regionId, subregionId, status, page }],
+        queryKey: ['list-locations', { name, regionId, subregionId, status, page }],
 
         queryFn: () => listAllLocations({
             page: page,
@@ -67,9 +68,9 @@ export const LocationList = () => {
         queryFn: listAllRegions
     })
     const { data: subregionsData } = useQuery({
-        // TODO: DEBE LISTAR LAS SUBREGIONES POR LA REGION SELECCIONADA
-        queryKey: ['list-subregions-by-region', '1'],
-        queryFn: () => listAllSubregionsByRegionId('1')
+        queryKey: ['list-subregions-by-region', form.regionId],
+        queryFn: () => listAllSubregionsByRegionId(form.regionId!),
+        enabled: !!form.regionId // solo ejecuta si hay region
     })
 
     const regions = regionsData?.map((region: RegionItem) => ({
@@ -136,11 +137,18 @@ export const LocationList = () => {
                             label='Región:'
                             options={regions}
                             onChange={(e) =>
-                                setForm(prev => ({ ...prev, regionId: e.target.value }))
+                                setForm(prev =>
+                                ({
+                                    ...prev,
+                                    regionId: e.target.value,
+                                    subregionId: '' // reset
+                                }))
                             }
                             textInNullOption="Todas las regiones"
                             value={form.regionId}
                         />
+
+                        {/* TODO: LUEGO DE SELECCIONAR UNA REGION DEBE LISTAR TODAS LAS SUBREGIONES ASOCIADAS A ESA REGION */}
                         <SelectOptionFilter
                             name='subregionId'
                             label='Subregión:'
@@ -181,8 +189,7 @@ export const LocationList = () => {
                             <BaseTableCell data={location.id} />
                             <BaseTableCell data={
                                 <div className='flex flex-col gap-1'>
-                                    {/* TODO: EL ENLACE SE PODRIA AÑADIR EN OTRA PARTE O SE PUEDE HACER MÁS RESALTADO COMO EN EL NOMBRE DEL PRODUCTO*/}
-                                    <Link to={`/products/${location.id}`} className='hover:text-blue-900'>{location.name}</Link>
+                                    {location.name}
                                 </div>
                             } />
                             <BaseTableCell data={
@@ -193,8 +200,7 @@ export const LocationList = () => {
                             } />
 
                             <BaseTableCell data={
-                                location.status ? 'Activo' : 'Inactivo'
-                                // <ProductChangeStatus size="small" productId={product.id.toString()} value={product.status ? 'Activo' : 'Inactivo'} />
+                                <LocationChangeStatus size="small" locationId={location.id.toString()} value={location.status ? 'Activo' : 'Inactivo'} />
                             } />
 
                             <BaseTableCell isCenter data={
@@ -202,7 +208,7 @@ export const LocationList = () => {
                                     <ButtonLink
                                         size="small"
                                         text="Editar"
-                                        to={`/products/edit/${location.id}`}
+                                        to={`/locations/edit/${location.id}`}
                                         color="blue"
 
                                     /> : ''
@@ -228,7 +234,7 @@ export const LocationList = () => {
 
                             if (form.name) params.set('name', form.name)
                             if (form.regionId) params.set('regionId', form.regionId)
-                            if (form.subregionId) params.set('typeId', form.subregionId)
+                            if (form.subregionId) params.set('subregionId', form.subregionId)
                             if (form.status !== '') params.set('status', form.status)
 
                             params.set('page', page.toString())
