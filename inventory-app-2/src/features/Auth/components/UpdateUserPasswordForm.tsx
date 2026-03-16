@@ -4,14 +4,17 @@ import { useMutation } from '@tanstack/react-query'
 import { updateUserPassword } from '../api/AuthAPI'
 import { toast } from 'sonner'
 import { useNavigate } from 'react-router-dom'
-import { InputText } from '@/ui/fields/InputText'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateSecretToken } from '@/reducers/authSlice'
 import type { RootState } from '@/store/store'
 import { AuthFormContainer } from '@/features/Auth/views/AuthFormContainer'
 import type { GeneralError } from 'types'
+import { InputPassword } from '@/ui/fields/InputPassword'
 
 export const UpdateUserPasswordForm = () => {
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+
     const secretToken = useSelector((state: RootState) => state.auth.secretToken)
 
     const initialValues: AuthUpdateUserPasswordForm = {
@@ -23,11 +26,6 @@ export const UpdateUserPasswordForm = () => {
         defaultValues: initialValues
     })
 
-    const navigate = useNavigate()
-
-    const dispatch = useDispatch()
-
-
     const { mutate, isPending } = useMutation({
         mutationFn: (data: AuthUpdateUserPasswordForm) => updateUserPassword({
             resetToken: secretToken,
@@ -35,8 +33,6 @@ export const UpdateUserPasswordForm = () => {
             confirmNewPassword: data.confirmNewPassword
         }),
         onError: (error: GeneralError) => {
-
-            // Error de campo
             if (error.type === 'FIELD_ERROR') {
                 Object.entries(error.fields).forEach(([field, message]) => {
                     setError(field as keyof AuthUpdateUserPasswordForm, {
@@ -49,7 +45,6 @@ export const UpdateUserPasswordForm = () => {
                 return
             }
 
-            // Error general
             if (error.type === 'GENERAL_ERROR') {
                 toast.error(error.message)
                 return
@@ -62,36 +57,33 @@ export const UpdateUserPasswordForm = () => {
         }
     })
 
-
     return (
-
         <AuthFormContainer
             title="Introduce tu nueva contraseña"
             onSubmit={handleSubmit((data) => mutate(data))}
             isPending={isPending}
-            inputs={
+            inputsFields={
                 <>
-                    <InputText
+                    <InputPassword
                         id="newPassword"
                         label="Nueva contraseña"
                         placeholder="Introduce tu nueva contraseña"
-                        type="password"
                         errorMessage={errors.newPassword}
                         functionEnabled={register('newPassword')} />
-                    <InputText
+
+                    <InputPassword
                         id="confirmNewPassword"
                         label="Confirma la nueva contraseña"
                         placeholder="Confirma la nueva contraseña"
-                        type="password"
                         errorMessage={errors.confirmNewPassword}
                         functionEnabled={register('confirmNewPassword')} />
                 </>
             }
             buttonText='Cambiar contraseña'
             secondaryLink={{
-                text: 'Necesitas un nuevo token de 6 digitos, ',
+                text: 'Necesitas un nuevo token de 6 digitos,',
                 to: '/restore-password',
-                linkText: 'Haz clic aqui para obtenerlo'
+                linkText: 'haz clic aqui para obtenerlo'
             }}
         />
     )

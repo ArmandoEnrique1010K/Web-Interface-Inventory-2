@@ -111,7 +111,9 @@ export const ModelList = () => {
         { value: 'false', label: 'Inactivos' },
     ]
 
-    const isSmallScreen = useMediaQuery({ query: '(max-width: 479px)' })
+    const isSmallScreen = useMediaQuery({ query: '(max-width: 920px)' })
+    const isExtraSmallScreen = useMediaQuery({ query: '(max-width: 720px)' })
+
 
     return (
         <TitleContainer
@@ -147,63 +149,55 @@ export const ModelList = () => {
                             }
                         />
                     </div>
-                    <div className={`flex flex-row gap-4`}>
-                        <div className='flex-row w-full'>
-                            <InputTextFilter
-                                name='minStock'
-                                label='Stock mínimo:'
-                                placeholder='Stock mínimo'
-                                type='number'
-                                value={form.minStock.toString()}
-                                onChange={(e) =>
-                                    setForm(prev => ({ ...prev, minStock: e.target.value }))
-                                }
-                            />
+                    <div className={`flex ${isExtraSmallScreen ? 'flex-col gap-4' : 'flex-row gap-4'}`}>
+                        <InputTextFilter
+                            name='minStock'
+                            label='Stock mínimo:'
+                            placeholder='Stock mínimo'
+                            type='number'
+                            value={form.minStock.toString()}
+                            onChange={(e) =>
+                                setForm(prev => ({ ...prev, minStock: e.target.value }))
+                            }
+                        />
 
-                        </div>
-                        <div className='flex-row w-full'>
-                            <InputTextFilter
-                                name='maxStock'
-                                label='Stock máximo:'
-                                placeholder='Stock máximo'
-                                type='number'
-                                value={form.maxStock.toString()}
-                                onChange={(e) =>
-                                    setForm(prev => ({ ...prev, maxStock: e.target.value }))
-                                }
-                            />
+                        <InputTextFilter
+                            name='maxStock'
+                            label='Stock máximo:'
+                            placeholder='Stock máximo'
+                            type='number'
+                            value={form.maxStock.toString()}
+                            onChange={(e) =>
+                                setForm(prev => ({ ...prev, maxStock: e.target.value }))
+                            }
+                        />
 
-                        </div>
                     </div>
 
 
-                    <div className={`flex flex-row gap-4`}>
-                        <div className='flex-row w-full'>
+                    <div className={`flex ${isExtraSmallScreen ? 'flex-col gap-4' : 'flex-row gap-4'}`}>
 
-                            <InputDateFilter
-                                name='minEntryDate'
-                                label='Fecha minima de entrada:'
-                                value={form.minEntryDate}
-                                onChange={(e) =>
-                                    setForm(prev => ({ ...prev, minEntryDate: e.target.value }))
-                                }
-                            />
-                        </div>
-                        <div className='flex-row w-full'>
-                            <InputDateFilter
-                                name='maxEntryDate'
-                                label='Fecha máxima de entrada:'
-                                value={form.maxEntryDate}
-                                onChange={(e) =>
-                                    setForm(prev => ({ ...prev, maxEntryDate: e.target.value }))
-                                }
-                            />
-                        </div>
+                        <InputDateFilter
+                            name='minEntryDate'
+                            label='Fecha minima de entrada:'
+                            value={form.minEntryDate}
+                            onChange={(e) =>
+                                setForm(prev => ({ ...prev, minEntryDate: e.target.value }))
+                            }
+                        />
+                        <InputDateFilter
+                            name='maxEntryDate'
+                            label='Fecha máxima de entrada:'
+                            value={form.maxEntryDate}
+                            onChange={(e) =>
+                                setForm(prev => ({ ...prev, maxEntryDate: e.target.value }))
+                            }
+                        />
                     </div>
 
 
 
-                    <div className={`flex ${isSmallScreen ? 'flex-col gap-2' : 'flex-row gap-4'}`}>
+                    <div className={`flex ${isSmallScreen ? 'flex-col gap-4' : 'flex-row gap-4'}`}>
                         <SelectOptionFilter
                             name='categoryId'
                             label='Categoría:'

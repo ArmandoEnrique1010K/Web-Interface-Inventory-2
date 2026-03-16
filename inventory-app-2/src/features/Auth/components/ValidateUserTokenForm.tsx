@@ -12,6 +12,9 @@ import { AuthFormContainer } from '@/features/Auth/views/AuthFormContainer'
 import type { GeneralError } from 'types'
 
 export const ValidateUserTokenForm = () => {
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+
     const secretToken = useSelector((state: RootState) => state.auth.secretToken)
 
     const initialValues: AuthValidateUserTokenForm = {
@@ -22,9 +25,6 @@ export const ValidateUserTokenForm = () => {
         defaultValues: initialValues
     })
 
-    const navigate = useNavigate()
-
-    const dispatch = useDispatch()
 
     const { mutate, isPending } = useMutation({
         mutationFn: (data: AuthValidateUserTokenForm) => validateUserToken({
@@ -49,7 +49,6 @@ export const ValidateUserTokenForm = () => {
                 return
             }
         },
-
         onSuccess: async (data) => {
             toast.success(data?.data);
             dispatch(updateSecretToken({ secretToken: data!.resetToken }))
@@ -65,9 +64,9 @@ export const ValidateUserTokenForm = () => {
             onSubmit={handleSubmit((data) => mutate(data))}
             isPending={isPending}
             helpText='Introduce el token de 6 digitos que se envio a tu correo electrónico, para reestablecer tu contraseña.'
-            inputs={
+            inputsFields={
                 <>
-                    {/* //* NO SE PERMITE EL USO DE INPUT DE TIPO HIDDEN */}
+                    {/*  NO SE PERMITE EL USO DE INPUT DE TIPO HIDDEN */}
                     {/* <InputText
                         id="requestId"
                         type="hidden"
@@ -90,9 +89,9 @@ export const ValidateUserTokenForm = () => {
             }
             buttonText="Validar token"
             secondaryLink={{
-                text: 'Necesitas un nuevo token de 6 digitos, ',
+                text: 'Necesitas un nuevo token de 6 digitos,',
                 to: '/restore-password',
-                linkText: 'Haz clic aqui para obtenerlo'
+                linkText: 'haz clic aqui para obtenerlo'
             }}
         />
     )

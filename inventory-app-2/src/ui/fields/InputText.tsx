@@ -16,60 +16,57 @@ export const InputText = ({ id, label, placeholder, type, errorMessage, function
 
     // Estado para ver contraseñas
     const [showPassword, setShowPassword] = useState(false);
-
     // No se mostrara nada si el input es hidden
     const applyStylesInHiddenInput = () => {
         if (type === 'hidden') {
             return 'hidden'
         }
-        return 'flex flex-col space-y-1 w-full pt-2'
+        return 'flex flex-col w-full space-y-1'
     }
+
+    console.log(errorMessage) // Siempre imprime undefined
 
     return (
         <div className={applyStylesInHiddenInput()}>
-            <label className="text-md font-bold" htmlFor={id}>{label}</label>
-            <div className="flex flex-col gap-1">
-                <div className="flex flex-row gap-1">
+            <label className="text-sm font-medium text-slate-700" htmlFor={id}>{label}</label>
 
-                    <input
-                        className="outline-none focus:outline-none p-2 border border-gray-700 bg-gray-100 rounded w-full"
-                        type={type === "password" && showPassword ? "text" : type}
-                        placeholder={placeholder}
-                        id={id}
-                        onWheel={(e) => e.currentTarget.blur()}
+            <input
+                className="outline-none focus:outline-none border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                type={type === "password" && showPassword ? "text" : type}
+                placeholder={placeholder}
+                id={id}
+                onWheel={(e) => e.currentTarget.blur()}
 
-                        // Controla el valor introducido si es de tipo number y si hay un valor para la prop max
-                        onInput={(e) => {
-                            if (type === "number" && max) {
-                                const target = e.currentTarget
-                                if (target.value.length > max) {
-                                    // Acorta el valor introducido a 6 caracteres
-                                    target.value = target.value.slice(0, max)
-                                }
-                            }
-                        }}
-
-                        {...functionEnabled}
-                        {...(type === "number" ? { max } : {})}
-
-                    />
-                    {
-                        type === "password" && (
-                            <button className="p-2 border border-gray-700 rounded bg-gray-100 hover:cursor-pointer hover:bg-gray-200" type="button" onClick={() => setShowPassword(!showPassword)}>
-                                {showPassword ? <EyeSlashIcon className="size-6" /> : <EyeIcon className="size-6" />}
-                            </button>
-                        )
+                // Controla el valor introducido si es de tipo number y si hay un valor para la prop max
+                onInput={(e) => {
+                    if (type === "number" && max) {
+                        const target = e.currentTarget
+                        if (target.value.length > max) {
+                            // Acorta el valor introducido a 6 caracteres
+                            target.value = target.value.slice(0, max)
+                        }
                     }
-                </div>
+                }}
 
-                {
-                    <div className="min-h-6">
-                        <p className="text-red-700 text-sm">
-                            {errorMessage?.message}
-                        </p>
-                    </div>
-                }
-            </div>
+                {...functionEnabled}
+                {...(type === "number" ? { max } : {})}
+
+            />
+            {
+                type === "password" && (
+                    <button className="p-2 border border-gray-700 rounded bg-gray-100 hover:cursor-pointer hover:bg-gray-200" type="button" onClick={() => setShowPassword(!showPassword)}>
+                        {showPassword ? <EyeSlashIcon className="size-6" /> : <EyeIcon className="size-6" />}
+                    </button>
+                )
+            }
+
+            {
+                <div className='min-h-5'>
+                    <p className="text-red-600 text-xs mt-1">
+                        {errorMessage?.message}
+                    </p>
+                </div>
+            }
         </div>
     )
 }

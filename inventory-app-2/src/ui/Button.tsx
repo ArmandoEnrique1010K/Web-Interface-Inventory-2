@@ -3,7 +3,7 @@ import { useMediaQuery } from "react-responsive"
 
 type Props = {
     size?: 'small' | 'large' // Tamaño
-    text: string // Texto
+    text?: string // Texto
     type: 'submit' | 'button' // Tipo
     color: 'blue' | 'green' | 'gray' | 'red' | 'none' | 'green-outline' | 'red-outline' // Color
     isLarge?: boolean, // ¿Ocupa todo el ancho?
@@ -24,8 +24,6 @@ export const Button = ({
     onClick,
     icon
 }: Props) => {
-
-    // TODO: CORREGIR EL ANCHO DE PANTALLA
     const isSmallScreen = useMediaQuery({ query: '(max-width: 640px)' })
 
     const baseStyles = `
@@ -44,7 +42,7 @@ export const Button = ({
     const sizeStyles =
         size === 'small'
             ? 'text-sm px-3 py-1.5 rounded-md'
-            : 'text-lg px-4 py-2 rounded-lg'
+            : 'text-base px-4 py-2 rounded-lg'
 
     const widthStyles = isLarge ? 'w-full' : ''
 
@@ -65,11 +63,11 @@ export const Button = ({
             onClick={onClick}
         >
             {icon && (
-                <span className={`flex items-center justify-center size-8 ${isSmallScreen ? '' : 'mr-2'}`}>
+                <span className={`flex items-center justify-center size-8 ${isSmallScreen ? '' : (text && 'mr-2')}`}>
                     {icon}
                 </span>
             )}
-            <span>{isSmallScreen && icon || text}</span>
+            <span>{isSmallScreen && icon && text || text}</span>
         </button>
     )
 }

@@ -4,7 +4,7 @@ import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom
 import { AuthLayout } from '@/layout/AuthLayout'
 import { LoginForm } from '@/features/Auth/components/LoginForm'
 import { DashboardLayout } from '@/layout/DashboardLayout'
-import { ForgotUserPasswordForm } from '@/features/Auth/components/ForgotUserPasswordForm'
+import { RestoreUserPasswordForm } from '@/features/Auth/components/RestoreUserPasswordForm'
 import { ValidateUserTokenForm } from '@/features/Auth/components/ValidateUserTokenForm'
 import { UpdateUserPasswordForm } from '@/features/Auth/components/UpdateUserPasswordForm'
 import { useSelector } from 'react-redux'
@@ -131,7 +131,7 @@ export const GeneralRouter = () => {
                 {!isAuthenticated && (
                     <Route path="/" element={<AuthLayout />}>
                         <Route index element={<LoginForm />} />
-                        <Route path="restore-password" element={<ForgotUserPasswordForm />} />
+                        <Route path="restore-password" element={<RestoreUserPasswordForm />} />
                         <Route path="validate-token" element={<ValidateUserTokenForm />} />
                         <Route path="update-password" element={<UpdateUserPasswordForm />} />
                         <Route path="*" element={<Navigate to="/" replace />} />

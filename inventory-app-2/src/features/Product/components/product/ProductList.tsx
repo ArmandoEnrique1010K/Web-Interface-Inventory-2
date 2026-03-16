@@ -107,7 +107,7 @@ export const ProductList = () => {
         { value: 'false', label: 'Inactivos' },
     ]
 
-    const isSmallScreen = useMediaQuery({ query: '(max-width: 479px)' })
+    const isSmallScreen = useMediaQuery({ query: '(max-width: 920px)' })
 
     return (
         <TitleContainer
@@ -147,7 +147,7 @@ export const ProductList = () => {
                         }
                     />
 
-                    <div className={`flex ${isSmallScreen ? 'flex-col gap-2' : 'flex-row gap-4'}`}>
+                    <div className={`flex ${isSmallScreen ? 'flex-col space-y-4' : 'flex-row space-x-4'}`}>
                         <SelectOptionFilter
                             name='categoryId'
                             label='Categoría:'

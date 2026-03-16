@@ -3,10 +3,14 @@ import { Outlet } from "react-router-dom"
 export const AuthLayout = () => {
 
     return (
-        <div className="flex flex-col min-h-screen bg-gray-800">
-            <div className="flex sm:flex-row flex-col items-center justify-center bg-gray-300 m-auto rounded-xl">
-                <div className="flex items-center justify-center sm:px-10 py-4">
-                    <img src="/imprenta.png" alt="Logo de Imprenta" className="sm:w-100 w-40" />
+        <div className="min-h-screen flex items-center justify-center bg-slate-100 px-4 py-8">
+            <div className="bg-white shadow-xl hover:shadow-2xl transition-shadow rounded-2xl w-full max-w-md p-6">
+                <div className="hidden md:flex justify-center mb-6 ">
+                    <img
+                        src="/imprenta.png"
+                        alt="Logo de Imprenta"
+                        className="size-40 object-contain "
+                    />
                 </div>
 
                 {/* El formulario se mostrara aqui */}

@@ -9,27 +9,25 @@ import { AuthFormContainer } from "@/features/Auth/views/AuthFormContainer"
 import { useDispatch } from "react-redux"
 import { setAuthenticated, setUserRoles } from '@/reducers/authSlice';
 import type { GeneralError } from "types"
+import { InputPassword } from "@/ui/fields/InputPassword"
 
 export const LoginForm = () => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const initialValues: AuthLoginForm = {
         email: '',
         password: ''
     }
 
-    const { register, handleSubmit, setError, formState: { errors } } = useForm<AuthLoginForm>({
+    const { register, handleSubmit, setError } = useForm<AuthLoginForm>({
         defaultValues: initialValues
     })
 
-    const navigate = useNavigate();
-
-    const dispatch = useDispatch();
 
     const { mutate, isPending } = useMutation({
         mutationFn: login,
         onError: (error: GeneralError) => {
-            // toast.error(error.message)
-
             // Error de campo
             if (error.type === 'FIELD_ERROR') {
                 Object.entries(error.fields).forEach(([field, message]) => {
@@ -63,29 +61,27 @@ export const LoginForm = () => {
             title="Inicio de sesión"
             onSubmit={handleSubmit((data) => mutate(data))}
             isPending={isPending}
-            inputs={
+            inputsFields={
                 <>
                     <InputText
                         id="email"
                         label="Correo"
                         placeholder="Correo del usuario"
                         type="email"
-                        errorMessage={errors.email}
                         functionEnabled={register('email')} />
-                    <InputText
+
+                    <InputPassword
                         id="password"
                         label="Contraseña"
                         placeholder="Contraseña del usuario"
-                        type="password"
-                        errorMessage={errors.password}
                         functionEnabled={register('password')} />
                 </>
             }
             buttonText="Iniciar sesión"
             secondaryLink={{
-                text: '¿Olvidastes tu contraseña?, ',
+                text: '¿Olvidastes tu contraseña?,',
                 to: '/restore-password',
-                linkText: 'Haz clic aqui para cambiarla'
+                linkText: 'haz clic aqui para cambiarla'
             }}
         />
     )

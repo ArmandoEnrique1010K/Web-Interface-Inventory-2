@@ -1,4 +1,4 @@
-import type { AuthForgotUserPasswordForm } from '../types'
+import type { AuthRestoreUserPasswordForm } from '../types'
 import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
@@ -10,26 +10,24 @@ import { updateSecretToken } from '@/reducers/authSlice'
 import { AuthFormContainer } from '@/features/Auth/views/AuthFormContainer'
 import type { GeneralError } from 'types'
 
-export const ForgotUserPasswordForm = () => {
+export const RestoreUserPasswordForm = () => {
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
 
-    const initialValues: AuthForgotUserPasswordForm = {
+    const initialValues: AuthRestoreUserPasswordForm = {
         email: '',
     }
 
-    const { register, handleSubmit, setError, formState: { errors } } = useForm<AuthForgotUserPasswordForm>({
+    const { register, handleSubmit, setError, formState: { errors } } = useForm<AuthRestoreUserPasswordForm>({
         defaultValues: initialValues
     })
-
-    const navigate = useNavigate()
-
-    const dispatch = useDispatch()
 
     const { mutate, isPending } = useMutation({
         mutationFn: forgotUserPassword,
         onError: (error: GeneralError) => {
             if (error.type === 'FIELD_ERROR') {
                 Object.entries(error.fields).forEach(([field, message]) => {
-                    setError(field as keyof AuthForgotUserPasswordForm, {
+                    setError(field as keyof AuthRestoreUserPasswordForm, {
                         type: 'server',
                         message: message as string,
                     })
@@ -47,9 +45,6 @@ export const ForgotUserPasswordForm = () => {
         onSuccess: (data) => {
             toast.success(data?.data)
             dispatch(updateSecretToken({ secretToken: data!.requestId }))
-            // requestAnimationFrame(() => {
-            //     navigate('/validate-token')
-            // })
             navigate('/validate-token')
         }
     })
@@ -60,7 +55,7 @@ export const ForgotUserPasswordForm = () => {
             onSubmit={handleSubmit((data) => mutate(data))}
             isPending={isPending}
             helpText='Introduce tu correo electrónico y te enviaremos un token de 6 digitos para que puedas reestablecer tu contraseña.'
-            inputs={
+            inputsFields={
                 <>
                     <InputText
                         id="email"
@@ -74,9 +69,9 @@ export const ForgotUserPasswordForm = () => {
             buttonText='Enviar un token'
             secondaryLink={
                 {
-                    text: 'Si recuerdas tu contraseña anterior, ',
+                    text: 'Si recuerdas tu contraseña anterior,',
                     to: '/',
-                    linkText: 'Haz clic aqui para iniciar sesión'
+                    linkText: 'haz clic aqui para iniciar sesión'
                 }
             }
         />

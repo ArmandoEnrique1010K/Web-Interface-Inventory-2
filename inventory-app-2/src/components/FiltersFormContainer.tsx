@@ -19,7 +19,7 @@ export const FiltersFormContainer = ({
             {children}
 
             <div className='flex justify-end'>
-                <Button text="Filtrar" icon={<MagnifyingGlassCircleIcon />} type="submit" color='green' size='large' aditionalStyles='mt-4 m' />
+                <Button text="Filtrar" icon={<MagnifyingGlassCircleIcon />} type="submit" color='green' size='large' aditionalStyles='mt-2' />
             </div>
         </form>
     )

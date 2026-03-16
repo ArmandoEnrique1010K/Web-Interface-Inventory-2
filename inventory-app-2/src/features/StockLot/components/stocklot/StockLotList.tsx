@@ -128,7 +128,8 @@ export const StockLotList = () => {
         label: type.name,
     })) || []
 
-    const isSmallScreen = useMediaQuery({ query: '(max-width: 479px)' })
+    const isSmallScreen = useMediaQuery({ query: '(max-width: 920px)' })
+    const isExtraSmallScreen = useMediaQuery({ query: '(max-width: 720px)' })
 
 
     return (
@@ -184,7 +185,7 @@ export const StockLotList = () => {
                             setForm(prev => ({ ...prev, modelId: e.target.value }))
                         }
                     />
-                    <div className={`flex flex-row gap-4`}>
+                    <div className={`flex ${isExtraSmallScreen ? 'flex-col gap-4' : 'flex-row gap-4'}`}>
                         <div className='flex-row w-full'>
                             <InputTextFilter
                                 name='minQuantityAvailable'
@@ -211,7 +212,7 @@ export const StockLotList = () => {
                         </div>
                     </div>
 
-                    <div className={`flex flex-row gap-4`}>
+                    <div className={`flex ${isExtraSmallScreen ? 'flex-col gap-4' : 'flex-row gap-4'}`}>
                         <div className='flex-row w-full'>
                             <InputTextFilter
                                 name='minQuantityReceived'
@@ -241,7 +242,7 @@ export const StockLotList = () => {
 
 
 
-                    <div className={`flex ${isSmallScreen ? 'flex-col gap-2' : 'flex-row gap-4'}`}>
+                    <div className={`flex ${isSmallScreen ? 'flex-col gap-4' : 'flex-row gap-4'}`}>
 
                         <SelectOptionFilter
                             name='companyId'

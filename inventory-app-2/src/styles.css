@@ -67,7 +67,13 @@ body,
     background-color: rgb(20, 71, 230);
 }
 
+/* AL ABRIR EL CALENDARIO, ENCONTRE ESTA CLASE CSS */
+/* .react-datepicker-ignore-onclickoutside{
+    margin: ;
+} */
+/* .react-datepicker-wrapper{
 
+} */
 
 /* Desactiva el scroll que aparece en un input de tipo number */
 /* Chrome, Edge, Safari */

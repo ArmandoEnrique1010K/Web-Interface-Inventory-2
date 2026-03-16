@@ -7,7 +7,7 @@ type Props = {
     onSubmit: React.SubmitEventHandler<HTMLFormElement>,
     isPending?: boolean,
     helpText?: string,
-    inputs: React.ReactNode,
+    inputsFields: React.ReactNode,
 
     buttonText?: string,
     secondaryLink?: {
@@ -17,20 +17,20 @@ type Props = {
     }
 }
 
-export const AuthFormContainer = ({ title, onSubmit, isPending, helpText, inputs, secondaryLink, buttonText = 'Enviar' }: Props) => {
+export const AuthFormContainer = ({ title, onSubmit, isPending, helpText, inputsFields, secondaryLink, buttonText = 'Enviar' }: Props) => {
     return (
-        <div className="flex flex-col items-center w-full align-center justify-center sm:p-10 p-6">
-            <h1 className="text-4xl font-bold pb-6 w-full text-center">{title}</h1>
-            <form onSubmit={onSubmit} className="w-full" autoComplete="off" noValidate>
-                {
-                    helpText && (
-                        <p className='pb-4 w-full'>
-                            {helpText}
-                        </p>
-                    )
-                }
+        <div className="flex flex-col w-full">
+            <h1 className="text-2xl font-bold text-slate-900 text-center mb-4">{title}</h1>
+            {
+                helpText && (
+                    <p className='text-sm text-slate-600 mb-4 text-center'>
+                        {helpText}
+                    </p>
+                )
+            }
 
-                {inputs}
+            <form onSubmit={onSubmit} className="w-full space-y-4 mt-2" autoComplete="off" noValidate>
+                {inputsFields}
 
                 <Button
                     size="large"
@@ -38,22 +38,22 @@ export const AuthFormContainer = ({ title, onSubmit, isPending, helpText, inputs
                     type="submit"
                     color='green'
                     isLarge={true}
-                    aditionalStyles="mt-6"
+                    aditionalStyles="mt-2"
                     disabled={isPending}
                 />
-
-                {secondaryLink && (
-                    <>
-                        <hr className="my-8 border-gray-700" />
-                        <div className="text-center">
-                            <span className="text-gray-700">{secondaryLink.text}</span>
-                            <Link to={secondaryLink.to} className="text-green-700">
-                                {secondaryLink.linkText}
-                            </Link>
-                        </div>
-                    </>
-                )}
             </form>
+
+            {secondaryLink && (
+                <>
+                    <hr className="my-6 border-slate-200" />
+                    <div className="text-center text-sm text-slate-600">
+                        {secondaryLink.text}
+                        <Link to={secondaryLink.to} className="text-blue-600 hover:underline ml-1">
+                            {secondaryLink.linkText}
+                        </Link>
+                    </div>
+                </>
+            )}
         </div>
     )
 }

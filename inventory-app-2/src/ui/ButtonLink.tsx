@@ -23,7 +23,6 @@ export const ButtonLink = ({
     onClick,
     icon
 }: Props) => {
-    // TODO: CORREGIR EL ANCHO DE PANTALLA
     const isSmallScreen = useMediaQuery({ query: '(max-width: 640px)' })
 
     const baseStyles = `
@@ -41,7 +40,7 @@ export const ButtonLink = ({
     const sizeStyles =
         size === 'small'
             ? 'text-sm px-3 py-1.5 rounded-md'
-            : 'text-lg px-4 py-2 rounded-lg'
+            : 'text-base px-4 py-2 rounded-lg'
 
     const widthStyles = isLarge ? 'w-full' : ''
 
