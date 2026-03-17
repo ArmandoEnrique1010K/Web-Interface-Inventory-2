@@ -15,8 +15,9 @@ export const LeftPanelContainer = ({ subtitle, details, image, legend, extraDeta
             <div className="space-y-1">
                 {
                     details.map(d => (
-                        <div>
-                            <span className="font-semibold">{d.name}: </span>{d.value}</div>
+                        <div key={d.name}>
+                            <span className="font-semibold">{d.name}: </span>{d.value}
+                        </div>
 
                     ))
                 }
@@ -50,7 +51,7 @@ export const LeftPanelContainer = ({ subtitle, details, image, legend, extraDeta
                 extraDetails && <div className='flex flex-col text-lg'>
                     {
                         extraDetails.map(d => (
-                            <div><span className="font-semibold">{d.name}:</span> {d.value}</div>
+                            <div key={d.name}><span className="font-semibold">{d.name}:</span> {d.value}</div>
 
                         ))
                     }

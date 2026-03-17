@@ -21,7 +21,19 @@ export const UploadImage = ({
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = e.target.files?.[0]
 
+        if (!selectedFile) return
+
         if (selectedFile) {
+            // Obtiene el tipo de dato del archivo
+            console.log(selectedFile.type);
+
+            // Si no coincide con el tipo de archivo image
+            if (!selectedFile.type.startsWith('image/')) {
+                setFile(null)
+                setPreview(null)
+                return
+            }
+
             setFile(selectedFile)
             setPreview(URL.createObjectURL(selectedFile))
         }
@@ -31,8 +43,8 @@ export const UploadImage = ({
     }
 
     return (
-        <div className="flex flex-col space-y-1">
-            <label className="font-bold">{label}</label>
+        <div className="flex flex-col w-full space-y-1">
+            <label className="text-sm font-medium text-slate-700">{label}:</label>
 
             {/* Input oculto */}
             <input
@@ -49,30 +61,31 @@ export const UploadImage = ({
             <label
                 htmlFor={id}
                 className="
-        inline-flex items-center justify-center 
-        text-white
-        cursor-pointer
-        transition-all duration-200
-        font-sans
-        select-none
-        whitespace-nowrap
-        focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
-                 text-lg font-semibold py-2 px-3 rounded-lg bg-blue-600 hover:bg-blue-700
-                 w-max
+                    inline-flex items-center justify-center 
+                    font-medium
+                    select-none
+                    whitespace-nowrap
+                    cursor-pointer
+                    transition-all duration-200
+                    focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
+                    active:scale-95
+                    text-base px-4 py-2 rounded-lg
+                    bg-blue-600 hover:bg-blue-700 focus-visible:ring-blue-500 text-white
                  "
             >
-                Seleccionar archivo
+                Seleccione un archivo
             </label>
-
             {previewImage && (
                 <img
                     src={previewImage}
                     alt="preview"
-                    className="w-60 mt-2 rounded border"
+                    className="max-h-80 max-w-full object-contain bg-white shadow-sm rounded-xl border border-gray-200 mt-2"
                 />
             )}
 
-            <div className="min-h-6"></div>
+
+            <div className='min-h-5'>
+            </div>
         </div>
     )
 }

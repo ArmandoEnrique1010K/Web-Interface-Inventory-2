@@ -2,7 +2,7 @@ import type { FieldError, UseFormRegisterReturn } from "react-hook-form";
 
 type Props = {
     id: string; // Id del input
-    label?: string; // Etiqueta del input
+    label: string; // Etiqueta del input
     placeholder?: string; // Texto que se muestra en el input
     type: 'text' | 'email' | 'number' | 'hidden'; // Tipo de input (text, password, email, etc)
     errorMessage?: FieldError | undefined, // Mensaje de error
@@ -20,11 +20,9 @@ export const InputText = ({ id, label, placeholder, type, errorMessage, function
         return 'flex flex-col w-full space-y-1'
     }
 
-    console.log(errorMessage) // Siempre imprime undefined
-
     return (
         <div className={applyStylesInHiddenInput()}>
-            <label className="text-sm font-medium text-slate-700" htmlFor={id}>{label}</label>
+            <label className="text-sm font-medium text-slate-700" htmlFor={id}>{label}:</label>
 
             <input
                 className="outline-none focus:outline-none border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"

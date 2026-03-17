@@ -6,7 +6,6 @@ import { toast } from "sonner";
 import type { CategoryForm } from "../../types";
 import { InputText } from "@/ui/fields/InputText";
 import { Button } from "@/ui/Button";
-import { ListElementsContainer } from "@/views/ListElementsContainer";
 import { BaseForm } from "@/components/BaseForm";
 import type { GeneralError } from "types";
 import { ButtonLink } from "@/ui/ButtonLink";
@@ -53,29 +52,28 @@ export const CategoryAddForm = () => {
 
     return (
         <>
-            <ListElementsContainer title="Añadir nueva categoria">
-                <BaseForm
-                    onSubmit={handleSubmit((data) => mutate(data))}
-                    inputs={
-                        <>
-                            <InputText
-                                id="name"
-                                label="Nombre"
-                                placeholder="Nombre de la categoria"
-                                type="text"
-                                errorMessage={errors.name}
-                                functionEnabled={register('name')} />
+            <BaseForm
+                title="Añadir nueva categoria"
+                onSubmit={handleSubmit((data) => mutate(data))}
+                inputsFields={
+                    <>
+                        <InputText
+                            id="name"
+                            label="Nombre"
+                            placeholder="Nombre de la categoria"
+                            type="text"
+                            errorMessage={errors.name}
+                            functionEnabled={register('name')} />
 
-                        </>
-                    }
-                    buttons={
-                        <>
-                            <Button icon={<ArrowUpCircleIcon />} size="large" text='Añadir categoria' type="submit" color="green" />
-                            <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to="/products/categories" />
-                        </>
-                    }
-                />
-            </ListElementsContainer>
+                    </>
+                }
+                buttons={
+                    <>
+                        <Button icon={<ArrowUpCircleIcon />} size="large" text='Añadir categoria' type="submit" color="green" />
+                        <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to="/products/categories" />
+                    </>
+                }
+            />
         </>
     )
 }

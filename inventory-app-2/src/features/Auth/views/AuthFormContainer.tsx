@@ -8,7 +8,6 @@ type Props = {
     isPending?: boolean,
     helpText?: string,
     inputsFields: React.ReactNode,
-
     buttonText?: string,
     secondaryLink?: {
         text: string

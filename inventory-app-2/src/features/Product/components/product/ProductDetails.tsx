@@ -97,7 +97,6 @@ export const ProductDetails = () => {
     //     }
     // }
 
-
     if (isProductLoading || isModelsLoading) {
         return <div>Cargando...</div>
     }
@@ -144,7 +143,8 @@ export const ProductDetails = () => {
                         name: `${selectedModel.name}`
                     }}
                     legend={`${productData.name}, ${selectedModel.name}`}
-                />}
+                />
+            }
             rightPanelContainer={
                 <RightPanelContainer
                     subtitle={"Modelo seleccionado"}
@@ -191,7 +191,7 @@ export const ProductDetails = () => {
                             value: `${selectedModel.entryDate}`
                         },
                         {
-                            condition: `${selectedModel.caducityDate}`,
+                            condition: selectedModel.caducityDate !== null, // TODO: Verificar porque siempre es null
                             name: 'Fecha de caducidad',
                             value: `${selectedModel.caducityDate}`
                         },
@@ -226,14 +226,13 @@ export const ProductDetails = () => {
                                 <QRModal
                                     isOpen={isQRModalOpen}
                                     onClose={() => setIsQRModalOpen(false)}
-                                    // TODO: CORREGIR EL NOMBRE DEL DOMINIO EN UN FUTURO
-                                    url={'http://localhost:5173' + path + queryParams}
+                                    url={import.meta.env.VITE_FRONTEND_DOMAIN + path + queryParams}
                                     title={`Código QR del producto ${productData?.name}, ${selectedModel?.name}`}
                                 />
                             </>
                         },
                         {
-                            condition: `${selectedModel.status}`,
+                            condition: selectedModel.status,
                             name: 'Editar modelo',
                             value: <>
                                 <ButtonLink

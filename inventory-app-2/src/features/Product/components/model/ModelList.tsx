@@ -141,7 +141,7 @@ export const ModelList = () => {
                         <InputTextFilter
                             name='keyword'
                             label='Nombre del modelo o producto:'
-                            placeholder='Buscar modelos por nombre y/o nombre del producto'
+                            placeholder='Buscar modelos y/o productos por nombre'
                             type='text'
                             value={form.keyword}
                             onChange={(e) =>

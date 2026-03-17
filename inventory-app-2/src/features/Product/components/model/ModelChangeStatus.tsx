@@ -38,7 +38,7 @@ export const ModelChangeStatus = ({ from, modelId, productId, value, size }: { f
 
     return (
         <form onSubmit={handleSubmit(() => mutate())} className="text-center ">
-            <Button icon={size === 'large' && <XMarkIcon />} text={value} type="submit" size={size} color={value === 'Activo' ? 'green' : 'red'} />
+            <Button icon={size === 'large' && <XMarkIcon />} text={value} type="submit" size={size} color={value === 'Activo' ? 'green-outline' : 'red-outline'} />
         </form>
     )
 }

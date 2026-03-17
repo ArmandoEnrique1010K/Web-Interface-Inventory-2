@@ -5,7 +5,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { updateModel } from '../../api/ModelAPI';
 import type { GeneralError } from '@/types/index';
 import { toast } from 'sonner';
-import { ListElementsContainer } from '@/views/ListElementsContainer';
 import { BaseForm } from '@/components/BaseForm';
 import { InputText } from '@/ui/fields/InputText';
 import { InputDate } from '@/ui/fields/InputDate';
@@ -82,26 +81,43 @@ export const ModelEditForm = ({ data, modelId, productId }: Props) => {
 
     return (
         <>
-            <ListElementsContainer title={`Editar modelo ${modelId}`}>
-                <BaseForm
-                    onSubmit={handleSubmit((data) => {
-                        handleForm({
-                            ...data,
-                            file: file || data.file // Use new file or original file
-                        })
-                    })}
-                    inputs={
-                        <>
-                            <InputText
-                                id="name"
-                                label="Nombre"
-                                placeholder="Nombre del modelo"
-                                type="text"
-                                errorMessage={errors.name}
-                                functionEnabled={register('name')} />
+            <BaseForm
+                title={`Editar modelo #${modelId}`}
+                onSubmit={handleSubmit((data) => {
+                    handleForm({
+                        ...data,
+                        file: file || data.file // Use new file or original file
+                    })
+                })}
+                inputsFields={
+                    <>
+                        <InputText
+                            id="name"
+                            label="Nombre"
+                            placeholder="Nombre del modelo"
+                            type="text"
+                            errorMessage={errors.name}
+                            functionEnabled={register('name')} />
 
 
-                            {/* <input
+
+
+                        <InputDate<ModelInProductForm & { file: File }>
+                            id="entryDate"
+                            label="Fecha de entrada"
+                            name="entryDate"
+                            control={control}
+                            errorMessage={errors.entryDate?.message}
+                        />
+                        <InputDate<ModelInProductForm & { file: File }>
+                            id="caducityDate"
+                            label="Fecha de caducidad"
+                            name="caducityDate"
+                            control={control}
+                            errorMessage={errors.caducityDate?.message}
+                        />
+
+                        {/* <input
                                 type="file"
                                 accept="image/*"
                                 {...register("file", {
@@ -122,41 +138,23 @@ export const ModelEditForm = ({ data, modelId, productId }: Props) => {
                                     className="w-40 mt-2 rounded"
                                 />
                             )} */}
-                            <UploadImage id='file' label="Reemplazo de la imagen"
-                                register={register('file')}
-                                previewImage={preview}
-                                setFile={setFile}
-                                setPreview={setPreview}
-                            />
+                        <UploadImage id='file' label="Imagen"
+                            register={register('file')}
+                            previewImage={preview}
+                            setFile={setFile}
+                            setPreview={setPreview}
+                        />
 
+                    </>
+                }
+                buttons={
+                    <>
+                        <Button icon={<ArrowUpCircleIcon />} size="large" text="Editar modelo" type="submit" color="green" />
+                        <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to={`/products/${productId}`} />
+                    </>
+                }
 
-                            <InputDate<ModelInProductForm & { file: File }>
-                                id="entryDate"
-                                label="Fecha de entrada del modelo"
-                                name="entryDate"
-                                control={control}
-                                errorMessage={errors.entryDate?.message}
-                            />
-                            <InputDate<ModelInProductForm & { file: File }>
-                                id="caducityDate"
-                                label="Fecha de caducidad del modelo"
-                                name="caducityDate"
-                                control={control}
-                                errorMessage={errors.caducityDate?.message}
-                            />
-
-
-                        </>
-                    }
-                    buttons={
-                        <>
-                            <Button icon={<ArrowUpCircleIcon />} size="large" text="Editar modelo" type="submit" color="green" />
-                            <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to={`/products/${productId}`} />
-                        </>
-                    }
-
-                />
-            </ListElementsContainer>
+            />
 
         </>
     )

@@ -5,7 +5,7 @@ import { Button } from "../Button";
 
 type Props = {
     id: string; // Id del input
-    label?: string; // Etiqueta del input
+    label: string; // Etiqueta del input
     placeholder?: string; // Texto que se muestra en el input
     errorMessage?: FieldError | undefined, // Mensaje de error
     functionEnabled?: UseFormRegisterReturn // Funcion que se ejecuta al cambiar el valor del input con react hook form
@@ -20,7 +20,7 @@ export const InputPassword = ({ id, label, placeholder, errorMessage, functionEn
 
     return (
         <div className={`flex flex-col w-full space-y-1`}>
-            <label className="text-sm font-medium text-slate-700" htmlFor={id}>{label}</label>
+            <label className="text-sm font-medium text-slate-700" htmlFor={id}>{label}:</label>
 
             <div className="flex flex-row gap-2">
 
@@ -42,7 +42,7 @@ export const InputPassword = ({ id, label, placeholder, errorMessage, functionEn
             </div>
 
             {
-                <div className={'min-h-5'}>
+                <div className='min-h-5'>
                     <p className="text-red-600 text-xs mt-1">
                         {errorMessage?.message}
                     </p>

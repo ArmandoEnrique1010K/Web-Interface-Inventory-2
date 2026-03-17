@@ -7,7 +7,6 @@ import { BaseForm } from "@/components/BaseForm";
 import type { GeneralError } from "types";
 import { Button } from "@/ui/Button";
 import { InputText } from "@/ui/fields/InputText";
-import { ListElementsContainer } from "@/views/ListElementsContainer";
 import { updateType } from "../../api/TypeAPI";
 import { ButtonLink } from "@/ui/ButtonLink";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
@@ -68,27 +67,26 @@ export const TypeEditForm = ({ data, typeId }: Props) => {
 
     return (
         <>
-            <ListElementsContainer title={`Editar tipo ${typeId}`}>
-                <BaseForm
-                    onSubmit={handleSubmit(handleForm)}
-                    buttons={
-                        <>
-                            <Button icon={<ArrowUpCircleIcon />} size="large" text="Editar tipo" type="submit" color="green" />
-                            <ButtonLink icon={<XCircleIcon />} size="large" text="Volver" color="gray" to="/products/types" />
-                        </>
-                    }
-                    inputs={
-                        <InputText
-                            id="name"
-                            label="Nombre"
-                            placeholder="Nombre del tipo"
-                            type="text"
-                            errorMessage={errors.name}
-                            functionEnabled={register('name')} />
+            <BaseForm
+                title={`Editar tipo #${typeId}`}
+                onSubmit={handleSubmit(handleForm)}
+                buttons={
+                    <>
+                        <Button icon={<ArrowUpCircleIcon />} size="large" text="Editar tipo" type="submit" color="green" />
+                        <ButtonLink icon={<XCircleIcon />} size="large" text="Volver" color="gray" to="/products/types" />
+                    </>
+                }
+                inputsFields={
+                    <InputText
+                        id="name"
+                        label="Nombre"
+                        placeholder="Nombre del tipo"
+                        type="text"
+                        errorMessage={errors.name}
+                        functionEnabled={register('name')} />
 
-                    }
-                />
-            </ListElementsContainer>
+                }
+            />
         </>
     )
 }

@@ -5,7 +5,6 @@ import { toast } from "sonner";
 import type { TypeForm } from "../../types";
 import { InputText } from "@/ui/fields/InputText";
 import { Button } from "@/ui/Button";
-import { ListElementsContainer } from "@/views/ListElementsContainer";
 import { BaseForm } from "@/components/BaseForm";
 import type { GeneralError } from "types";
 import { registerType } from "../../api/TypeAPI";
@@ -55,29 +54,28 @@ export const TypeAddForm = () => {
 
     return (
         <>
-            <ListElementsContainer title="Añadir nuevo tipo">
-                <BaseForm
-                    onSubmit={handleSubmit((data) => mutate(data))}
-                    inputs={
-                        <>
-                            <InputText
-                                id="name"
-                                label="Nombre"
-                                placeholder="Nombre del tipo"
-                                type="text"
-                                errorMessage={errors.name}
-                                functionEnabled={register('name')} />
+            <BaseForm
+                title="Añadir nuevo tipo"
+                onSubmit={handleSubmit((data) => mutate(data))}
+                inputsFields={
+                    <>
+                        <InputText
+                            id="name"
+                            label="Nombre"
+                            placeholder="Nombre del tipo"
+                            type="text"
+                            errorMessage={errors.name}
+                            functionEnabled={register('name')} />
 
-                        </>
-                    }
-                    buttons={
-                        <>
-                            <Button icon={<ArrowUpCircleIcon />} size="large" text="Añadir tipo" type="submit" color="green" />
-                            <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to="/products/types" />
-                        </>
-                    }
-                />
-            </ListElementsContainer>
+                    </>
+                }
+                buttons={
+                    <>
+                        <Button icon={<ArrowUpCircleIcon />} size="large" text="Añadir tipo" type="submit" color="green" />
+                        <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to="/products/types" />
+                    </>
+                }
+            />
         </>
     )
 }

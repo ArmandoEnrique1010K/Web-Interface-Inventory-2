@@ -8,7 +8,6 @@ import { BaseForm } from "@/components/BaseForm";
 import type { GeneralError } from "types";
 import { Button } from "@/ui/Button";
 import { InputText } from "@/ui/fields/InputText";
-import { ListElementsContainer } from "@/views/ListElementsContainer";
 import { ButtonLink } from "@/ui/ButtonLink";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 
@@ -68,27 +67,26 @@ export const CategoryEditForm = ({ data, categoryId }: Props) => {
 
     return (
         <>
-            <ListElementsContainer title={`Editar categoria ${categoryId}`}>
-                <BaseForm
-                    onSubmit={handleSubmit(handleForm)}
-                    buttons={
-                        <>
-                            <Button icon={<ArrowUpCircleIcon />} size="large" text="Editar categoria" type="submit" color="green" />
-                            <ButtonLink icon={<XCircleIcon />} size="large" text="Volver" color="gray" to="/products/categories" />
-                        </>
-                    }
-                    inputs={
-                        <InputText
-                            id="name"
-                            label="Nombre"
-                            placeholder="Nombre de la categoria"
-                            type="text"
-                            errorMessage={errors.name}
-                            functionEnabled={register('name')} />
+            <BaseForm
+                title={`Editar categoria #${categoryId}`}
+                onSubmit={handleSubmit(handleForm)}
+                inputsFields={
+                    <InputText
+                        id="name"
+                        label="Nombre"
+                        placeholder="Nombre de la categoria"
+                        type="text"
+                        errorMessage={errors.name}
+                        functionEnabled={register('name')} />
 
-                    }
-                />
-            </ListElementsContainer>
+                }
+                buttons={
+                    <>
+                        <Button icon={<ArrowUpCircleIcon />} size="large" text="Editar categoria" type="submit" color="green" />
+                        <ButtonLink icon={<XCircleIcon />} size="large" text="Volver" color="gray" to="/products/categories" />
+                    </>
+                }
+            />
         </>
     )
 }

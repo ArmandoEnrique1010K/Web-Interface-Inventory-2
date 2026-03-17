@@ -6,7 +6,6 @@ import { updateProduct } from '../../api/ProductAPI';
 import type { GeneralError } from '@/types/index';
 import { toast } from 'sonner';
 import { BaseForm } from '@/components/BaseForm';
-import { ListElementsContainer } from '@/views/ListElementsContainer';
 import { Button } from '@/ui/Button';
 import { InputText } from '@/ui/fields/InputText';
 import { SelectOption } from '@/ui/fields/SelectOption';
@@ -101,72 +100,70 @@ export const ProductEditForm = ({ data, productId }: Props) => {
 
     return (
         <>
-            <ListElementsContainer title={`Editar producto ${productId}`}>
-                <BaseForm
-                    onSubmit={handleSubmit(handleForm)}
-                    inputs={
-                        <>
-                            <InputText
-                                id="name"
-                                label="Nombre"
-                                placeholder="Nombre de la categoria"
-                                type="text"
-                                errorMessage={errors.name}
-                                functionEnabled={register('name')} />
+            <BaseForm
+                title={`Editar producto #${productId}`}
+                onSubmit={handleSubmit(handleForm)}
+                inputsFields={
+                    <>
+                        <InputText
+                            id="name"
+                            label="Nombre"
+                            placeholder="Nombre del producto"
+                            type="text"
+                            errorMessage={errors.name}
+                            functionEnabled={register('name')} />
 
+                        <InputText
+                            id="length"
+                            label="Largo (cm.)"
+                            placeholder="Medida del largo"
+                            type="number"
+                            errorMessage={errors.length}
+                            functionEnabled={register('length')} />
 
-                            <InputText
-                                id="length"
-                                label="Largo (cm.)"
-                                placeholder="Medida del largo del producto en cm"
-                                type="number"
-                                errorMessage={errors.length}
-                                functionEnabled={register('length')} />
+                        <InputText
+                            id="width"
+                            label="Ancho (cm.)"
+                            placeholder="Medida del ancho"
+                            type="number"
+                            errorMessage={errors.width}
+                            functionEnabled={register('width')} />
 
-                            <InputText
-                                id="width"
-                                label="Ancho (cm.)"
-                                placeholder="Medida del ancho del producto en cm"
-                                type="number"
-                                errorMessage={errors.width}
-                                functionEnabled={register('width')} />
+                        <InputText
+                            id="height"
+                            label="Alto (cm.)"
+                            placeholder="Medida de la altura"
+                            type="number"
+                            errorMessage={errors.height}
+                            functionEnabled={register('height')} />
 
-                            <InputText
-                                id="height"
-                                label="Alto (cm.)"
-                                placeholder="Medida de la altura del producto en cm"
-                                type="number"
-                                errorMessage={errors.height}
-                                functionEnabled={register('height')} />
-                            <SelectOption
-                                id="categoryId"
-                                label="Categoria"
-                                errorMessage={errors.categoryId}
-                                functionEnabled={register('categoryId')}
-                                options={categories}
-                                textInNullOption="Seleccione una categoria"
-                            />
+                        <SelectOption
+                            id="categoryId"
+                            label="Categoria"
+                            errorMessage={errors.categoryId}
+                            functionEnabled={register('categoryId')}
+                            options={categories}
+                            textInNullOption="Seleccione una categoria"
+                        />
 
-                            <SelectOption
-                                id="typeId"
-                                label="Tipo"
-                                errorMessage={errors.typeId}
-                                functionEnabled={register('typeId')}
-                                options={types}
-                                textInNullOption="Seleccione un tipo"
-                            />
+                        <SelectOption
+                            id="typeId"
+                            label="Tipo"
+                            errorMessage={errors.typeId}
+                            functionEnabled={register('typeId')}
+                            options={types}
+                            textInNullOption="Seleccione un tipo"
+                        />
+                    </>
+                }
+                buttons={
+                    <>
+                        <Button icon={<ArrowUpCircleIcon />} size="large" text="Editar producto" type="submit" color="green" />
+                        <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to="/products" />
+                    </>
+                }
 
-                        </>
-                    }
-                    buttons={
-                        <>
-                            <Button icon={<ArrowUpCircleIcon />} size="large" text="Editar producto" type="submit" color="green" />
-                            <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to="/products" />
-                        </>
-                    }
-
-                />
-            </ListElementsContainer>
+            />
         </>
     )
 }

@@ -71,9 +71,15 @@ body,
 /* .react-datepicker-ignore-onclickoutside{
     margin: ;
 } */
-/* .react-datepicker-wrapper{
 
-} */
+/* Solucion al problema del espaciado en React DatePicker*/
+.react-datepicker-wrapper{
+    margin: 0
+}
+
+.react-datepicker__tab-loop{
+    margin: 0
+}
 
 /* Desactiva el scroll que aparece en un input de tipo number */
 /* Chrome, Edge, Safari */

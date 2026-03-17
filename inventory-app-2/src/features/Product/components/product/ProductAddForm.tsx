@@ -93,70 +93,101 @@ export const ProductAddForm = () => {
 
 
     return (
-        // TODO: CONTINUAR AQUI
-        <>
-            <BaseForm
-                title="Añadir nuevo producto"
-                onSubmit={handleSubmit((data) => {
+        <BaseForm
+            title="Añadir nuevo producto"
+            onSubmit={handleSubmit((data) => {
 
-                    mutate({
-                        data: data,
-                        ...(file && { file })
-                    })
-                })}
-                inputs={
-                    <>
-                        <div className="pb-2">
-                            <Subtitle>Producto</Subtitle>
-                        </div>
-                        <InputText
-                            id="name"
-                            label="Nombre"
-                            placeholder="Nombre del producto"
-                            type="text"
-                            errorMessage={errors.name}
-                            functionEnabled={register('name')} />
+                mutate({
+                    data: data,
+                    ...(file && { file })
+                })
+            })}
+            inputsFields={
+                <>
+                    <div className="pb-2">
+                        <Subtitle>Producto</Subtitle>
+                    </div>
+                    <InputText
+                        id="name"
+                        label="Nombre"
+                        placeholder="Nombre del producto"
+                        type="text"
+                        errorMessage={errors.name}
+                        functionEnabled={register('name')} />
 
-                        <InputText
-                            id="length"
-                            label="Largo (cm.)"
-                            placeholder="Medida del largo del producto en cm"
-                            type="number"
-                            errorMessage={errors.length}
-                            functionEnabled={register('length')} />
+                    <InputText
+                        id="length"
+                        label="Largo (cm.)"
+                        placeholder="Medida del largo"
+                        type="number"
+                        errorMessage={errors.length}
+                        functionEnabled={register('length')} />
 
-                        <InputText
-                            id="width"
-                            label="Ancho (cm.)"
-                            placeholder="Medida del ancho del producto en cm"
-                            type="number"
-                            errorMessage={errors.width}
-                            functionEnabled={register('width')} />
+                    <InputText
+                        id="width"
+                        label="Ancho (cm.)"
+                        placeholder="Medida del ancho"
+                        type="number"
+                        errorMessage={errors.width}
+                        functionEnabled={register('width')} />
 
-                        <InputText
-                            id="height"
-                            label="Alto (cm.)"
-                            placeholder="Medida de la altura del producto en cm"
-                            type="number"
-                            errorMessage={errors.height}
-                            functionEnabled={register('height')} />
+                    <InputText
+                        id="height"
+                        label="Alto (cm.)"
+                        placeholder="Medida de la altura"
+                        type="number"
+                        errorMessage={errors.height}
+                        functionEnabled={register('height')} />
 
-                        <hr className="my-6 border-slate-200" />
-                        <div className="pb-2">
-                            <Subtitle>Primer modelo</Subtitle>
-                        </div>
+                    <hr className="my-6 border-slate-200" />
+                    <div className="pb-2">
+                        <Subtitle>Primer modelo</Subtitle>
+                    </div>
 
-                        <InputText
-                            id="modelName"
-                            label="Nombre del modelo"
-                            placeholder="Nombre del modelo"
-                            type="text"
-                            errorMessage={errors.modelName}
-                            functionEnabled={register('modelName')} />
+                    <InputText
+                        id="modelName"
+                        label="Nombre"
+                        placeholder="Nombre del modelo"
+                        type="text"
+                        errorMessage={errors.modelName}
+                        functionEnabled={register('modelName')} />
 
-                        {/* TODO: INPUT DE TIPO IMAGE ANTES DE SEPARARLO EN UN COMPONENTE APARTE */}
+                    {/** NOTA: SI NO SUBE UNA FECHA DE ENTRADA, SE ESTABLECERA LA FECHA DE HOY DIA */}
+                    <InputDate<ProductCreateForm & { file: File }>
+                        id="modelEntryDate"
+                        label="Fecha de entrada"
+                        name="modelEntryDate"
+                        control={control}
+                        errorMessage={errors.modelEntryDate?.message}
+                    />
+                    <InputDate<ProductCreateForm & { file: File }>
+                        id="modelCaducityDate"
+                        label="Fecha de caducidad"
+                        name="modelCaducityDate"
+                        control={control}
+                        errorMessage={errors.modelCaducityDate?.message}
+                    />
 
-                        {/* <input
+                    <SelectOption
+                        id="categoryId"
+                        label="Categoria"
+                        errorMessage={errors.categoryId}
+                        functionEnabled={register('categoryId')}
+                        options={categories}
+                        textInNullOption="Seleccione una categoria"
+                    />
+
+                    <SelectOption
+                        id="typeId"
+                        label="Tipo"
+                        errorMessage={errors.typeId}
+                        functionEnabled={register('typeId')}
+                        options={types}
+                        textInNullOption="Seleccione un tipo"
+                    />
+                    {/* INPUT DE TIPO IMAGE ANTES DE SEPARARLO EN UN COMPONENTE APARTE */}
+
+                    {/* <input
                                 type="file"
                                 accept="image/*"
                                 {...register("file", {
@@ -178,60 +209,24 @@ export const ProductAddForm = () => {
                                 />
                             )} */}
 
-                        {/* Componente para cargar la imagen, contiene el boton y la previsualizacion de la imagen */}
-                        <UploadImage id='file' label="Suba una imagen"
-                            register={register('file')}
-                            previewImage={preview}
-                            setFile={setFile}
-                            setPreview={setPreview}
+                    {/* Componente para cargar la imagen, contiene el boton y la previsualizacion de la imagen */}
+                    <UploadImage id='file' label="Imagen"
+                        register={register('file')}
+                        previewImage={preview}
+                        setFile={setFile}
+                        setPreview={setPreview}
 
-                        />
+                    />
 
+                </>
+            }
+            buttons={
+                <>
+                    <Button icon={<ArrowUpCircleIcon />} disabled={isPending} size="large" text="Añadir producto" type="submit" color="green" />
+                    <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to="/products" />
+                </>
+            }
+        />
 
-                        {/** NOTA: SI NO SUBE UNA FECHA DE ENTRADA, SE ESTABLECERA LA FECHA DE HOY DIA */}
-                        <InputDate<ProductCreateForm & { file: File }>
-                            id="modelEntryDate"
-                            label="Fecha de entrada del modelo"
-                            name="modelEntryDate"
-                            control={control}
-                            errorMessage={errors.modelEntryDate?.message}
-                        />
-                        <InputDate<ProductCreateForm & { file: File }>
-                            id="modelCaducityDate"
-                            label="Fecha de caducidad del modelo"
-                            name="modelCaducityDate"
-                            control={control}
-                            errorMessage={errors.modelCaducityDate?.message}
-                        />
-
-                        <SelectOption
-                            id="categoryId"
-                            label="Categoria"
-                            errorMessage={errors.categoryId}
-                            functionEnabled={register('categoryId')}
-                            options={categories}
-                            textInNullOption="Seleccione una categoria"
-                        />
-
-                        <SelectOption
-                            id="typeId"
-                            label="Tipo"
-                            errorMessage={errors.typeId}
-                            functionEnabled={register('typeId')}
-                            options={types}
-                            textInNullOption="Seleccione un tipo"
-                        />
-
-                    </>
-                }
-                buttons={
-                    <>
-                        <Button icon={<ArrowUpCircleIcon />} disabled={isPending} size="large" text="Añadir producto" type="submit" color="green" />
-                        <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to="/products" />
-                    </>
-                }
-            />
-
-        </>
     )
 }
