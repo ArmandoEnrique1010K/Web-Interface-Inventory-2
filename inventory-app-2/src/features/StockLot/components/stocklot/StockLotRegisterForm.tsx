@@ -5,7 +5,7 @@ import { registerStockLot } from '../../api/StockLotAPI'
 import type { GeneralError } from '@/types/index'
 import { toast } from 'sonner'
 import { useNavigate } from 'react-router-dom'
-import { TitleContainer } from '@/components/TitleContainer'
+import { ListElementsContainer } from '@/views/ListElementsContainer'
 import { BaseForm } from '@/components/BaseForm'
 import { InputText } from '@/ui/fields/InputText'
 import { SelectOption } from '@/ui/fields/SelectOption'
@@ -70,7 +70,7 @@ export const StockLotRegisterForm = () => {
 
     return (
         <>
-            <TitleContainer title="Registrar nuevo lote de stock">
+            <ListElementsContainer title="Registrar nuevo lote de stock">
                 <BaseForm
                     onSubmit={handleSubmit((data) => mutate(data))}
                     inputs={
@@ -118,7 +118,7 @@ export const StockLotRegisterForm = () => {
                         </>
                     }
                 />
-            </TitleContainer>
+            </ListElementsContainer>
 
         </>
     )

@@ -5,7 +5,7 @@ import { listAllUsers } from "../api/UserAPI"
 import { listAllRoles } from "../api/RoleAPI"
 import type { RoleItem, UserItem } from "../types"
 import { useMediaQuery } from "react-responsive"
-import { TitleContainer } from "@/components/TitleContainer"
+import { ListElementsContainer } from "@/views/ListElementsContainer"
 import { FiltersFormContainer } from "@/components/FiltersFormContainer"
 import { InputTextFilter } from "@/ui/filters/InputTextFilter"
 import { SearchCounter } from "@/components/SearchCounter"
@@ -65,7 +65,7 @@ export const UserList = () => {
     const isSmallScreen = useMediaQuery({ query: '(max-width: 479px)' })
 
     return (
-        <TitleContainer
+        <ListElementsContainer
             title="Usuarios registrados"
             buttons={
                 <ButtonLink
@@ -186,6 +186,6 @@ export const UserList = () => {
                     />
                 ) : null
             }
-        </TitleContainer>
+        </ListElementsContainer>
     )
 }

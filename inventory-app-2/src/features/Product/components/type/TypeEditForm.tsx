@@ -7,7 +7,7 @@ import { BaseForm } from "@/components/BaseForm";
 import type { GeneralError } from "types";
 import { Button } from "@/ui/Button";
 import { InputText } from "@/ui/fields/InputText";
-import { TitleContainer } from "@/components/TitleContainer";
+import { ListElementsContainer } from "@/views/ListElementsContainer";
 import { updateType } from "../../api/TypeAPI";
 import { ButtonLink } from "@/ui/ButtonLink";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
@@ -68,7 +68,7 @@ export const TypeEditForm = ({ data, typeId }: Props) => {
 
     return (
         <>
-            <TitleContainer title={`Editar tipo ${typeId}`}>
+            <ListElementsContainer title={`Editar tipo ${typeId}`}>
                 <BaseForm
                     onSubmit={handleSubmit(handleForm)}
                     buttons={
@@ -88,7 +88,7 @@ export const TypeEditForm = ({ data, typeId }: Props) => {
 
                     }
                 />
-            </TitleContainer>
+            </ListElementsContainer>
         </>
     )
 }

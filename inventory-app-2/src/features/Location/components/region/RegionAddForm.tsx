@@ -5,7 +5,7 @@ import { useMutation } from '@tanstack/react-query'
 import { registerRegion } from '../../api/RegionAPI'
 import type { GeneralError } from '@/types/index'
 import { toast } from 'sonner'
-import { TitleContainer } from '@/components/TitleContainer'
+import { ListElementsContainer } from '@/views/ListElementsContainer'
 import { BaseForm } from '@/components/BaseForm'
 import { InputText } from '@/ui/fields/InputText'
 import { ArrowUpCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
@@ -52,7 +52,7 @@ export const RegionAddForm = () => {
 
     return (
         <>
-            <TitleContainer title="Añadir nueva región">
+            <ListElementsContainer title="Añadir nueva región">
                 <BaseForm
                     onSubmit={handleSubmit((data) => mutate(data))}
                     inputs={
@@ -74,7 +74,7 @@ export const RegionAddForm = () => {
                         </>
                     }
                 />
-            </TitleContainer>
+            </ListElementsContainer>
         </>
     )
 }

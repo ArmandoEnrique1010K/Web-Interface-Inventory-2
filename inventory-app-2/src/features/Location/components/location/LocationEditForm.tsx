@@ -5,7 +5,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { updateLocation } from '../../api/LocationAPI';
 import type { GeneralError } from '@/types/index';
 import { toast } from 'sonner';
-import { TitleContainer } from '@/components/TitleContainer';
+import { ListElementsContainer } from '@/views/ListElementsContainer';
 import { BaseForm } from '@/components/BaseForm';
 import { Button } from '@/ui/Button';
 import { ButtonLink } from '@/ui/ButtonLink';
@@ -113,7 +113,7 @@ export const LocationEditForm = ({ data, locationId }: Props) => {
 
 
     return (
-        <TitleContainer title={`Editar ubicación ${locationId}`}>
+        <ListElementsContainer title={`Editar ubicación ${locationId}`}>
             <BaseForm
                 onSubmit={handleSubmit(handleForm)}
                 buttons={
@@ -173,6 +173,6 @@ export const LocationEditForm = ({ data, locationId }: Props) => {
                     </>
                 }
             />
-        </TitleContainer>
+        </ListElementsContainer>
     )
 }

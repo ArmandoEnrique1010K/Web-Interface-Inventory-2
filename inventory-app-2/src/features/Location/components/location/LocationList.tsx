@@ -6,7 +6,7 @@ import { listAllRegions } from "../../api/RegionAPI"
 import { listAllSubregionsByRegionId } from "../../api/SubregionAPI"
 import type { LocationItem, RegionItem, SubregionItem } from "../../types"
 import { useMediaQuery } from "react-responsive"
-import { TitleContainer } from "@/components/TitleContainer"
+import { ListElementsContainer } from "@/views/ListElementsContainer"
 import { ButtonLink } from "@/ui/ButtonLink"
 import { PlusCircleIcon } from "@heroicons/react/24/outline"
 import { FiltersFormContainer } from "@/components/FiltersFormContainer"
@@ -94,7 +94,7 @@ export const LocationList = () => {
 
     return (
 
-        <TitleContainer
+        <ListElementsContainer
             title="Ubicaciones"
             buttons={
                 <ButtonLink
@@ -245,7 +245,7 @@ export const LocationList = () => {
                     />
                 ) : null
             }
-        </TitleContainer>
+        </ListElementsContainer>
 
 
     )

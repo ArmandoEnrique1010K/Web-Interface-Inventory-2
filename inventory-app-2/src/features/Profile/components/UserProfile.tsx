@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query"
-import { TitleContainer } from "@/components/TitleContainer"
 import { ButtonLink } from "@/ui/ButtonLink"
 import { getUserProfile } from "../api/ProfileAPI";
 import { UserIcon } from "@heroicons/react/24/outline";
+import { ListElementsContainer } from "@/views/ListElementsContainer";
 
 const rolesColors: { role: string; style: string }[] = [
     {
@@ -36,53 +36,52 @@ export const UserProfile = () => {
 
     return (
 
-        <TitleContainer
+        <ListElementsContainer
             title={"Perfil del usuario"}
-            buttons={
+            buttonsContainer={
                 <ButtonLink icon={<UserIcon />} to={'/profile/update'} size={"large"} text={"Actualizar Perfil"} color={"blue"} />
             }
-        >
-            <div className="w-full border-blue-600 border-2">
-                <div className="flex flex-row  bg-white border border-blue-600">
-                    <div className="font-semibold bg-blue-500 text-white p-2 w-30">Nombre</div>
-                    <div className="p-2">{data?.firstname}</div>
-                </div>
-                <div className="flex flex-row  bg-white border border-blue-600">
-                    <div className="font-semibold bg-blue-500 text-white p-2 w-30">Apellido</div>
-                    <div className="p-2">{data?.lastname}</div>
-                </div>
-                <div className="flex flex-row  bg-white border border-blue-600">
-                    <div className="font-semibold bg-blue-500 text-white p-2 w-30">Email</div>
-                    <div className="p-2">{data?.email}</div>
-                </div>
-                <div className="flex flex-row  bg-white border border-blue-600">
-                    <div className="font-semibold bg-blue-500 text-white p-2 w-30">DNI</div>
-                    <div className="p-2">{data?.dni}</div>
-                </div>
-                <div className="flex flex-row  bg-white border border-blue-600">
-                    <div className="font-semibold bg-blue-500 text-white p-2 w-30">Roles</div>
-                    <div className="flex flex-col  items-start gap-2 m-2">
-                        {/* APLICAR UN FORMATO DE COLOR A CADA ROL */}
-                        {
-                            data.roles?.map((role: string) => {
-                                const roleStyle = rolesColors.find((roleColor) => roleColor.role === role);
-                                return (
-                                    <div
-                                        key={role}
-                                        className={`${roleStyle?.style || 'bg-gray-500'} text-white px-2 py-1 rounded-md`}
-                                    >
-                                        {role}
-                                    </div>
-                                );
-                            })
-                        }
+
+            dataContainer={
+                <div className="w-full border-blue-600 border-2">
+                    <div className="flex flex-row  bg-white border border-blue-600">
+                        <div className="font-semibold bg-blue-500 text-white p-2 w-30">Nombre</div>
+                        <div className="p-2">{data?.firstname}</div>
+                    </div>
+                    <div className="flex flex-row  bg-white border border-blue-600">
+                        <div className="font-semibold bg-blue-500 text-white p-2 w-30">Apellido</div>
+                        <div className="p-2">{data?.lastname}</div>
+                    </div>
+                    <div className="flex flex-row  bg-white border border-blue-600">
+                        <div className="font-semibold bg-blue-500 text-white p-2 w-30">Email</div>
+                        <div className="p-2">{data?.email}</div>
+                    </div>
+                    <div className="flex flex-row  bg-white border border-blue-600">
+                        <div className="font-semibold bg-blue-500 text-white p-2 w-30">DNI</div>
+                        <div className="p-2">{data?.dni}</div>
+                    </div>
+                    <div className="flex flex-row  bg-white border border-blue-600">
+                        <div className="font-semibold bg-blue-500 text-white p-2 w-30">Roles</div>
+                        <div className="flex flex-col  items-start gap-2 m-2">
+                            {/* APLICAR UN FORMATO DE COLOR A CADA ROL */}
+                            {
+                                data.roles?.map((role: string) => {
+                                    const roleStyle = rolesColors.find((roleColor) => roleColor.role === role);
+                                    return (
+                                        <div
+                                            key={role}
+                                            className={`${roleStyle?.style || 'bg-gray-500'} text-white px-2 py-1 rounded-md`}
+                                        >
+                                            {role}
+                                        </div>
+                                    );
+                                })
+                            }
+                        </div>
                     </div>
                 </div>
-
-            </div>
-
-        </TitleContainer>
-
+            }
+        />
     )
 }
 

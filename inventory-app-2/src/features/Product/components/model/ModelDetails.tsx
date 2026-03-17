@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom'
 import type { ModelDetailsItem } from '../../types'
 import { getModel } from '../../api/ModelAPI'
 import { useQuery } from '@tanstack/react-query'
-import { TitleContainer } from '@/components/TitleContainer'
+import { ListElementsContainer } from '@/views/ListElementsContainer'
 import { PencilSquareIcon } from '@heroicons/react/24/outline'
 import { ButtonLink } from '@/ui/ButtonLink'
 import { Button } from '@/ui/Button'
@@ -34,7 +34,7 @@ export const ModelDetails = () => {
     }
 
     return (
-        <TitleContainer
+        <ListElementsContainer
             title={data.productName + ", " + data.name}
             buttons={
                 <>
@@ -178,7 +178,7 @@ export const ModelDetails = () => {
 
 
 
-        </TitleContainer >
+        </ListElementsContainer >
 
 
 

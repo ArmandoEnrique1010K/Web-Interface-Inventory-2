@@ -1,12 +1,10 @@
-import { useState } from "react";
 import type { FieldError, UseFormRegisterReturn } from "react-hook-form";
-import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 
 type Props = {
     id: string; // Id del input
     label?: string; // Etiqueta del input
     placeholder?: string; // Texto que se muestra en el input
-    type: 'text' | 'password' | 'email' | 'number' | 'hidden'; // Tipo de input (text, password, email, etc)
+    type: 'text' | 'email' | 'number' | 'hidden'; // Tipo de input (text, password, email, etc)
     errorMessage?: FieldError | undefined, // Mensaje de error
     functionEnabled?: UseFormRegisterReturn // Funcion que se ejecuta al cambiar el valor del input con react hook form
     max?: number
@@ -14,8 +12,6 @@ type Props = {
 
 export const InputText = ({ id, label, placeholder, type, errorMessage, functionEnabled, max }: Props) => {
 
-    // Estado para ver contraseñas
-    const [showPassword, setShowPassword] = useState(false);
     // No se mostrara nada si el input es hidden
     const applyStylesInHiddenInput = () => {
         if (type === 'hidden') {
@@ -32,7 +28,7 @@ export const InputText = ({ id, label, placeholder, type, errorMessage, function
 
             <input
                 className="outline-none focus:outline-none border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                type={type === "password" && showPassword ? "text" : type}
+                type={type}
                 placeholder={placeholder}
                 id={id}
                 onWheel={(e) => e.currentTarget.blur()}
@@ -52,14 +48,6 @@ export const InputText = ({ id, label, placeholder, type, errorMessage, function
                 {...(type === "number" ? { max } : {})}
 
             />
-            {
-                type === "password" && (
-                    <button className="p-2 border border-gray-700 rounded bg-gray-100 hover:cursor-pointer hover:bg-gray-200" type="button" onClick={() => setShowPassword(!showPassword)}>
-                        {showPassword ? <EyeSlashIcon className="size-6" /> : <EyeIcon className="size-6" />}
-                    </button>
-                )
-            }
-
             {
                 <div className='min-h-5'>
                     <p className="text-red-600 text-xs mt-1">

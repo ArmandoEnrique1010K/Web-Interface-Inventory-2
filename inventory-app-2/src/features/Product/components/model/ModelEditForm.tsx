@@ -5,7 +5,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { updateModel } from '../../api/ModelAPI';
 import type { GeneralError } from '@/types/index';
 import { toast } from 'sonner';
-import { TitleContainer } from '@/components/TitleContainer';
+import { ListElementsContainer } from '@/views/ListElementsContainer';
 import { BaseForm } from '@/components/BaseForm';
 import { InputText } from '@/ui/fields/InputText';
 import { InputDate } from '@/ui/fields/InputDate';
@@ -82,7 +82,7 @@ export const ModelEditForm = ({ data, modelId, productId }: Props) => {
 
     return (
         <>
-            <TitleContainer title={`Editar modelo ${modelId}`}>
+            <ListElementsContainer title={`Editar modelo ${modelId}`}>
                 <BaseForm
                     onSubmit={handleSubmit((data) => {
                         handleForm({
@@ -156,7 +156,7 @@ export const ModelEditForm = ({ data, modelId, productId }: Props) => {
                     }
 
                 />
-            </TitleContainer>
+            </ListElementsContainer>
 
         </>
     )

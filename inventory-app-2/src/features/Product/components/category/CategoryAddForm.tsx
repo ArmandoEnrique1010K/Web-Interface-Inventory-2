@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import type { CategoryForm } from "../../types";
 import { InputText } from "@/ui/fields/InputText";
 import { Button } from "@/ui/Button";
-import { TitleContainer } from "@/components/TitleContainer";
+import { ListElementsContainer } from "@/views/ListElementsContainer";
 import { BaseForm } from "@/components/BaseForm";
 import type { GeneralError } from "types";
 import { ButtonLink } from "@/ui/ButtonLink";
@@ -53,7 +53,7 @@ export const CategoryAddForm = () => {
 
     return (
         <>
-            <TitleContainer title="Añadir nueva categoria">
+            <ListElementsContainer title="Añadir nueva categoria">
                 <BaseForm
                     onSubmit={handleSubmit((data) => mutate(data))}
                     inputs={
@@ -75,7 +75,7 @@ export const CategoryAddForm = () => {
                         </>
                     }
                 />
-            </TitleContainer>
+            </ListElementsContainer>
         </>
     )
 }

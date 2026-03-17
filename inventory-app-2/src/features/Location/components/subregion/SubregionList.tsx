@@ -1,7 +1,7 @@
 import { listAllSubregionsByRegionId } from '../../api/SubregionAPI'
 import { useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { TitleContainer } from '@/components/TitleContainer'
+import { ListElementsContainer } from '@/views/ListElementsContainer'
 import { ButtonLink } from '@/ui/ButtonLink'
 import { PlusCircleIcon } from '@heroicons/react/24/outline'
 import { TableHeaderContainer } from '@/components/TableHeaderContainer'
@@ -38,7 +38,7 @@ export const SubregionList = () => {
 
 
     return (
-        <TitleContainer
+        <ListElementsContainer
             title="Subregiones agrupadas por región"
             buttons={
                 <ButtonLink
@@ -91,6 +91,6 @@ export const SubregionList = () => {
 
                 }
             </TableHeaderContainer>
-        </TitleContainer>
+        </ListElementsContainer>
     )
 }

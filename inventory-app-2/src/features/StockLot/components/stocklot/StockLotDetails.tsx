@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom"
 import { getStockLot } from "../../api/StockLotAPI";
 import type { StockLotDetailsItem } from "../../types";
-import { TitleContainer } from "@/components/TitleContainer";
+import { ListElementsContainer } from "@/views/ListElementsContainer";
 import { handleFormatDateTime } from "@/utils/handleFormatDateTime";
 import { ButtonLink } from "@/ui/ButtonLink";
 import { ArrowPathIcon, MinusCircleIcon, PlusCircleIcon, SquaresPlusIcon } from "@heroicons/react/24/outline";
@@ -27,7 +27,7 @@ export const StockLotDetails = () => {
 
 
     return (
-        <TitleContainer
+        <ListElementsContainer
             title={data.batch}
             buttons={
                 <>
@@ -115,7 +115,7 @@ export const StockLotDetails = () => {
 
 
 
-        </TitleContainer >
+        </ListElementsContainer >
 
 
     )

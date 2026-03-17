@@ -1,4 +1,4 @@
-import { TitleContainer } from '@/components/TitleContainer'
+import { ListElementsContainer } from '@/views/ListElementsContainer'
 import { useQuery } from '@tanstack/react-query'
 import { TableHeaderContainer } from '@/components/TableHeaderContainer'
 import type { CategoryItem, ModelItem, TypeItem } from '../../types'
@@ -116,9 +116,9 @@ export const ModelList = () => {
 
 
     return (
-        <TitleContainer
+        <ListElementsContainer
             title="Modelos"
-            searchParams={
+            searchParamsContainer={
                 <FiltersFormContainer onSubmit={
                     (e) => {
                         e.preventDefault()
@@ -232,93 +232,90 @@ export const ModelList = () => {
 
                 </FiltersFormContainer>
             }
-        >
-            {
-                data && <SearchCounter totalElements={data.totalElements} page={data.page} size={data.size} last={data.last} />
+            dataContainer={
+                <TableHeaderContainer
+                    headers={['ID', 'Nombre', 'Cantidad disponible', 'Fechas', 'Estado', 'Editar']}
+                    isError={isError}
+                    isEmpty={!content?.length}
+                    itemsCounter={
+                        data && <SearchCounter totalElements={data.totalElements} page={data.page} size={data.size} last={data.last} />
+                    }
+                    paginator={
+                        (content?.length && data) ? (
+                            <Paginator
+                                currentPage={data?.page}
+                                totalPages={data?.totalPages}
+                                isFirst={data?.first}
+                                isLast={data?.last}
+                                onPageChange={(page) => {
+                                    setForm(prev => ({
+                                        ...prev,
+                                        page
+                                    }))
+                                    const params = new URLSearchParams()
+
+                                    if (form.keyword) params.set('keyword', form.keyword)
+
+                                    if (form.minStock) params.set('minStock', form.minStock.toString())
+                                    if (form.maxStock) params.set('maxStock', form.maxStock.toString())
+                                    if (form.minEntryDate) params.set('minEntryDate', form.minEntryDate)
+                                    if (form.maxEntryDate) params.set('maxEntryDate', form.maxEntryDate)
+
+                                    if (form.categoryId) params.set('categoryId', form.categoryId)
+                                    if (form.typeId) params.set('typeId', form.typeId)
+                                    if (form.status !== '') params.set('status', form.status)
+
+                                    params.set('page', page.toString())
+
+                                    setSearchParams(params)
+
+                                }}
+                            />
+                        ) : null
+                    }
+
+                >
+                    {
+                        content?.map((model: ModelItem) => {
+                            return <TableRowContainer key={model.id}>
+                                <BaseTableCell data={model.id} />
+                                <BaseTableCell data={
+                                    <div className='flex flex-col gap-1'>
+                                        {/* TODO: CORREGIR EL ENLACE Y CREAR UN COMPONENTE PARA MOSTRAR LOS DATOS DEL MODELO */}
+                                        <Link to={`/products/${model.productId}/models/${model.id}`} className='hover:text-blue-900'>
+                                            <div>{model.name}</div>
+                                            <div className='text-sm text-gray-500'>{model.productName}</div>
+                                            <div className='text-sm text-gray-500'>{model.categoryName} - {model.typeName}</div>
+                                        </Link>
+                                    </div>
+                                } />
+                                <BaseTableCell data={model.totalQuantityAvailable} />
+
+                                <BaseTableCell data={<div className='flex flex-col text-sm'>
+                                    <div>Entrada: {model.entryDate}</div>
+                                    <div>Caducidad: {model.caducityDate}</div>
+                                </div>} />
+
+                                <BaseTableCell data={
+                                    <ModelChangeStatus size="small" modelId={model.id.toString()} productId={model.productId} value={model.status ? 'Activo' : 'Inactivo'} />
+                                } />
+
+                                <BaseTableCell isCenter data={
+                                    //* SOLAMENTE SI UN PRODUCTO ESTA ACTIVO, PUEDE SER EDITADO
+                                    model.status === true ?
+                                        <ButtonLink
+                                            size="small"
+                                            text="Editar"
+                                            to={`/products/${model.productId}/models/edit/${model.id}`}
+                                            color="blue"
+                                        /> : ''
+                                } />
+                            </TableRowContainer>
+                        })
+                    }
+                </TableHeaderContainer>
             }
-
-            <TableHeaderContainer
-                headers={['ID', 'Nombre', 'Cantidad disponible', 'Fechas', 'Estado', 'Editar']}
-                isError={isError}
-                isEmpty={!content?.length}
-            >
-                {
-                    content?.map((model: ModelItem) => {
-                        return <TableRowContainer key={model.id}>
-                            <BaseTableCell data={model.id} />
-                            <BaseTableCell data={
-                                <div className='flex flex-col gap-1'>
-                                    {/* TODO: CORREGIR EL ENLACE Y CREAR UN COMPONENTE PARA MOSTRAR LOS DATOS DEL MODELO */}
-                                    <Link to={`/products/${model.productId}/models/${model.id}`} className='hover:text-blue-900'>
-                                        <div>{model.name}</div>
-                                        <div className='text-sm text-gray-500'>{model.productName}</div>
-                                        <div className='text-sm text-gray-500'>{model.categoryName} - {model.typeName}</div>
-                                    </Link>
-                                </div>
-                            } />
-                            <BaseTableCell data={model.totalQuantityAvailable} />
-
-                            <BaseTableCell data={<div className='flex flex-col text-sm'>
-                                <div>Entrada: {model.entryDate}</div>
-                                <div>Caducidad: {model.caducityDate}</div>
-                            </div>} />
-
-                            <BaseTableCell data={
-                                <ModelChangeStatus size="small" modelId={model.id.toString()} productId={model.productId} value={model.status ? 'Activo' : 'Inactivo'} />
-                            } />
-
-                            <BaseTableCell isCenter data={
-                                //* SOLAMENTE SI UN PRODUCTO ESTA ACTIVO, PUEDE SER EDITADO
-                                model.status === true ?
-                                    <ButtonLink
-                                        size="small"
-                                        text="Editar"
-                                        to={`/products/${model.productId}/models/edit/${model.id}`}
-                                        color="blue"
-                                    /> : ''
-                            } />
-                        </TableRowContainer>
-                    })
-                }
-            </TableHeaderContainer>
-
-            {
-                (content?.length && data) ? (
-                    <Paginator
-                        currentPage={data?.page}
-                        totalPages={data?.totalPages}
-                        isFirst={data?.first}
-                        isLast={data?.last}
-                        onPageChange={(page) => {
-                            setForm(prev => ({
-                                ...prev,
-                                page
-                            }))
-                            const params = new URLSearchParams()
-
-                            if (form.keyword) params.set('keyword', form.keyword)
-
-                            if (form.minStock) params.set('minStock', form.minStock.toString())
-                            if (form.maxStock) params.set('maxStock', form.maxStock.toString())
-                            if (form.minEntryDate) params.set('minEntryDate', form.minEntryDate)
-                            if (form.maxEntryDate) params.set('maxEntryDate', form.maxEntryDate)
-
-                            if (form.categoryId) params.set('categoryId', form.categoryId)
-                            if (form.typeId) params.set('typeId', form.typeId)
-                            if (form.status !== '') params.set('status', form.status)
-
-                            params.set('page', page.toString())
-
-                            setSearchParams(params)
-
-                        }}
-                    />
-                ) : null
-            }
-        </TitleContainer>
-
-
-
+        />
     )
 }
 

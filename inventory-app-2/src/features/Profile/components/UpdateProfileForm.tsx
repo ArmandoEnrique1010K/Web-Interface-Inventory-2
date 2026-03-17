@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { GeneralError } from "@/types/index";
 import { toast } from "sonner";
-import { TitleContainer } from "@/components/TitleContainer";
+import { ListElementsContainer } from "@/views/ListElementsContainer";
 import { BaseForm } from "@/components/BaseForm";
 import { InputText } from "@/ui/fields/InputText";
 import { Button } from "@/ui/Button";
@@ -61,7 +61,7 @@ export const UpdateProfileForm = ({ data }: { data: UserProfileForm }) => {
 
     return (
         <>
-            <TitleContainer title="Actualizar perfil">
+            <ListElementsContainer title="Actualizar perfil">
                 <BaseForm
                     onSubmit={handleSubmit((data) => mutate(data))}
                     inputs={
@@ -104,7 +104,7 @@ export const UpdateProfileForm = ({ data }: { data: UserProfileForm }) => {
                         </>
                     }
                 />
-            </TitleContainer>
+            </ListElementsContainer>
 
         </>
     )

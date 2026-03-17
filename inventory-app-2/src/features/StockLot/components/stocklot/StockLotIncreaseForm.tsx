@@ -5,7 +5,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { increaseStockLot } from "../../api/StockLotAPI";
 import type { GeneralError } from "@/types/index";
 import { toast } from "sonner";
-import { TitleContainer } from "@/components/TitleContainer";
+import { ListElementsContainer } from "@/views/ListElementsContainer";
 import { BaseForm } from "@/components/BaseForm";
 import { Button } from "@/ui/Button";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
@@ -66,7 +66,7 @@ export const StockLotIncreaseForm = () => {
 
     return (
         <>
-            <TitleContainer title={`Agregar cantidad al lote de stock ${stockLotId}`}>
+            <ListElementsContainer title={`Agregar cantidad al lote de stock ${stockLotId}`}>
 
                 <BaseForm
                     onSubmit={handleSubmit(handleForm)}
@@ -96,7 +96,7 @@ export const StockLotIncreaseForm = () => {
                         </>
                     }
                 />
-            </TitleContainer>
+            </ListElementsContainer>
         </>
     )
 }

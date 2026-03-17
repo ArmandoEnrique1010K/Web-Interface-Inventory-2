@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import type { TypeForm } from "../../types";
 import { InputText } from "@/ui/fields/InputText";
 import { Button } from "@/ui/Button";
-import { TitleContainer } from "@/components/TitleContainer";
+import { ListElementsContainer } from "@/views/ListElementsContainer";
 import { BaseForm } from "@/components/BaseForm";
 import type { GeneralError } from "types";
 import { registerType } from "../../api/TypeAPI";
@@ -55,7 +55,7 @@ export const TypeAddForm = () => {
 
     return (
         <>
-            <TitleContainer title="Añadir nuevo tipo">
+            <ListElementsContainer title="Añadir nuevo tipo">
                 <BaseForm
                     onSubmit={handleSubmit((data) => mutate(data))}
                     inputs={
@@ -77,7 +77,7 @@ export const TypeAddForm = () => {
                         </>
                     }
                 />
-            </TitleContainer>
+            </ListElementsContainer>
         </>
     )
 }

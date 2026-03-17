@@ -4,7 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { InputText } from "@/ui/fields/InputText";
 import { Button } from "@/ui/Button";
-import { TitleContainer } from "@/components/TitleContainer";
+import { ListElementsContainer } from "@/views/ListElementsContainer";
 import { BaseForm } from "@/components/BaseForm";
 import type { GeneralError } from "types";
 import { ButtonLink } from "@/ui/ButtonLink";
@@ -55,7 +55,7 @@ export const CompanyAddForm = () => {
 
     return (
         <>
-            <TitleContainer title="Añadir nueva empresa importadora">
+            <ListElementsContainer title="Añadir nueva empresa importadora">
                 <BaseForm
                     onSubmit={handleSubmit((data) => mutate(data))}
                     inputs={
@@ -77,7 +77,7 @@ export const CompanyAddForm = () => {
                         </>
                     }
                 />
-            </TitleContainer>
+            </ListElementsContainer>
         </>
     )
 }

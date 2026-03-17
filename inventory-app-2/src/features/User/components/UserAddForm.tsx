@@ -5,7 +5,7 @@ import { useMutation } from "@tanstack/react-query"
 import { registerUser } from "../api/UserAPI"
 import type { GeneralError } from "@/types/index"
 import { toast } from "sonner"
-import { TitleContainer } from "@/components/TitleContainer"
+import { ListElementsContainer } from "@/views/ListElementsContainer"
 import { BaseForm } from "@/components/BaseForm"
 import { InputText } from "@/ui/fields/InputText"
 import { Button } from "@/ui/Button"
@@ -60,7 +60,7 @@ export const UserAddForm = () => {
 
 
     return (
-        <TitleContainer title="Registrar nuevo usuario">
+        <ListElementsContainer title="Registrar nuevo usuario">
             <BaseForm
                 onSubmit={handleSubmit((data) => mutate(data))}
                 inputs={
@@ -147,6 +147,6 @@ export const UserAddForm = () => {
                     </>
                 }
             />
-        </TitleContainer>
+        </ListElementsContainer>
     )
 }

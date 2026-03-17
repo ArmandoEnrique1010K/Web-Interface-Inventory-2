@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { listAllStockLotsByModelAndExcludeOne, transferStockLot } from "../../api/StockLotAPI";
 import type { GeneralError } from "@/types/index";
 import { toast } from "sonner";
-import { TitleContainer } from "@/components/TitleContainer";
+import { ListElementsContainer } from "@/views/ListElementsContainer";
 import { BaseForm } from "@/components/BaseForm";
 import { Button } from "@/ui/Button";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
@@ -99,7 +99,7 @@ export const StockLotTransferStocksForm = ({ data, stockLotEmitterId }: Props) =
 
     return (
         <>
-            <TitleContainer title={`Transferir 'x' unidades del lote de stock ${stockLotEmitterId} a otro lote de stock`}>
+            <ListElementsContainer title={`Transferir 'x' unidades del lote de stock ${stockLotEmitterId} a otro lote de stock`}>
                 <BaseForm
                     onSubmit={handleSubmit(handleForm)}
                     buttons={
@@ -141,7 +141,7 @@ export const StockLotTransferStocksForm = ({ data, stockLotEmitterId }: Props) =
                         </>
                     }
                 />
-            </TitleContainer>
+            </ListElementsContainer>
         </>
     )
 }

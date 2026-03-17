@@ -4,7 +4,7 @@ import type { StockLotAdjustmentForm } from "../../types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { GeneralError } from "@/types/index";
 import { toast } from "sonner";
-import { TitleContainer } from "@/components/TitleContainer";
+import { ListElementsContainer } from "@/views/ListElementsContainer";
 import { BaseForm } from "@/components/BaseForm";
 import { Button } from "@/ui/Button";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
@@ -66,7 +66,7 @@ export const StockLotDecreaseForm = () => {
 
     return (
         <>
-            <TitleContainer title={`Eliminar 'x' unidades del lote de stock ${stockLotId}`}>
+            <ListElementsContainer title={`Eliminar 'x' unidades del lote de stock ${stockLotId}`}>
 
                 <BaseForm
                     onSubmit={handleSubmit(handleForm)}
@@ -96,7 +96,7 @@ export const StockLotDecreaseForm = () => {
                         </>
                     }
                 />
-            </TitleContainer>
+            </ListElementsContainer>
         </>
     )
 }

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import type { GeneralError } from '@/types/index'
 import { toast } from 'sonner'
-import { TitleContainer } from '@/components/TitleContainer'
+import { ListElementsContainer } from '@/views/ListElementsContainer'
 import { BaseForm } from '@/components/BaseForm'
 import { InputText } from '@/ui/fields/InputText'
 import { ArrowUpCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
@@ -67,7 +67,7 @@ export const SubregionAddForm = () => {
 
     return (
         <>
-            <TitleContainer title="Añadir nueva subregión">
+            <ListElementsContainer title="Añadir nueva subregión">
                 <BaseForm
                     onSubmit={handleSubmit((data) => {
                         mutate(data)
@@ -97,7 +97,7 @@ export const SubregionAddForm = () => {
                         </>
                     }
                 />
-            </TitleContainer>
+            </ListElementsContainer>
         </>
     )
 }

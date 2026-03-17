@@ -8,7 +8,7 @@ import { listAllCompanies } from '../../api/CompanyAPI'
 import type { CategoryItem, TypeItem } from '@/features/Product/types'
 import type { CompanyItem, StockLotItem } from '../../types'
 import { useMediaQuery } from 'react-responsive'
-import { TitleContainer } from '@/components/TitleContainer'
+import { ListElementsContainer } from '@/views/ListElementsContainer'
 import { ButtonLink } from '@/ui/ButtonLink'
 import { PlusCircleIcon } from '@heroicons/react/24/outline'
 import { FiltersFormContainer } from '@/components/FiltersFormContainer'
@@ -133,7 +133,7 @@ export const StockLotList = () => {
 
 
     return (
-        <TitleContainer
+        <ListElementsContainer
             title="Lotes de entrega"
             buttons={
                 <ButtonLink
@@ -368,7 +368,7 @@ export const StockLotList = () => {
                     />
                 ) : null
             }
-        </TitleContainer>
+        </ListElementsContainer>
 
 
 

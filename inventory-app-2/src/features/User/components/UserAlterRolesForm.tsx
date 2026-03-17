@@ -5,7 +5,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateUserRoles } from "../api/UserAPI";
 import type { GeneralError } from "@/types/index";
 import { toast } from "sonner";
-import { TitleContainer } from "@/components/TitleContainer";
+import { ListElementsContainer } from "@/views/ListElementsContainer";
 import { BaseForm } from "@/components/BaseForm";
 import { Button } from "@/ui/Button";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
@@ -68,7 +68,7 @@ export const UserAlterRolesForm = ({ data, userId }: Props) => {
 
 
     return (
-        <TitleContainer title={`Alterar roles del usuario ${userId}`}>
+        <ListElementsContainer title={`Alterar roles del usuario ${userId}`}>
             <BaseForm
                 onSubmit={handleSubmit(handleForm)}
                 buttons={
@@ -117,6 +117,6 @@ export const UserAlterRolesForm = ({ data, userId }: Props) => {
                     </>
                 }
             />
-        </TitleContainer>
+        </ListElementsContainer>
     )
 }

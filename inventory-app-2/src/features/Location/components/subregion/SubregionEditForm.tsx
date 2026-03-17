@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import type { GeneralError } from "@/types/index";
 import { updateSubregion } from "../../api/SubregionAPI";
 import { toast } from "sonner";
-import { TitleContainer } from "@/components/TitleContainer";
+import { ListElementsContainer } from "@/views/ListElementsContainer";
 import { BaseForm } from "@/components/BaseForm";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { Button } from "@/ui/Button";
@@ -86,7 +86,7 @@ export const SubregionEditForm = ({ data, subregionId }: Props) => {
 
 
     return (
-        <TitleContainer title={`Editar subregión ${subregionId}`}>
+        <ListElementsContainer title={`Editar subregión ${subregionId}`}>
             <BaseForm
                 onSubmit={handleSubmit(handleForm)}
                 buttons={
@@ -117,6 +117,6 @@ export const SubregionEditForm = ({ data, subregionId }: Props) => {
                     </>
                 }
             />
-        </TitleContainer>
+        </ListElementsContainer>
     )
 }

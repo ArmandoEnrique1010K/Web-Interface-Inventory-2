@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { TitleContainer } from '@/components/TitleContainer'
+import { ListElementsContainer } from '@/views/ListElementsContainer'
 import { TableHeaderContainer } from '@/components/TableHeaderContainer'
 import { TableRowContainer } from '@/components/TableRowContainer'
 import { BaseTableCell } from '@/components/BaseTableCell'
@@ -15,7 +15,7 @@ export const CompanyList = () => {
     })
 
     return (
-        <TitleContainer
+        <ListElementsContainer
             title="Empresas importadoras"
             buttons={
                 <ButtonLink
@@ -50,6 +50,6 @@ export const CompanyList = () => {
 
                 }
             </TableHeaderContainer>
-        </TitleContainer>
+        </ListElementsContainer>
     )
 }

@@ -6,7 +6,7 @@ import { updateRegion } from '../../api/RegionAPI';
 import type { GeneralError } from '@/types/index';
 import { toast } from 'sonner';
 import { BaseForm } from '@/components/BaseForm';
-import { TitleContainer } from '@/components/TitleContainer';
+import { ListElementsContainer } from '@/views/ListElementsContainer';
 import { Button } from '@/ui/Button';
 import { ButtonLink } from '@/ui/ButtonLink';
 import { InputText } from '@/ui/fields/InputText';
@@ -67,7 +67,7 @@ export const RegionEditForm = ({ data, regionId }: Props) => {
     }
 
     return (
-        <TitleContainer title={`Editar región ${regionId}`}>
+        <ListElementsContainer title={`Editar región ${regionId}`}>
             <BaseForm
                 onSubmit={handleSubmit(handleForm)}
                 buttons={
@@ -87,6 +87,6 @@ export const RegionEditForm = ({ data, regionId }: Props) => {
 
                 }
             />
-        </TitleContainer>
+        </ListElementsContainer>
     )
 }

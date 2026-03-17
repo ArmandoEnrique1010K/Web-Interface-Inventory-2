@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { listAllRegions } from '../../api/RegionAPI'
-import { TitleContainer } from '@/components/TitleContainer'
+import { ListElementsContainer } from '@/views/ListElementsContainer'
 import { ButtonLink } from '@/ui/ButtonLink'
 import { PlusCircleIcon } from '@heroicons/react/24/outline'
 import { TableHeaderContainer } from '@/components/TableHeaderContainer'
@@ -15,7 +15,7 @@ export const RegionList = () => {
     })
 
     return (
-        <TitleContainer
+        <ListElementsContainer
             title="Regiones"
             buttons={
                 <ButtonLink
@@ -50,7 +50,7 @@ export const RegionList = () => {
 
                 }
             </TableHeaderContainer>
-        </TitleContainer>
+        </ListElementsContainer>
     )
 }
 

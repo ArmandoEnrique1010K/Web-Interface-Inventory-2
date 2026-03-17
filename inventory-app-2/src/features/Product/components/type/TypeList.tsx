@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import type { TypeItem } from '../../types'
-import { TitleContainer } from '@/components/TitleContainer'
+import { ListElementsContainer } from '@/views/ListElementsContainer'
 import { TableHeaderContainer } from '@/components/TableHeaderContainer'
 import { TableRowContainer } from '@/components/TableRowContainer'
 import { BaseTableCell } from '@/components/BaseTableCell'
@@ -15,9 +15,9 @@ export const TypeList = () => {
     })
 
     return (
-        <TitleContainer
+        <ListElementsContainer
             title="Tipos"
-            buttons={
+            buttonsContainer={
                 <ButtonLink
                     icon={<PlusCircleIcon />}
                     size="large"
@@ -25,31 +25,32 @@ export const TypeList = () => {
                     to="/products/types/new"
                     color="blue"
                 />
-            }>
+            }
+            dataContainer={
+                <TableHeaderContainer
+                    headers={['ID', 'Nombre', 'Editar']}
+                    isError={isError}
+                    isEmpty={!data?.length}
+                >
+                    {
+                        data?.map((type: TypeItem) => (
+                            <TableRowContainer key={type.id}>
+                                <BaseTableCell data={type.id} />
+                                <BaseTableCell data={type.name} />
+                                <BaseTableCell data={
+                                    <ButtonLink
+                                        size="small"
+                                        text="Editar"
+                                        to={`/products/types/edit/${type.id}`}
+                                        color="blue"
+                                    />
+                                } isCenter />
+                            </TableRowContainer>
+                        ))
 
-            <TableHeaderContainer
-                headers={['ID', 'Nombre', 'Editar']}
-                isError={isError}
-                isEmpty={!data?.length}
-            >
-                {
-                    data?.map((type: TypeItem) => (
-                        <TableRowContainer key={type.id}>
-                            <BaseTableCell data={type.id} />
-                            <BaseTableCell data={type.name} />
-                            <BaseTableCell data={
-                                <ButtonLink
-                                    size="small"
-                                    text="Editar"
-                                    to={`/products/types/edit/${type.id}`}
-                                    color="blue"
-                                />
-                            } isCenter />
-                        </TableRowContainer>
-                    ))
-
-                }
-            </TableHeaderContainer>
-        </TitleContainer>
+                    }
+                </TableHeaderContainer>
+            }
+        />
     )
 }

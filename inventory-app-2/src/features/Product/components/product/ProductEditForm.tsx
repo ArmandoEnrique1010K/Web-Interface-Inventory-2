@@ -6,7 +6,7 @@ import { updateProduct } from '../../api/ProductAPI';
 import type { GeneralError } from '@/types/index';
 import { toast } from 'sonner';
 import { BaseForm } from '@/components/BaseForm';
-import { TitleContainer } from '@/components/TitleContainer';
+import { ListElementsContainer } from '@/views/ListElementsContainer';
 import { Button } from '@/ui/Button';
 import { InputText } from '@/ui/fields/InputText';
 import { SelectOption } from '@/ui/fields/SelectOption';
@@ -101,7 +101,7 @@ export const ProductEditForm = ({ data, productId }: Props) => {
 
     return (
         <>
-            <TitleContainer title={`Editar producto ${productId}`}>
+            <ListElementsContainer title={`Editar producto ${productId}`}>
                 <BaseForm
                     onSubmit={handleSubmit(handleForm)}
                     inputs={
@@ -166,7 +166,7 @@ export const ProductEditForm = ({ data, productId }: Props) => {
                     }
 
                 />
-            </TitleContainer>
+            </ListElementsContainer>
         </>
     )
 }

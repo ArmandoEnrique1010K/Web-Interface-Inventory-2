@@ -1,10 +1,10 @@
-import { TitleContainer } from "@/components/TitleContainer"
+import { ListElementsContainer } from "@/views/ListElementsContainer"
 import { CreditSection } from "./CreditSection"
 import { CreditItem } from './CreditItem';
 
 export const CreditsDetails = () => {
     return (
-        <TitleContainer title="Creditos">
+        <ListElementsContainer title="Creditos">
             <CreditSection title="Información" type='text'>
                 <CreditItem type="div">Gracias por usar Inventory App</CreditItem>
                 <CreditItem type="div">Desarrollado por {
@@ -69,6 +69,6 @@ export const CreditsDetails = () => {
                 </CreditItem>
             </CreditSection>
 
-        </TitleContainer>
+        </ListElementsContainer>
     )
 }

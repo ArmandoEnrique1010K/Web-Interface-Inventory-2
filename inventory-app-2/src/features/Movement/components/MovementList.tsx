@@ -3,7 +3,7 @@ import { useEffectEvent, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 import { listAllMovements } from "../api/MovementAPI"
 import { useMediaQuery } from "react-responsive"
-import { TitleContainer } from "@/components/TitleContainer"
+import { ListElementsContainer } from "@/views/ListElementsContainer"
 import { FiltersFormContainer } from "@/components/FiltersFormContainer"
 import { InputTextFilter } from "@/ui/filters/InputTextFilter"
 import { SearchCounter } from "@/components/SearchCounter"
@@ -96,7 +96,7 @@ export const MovementList = () => {
     const isSmallScreen = useMediaQuery({ query: '(max-width: 479px)' })
 
     return (
-        <TitleContainer
+        <ListElementsContainer
             title="Movimientos"
             searchParams={
                 <FiltersFormContainer onSubmit={
@@ -215,7 +215,7 @@ export const MovementList = () => {
                     />
                 ) : null
             }
-        </TitleContainer>
+        </ListElementsContainer>
 
 
 

@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query'
 import { registerModelInProduct } from '../../api/ModelAPI';
 import type { GeneralError } from '@/types/index'
 import { toast } from 'sonner'
-import { TitleContainer } from '@/components/TitleContainer'
+import { ListElementsContainer } from '@/views/ListElementsContainer'
 import { BaseForm } from '@/components/BaseForm'
 import { InputText } from '@/ui/fields/InputText'
 import { InputDate } from '@/ui/fields/InputDate'
@@ -67,7 +67,7 @@ export const ModelAddInProductForm = () => {
     // EFECTO QUE SE EJECUTA SI HAY UNA IMAGEN QUE SE ESTA SUBIENDO
     return (
         <>
-            <TitleContainer title={`Añadir nuevo modelo al producto ${location.pathname.split('/')[2]}`}>
+            <ListElementsContainer title={`Añadir nuevo modelo al producto ${location.pathname.split('/')[2]}`}>
                 <BaseForm
                     onSubmit={handleSubmit((data) => {
                         mutate({
@@ -142,7 +142,7 @@ export const ModelAddInProductForm = () => {
                         </>
                     }
                 />
-            </TitleContainer>
+            </ListElementsContainer>
 
         </>
     )

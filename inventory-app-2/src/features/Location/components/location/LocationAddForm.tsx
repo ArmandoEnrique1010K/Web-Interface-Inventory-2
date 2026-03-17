@@ -5,7 +5,7 @@ import { registerLocation } from "../../api/LocationAPI"
 import type { GeneralError } from "@/types/index"
 import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
-import { TitleContainer } from "@/components/TitleContainer"
+import { ListElementsContainer } from "@/views/ListElementsContainer"
 import { BaseForm } from "@/components/BaseForm"
 import { InputText } from "@/ui/fields/InputText"
 import { SelectOption } from "@/ui/fields/SelectOption"
@@ -84,7 +84,7 @@ export const LocationAddForm = () => {
     })) || []
 
     return (
-        <TitleContainer title="Añadir nueva ubicación">
+        <ListElementsContainer title="Añadir nueva ubicación">
             <BaseForm
                 onSubmit={handleSubmit((data) => mutate(data))}
                 inputs={
@@ -138,6 +138,6 @@ export const LocationAddForm = () => {
                     </>
                 }
             />
-        </TitleContainer>
+        </ListElementsContainer>
     )
 }
