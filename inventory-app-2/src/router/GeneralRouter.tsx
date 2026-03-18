@@ -1,9 +1,9 @@
 
 
 import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom'
-import { AuthLayout } from '@/layout/AuthLayout'
+import { AuthLayout } from '@/layout/app/AuthLayout'
 import { LoginForm } from '@/features/Auth/components/LoginForm'
-import { DashboardLayout } from '@/layout/DashboardLayout'
+import { DashboardLayout } from '@/layout/app/DashboardLayout'
 import { RestoreUserPasswordForm } from '@/features/Auth/components/RestoreUserPasswordForm'
 import { ValidateUserTokenForm } from '@/features/Auth/components/ValidateUserTokenForm'
 import { UpdateUserPasswordForm } from '@/features/Auth/components/UpdateUserPasswordForm'
@@ -20,10 +20,6 @@ import { NavbarContainer } from '@/components/NavbarContainer'
 import { TypeList } from '@/features/Product/components/type/TypeList'
 import { TypeAddForm } from '@/features/Product/components/type/TypeAddForm'
 import { TypeEditLoader } from '@/features/Product/components/type/TypeEditLoader'
-import { ProductAddForm } from '@/features/Product/components/product/ProductAddForm'
-import { ProductList } from '@/features/Product/components/product/ProductList'
-import { ProductEditLoader } from '@/features/Product/components/product/ProductEditLoader'
-import { ProductDetails } from '@/features/Product/components/product/ProductDetails'
 import { CreditsDetails } from '@/features/Credits/components/CreditsDetails'
 import { ProfileEditLoader } from '@/features/Profile/components/ProfileEditLoader'
 import { ModelList } from '@/features/Product/components/model/ModelList'
@@ -53,6 +49,10 @@ import { UserList } from '@/features/User/components/UserList'
 import { UserAddForm } from '@/features/User/components/UserAddForm'
 import { UserAlterRolesLoader } from '@/features/User/components/UserAlterRolesLoader'
 import { MovementList } from '@/features/Movement/components/MovementList'
+import { DetailsProductPage } from '@/features/Product/views/product/DetailsProductPage'
+import { ListProductPage } from '@/features/Product/views/product/ListProductPage'
+import { NewProductPage } from '@/features/Product/views/product/NewProductPage'
+import { LoaderProductPage } from '@/features/Product/views/product/LoaderProductPage'
 
 const productItems: MenuItem[] = [
     {
@@ -151,10 +151,10 @@ export const GeneralRouter = () => {
                             </NavbarContainer>
                         }>
                             {/* RELACIONADO A PRODUCTS */}
-                            <Route index element={<ProductList />} />
-                            <Route path=":id" element={<ProductDetails />} />
-                            <Route path="new" element={<ProductAddForm />} />
-                            <Route path="edit/:id" element={<ProductEditLoader />} />
+                            <Route index element={<ListProductPage />} />
+                            <Route path=":id" element={<DetailsProductPage />} />
+                            <Route path="new" element={<NewProductPage />} />
+                            <Route path="edit/:id" element={<LoaderProductPage />} />
 
                             {/* RELACIONADO A MODELS */}
                             <Route path="models" element={<ModelList />} />

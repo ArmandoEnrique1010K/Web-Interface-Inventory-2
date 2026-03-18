@@ -7,7 +7,7 @@ import { ListElementsContainer } from "@/views/ListElementsContainer"
 import { FiltersFormContainer } from "@/components/FiltersFormContainer"
 import { InputTextFilter } from "@/ui/filters/InputTextFilter"
 import { SearchCounter } from "@/components/SearchCounter"
-import { TableHeaderContainer } from "@/components/TableHeaderContainer"
+import { TableContainer } from "@/components/TableContainer"
 import { TableRowContainer } from "@/components/TableRowContainer"
 import type { MovementItem } from "../types"
 import { BaseTableCell } from "@/components/BaseTableCell"
@@ -152,7 +152,7 @@ export const MovementList = () => {
                 data && <SearchCounter totalElements={data.totalElements} page={data.page} size={data.size} last={data.last} />
             }
 
-            <TableHeaderContainer
+            <TableContainer
                 headers={['ID', 'Movimiento', 'Fecha', 'Cantidad', 'Usuario', 'ID de modelo']}
                 isError={isError}
                 isEmpty={!content?.length}
@@ -178,7 +178,7 @@ export const MovementList = () => {
                         </TableRowContainer>
                     })
                 }
-            </TableHeaderContainer>
+            </TableContainer>
 
             {
                 (content?.length && data) ? (

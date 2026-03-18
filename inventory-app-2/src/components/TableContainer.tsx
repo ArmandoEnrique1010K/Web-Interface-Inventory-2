@@ -7,13 +7,13 @@ type Props = {
     title?: string,
     headers: string[];
     isError: boolean
-    children: React.ReactNode;
     isEmpty: boolean;
     itemsCounter?: React.ReactNode;
     paginator?: React.ReactNode;
+    children: React.ReactNode;
 }
 
-export const TableHeaderContainer = ({ title, itemsCounter, headers, children, isError, isEmpty, paginator }: Props) => {
+export const TableContainer = ({ title, itemsCounter, headers, isError, isEmpty, paginator, children }: Props) => {
 
     // if (isError) {
     //     return <TextMessage text="Ha ocurrido un error" align="center" color="red" />
@@ -60,6 +60,7 @@ export const TableHeaderContainer = ({ title, itemsCounter, headers, children, i
                             <tbody>
                                 {children}
                             </tbody>
+
                         </table>
 
                     </div>

@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import type { TypeItem } from '../../types'
 import { ListElementsContainer } from '@/views/ListElementsContainer'
-import { TableHeaderContainer } from '@/components/TableHeaderContainer'
+import { TableContainer } from '@/components/TableContainer'
 import { TableRowContainer } from '@/components/TableRowContainer'
 import { BaseTableCell } from '@/components/BaseTableCell'
 import { listAllTypes } from '../../api/TypeAPI'
@@ -27,12 +27,11 @@ export const TypeList = () => {
                 />
             }
             dataContainer={
-                <TableHeaderContainer
+                <TableContainer
                     headers={['ID', 'Nombre', 'Editar']}
                     isError={isError}
                     isEmpty={!data?.length}
-                >
-                    {
+                    tableRows={
                         data?.map((type: TypeItem) => (
                             <TableRowContainer key={type.id}>
                                 <BaseTableCell data={type.id} />
@@ -49,7 +48,7 @@ export const TypeList = () => {
                         ))
 
                     }
-                </TableHeaderContainer>
+                />
             }
         />
     )

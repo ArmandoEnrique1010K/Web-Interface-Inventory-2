@@ -16,7 +16,7 @@ import { ModelChangeStatus } from "../model/ModelChangeStatus"
 import { ElementContainer } from "@/views/ElementContainer"
 import { RightPanelContainer } from "@/components/RightPanelContainer"
 import { LeftPanelContainer } from "@/components/LeftPanelContainer"
-import { TableHeaderContainer } from "@/components/TableHeaderContainer"
+import { TableContainer } from "@/components/TableContainer"
 import { TableRowContainer } from "@/components/TableRowContainer"
 import { BaseTableCell } from "@/components/BaseTableCell"
 import { SummaryPanelContainer } from "@/components/SummaryPanelContainer"
@@ -119,36 +119,39 @@ export const ProductDetails = () => {
                 </>
             }
             leftPanelContainer={
-                <LeftPanelContainer subtitle={"Características del producto"}
-                    details={[
-                        {
-                            name: 'ID',
-                            value: `${productData.id}`
-                        },
-                        {
-                            name: 'Categoria',
-                            value: `${productData.categoryName}`
-                        },
-                        {
-                            name: 'Tipo',
-                            value: `${productData.typeName}`
-                        },
-                        {
-                            name: 'Medidas',
-                            value: `${generateSizes(productData)}`
-                        }
-                    ]}
-                    image={{
-                        url: `${selectedModel.imageUrl}`,
-                        name: `${selectedModel.name}`
-                    }}
-                    legend={`${productData.name}, ${selectedModel.name}`}
-                />
+                <LeftPanelContainer subtitle="Características del producto">
+
+                    <LeftPanelContainer.DetailsGroup>
+                        <LeftPanelContainer.Detail label="ID">
+                            {productData.id}
+                        </LeftPanelContainer.Detail>
+
+                        <LeftPanelContainer.Detail label="Categoria">
+                            {productData.categoryName}
+                        </LeftPanelContainer.Detail>
+
+                        <LeftPanelContainer.Detail label="Tipo">
+                            {productData.typeName}
+                        </LeftPanelContainer.Detail>
+
+                        <LeftPanelContainer.Detail label="Medidas">
+                            {generateSizes(productData)}
+                        </LeftPanelContainer.Detail>
+                    </LeftPanelContainer.DetailsGroup>
+
+                    <LeftPanelContainer.Image
+                        url={selectedModel.imageUrl}
+                        name={selectedModel.name}
+                        legend={`${productData.name}, ${selectedModel.name}`}
+                    />
+
+                </LeftPanelContainer>
             }
             rightPanelContainer={
                 <RightPanelContainer
-                    subtitle={"Modelo seleccionado"}
-                    selectButtons={
+                    subtitle={"Modelo seleccionado"}>
+
+                    <RightPanelContainer.Actions>
                         <>
                             <Button
                                 text="◄"
@@ -176,45 +179,45 @@ export const ProductDetails = () => {
                                 disabled={!hasNext}
                             />
                         </>
-                    }
-                    details={[
-                        {
-                            name: 'ID',
-                            value: `${selectedModel.id}`,
-                        },
-                        {
-                            name: 'Nombre',
-                            value: `${selectedModel.name}`
-                        },
-                        {
-                            name: 'Fecha de entrada',
-                            value: `${selectedModel.entryDate}`
-                        },
-                        {
-                            condition: selectedModel.caducityDate !== null, // TODO: Verificar porque siempre es null
-                            name: 'Fecha de caducidad',
-                            value: `${selectedModel.caducityDate}`
-                        },
-                        {
-                            name: 'Cantidad diponible',
-                            value: `${selectedModel.totalQuantityAvailable}`
-                        },
-                        {
-                            name: 'Cantidad recibida',
-                            value: `${selectedModel.totalQuantityReceived}`
-                        },
-                        {
-                            name: 'Cantidad entregada',
-                            value: `${selectedModel.totalQuantityDelivered}`
-                        },
-                        {
-                            name: 'Estado del modelo',
-                            value: <ModelChangeStatus modelId={selectedModel.id.toString()} productId={productId!} value={selectedModel.status ? 'Activo' : 'Inactivo'} size={"small"} />,
-                            isButton: true
-                        },
-                        {
-                            name: 'Codigo QR',
-                            value: <>
+                    </RightPanelContainer.Actions>
+
+                    <RightPanelContainer.DetailsGrid>
+                        <RightPanelContainer.Detail label="ID">
+                            {selectedModel.id}
+                        </RightPanelContainer.Detail>
+                        <RightPanelContainer.Detail label="Nombre">
+                            {selectedModel.name}
+                        </RightPanelContainer.Detail>
+                        <RightPanelContainer.Detail label="Fecha de entrada">
+                            {selectedModel.entryDate}
+                        </RightPanelContainer.Detail>
+
+                        {selectedModel.caducityDate && (
+                            <RightPanelContainer.Detail label="Fecha de caducidad">
+                                {selectedModel.caducityDate}
+                            </RightPanelContainer.Detail>
+                        )}
+
+                        <RightPanelContainer.Detail label="Cantidad diponible">
+                            {selectedModel.totalQuantityAvailable}
+                        </RightPanelContainer.Detail>
+                        <RightPanelContainer.Detail label="Cantidad recibida">
+                            {selectedModel.totalQuantityReceived}
+                        </RightPanelContainer.Detail>
+                        <RightPanelContainer.Detail label="Cantidad entregada">
+                            {selectedModel.totalQuantityDelivered}
+                        </RightPanelContainer.Detail>
+
+                        <RightPanelContainer.Detail label="Estado del modelo" isButton>
+                            <ModelChangeStatus
+                                modelId={selectedModel.id.toString()}
+                                productId={productId!}
+                                value={selectedModel.status ? 'Activo' : 'Inactivo'}
+                                size={"small"} />
+                        </RightPanelContainer.Detail>
+
+                        <RightPanelContainer.Detail label="Codigo QR">
+                            <>
                                 <Button
                                     text="Obtener QR"
                                     type="button"
@@ -230,39 +233,42 @@ export const ProductDetails = () => {
                                     title={`Código QR del producto ${productData?.name}, ${selectedModel?.name}`}
                                 />
                             </>
-                        },
-                        {
-                            condition: selectedModel.status,
-                            name: 'Editar modelo',
-                            value: <>
+                        </RightPanelContainer.Detail>
+
+                        {selectedModel.status && (
+                            <RightPanelContainer.Detail label="Editar modelo">
                                 <ButtonLink
                                     size="small"
                                     text="Editar"
                                     to={`/products/${productId}/models/edit/${selectedModel.id}`}
                                     color="blue"
                                 />
-                            </>
-                        }
+                            </RightPanelContainer.Detail>
+                        )}
+                    </RightPanelContainer.DetailsGrid>
 
-                    ]}
-                />
+                </RightPanelContainer>
             }
             summaryPanelContainer={
-                <SummaryPanelContainer
-                    dataContainer={
-                        <TableHeaderContainer title="Resumen de modelos" headers={['ID', 'Nombre', 'Fecha de entrada', 'Total disponible']} isError={isModelsError} isEmpty={!modelsData?.length}>
-                            {modelsData?.map((model: ModelItem) => (
-                                <TableRowContainer key={model.id}>
-                                    <BaseTableCell data={model.id} />
-                                    <BaseTableCell data={model.name} />
-                                    <BaseTableCell data={model.entryDate} />
-                                    <BaseTableCell data={model.totalQuantityAvailable} />
-                                </TableRowContainer>
-                            ))}
-                        </TableHeaderContainer>
+                <SummaryPanelContainer>
+                    <TableContainer
+                        title="Resumen de modelos"
+                        headers={['ID', 'Nombre', 'Fecha de entrada', 'Total disponible']}
+                        isError={isModelsError}
+                        isEmpty={!modelsData?.length}
+                    >
+                        {modelsData?.map((model: ModelItem) => (
+                            <TableRowContainer key={model.id}>
+                                <BaseTableCell data={model.id} />
+                                <BaseTableCell data={model.name} />
+                                <BaseTableCell data={model.entryDate} />
+                                <BaseTableCell data={model.totalQuantityAvailable} />
+                            </TableRowContainer>
+                        ))}
 
-                    }
-                />
+
+                    </TableContainer>
+                </SummaryPanelContainer>
             }
         />
 
@@ -421,7 +427,7 @@ export const ProductDetails = () => {
 
 
         //             <h2 className="text-3xl font-bold pt-8 pb-2">Tabla resumen de modelos</h2>
-        //             <TableHeaderContainer headers={['ID', 'Nombre', 'Fecha de entrada', 'Total disponible']} isError={isModelsError} isEmpty={!modelsData?.length}>
+        //             <TableContainer headers={['ID', 'Nombre', 'Fecha de entrada', 'Total disponible']} isError={isModelsError} isEmpty={!modelsData?.length}>
         //                 {modelsData?.map((model: ModelItem) => (
         //                     <TableRowContainer key={model.id}>
         //                         <BaseTableCell data={model.id} />
@@ -430,7 +436,7 @@ export const ProductDetails = () => {
         //                         <BaseTableCell data={model.totalQuantityAvailable} />
         //                     </TableRowContainer>
         //                 ))}
-        //             </TableHeaderContainer>
+        //             </TableContainer>
         //         </>
         //     }>
 

@@ -13,7 +13,7 @@ import { FiltersFormContainer } from "@/components/FiltersFormContainer"
 import { InputTextFilter } from "@/ui/filters/InputTextFilter"
 import { SelectOptionFilter } from "@/ui/filters/SelectOptionFilter"
 import { SearchCounter } from "@/components/SearchCounter"
-import { TableHeaderContainer } from "@/components/TableHeaderContainer"
+import { TableContainer } from "@/components/TableContainer"
 import { TableRowContainer } from "@/components/TableRowContainer"
 import { BaseTableCell } from "@/components/BaseTableCell"
 import { Paginator } from "@/components/Paginator"
@@ -178,7 +178,7 @@ export const LocationList = () => {
                 data && <SearchCounter totalElements={data.totalElements} page={data.page} size={data.size} last={data.last} />
             }
 
-            <TableHeaderContainer
+            <TableContainer
                 headers={['ID', 'Nombre', 'Ubicación', 'Subregión', 'Estado', 'Editar']}
                 isError={isError}
                 isEmpty={!content?.length}
@@ -216,7 +216,7 @@ export const LocationList = () => {
                         </TableRowContainer>
                     })
                 }
-            </TableHeaderContainer>
+            </TableContainer>
 
             {
                 (content?.length && data) ? (

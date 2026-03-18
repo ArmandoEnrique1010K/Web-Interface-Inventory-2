@@ -5,7 +5,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateUserRoles } from "../api/UserAPI";
 import type { GeneralError } from "@/types/index";
 import { toast } from "sonner";
-import { ListElementsContainer } from "@/views/ListElementsContainer";
 import { BaseForm } from "@/components/BaseForm";
 import { Button } from "@/ui/Button";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
@@ -68,55 +67,55 @@ export const UserAlterRolesForm = ({ data, userId }: Props) => {
 
 
     return (
-        <ListElementsContainer title={`Alterar roles del usuario ${userId}`}>
-            <BaseForm
-                onSubmit={handleSubmit(handleForm)}
-                buttons={
-                    <>
-                        <Button icon={<ArrowUpCircleIcon />} size="large" text="Alterar roles" type="submit" color="green" />
-                        <ButtonLink icon={<XCircleIcon />} size="large" text="Volver" color="gray" to="/users" />
-                    </>
-                }
-                inputs={
-                    <>
-                        <div>Tenga cuidado al alterar los roles de un usuario, recuerde que lo altera bajo su propia responsabilidad. Por defecto los usuarios siempre van a tener el rol de 'Usuario'</div>
-                        <br></br>
-                        <label className="text-md font-bold">Roles</label>
+        <BaseForm
+            title={`Alterar roles del usuario #${userId}`}
+            onSubmit={handleSubmit(handleForm)}
+            buttons={
+                <>
+                    <Button icon={<ArrowUpCircleIcon />} size="large" text="Alterar roles" type="submit" color="green" />
+                    <ButtonLink icon={<XCircleIcon />} size="large" text="Volver" color="gray" to="/users" />
+                </>
+            }
+            helpText={
+                "Tenga cuidado al alterar los roles de un usuario, podria acceder a información confidencial; recuerde que lo altera bajo su propia responsabilidad. Por defecto los usuarios siempre van a tener el rol de 'Usuario'"
+            }
+            inputsFields={
+                <>
+                    <label className="text-md font-bold">Roles</label>
 
-                        {/* Campos de tipo checkbox para los roles */}
-                        <div className="flex flex-col gap-3 pt-2">
-                            {/* TODO: SEPARAR ESTE CAMPO EN UN COMPONENTE APARTE */}
-                            <label className="flex items-center gap-2">
-                                <input
-                                    type="checkbox"
-                                    {...register("operator")}
-                                    className="w-4 h-4"
-                                />
-                                Operador
-                            </label>
+                    {/* Campos de tipo checkbox para los roles */}
+                    <div className="flex flex-col gap-3 pt-2">
+                        {/* TODO: SEPARAR ESTE CAMPO EN UN COMPONENTE APARTE */}
+                        <label className="flex items-center gap-2">
+                            <input
+                                type="checkbox"
+                                {...register("operator")}
+                                className="w-4 h-4"
+                            />
+                            Operador
+                        </label>
 
-                            <label className="flex items-center gap-2">
-                                <input
-                                    type="checkbox"
-                                    {...register("secretary")}
-                                    className="w-4 h-4"
-                                />
-                                Secretario
-                            </label>
+                        <label className="flex items-center gap-2">
+                            <input
+                                type="checkbox"
+                                {...register("secretary")}
+                                className="w-4 h-4"
+                            />
+                            Secretario
+                        </label>
 
-                            <label className="flex items-center gap-2">
-                                <input
-                                    type="checkbox"
-                                    {...register("admin")}
-                                    className="w-4 h-4"
-                                />
-                                Administrador
-                            </label>
+                        <label className="flex items-center gap-2">
+                            <input
+                                type="checkbox"
+                                {...register("admin")}
+                                className="w-4 h-4"
+                            />
+                            Administrador
+                        </label>
 
-                        </div>
-                    </>
-                }
-            />
-        </ListElementsContainer>
+                    </div>
+                </>
+            }
+        />
     )
 }

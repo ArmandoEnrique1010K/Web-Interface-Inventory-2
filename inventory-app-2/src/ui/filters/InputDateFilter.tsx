@@ -13,7 +13,7 @@ registerLocale('spanish', es)
 export const InputDateFilter = ({ name, label, value, onChange }: Props) => {
     return (
         <div className="flex flex-col w-full space-y-1">
-            <label className="text-sm font-medium text-slate-700" htmlFor={name}>{label}</label>
+            <label className="text-sm font-medium text-slate-700" htmlFor={name}>{label}:</label>
 
             <DatePicker
                 id={name}

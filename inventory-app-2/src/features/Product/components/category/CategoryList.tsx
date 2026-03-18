@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { listAllCategories } from '../../api/CategoryAPI'
 import type { CategoryItem } from '../../types'
 import { ListElementsContainer } from '@/views/ListElementsContainer'
-import { TableHeaderContainer } from '@/components/TableHeaderContainer'
+import { TableContainer } from '@/components/TableContainer'
 import { TableRowContainer } from '@/components/TableRowContainer'
 import { BaseTableCell } from '@/components/BaseTableCell'
 import { ButtonLink } from '@/ui/ButtonLink'
@@ -28,7 +28,7 @@ export const CategoryList = () => {
             }
 
             dataContainer={
-                <TableHeaderContainer
+                <TableContainer
                     headers={['ID', 'Nombre', 'Editar']}
                     isError={isError}
                     isEmpty={!data?.length}
@@ -50,7 +50,7 @@ export const CategoryList = () => {
                         ))
 
                     }
-                </TableHeaderContainer>
+                </TableContainer>
             }
         />
     )

@@ -22,7 +22,7 @@ export const InputPassword = ({ id, label, placeholder, errorMessage, functionEn
         <div className={`flex flex-col w-full space-y-1`}>
             <label className="text-sm font-medium text-slate-700" htmlFor={id}>{label}:</label>
 
-            <div className="flex flex-row gap-2">
+            <div className="flex flex-row gap-2 ">
 
                 <input
                     className="outline-none focus:outline-none border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full"

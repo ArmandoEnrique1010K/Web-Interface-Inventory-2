@@ -3,7 +3,7 @@ import { listAllRegions } from '../../api/RegionAPI'
 import { ListElementsContainer } from '@/views/ListElementsContainer'
 import { ButtonLink } from '@/ui/ButtonLink'
 import { PlusCircleIcon } from '@heroicons/react/24/outline'
-import { TableHeaderContainer } from '@/components/TableHeaderContainer'
+import { TableContainer } from '@/components/TableContainer'
 import type { RegionItem } from '../../types'
 import { TableRowContainer } from '@/components/TableRowContainer'
 import { BaseTableCell } from '@/components/BaseTableCell'
@@ -27,7 +27,7 @@ export const RegionList = () => {
                 />
             }>
 
-            <TableHeaderContainer
+            <TableContainer
                 headers={['ID', 'Nombre', 'Editar']}
                 isError={isError}
                 isEmpty={!data?.length}
@@ -49,7 +49,7 @@ export const RegionList = () => {
                     ))
 
                 }
-            </TableHeaderContainer>
+            </TableContainer>
         </ListElementsContainer>
     )
 }

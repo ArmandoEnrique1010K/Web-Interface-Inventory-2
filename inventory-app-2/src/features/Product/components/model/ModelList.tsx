@@ -1,6 +1,6 @@
 import { ListElementsContainer } from '@/views/ListElementsContainer'
 import { useQuery } from '@tanstack/react-query'
-import { TableHeaderContainer } from '@/components/TableHeaderContainer'
+import { TableContainer } from '@/components/TableContainer'
 import type { CategoryItem, ModelItem, TypeItem } from '../../types'
 import { TableRowContainer } from '@/components/TableRowContainer'
 import { BaseTableCell } from '@/components/BaseTableCell'
@@ -140,7 +140,7 @@ export const ModelList = () => {
                     <div>
                         <InputTextFilter
                             name='keyword'
-                            label='Nombre del modelo o producto:'
+                            label='Nombre del modelo o producto'
                             placeholder='Buscar modelos y/o productos por nombre'
                             type='text'
                             value={form.keyword}
@@ -152,7 +152,7 @@ export const ModelList = () => {
                     <div className={`flex ${isExtraSmallScreen ? 'flex-col gap-4' : 'flex-row gap-4'}`}>
                         <InputTextFilter
                             name='minStock'
-                            label='Stock mínimo:'
+                            label='Stock mínimo'
                             placeholder='Stock mínimo'
                             type='number'
                             value={form.minStock.toString()}
@@ -163,7 +163,7 @@ export const ModelList = () => {
 
                         <InputTextFilter
                             name='maxStock'
-                            label='Stock máximo:'
+                            label='Stock máximo'
                             placeholder='Stock máximo'
                             type='number'
                             value={form.maxStock.toString()}
@@ -179,7 +179,7 @@ export const ModelList = () => {
 
                         <InputDateFilter
                             name='minEntryDate'
-                            label='Fecha minima de entrada:'
+                            label='Fecha minima de entrada'
                             value={form.minEntryDate}
                             onChange={(e) =>
                                 setForm(prev => ({ ...prev, minEntryDate: e.target.value }))
@@ -187,7 +187,7 @@ export const ModelList = () => {
                         />
                         <InputDateFilter
                             name='maxEntryDate'
-                            label='Fecha máxima de entrada:'
+                            label='Fecha máxima de entrada'
                             value={form.maxEntryDate}
                             onChange={(e) =>
                                 setForm(prev => ({ ...prev, maxEntryDate: e.target.value }))
@@ -200,7 +200,7 @@ export const ModelList = () => {
                     <div className={`flex ${isSmallScreen ? 'flex-col gap-4' : 'flex-row gap-4'}`}>
                         <SelectOptionFilter
                             name='categoryId'
-                            label='Categoría:'
+                            label='Categoría'
                             options={categories}
                             onChange={(e) =>
                                 setForm(prev => ({ ...prev, categoryId: e.target.value }))
@@ -210,7 +210,7 @@ export const ModelList = () => {
                         />
                         <SelectOptionFilter
                             name='typeId'
-                            label='Tipo:'
+                            label='Tipo'
                             options={types}
                             onChange={(e) =>
                                 setForm(prev => ({ ...prev, typeId: e.target.value }))
@@ -220,7 +220,7 @@ export const ModelList = () => {
                         />
                         <SelectOptionFilter
                             name='status'
-                            label='Estado:'
+                            label='Estado'
                             options={statusOptions}
                             onChange={(e) =>
                                 setForm(prev => ({ ...prev, status: e.target.value }))
@@ -233,7 +233,7 @@ export const ModelList = () => {
                 </FiltersFormContainer>
             }
             dataContainer={
-                <TableHeaderContainer
+                <TableContainer
                     headers={['ID', 'Nombre', 'Cantidad disponible', 'Fechas', 'Estado', 'Editar']}
                     isError={isError}
                     isEmpty={!content?.length}
@@ -313,7 +313,7 @@ export const ModelList = () => {
                             </TableRowContainer>
                         })
                     }
-                </TableHeaderContainer>
+                </TableContainer>
             }
         />
     )

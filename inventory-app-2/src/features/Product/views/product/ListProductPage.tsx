@@ -1,15 +1,13 @@
-import { ListElementsContainer } from '@/views/ListElementsContainer'
 import { useQuery } from '@tanstack/react-query'
 import { listAllProducts } from '../../api/ProductAPI'
-import { TableHeaderContainer } from '@/components/TableHeaderContainer'
+import { TableContainer } from '@/components/TableContainer'
 import type { CategoryItem, ProductItem, TypeItem } from '../../types'
 import { TableRowContainer } from '@/components/TableRowContainer'
 import { BaseTableCell } from '@/components/BaseTableCell'
 import { listAllCategories } from '../../api/CategoryAPI'
 import { listAllTypes } from '../../api/TypeAPI'
-import { ProductChangeStatus } from './ProductChangeStatus'
 import { Link, useSearchParams } from 'react-router-dom'
-import { useEffectEvent, useState } from 'react'
+import { useState } from 'react'
 import { Paginator } from '../../../../components/Paginator'
 import { useMediaQuery } from 'react-responsive'
 import { SearchCounter } from '@/components/SearchCounter'
@@ -19,8 +17,10 @@ import { generateSizes } from '@/utils/generateSizes'
 import { InputTextFilter } from '@/ui/filters/InputTextFilter'
 import { SelectOptionFilter } from '@/ui/filters/SelectOptionFilter'
 import { PlusCircleIcon } from '@heroicons/react/24/outline'
+import { EntityListLayout } from '@/layout/entity/EntityListLayout'
+import { ProductChangeStatus } from '../../components/product/ProductChangeStatus'
 
-export const ProductList = () => {
+export const ListProductPage = () => {
     const [searchParams, setSearchParams] = useSearchParams()
     const page = Number(searchParams.get('page') ?? 0)
     const name = searchParams.get('name') ?? ''
@@ -40,18 +40,19 @@ export const ProductList = () => {
         status: status === undefined ? '' : String(status),
     })
 
+    // No se recomienda usar un hook useEffectEvent ni useEffect en React 19
+    // Problema: useEffectEvent NO reemplaza a useEffect para sincronizar estado.
+    // Estás copiando estado derivado → anti-pattern
 
-    // En React 19 se utiliza el hook useEffectEvent en lugar del clasico useEffect
-
-    useEffectEvent(() => {
-        setForm({
-            page: page,
-            name: name,
-            categoryId: categoryId ?? '',
-            typeId: typeId ?? '',
-            status: status === undefined ? '' : String(status),
-        })
-    })
+    // useEffectEvent(() => {
+    //     setForm({
+    //         page: page,
+    //         name: name,
+    //         categoryId: categoryId ?? '',
+    //         typeId: typeId ?? '',
+    //         status: status === undefined ? '' : String(status),
+    //     })
+    // })
 
 
     const { data, isError } = useQuery({
@@ -109,18 +110,20 @@ export const ProductList = () => {
     const isSmallScreen = useMediaQuery({ query: '(max-width: 920px)' })
 
     return (
-        <ListElementsContainer
-            title="Productos"
-            buttonsContainer={
-                <ButtonLink
-                    icon={<PlusCircleIcon />}
-                    size="large"
-                    text="Nuevo producto"
-                    to="/products/new"
-                    color="blue"
-                />
-            }
-            searchParamsContainer={
+        <EntityListLayout>
+            <EntityListLayout.Header title='Productos'
+                actions={
+                    <ButtonLink
+                        icon={<PlusCircleIcon />}
+                        size="large"
+                        text="Nuevo producto"
+                        to="/products/new"
+                        color="blue"
+                    />
+
+                }></EntityListLayout.Header>
+            <EntityListLayout.Content>
+
                 <FiltersFormContainer onSubmit={
                     (e) => {
                         e.preventDefault()
@@ -137,7 +140,7 @@ export const ProductList = () => {
                 }>
                     <InputTextFilter
                         name='name'
-                        label='Nombre del producto:'
+                        label='Nombre del producto'
                         placeholder='Buscar productos por nombre'
                         type='text'
                         value={form.name}
@@ -149,7 +152,7 @@ export const ProductList = () => {
                     <div className={`flex ${isSmallScreen ? 'flex-col space-y-4' : 'flex-row space-x-4'}`}>
                         <SelectOptionFilter
                             name='categoryId'
-                            label='Categoría:'
+                            label='Categoría'
                             options={categories}
                             onChange={(e) =>
                                 setForm(prev => ({ ...prev, categoryId: e.target.value }))
@@ -159,7 +162,7 @@ export const ProductList = () => {
                         />
                         <SelectOptionFilter
                             name='typeId'
-                            label='Tipo:'
+                            label='Tipo'
                             options={types}
                             onChange={(e) =>
                                 setForm(prev => ({ ...prev, typeId: e.target.value }))
@@ -169,7 +172,7 @@ export const ProductList = () => {
                         />
                         <SelectOptionFilter
                             name='status'
-                            label='Estado:'
+                            label='Estado'
                             options={statusOptions}
                             onChange={(e) =>
                                 setForm(prev => ({ ...prev, status: e.target.value }))
@@ -180,10 +183,9 @@ export const ProductList = () => {
                     </div>
 
                 </FiltersFormContainer>
-            }
 
-            dataContainer={
-                <TableHeaderContainer
+
+                <TableContainer
                     headers={['ID', 'Nombre', 'Característica', 'Medidas', 'Estado', 'Editar']}
                     isError={isError}
                     isEmpty={!content?.length}
@@ -216,11 +218,7 @@ export const ProductList = () => {
                                 }}
                             />
                         ) : null
-
-                    }
-
-                >
-
+                    }>
                     {
                         content?.map((product: ProductItem) => {
                             return <TableRowContainer key={product.id}>
@@ -261,11 +259,16 @@ export const ProductList = () => {
                                 } />
                             </TableRowContainer>
                         })
-                    }
-                </TableHeaderContainer>
 
-            }
-        />
+                    }
+
+                </TableContainer>
+
+
+
+
+            </EntityListLayout.Content>
+        </EntityListLayout>
     )
 }
 

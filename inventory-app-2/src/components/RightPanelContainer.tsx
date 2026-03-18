@@ -2,38 +2,62 @@ import { Subtitle } from './Subtitle'
 
 type Props = {
     subtitle: string
-    selectButtons?: React.ReactNode,
-    details: {
-        name: string,
-        value: string | React.ReactNode,
-        condition?: React.ReactNode // Condicion que debe ser verdadera para mostrar el detalle
-        isButton?: boolean // Aplica estilos si contiene un boton
-    }[]
+    // selectButtons?: React.ReactNode,
+    // details: {
+    //     name: string,
+    //     value: string | React.ReactNode,
+    //     condition?: React.ReactNode // Condicion que debe ser verdadera para mostrar el detalle
+    //     isButton?: boolean // Aplica estilos si contiene un boton
+    // }[]
+
+    children?: React.ReactNode
+
 }
 
-export const RightPanelContainer = ({ subtitle, selectButtons, details }: Props) => {
+export const RightPanelContainer = ({ subtitle, children }: Props) => {
     return (
-        <>
+        <div className="flex flex-col gap-4">
             <Subtitle>{subtitle}</Subtitle>
-            {
-                selectButtons && <>
-                    <div className="flex items-center justify-center gap-3">
-                        {selectButtons}
-                    </div>
-                </>
-            }
-            <div className="grid grid-cols-1 gap-y-2 text-sm mt-2">
-                {
-                    // Solamente no se mostrara el detalle si es falsa la condicion (no cuenta si no se ha definido la condicion)
-                    details.map(d => (
-                        (d.condition === undefined || d.condition === true) &&
-                        <div className='grid grid-cols-2 items-center' key={d.name}>
-                            <div key={d.name} className="font-semibold">{d.name}:</div>
-                            <div className={`${d.isButton ? 'flex justify-start' : ''}`}>{d.value}</div>
-                        </div>
-                    ))
-                }
-            </div>
-        </>
+            {children}
+        </div>
     )
 }
+
+type ActionsProps = {
+    children: React.ReactNode
+}
+
+RightPanelContainer.Actions = ({ children }: ActionsProps) => {
+    return (
+        <div className="flex items-center justify-center gap-3">
+            {children}
+        </div>
+
+    )
+}
+
+
+RightPanelContainer.DetailsGrid = ({ children }: { children: React.ReactNode }) => {
+    return (
+        <div className="grid grid-cols-1 gap-y-2 text-sm mt-2">
+            {children}
+        </div>
+    )
+}
+type DetailProps = {
+    label: string
+    children: React.ReactNode
+    isButton?: boolean
+}
+
+RightPanelContainer.Detail = ({ label, children, isButton }: DetailProps) => {
+    return (
+        <div className="grid grid-cols-2 items-center">
+            <div className="font-semibold">{label}:</div>
+            <div className={isButton ? 'flex justify-start' : ''}>
+                {children}
+            </div>
+        </div>
+    )
+}
+
