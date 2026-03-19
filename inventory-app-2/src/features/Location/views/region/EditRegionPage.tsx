@@ -5,12 +5,11 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { updateRegion } from '../../api/RegionAPI';
 import type { GeneralError } from '@/types/index';
 import { toast } from 'sonner';
-import { BaseForm } from '@/components/BaseForm';
-import { ListElementsContainer } from '@/views/ListElementsContainer';
 import { Button } from '@/ui/Button';
 import { ButtonLink } from '@/ui/ButtonLink';
 import { InputText } from '@/ui/fields/InputText';
 import { ArrowUpCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import { EntityFormLayout } from '@/layout/entity/EntityFormLayout';
 
 type Props = {
     data: RegionForm;
@@ -18,7 +17,7 @@ type Props = {
 }
 
 
-export const RegionEditForm = ({ data, regionId }: Props) => {
+export const EditRegionPage = ({ data, regionId }: Props) => {
     const navigate = useNavigate();
 
     const { register, handleSubmit, setError, formState: { errors } } = useForm<RegionForm>({
@@ -67,16 +66,10 @@ export const RegionEditForm = ({ data, regionId }: Props) => {
     }
 
     return (
-        <ListElementsContainer title={`Editar región ${regionId}`}>
-            <BaseForm
-                onSubmit={handleSubmit(handleForm)}
-                buttons={
-                    <>
-                        <Button icon={<ArrowUpCircleIcon />} size="large" text="Editar región" type="submit" color="green" />
-                        <ButtonLink icon={<XCircleIcon />} size="large" text="Volver" color="gray" to="/locations/regions" />
-                    </>
-                }
-                inputs={
+        <EntityFormLayout>
+            <EntityFormLayout.Title>{`Editar región ${regionId}`}</EntityFormLayout.Title>
+            <EntityFormLayout.Form onSubmit={handleSubmit(handleForm)}>
+                <EntityFormLayout.Inputs>
                     <InputText
                         id="name"
                         label="Nombre"
@@ -85,8 +78,13 @@ export const RegionEditForm = ({ data, regionId }: Props) => {
                         errorMessage={errors.name}
                         functionEnabled={register('name')} />
 
-                }
-            />
-        </ListElementsContainer>
+                </EntityFormLayout.Inputs>
+                <EntityFormLayout.Actions>
+                    <Button icon={<ArrowUpCircleIcon />} size="large" text="Editar región" type="submit" color="green" />
+                    <ButtonLink icon={<XCircleIcon />} size="large" text="Volver" color="gray" to="/locations/regions" />
+
+                </EntityFormLayout.Actions>
+            </EntityFormLayout.Form>
+        </EntityFormLayout>
     )
 }

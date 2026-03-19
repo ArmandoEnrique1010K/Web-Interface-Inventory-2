@@ -29,10 +29,9 @@ import { StockLotDecreaseForm } from '../features/StockLot/components/stocklot/S
 import { StockLotRecoveryForm } from '@/features/StockLot/components/stocklot/StockLotRecoveryForm'
 import { StockLotTransferStocksLoader } from '@/features/StockLot/components/stocklot/StockLotTransferStocksLoader'
 import { StockLotDetails } from '@/features/StockLot/components/stocklot/StockLotDetails'
-import { RegionList } from '@/features/Location/components/region/RegionList'
-import { RegionAddForm } from '@/features/Location/components/region/RegionAddForm'
-import { RegionEditLoader } from '@/features/Location/components/region/RegionEditLoader'
-import { SubregionList } from '@/features/Location/components/subregion/SubregionList'
+import { ListRegionPage } from '@/features/Location/views/region/ListRegionPage'
+import { NewRegionPage } from '@/features/Location/views/region/NewRegionPage'
+import { LoaderRegionPage } from '@/features/Location/views/region/LoaderRegionPage'
 import { SubregionAddForm } from '@/features/Location/components/subregion/SubregionAddForm'
 import { SubregionEditLoader } from '@/features/Location/components/subregion/SubregionEditLoader'
 import { LocationList } from '@/features/Location/components/location/LocationList'
@@ -51,6 +50,7 @@ import { NewTypePage } from '@/features/Product/views/type/NewTypePage'
 import { LoaderTypePage } from '@/features/Product/views/type/LoaderTypePage'
 import { LoaderCategoryPage } from '@/features/Product/views/category/LoaderCategoryPage'
 import { LoaderModelPage } from '@/features/Product/views/model/LoaderModelPage';
+import { SubListRegionPage } from '@/features/Location/components/subregion/SubregionList'
 
 const productItems: MenuItem[] = [
     {
@@ -202,11 +202,11 @@ export const GeneralRouter = () => {
                             <Route path="new" element={<LocationAddForm />} />
                             <Route path="edit/:id" element={<LocationEditLoader />} />
 
-                            <Route path="regions" element={<RegionList />} />
-                            <Route path="regions/new" element={<RegionAddForm />} />
-                            <Route path="regions/edit/:id" element={<RegionEditLoader />} />
+                            <Route path="regions" element={<ListRegionPage />} />
+                            <Route path="regions/new" element={<NewRegionPage />} />
+                            <Route path="regions/edit/:id" element={<LoaderRegionPage />} />
 
-                            <Route path="subregions" element={<SubregionList />} />
+                            <Route path="subregions" element={<SubListRegionPage />} />
                             <Route path="subregions/add" element={<SubregionAddForm />} />
                             <Route path="subregions/edit/:id" element={<SubregionEditLoader />} />
                         </Route>

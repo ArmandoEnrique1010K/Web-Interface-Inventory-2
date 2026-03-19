@@ -12,7 +12,7 @@ import { listAllRegions } from '../../api/RegionAPI'
 import { Button } from '@/ui/Button'
 import { useEffect } from 'react'
 
-export const SubregionList = () => {
+export const SubListRegionPage = () => {
 
     const [searchParams, setSearchParams] = useSearchParams()
     const regionId = searchParams.get('regionId') ?? 1

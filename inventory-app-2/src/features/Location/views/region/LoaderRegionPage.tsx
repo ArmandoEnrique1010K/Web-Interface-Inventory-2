@@ -2,9 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { TextMessage } from "@/components/TextMessage";
 import { getRegion } from "../../api/RegionAPI";
-import { RegionEditForm } from "./RegionEditForm";
+import { EditRegionPage } from "./EditRegionPage";
 
-export const RegionEditLoader = () => {
+export const LoaderRegionPage = () => {
     const params = useParams();
     const regionId = params.id!;
 
@@ -24,6 +24,6 @@ export const RegionEditLoader = () => {
     }
 
     if (data) return (
-        <RegionEditForm data={data} regionId={regionId} />
+        <EditRegionPage data={data} regionId={regionId} />
     )
 }
