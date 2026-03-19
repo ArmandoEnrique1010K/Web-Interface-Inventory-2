@@ -109,7 +109,6 @@ export const DetailsProductPage = () => {
     // TODO: CORREGIR LA API REST, SI UN PRODUCTO ESTA DESACTIVADO, TODAVIA PUEDE SER EDITADO Y VISTO POR UN ADMINISTRADOR
     // TODO: SI UN PRODUCTO ESTA DESACTIVADO NO PODRA SER VISTO POR LOS USUARIOS
     return (
-
         <EntityDetailsLayout>
             <EntityDetailsLayout.Header
                 title={productData.name}
@@ -159,33 +158,31 @@ export const DetailsProductPage = () => {
                         subtitle={"Modelo seleccionado"}>
 
                         <RightPanelContainer.Actions>
-                            <>
-                                <Button
-                                    text="◄"
-                                    type="button"
-                                    color="blue"
-                                    onClick={handlePrevious}
-                                    disabled={!hasPrevious}
-                                    size="small"
-                                />
+                            <Button
+                                text="◄"
+                                type="button"
+                                color="blue"
+                                onClick={handlePrevious}
+                                disabled={!hasPrevious}
+                                size="small"
+                            />
 
-                                <Button
-                                    text={`${modelsData.length ? idModel + 1 : 0} de ${modelsData.length}`}
-                                    type="button"
-                                    color="none"
-                                    size="small"
-                                    disabled
-                                />
+                            <Button
+                                text={`${modelsData.length ? idModel + 1 : 0} de ${modelsData.length}`}
+                                type="button"
+                                color="none"
+                                size="small"
+                                disabled
+                            />
 
-                                <Button
-                                    text="►"
-                                    type="button"
-                                    size="small"
-                                    color="blue"
-                                    onClick={handleNext}
-                                    disabled={!hasNext}
-                                />
-                            </>
+                            <Button
+                                text="►"
+                                type="button"
+                                size="small"
+                                color="blue"
+                                onClick={handleNext}
+                                disabled={!hasNext}
+                            />
                         </RightPanelContainer.Actions>
 
                         <RightPanelContainer.DetailsGrid>
@@ -224,22 +221,20 @@ export const DetailsProductPage = () => {
                             </RightPanelContainer.Detail>
 
                             <RightPanelContainer.Detail label="Codigo QR">
-                                <>
-                                    <Button
-                                        text="Obtener QR"
-                                        type="button"
-                                        color="blue"
-                                        size="small"
-                                        onClick={handleOpenQR}
-                                    />
+                                <Button
+                                    text="Obtener QR"
+                                    type="button"
+                                    color="blue"
+                                    size="small"
+                                    onClick={handleOpenQR}
+                                />
 
-                                    <QRModal
-                                        isOpen={isQRModalOpen}
-                                        onClose={() => setIsQRModalOpen(false)}
-                                        url={import.meta.env.VITE_FRONTEND_DOMAIN + path + queryParams}
-                                        title={`Código QR del producto ${productData?.name}, ${selectedModel?.name}`}
-                                    />
-                                </>
+                                <QRModal
+                                    isOpen={isQRModalOpen}
+                                    onClose={() => setIsQRModalOpen(false)}
+                                    url={import.meta.env.VITE_FRONTEND_DOMAIN + path + queryParams}
+                                    title={`Código QR del producto ${productData?.name}, ${selectedModel?.name}`}
+                                />
                             </RightPanelContainer.Detail>
 
                             {selectedModel.status && (

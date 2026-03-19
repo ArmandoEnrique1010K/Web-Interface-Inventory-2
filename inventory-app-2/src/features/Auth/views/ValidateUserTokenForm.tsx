@@ -8,8 +8,8 @@ import { InputText } from '@/ui/fields/InputText'
 import { useDispatch, useSelector } from 'react-redux'
 import type { RootState } from '@/store/store'
 import { updateSecretToken } from '@/reducers/authSlice'
-import { AuthFormContainer } from '@/features/Auth/views/AuthFormContainer'
 import type { GeneralError } from 'types'
+import { AuthFormLayout } from '../layout/AuthFormLayout'
 
 export const ValidateUserTokenForm = () => {
     const navigate = useNavigate()
@@ -59,40 +59,41 @@ export const ValidateUserTokenForm = () => {
 
 
     return (
-        <AuthFormContainer
-            title="Introduce el token"
-            onSubmit={handleSubmit((data) => mutate(data))}
-            isPending={isPending}
-            helpText='Introduce el token de 6 digitos que se envio a tu correo electrónico, para reestablecer tu contraseña.'
-            inputsFields={
-                <>
-                    {/*  NO SE PERMITE EL USO DE INPUT DE TIPO HIDDEN */}
-                    {/* <InputText
-                        id="requestId"
-                        type="hidden"
-                        errorMessage={errors.requestId}
-                        defaultValue={secretToken}
-                        functionEnabled={register('requestId')}
-                    /> */}
 
-                    <InputText
-                        id="value"
-                        label="Token"
-                        placeholder="Introduce el token de 6 digitos"
-                        type="number"
-                        errorMessage={errors.value}
-                        functionEnabled={register('value')}
-                        // Se limita a 6 digitos
-                        max={6} />
+        <AuthFormLayout>
+            <AuthFormLayout.Header title="Introduce el token">
+            </AuthFormLayout.Header>
+            <AuthFormLayout.Form
+                isPending={isPending}
+                buttonText="Validar token"
+                onSubmit={handleSubmit((data) => mutate(data))}
+            >
+                {/*  NO SE PERMITE EL USO DE INPUT DE TIPO HIDDEN */}
+                {/* <InputText
+                   id="requestId"
+                   type="hidden"
+                   errorMessage={errors.requestId}
+                   defaultValue={secretToken}
+                   functionEnabled={register('requestId')}
+               /> */}
 
-                </>
-            }
-            buttonText="Validar token"
-            secondaryLink={{
-                text: 'Necesitas un nuevo token de 6 digitos,',
-                to: '/restore-password',
-                linkText: 'haz clic aqui para obtenerlo'
-            }}
-        />
+                <InputText
+                    id="value"
+                    label="Token"
+                    placeholder="Introduce el token de 6 digitos"
+                    type="number"
+                    errorMessage={errors.value}
+                    functionEnabled={register('value')}
+                    // Se limita a 6 digitos
+                    max={6} />
+            </AuthFormLayout.Form>
+            <AuthFormLayout.Link
+                text='Necesitas un nuevo token de 6 digitos'
+                to='/restore-password'
+                linkText='haz clic aqui para obtenerlo'
+            ></AuthFormLayout.Link>
+        </AuthFormLayout>
+
+
     )
 }

@@ -5,11 +5,11 @@ import { useMutation } from "@tanstack/react-query"
 import { currentSession, login } from "../api/AuthAPI"
 import { toast } from "sonner"
 import { InputText } from "@/ui/fields/InputText"
-import { AuthFormContainer } from "@/features/Auth/views/AuthFormContainer"
 import { useDispatch } from "react-redux"
 import { setAuthenticated, setUserRoles } from '@/reducers/authSlice';
 import type { GeneralError } from "types"
 import { InputPassword } from "@/ui/fields/InputPassword"
+import { AuthFormLayout } from "../layout/AuthFormLayout"
 
 export const LoginForm = () => {
     const navigate = useNavigate();
@@ -56,33 +56,34 @@ export const LoginForm = () => {
         }
     })
 
+    // TODO: SEGUIR EN EL OTRO FORMULARIO
     return (
-        <AuthFormContainer
-            title="Inicio de sesión"
-            onSubmit={handleSubmit((data) => mutate(data))}
-            isPending={isPending}
-            inputsFields={
-                <>
-                    <InputText
-                        id="email"
-                        label="Correo"
-                        placeholder="Correo del usuario"
-                        type="email"
-                        functionEnabled={register('email')} />
+        <AuthFormLayout>
+            <AuthFormLayout.Header title="Inicio de sesión">
+            </AuthFormLayout.Header>
+            <AuthFormLayout.Form
+                isPending={isPending}
+                buttonText="Iniciar sesión"
+                onSubmit={handleSubmit((data) => mutate(data))}
+            >
+                <InputText
+                    id="email"
+                    label="Correo"
+                    placeholder="Correo del usuario"
+                    type="email"
+                    functionEnabled={register('email')} />
 
-                    <InputPassword
-                        id="password"
-                        label="Contraseña"
-                        placeholder="Contraseña del usuario"
-                        functionEnabled={register('password')} />
-                </>
-            }
-            buttonText="Iniciar sesión"
-            secondaryLink={{
-                text: '¿Olvidastes tu contraseña?,',
-                to: '/restore-password',
-                linkText: 'haz clic aqui para cambiarla'
-            }}
-        />
+                <InputPassword
+                    id="password"
+                    label="Contraseña"
+                    placeholder="Contraseña del usuario"
+                    functionEnabled={register('password')} />
+            </AuthFormLayout.Form>
+            <AuthFormLayout.Link
+                text='¿Olvidastes tu contraseña?'
+                to='/restore-password'
+                linkText='haz clic aqui para cambiarla'
+            ></AuthFormLayout.Link>
+        </AuthFormLayout>
     )
 }

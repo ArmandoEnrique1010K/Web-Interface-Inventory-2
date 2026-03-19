@@ -5,7 +5,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { updateModel } from '../../api/ModelAPI';
 import type { GeneralError } from '@/types/index';
 import { toast } from 'sonner';
-import { BaseForm } from '@/components/BaseForm';
 import { InputText } from '@/ui/fields/InputText';
 import { InputDate } from '@/ui/fields/InputDate';
 import { ArrowUpCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
@@ -13,6 +12,7 @@ import { Button } from '@/ui/Button';
 import { ButtonLink } from '@/ui/ButtonLink';
 import { useState } from 'react';
 import { UploadImage } from '@/ui/fields/UploadImage';
+import { EntityFormLayout } from '../../../../layout/entity/EntityFormLayout';
 
 type Props = {
     data: ModelItem & { file: File };
@@ -20,7 +20,7 @@ type Props = {
     productId: string;
 }
 
-export const ModelEditForm = ({ data, modelId, productId }: Props) => {
+export const EditModelPage = ({ data, modelId, productId }: Props) => {
     const navigate = useNavigate();
 
     const { register, handleSubmit, setError, control, formState: { errors } } = useForm<ModelInProductForm & { file: File }>({
@@ -80,44 +80,41 @@ export const ModelEditForm = ({ data, modelId, productId }: Props) => {
 
 
     return (
-        <>
-            <BaseForm
-                title={`Editar modelo #${modelId}`}
+        <EntityFormLayout>
+            <EntityFormLayout.Title>{`Editar modelo #${modelId}`}</EntityFormLayout.Title>
+            <EntityFormLayout.Form
                 onSubmit={handleSubmit((data) => {
                     handleForm({
                         ...data,
-                        file: file || data.file // Use new file or original file
+                        file: file || data.file
                     })
                 })}
-                inputsFields={
-                    <>
-                        <InputText
-                            id="name"
-                            label="Nombre"
-                            placeholder="Nombre del modelo"
-                            type="text"
-                            errorMessage={errors.name}
-                            functionEnabled={register('name')} />
+            >
+                <EntityFormLayout.Inputs>
+                    <InputText
+                        id="name"
+                        label="Nombre"
+                        placeholder="Nombre del modelo"
+                        type="text"
+                        errorMessage={errors.name}
+                        functionEnabled={register('name')} />
 
+                    <InputDate<ModelInProductForm & { file: File }>
+                        id="entryDate"
+                        label="Fecha de entrada"
+                        name="entryDate"
+                        control={control}
+                        errorMessage={errors.entryDate?.message}
+                    />
+                    <InputDate<ModelInProductForm & { file: File }>
+                        id="caducityDate"
+                        label="Fecha de caducidad"
+                        name="caducityDate"
+                        control={control}
+                        errorMessage={errors.caducityDate?.message}
+                    />
 
-
-
-                        <InputDate<ModelInProductForm & { file: File }>
-                            id="entryDate"
-                            label="Fecha de entrada"
-                            name="entryDate"
-                            control={control}
-                            errorMessage={errors.entryDate?.message}
-                        />
-                        <InputDate<ModelInProductForm & { file: File }>
-                            id="caducityDate"
-                            label="Fecha de caducidad"
-                            name="caducityDate"
-                            control={control}
-                            errorMessage={errors.caducityDate?.message}
-                        />
-
-                        {/* <input
+                    {/* <input
                                 type="file"
                                 accept="image/*"
                                 {...register("file", {
@@ -138,24 +135,19 @@ export const ModelEditForm = ({ data, modelId, productId }: Props) => {
                                     className="w-40 mt-2 rounded"
                                 />
                             )} */}
-                        <UploadImage id='file' label="Imagen"
-                            register={register('file')}
-                            previewImage={preview}
-                            setFile={setFile}
-                            setPreview={setPreview}
-                        />
+                    <UploadImage id='file' label="Imagen"
+                        register={register('file')}
+                        previewImage={preview}
+                        setFile={setFile}
+                        setPreview={setPreview}
+                    />
+                </EntityFormLayout.Inputs>
+                <EntityFormLayout.Actions>
+                    <Button icon={<ArrowUpCircleIcon />} size="large" text="Editar modelo" type="submit" color="green" />
+                    <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to={`/products/${productId}`} />
 
-                    </>
-                }
-                buttons={
-                    <>
-                        <Button icon={<ArrowUpCircleIcon />} size="large" text="Editar modelo" type="submit" color="green" />
-                        <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to={`/products/${productId}`} />
-                    </>
-                }
-
-            />
-
-        </>
+                </EntityFormLayout.Actions>
+            </EntityFormLayout.Form>
+        </EntityFormLayout>
     )
 }

@@ -99,71 +99,69 @@ export const EditProductPage = ({ data, productId }: Props) => {
     }
 
     return (
-        <>
-            <EntityFormLayout>
-                <EntityFormLayout.Title>{`Editar producto #${productId}`}</EntityFormLayout.Title>
-                <EntityFormLayout.Form onSubmit={handleSubmit(handleForm)}>
-                    <EntityFormLayout.Inputs>
-                        <InputText
-                            id="name"
-                            label="Nombre"
-                            placeholder="Nombre del producto"
-                            type="text"
-                            errorMessage={errors.name}
-                            functionEnabled={register('name')} />
+        <EntityFormLayout>
+            <EntityFormLayout.Title>{`Editar producto #${productId}`}</EntityFormLayout.Title>
+            <EntityFormLayout.Form onSubmit={handleSubmit(handleForm)}>
+                <EntityFormLayout.Inputs>
+                    <InputText
+                        id="name"
+                        label="Nombre"
+                        placeholder="Nombre del producto"
+                        type="text"
+                        errorMessage={errors.name}
+                        functionEnabled={register('name')} />
 
-                        <InputText
-                            id="length"
-                            label="Largo (cm.)"
-                            placeholder="Medida del largo"
-                            type="number"
-                            errorMessage={errors.length}
-                            functionEnabled={register('length')} />
+                    <InputText
+                        id="length"
+                        label="Largo (cm.)"
+                        placeholder="Medida del largo"
+                        type="number"
+                        errorMessage={errors.length}
+                        functionEnabled={register('length')} />
 
-                        <InputText
-                            id="width"
-                            label="Ancho (cm.)"
-                            placeholder="Medida del ancho"
-                            type="number"
-                            errorMessage={errors.width}
-                            functionEnabled={register('width')} />
+                    <InputText
+                        id="width"
+                        label="Ancho (cm.)"
+                        placeholder="Medida del ancho"
+                        type="number"
+                        errorMessage={errors.width}
+                        functionEnabled={register('width')} />
 
-                        <InputText
-                            id="height"
-                            label="Alto (cm.)"
-                            placeholder="Medida de la altura"
-                            type="number"
-                            errorMessage={errors.height}
-                            functionEnabled={register('height')} />
+                    <InputText
+                        id="height"
+                        label="Alto (cm.)"
+                        placeholder="Medida de la altura"
+                        type="number"
+                        errorMessage={errors.height}
+                        functionEnabled={register('height')} />
 
-                        <SelectOption
-                            id="categoryId"
-                            label="Categoria"
-                            errorMessage={errors.categoryId}
-                            functionEnabled={register('categoryId')}
-                            options={categories}
-                            textInNullOption="Seleccione una categoria"
-                        />
+                    <SelectOption
+                        id="categoryId"
+                        label="Categoria"
+                        errorMessage={errors.categoryId}
+                        functionEnabled={register('categoryId')}
+                        options={categories}
+                        textInNullOption="Seleccione una categoria"
+                    />
 
-                        <SelectOption
-                            id="typeId"
-                            label="Tipo"
-                            errorMessage={errors.typeId}
-                            functionEnabled={register('typeId')}
-                            options={types}
-                            textInNullOption="Seleccione un tipo"
-                        />
-                    </EntityFormLayout.Inputs>
-                    <EntityFormLayout.Actions>
-                        <>
-                            <Button icon={<ArrowUpCircleIcon />} size="large" text="Editar producto" type="submit" color="green" />
-                            <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to="/products" />
-                        </>
-                    </EntityFormLayout.Actions>
-                </EntityFormLayout.Form>
+                    <SelectOption
+                        id="typeId"
+                        label="Tipo"
+                        errorMessage={errors.typeId}
+                        functionEnabled={register('typeId')}
+                        options={types}
+                        textInNullOption="Seleccione un tipo"
+                    />
+                </EntityFormLayout.Inputs>
+                <EntityFormLayout.Actions>
+                    <>
+                        <Button icon={<ArrowUpCircleIcon />} size="large" text="Editar producto" type="submit" color="green" />
+                        <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to="/products" />
+                    </>
+                </EntityFormLayout.Actions>
+            </EntityFormLayout.Form>
 
-            </EntityFormLayout>
-        </>
+        </EntityFormLayout>
     )
 }
 

@@ -7,8 +7,8 @@ import { toast } from 'sonner'
 import { InputText } from '@/ui/fields/InputText'
 import { useDispatch } from 'react-redux'
 import { updateSecretToken } from '@/reducers/authSlice'
-import { AuthFormContainer } from '@/features/Auth/views/AuthFormContainer'
 import type { GeneralError } from 'types'
+import { AuthFormLayout } from '../layout/AuthFormLayout'
 
 export const RestoreUserPasswordForm = () => {
     const navigate = useNavigate()
@@ -50,30 +50,31 @@ export const RestoreUserPasswordForm = () => {
     })
 
     return (
-        <AuthFormContainer
-            title="Reestablecer contraseña"
-            onSubmit={handleSubmit((data) => mutate(data))}
-            isPending={isPending}
-            helpText='Introduce tu correo electrónico y te enviaremos un token de 6 digitos para que puedas reestablecer tu contraseña.'
-            inputsFields={
-                <>
-                    <InputText
-                        id="email"
-                        label="Correo"
-                        placeholder="Introduce tu correo actual"
-                        type="email"
-                        errorMessage={errors.email}
-                        functionEnabled={register('email')} />
-                </>
-            }
-            buttonText='Enviar un token'
-            secondaryLink={
-                {
-                    text: 'Si recuerdas tu contraseña anterior,',
-                    to: '/',
-                    linkText: 'haz clic aqui para iniciar sesión'
-                }
-            }
-        />
+        <AuthFormLayout>
+            <AuthFormLayout.Header
+                title='Reestablecer contraseña'
+                helpText='Introduce tu correo electrónico y te enviaremos un token de 6 digitos para que puedas reestablecer tu contraseña.'
+            ></AuthFormLayout.Header>
+
+            <AuthFormLayout.Form
+                isPending={isPending}
+                buttonText="Enviar un token"
+                onSubmit={handleSubmit((data) => mutate(data))}
+            >
+                <InputText
+                    id="email"
+                    label="Correo"
+                    placeholder="Introduce tu correo actual"
+                    type="email"
+                    errorMessage={errors.email}
+                    functionEnabled={register('email')} />
+
+            </AuthFormLayout.Form>
+            <AuthFormLayout.Link
+                text='Si recuerdas tu contraseña anterior'
+                to='/'
+                linkText='haz clic aqui para iniciar sesión'
+            ></AuthFormLayout.Link>
+        </AuthFormLayout>
     )
 }

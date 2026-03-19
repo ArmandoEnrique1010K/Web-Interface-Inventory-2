@@ -29,6 +29,7 @@ export const NewProductPage = () => {
         height: '',
         modelName: '',
         // SELECCIONA LA FECHA DE HOY EN DIA
+        // TODO: EN LA API REST, SI O SI DEBE INTRODUCIR UNA FECHA
         modelEntryDate: new Date(new Date().setHours(12)).toISOString().split('T')[0],
         modelCaducityDate: '', //new Date(new Date().setHours(12)).toISOString().split('T')[0],
         categoryId: '',
@@ -223,10 +224,8 @@ export const NewProductPage = () => {
                 </EntityFormLayout.Inputs>
 
                 <EntityFormLayout.Actions>
-                    <>
-                        <Button icon={<ArrowUpCircleIcon />} disabled={isPending} size="large" text="Añadir producto" type="submit" color="green" />
-                        <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to="/products" />
-                    </>
+                    <Button icon={<ArrowUpCircleIcon />} disabled={isPending} size="large" text="Añadir producto" type="submit" color="green" />
+                    <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to="/products" />
                 </EntityFormLayout.Actions>
 
 

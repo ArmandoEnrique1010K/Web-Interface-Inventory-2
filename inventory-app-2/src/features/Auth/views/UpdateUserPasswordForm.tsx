@@ -7,9 +7,9 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateSecretToken } from '@/reducers/authSlice'
 import type { RootState } from '@/store/store'
-import { AuthFormContainer } from '@/features/Auth/views/AuthFormContainer'
 import type { GeneralError } from 'types'
 import { InputPassword } from '@/ui/fields/InputPassword'
+import { AuthFormLayout } from '../layout/AuthFormLayout'
 
 export const UpdateUserPasswordForm = () => {
     const navigate = useNavigate()
@@ -58,33 +58,34 @@ export const UpdateUserPasswordForm = () => {
     })
 
     return (
-        <AuthFormContainer
-            title="Introduce tu nueva contraseña"
-            onSubmit={handleSubmit((data) => mutate(data))}
-            isPending={isPending}
-            inputsFields={
-                <>
-                    <InputPassword
-                        id="newPassword"
-                        label="Nueva contraseña"
-                        placeholder="Introduce tu nueva contraseña"
-                        errorMessage={errors.newPassword}
-                        functionEnabled={register('newPassword')} />
+        <AuthFormLayout>
+            <AuthFormLayout.Header title="Introduce tu nueva contraseña">
+            </AuthFormLayout.Header>
+            <AuthFormLayout.Form
+                isPending={isPending}
+                buttonText="Cambiar contraseña"
+                onSubmit={handleSubmit((data) => mutate(data))}
+            >
+                <InputPassword
+                    id="newPassword"
+                    label="Nueva contraseña"
+                    placeholder="Introduce tu nueva contraseña"
+                    errorMessage={errors.newPassword}
+                    functionEnabled={register('newPassword')} />
 
-                    <InputPassword
-                        id="confirmNewPassword"
-                        label="Confirma la nueva contraseña"
-                        placeholder="Confirma la nueva contraseña"
-                        errorMessage={errors.confirmNewPassword}
-                        functionEnabled={register('confirmNewPassword')} />
-                </>
-            }
-            buttonText='Cambiar contraseña'
-            secondaryLink={{
-                text: 'Necesitas un nuevo token de 6 digitos,',
-                to: '/restore-password',
-                linkText: 'haz clic aqui para obtenerlo'
-            }}
-        />
+                <InputPassword
+                    id="confirmNewPassword"
+                    label="Confirma la nueva contraseña"
+                    placeholder="Confirma la nueva contraseña"
+                    errorMessage={errors.confirmNewPassword}
+                    functionEnabled={register('confirmNewPassword')} />
+            </AuthFormLayout.Form>
+            <AuthFormLayout.Link
+                text='Necesitas un nuevo token de 6 digitos'
+                to='/restore-password'
+                linkText='haz clic aqui para obtenerlo'
+            ></AuthFormLayout.Link>
+        </AuthFormLayout>
+
     )
 }

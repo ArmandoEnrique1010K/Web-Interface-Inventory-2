@@ -1,29 +1,29 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import { getProduct } from "../../api/ProductAPI";
+import { getType } from "../../api/TypeAPI";
 import { TextMessage } from "@/components/TextMessage";
-import { ProductEditForm } from "./ProductEditForm";
-import { Error } from "@/views/Error";
+import { EditTypePage } from "./EditTypePage";
 
-export const ProductEditLoader = () => {
+export const LoaderTypePage = () => {
     const params = useParams();
-    const productId = params.id!;
+    const typeId = params.id!;
 
     const { data, isLoading, isError } = useQuery({
-        queryKey: ['edit-product', productId],
-        queryFn: () => getProduct(productId),
+        queryKey: ['edit-type', typeId],
+        queryFn: () => getType(typeId),
         retry: false,
     })
+
 
     if (isLoading) {
         return <TextMessage text='Cargando...' align='left' color='black' />
     }
 
     if (isError) {
-        return <Error />
+        return <TextMessage text='Ha ocurrido un error' align='left' color='red' />
     }
 
     if (data) return (
-        <ProductEditForm data={data} productId={productId} />
+        <EditTypePage data={data} typeId={typeId} />
     )
 }

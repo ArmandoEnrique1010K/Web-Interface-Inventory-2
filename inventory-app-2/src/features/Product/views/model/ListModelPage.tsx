@@ -1,4 +1,3 @@
-import { ListElementsContainer } from '@/views/ListElementsContainer'
 import { useQuery } from '@tanstack/react-query'
 import { TableContainer } from '@/components/TableContainer'
 import type { CategoryItem, ModelItem, TypeItem } from '../../types'
@@ -7,7 +6,7 @@ import { BaseTableCell } from '@/components/BaseTableCell'
 import { listAllCategories } from '../../api/CategoryAPI'
 import { listAllTypes } from '../../api/TypeAPI'
 import { Link, useSearchParams } from 'react-router-dom'
-import { useEffectEvent, useState } from 'react'
+import { useState } from 'react'
 import { Paginator } from '../../../../components/Paginator'
 import { useMediaQuery } from 'react-responsive'
 import { SearchCounter } from '@/components/SearchCounter'
@@ -17,9 +16,10 @@ import { InputTextFilter } from '@/ui/filters/InputTextFilter'
 import { SelectOptionFilter } from '@/ui/filters/SelectOptionFilter'
 import { listAllModels } from '../../api/ModelAPI'
 import { InputDateFilter } from '@/ui/filters/InputDateFilter'
-import { ModelChangeStatus } from './ModelChangeStatus'
+import { ModelChangeStatus } from '../../components/model/ModelChangeStatus'
+import { EntityListLayout } from '@/layout/entity/EntityListLayout'
 
-export const ModelList = () => {
+export const ListModelPage = () => {
     const [searchParams, setSearchParams] = useSearchParams()
 
     const page = Number(searchParams.get('page') ?? 0)
@@ -46,23 +46,6 @@ export const ModelList = () => {
         categoryId: categoryId ?? '',
         typeId: typeId ?? '',
         status: status === undefined ? '' : String(status),
-    })
-
-
-    // En React 19 se utiliza el hook useEffectEvent en lugar del clasico useEffect
-
-    useEffectEvent(() => {
-        setForm({
-            page: page,
-            keyword: keyword,
-            minStock: minStock,
-            maxStock: maxStock,
-            minEntryDate: minEntryDate,
-            maxEntryDate: maxEntryDate,
-            categoryId: categoryId ?? '',
-            typeId: typeId ?? '',
-            status: status === undefined ? '' : String(status),
-        })
     })
 
 
@@ -116,9 +99,10 @@ export const ModelList = () => {
 
 
     return (
-        <ListElementsContainer
-            title="Modelos"
-            searchParamsContainer={
+        <EntityListLayout>
+
+            <EntityListLayout.Header title='Modelos'></EntityListLayout.Header>
+            <EntityListLayout.Content>
                 <FiltersFormContainer onSubmit={
                     (e) => {
                         e.preventDefault()
@@ -137,18 +121,16 @@ export const ModelList = () => {
                         setSearchParams(params)
                     }
                 }>
-                    <div>
-                        <InputTextFilter
-                            name='keyword'
-                            label='Nombre del modelo o producto'
-                            placeholder='Buscar modelos y/o productos por nombre'
-                            type='text'
-                            value={form.keyword}
-                            onChange={(e) =>
-                                setForm(prev => ({ ...prev, keyword: e.target.value }))
-                            }
-                        />
-                    </div>
+                    <InputTextFilter
+                        name='keyword'
+                        label='Nombre del modelo o producto'
+                        placeholder='Buscar modelos y/o productos por nombre'
+                        type='text'
+                        value={form.keyword}
+                        onChange={(e) =>
+                            setForm(prev => ({ ...prev, keyword: e.target.value }))
+                        }
+                    />
                     <div className={`flex ${isExtraSmallScreen ? 'flex-col gap-4' : 'flex-row gap-4'}`}>
                         <InputTextFilter
                             name='minStock'
@@ -231,8 +213,7 @@ export const ModelList = () => {
                     </div>
 
                 </FiltersFormContainer>
-            }
-            dataContainer={
+
                 <TableContainer
                     headers={['ID', 'Nombre', 'Cantidad disponible', 'Fechas', 'Estado', 'Editar']}
                     isError={isError}
@@ -314,8 +295,8 @@ export const ModelList = () => {
                         })
                     }
                 </TableContainer>
-            }
-        />
+            </EntityListLayout.Content>
+        </EntityListLayout>
     )
 }
 

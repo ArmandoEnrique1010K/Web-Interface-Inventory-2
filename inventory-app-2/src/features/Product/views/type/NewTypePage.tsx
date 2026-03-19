@@ -5,13 +5,13 @@ import { toast } from "sonner";
 import type { TypeForm } from "../../types";
 import { InputText } from "@/ui/fields/InputText";
 import { Button } from "@/ui/Button";
-import { BaseForm } from "@/components/BaseForm";
 import type { GeneralError } from "types";
 import { registerType } from "../../api/TypeAPI";
 import { ButtonLink } from "@/ui/ButtonLink";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
+import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 
-export const TypeAddForm = () => {
+export const NewTypePage = () => {
 
     const initialValues: TypeForm = {
         name: '',
@@ -53,29 +53,24 @@ export const TypeAddForm = () => {
     })
 
     return (
-        <>
-            <BaseForm
-                title="Añadir nuevo tipo"
-                onSubmit={handleSubmit((data) => mutate(data))}
-                inputsFields={
-                    <>
-                        <InputText
-                            id="name"
-                            label="Nombre"
-                            placeholder="Nombre del tipo"
-                            type="text"
-                            errorMessage={errors.name}
-                            functionEnabled={register('name')} />
+        <EntityFormLayout>
+            <EntityFormLayout.Title>Añadir nuevo tipo</EntityFormLayout.Title>
+            <EntityFormLayout.Form onSubmit={handleSubmit((data) => mutate(data))}>
+                <EntityFormLayout.Inputs>
+                    <InputText
+                        id="name"
+                        label="Nombre"
+                        placeholder="Nombre del tipo"
+                        type="text"
+                        errorMessage={errors.name}
+                        functionEnabled={register('name')} />
 
-                    </>
-                }
-                buttons={
-                    <>
-                        <Button icon={<ArrowUpCircleIcon />} size="large" text="Añadir tipo" type="submit" color="green" />
-                        <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to="/products/types" />
-                    </>
-                }
-            />
-        </>
+                </EntityFormLayout.Inputs>
+                <EntityFormLayout.Actions>
+                    <Button icon={<ArrowUpCircleIcon />} size="large" text="Añadir tipo" type="submit" color="green" />
+                    <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to="/products/types" />
+                </EntityFormLayout.Actions>
+            </EntityFormLayout.Form>
+        </EntityFormLayout>
     )
 }

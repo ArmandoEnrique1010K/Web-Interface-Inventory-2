@@ -6,12 +6,12 @@ import { toast } from "sonner";
 import type { CategoryForm } from "../../types";
 import { InputText } from "@/ui/fields/InputText";
 import { Button } from "@/ui/Button";
-import { BaseForm } from "@/components/BaseForm";
 import type { GeneralError } from "types";
 import { ButtonLink } from "@/ui/ButtonLink";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
+import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 
-export const CategoryAddForm = () => {
+export const NewCategoryPage = () => {
 
     const initialValues: CategoryForm = {
         name: '',
@@ -51,29 +51,23 @@ export const CategoryAddForm = () => {
     })
 
     return (
-        <>
-            <BaseForm
-                title="Añadir nueva categoria"
-                onSubmit={handleSubmit((data) => mutate(data))}
-                inputsFields={
-                    <>
-                        <InputText
-                            id="name"
-                            label="Nombre"
-                            placeholder="Nombre de la categoria"
-                            type="text"
-                            errorMessage={errors.name}
-                            functionEnabled={register('name')} />
-
-                    </>
-                }
-                buttons={
-                    <>
-                        <Button icon={<ArrowUpCircleIcon />} size="large" text='Añadir categoria' type="submit" color="green" />
-                        <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to="/products/categories" />
-                    </>
-                }
-            />
-        </>
+        <EntityFormLayout>
+            <EntityFormLayout.Title>Añadir nueva categoria</EntityFormLayout.Title>
+            <EntityFormLayout.Form onSubmit={handleSubmit((data) => mutate(data))}>
+                <EntityFormLayout.Inputs>
+                    <InputText
+                        id="name"
+                        label="Nombre"
+                        placeholder="Nombre de la categoria"
+                        type="text"
+                        errorMessage={errors.name}
+                        functionEnabled={register('name')} />
+                </EntityFormLayout.Inputs>
+                <EntityFormLayout.Actions>
+                    <Button icon={<ArrowUpCircleIcon />} size="large" text='Añadir categoria' type="submit" color="green" />
+                    <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to="/products/categories" />
+                </EntityFormLayout.Actions>
+            </EntityFormLayout.Form>
+        </EntityFormLayout>
     )
 }

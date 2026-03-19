@@ -1,11 +1,9 @@
 import { useForm } from 'react-hook-form'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
 import { registerModelInProduct } from '../../api/ModelAPI';
 import type { GeneralError } from '@/types/index'
 import { toast } from 'sonner'
-import { ListElementsContainer } from '@/views/ListElementsContainer'
-import { BaseForm } from '@/components/BaseForm'
 import { InputText } from '@/ui/fields/InputText'
 import { InputDate } from '@/ui/fields/InputDate'
 import { Button } from '@/ui/Button'
@@ -14,13 +12,16 @@ import { ArrowUpCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
 import { useState } from 'react'
 import type { ModelInProductForm } from '../../types';
 import { UploadImage } from '@/ui/fields/UploadImage';
+import { EntityFormLayout } from '@/layout/entity/EntityFormLayout';
 
-export const ModelAddInProductForm = () => {
+// TODO: ESTO DEBE ESTAR DENTRO DEL MODULO PRODUCT
+export const NewModelProductPage = () => {
     const { id } = useParams();
     const [file, setFile] = useState<File | null>(null)
     const [preview, setPreview] = useState<string | null>(null)
     const initialValues: ModelInProductForm = {
         name: '',
+        // TODO: EN LA API REST, SI O SI DEBE INTRODUCIR UNA FECHA
         // SELECCIONA LA FECHA DE HOY EN DIA (Valor por defecto), Tambien debe ser una fecha pasada o de hoy o ningun valor
         entryDate: new Date(new Date().setHours(12)).toISOString().split('T')[0], // 2026-03-11 -> String
         // La fecha de caducidad debe ser futura o ningun valor
@@ -32,7 +33,6 @@ export const ModelAddInProductForm = () => {
         defaultValues: initialValues
     })
     const navigate = useNavigate();
-    const location = useLocation();
 
     const { mutate } = useMutation({
         mutationFn: registerModelInProduct,
@@ -66,28 +66,27 @@ export const ModelAddInProductForm = () => {
 
     // EFECTO QUE SE EJECUTA SI HAY UNA IMAGEN QUE SE ESTA SUBIENDO
     return (
-        <>
-            <ListElementsContainer title={`Añadir nuevo modelo al producto ${location.pathname.split('/')[2]}`}>
-                <BaseForm
-                    onSubmit={handleSubmit((data) => {
-                        mutate({
-                            productId: id!,  // ← Add this line
-                            data: data,
-                            ...(file && { file })
-                        })
-                    })}
-                    inputs={
-                        <>
-                            <InputText
-                                id="name"
-                                label="Nombre"
-                                placeholder="Nombre del modelo"
-                                type="text"
-                                errorMessage={errors.name}
-                                functionEnabled={register('name')} />
+        <EntityFormLayout>
+            <EntityFormLayout.Title>{`Añadir nuevo modelo al producto #${id /* location.pathname.split('/')[2] */}`}</EntityFormLayout.Title>
+            <EntityFormLayout.Form onSubmit={handleSubmit((data) => {
+                mutate({
+                    productId: id!,
+                    data: data,
+                    ...(file && { file })
+                })
+            })}
+            >
+                <EntityFormLayout.Inputs>
+                    <InputText
+                        id="name"
+                        label="Nombre"
+                        placeholder="Nombre del modelo"
+                        type="text"
+                        errorMessage={errors.name}
+                        functionEnabled={register('name')} />
 
 
-                            {/* <input
+                    {/* <input
                                 type="file"
                                 accept="image/*"
                                 {...register("file", {
@@ -109,41 +108,36 @@ export const ModelAddInProductForm = () => {
                                 />
                             )} */}
 
-                            <UploadImage id='file' label="Suba una imagen"
-                                register={register('file')}
-                                previewImage={preview}
-                                setFile={setFile}
-                                setPreview={setPreview}
-                            />
+                    <UploadImage id='file' label="Suba una imagen"
+                        register={register('file')}
+                        previewImage={preview}
+                        setFile={setFile}
+                        setPreview={setPreview}
+                    />
 
 
-                            {/* TODO: QUITAR EL TIPADO DE FILE */}
-                            <InputDate<ModelInProductForm & { file: File }>
-                                id="entryDate"
-                                label="Fecha de entrada del modelo"
-                                name="entryDate"
-                                control={control}
-                                errorMessage={errors.entryDate?.message}
-                            />
+                    {/* TODO: QUITAR EL TIPADO DE FILE */}
+                    <InputDate<ModelInProductForm & { file: File }>
+                        id="entryDate"
+                        label="Fecha de entrada del modelo"
+                        name="entryDate"
+                        control={control}
+                        errorMessage={errors.entryDate?.message}
+                    />
 
-                            <InputDate<ModelInProductForm & { file: File }>
-                                id="caducityDate"
-                                label="Fecha de caducidad del modelo"
-                                name="caducityDate"
-                                control={control}
-                                errorMessage={errors.caducityDate?.message}
-                            />
-                        </>
-                    }
-                    buttons={
-                        <>
-                            <Button icon={<ArrowUpCircleIcon />} size="large" text="Añadir modelo" type="submit" color="green" />
-                            <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to={`/products/${id}`} />
-                        </>
-                    }
-                />
-            </ListElementsContainer>
-
-        </>
+                    <InputDate<ModelInProductForm & { file: File }>
+                        id="caducityDate"
+                        label="Fecha de caducidad del modelo"
+                        name="caducityDate"
+                        control={control}
+                        errorMessage={errors.caducityDate?.message}
+                    />
+                </EntityFormLayout.Inputs>
+                <EntityFormLayout.Actions>
+                    <Button icon={<ArrowUpCircleIcon />} size="large" text="Añadir modelo" type="submit" color="green" />
+                    <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to={`/products/${id}`} />
+                </EntityFormLayout.Actions>
+            </EntityFormLayout.Form>
+        </EntityFormLayout>
     )
 }

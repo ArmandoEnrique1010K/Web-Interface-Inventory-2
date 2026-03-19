@@ -1,37 +1,37 @@
 import { useQuery } from '@tanstack/react-query'
 import { listAllCategories } from '../../api/CategoryAPI'
 import type { CategoryItem } from '../../types'
-import { ListElementsContainer } from '@/views/ListElementsContainer'
 import { TableContainer } from '@/components/TableContainer'
 import { TableRowContainer } from '@/components/TableRowContainer'
 import { BaseTableCell } from '@/components/BaseTableCell'
 import { ButtonLink } from '@/ui/ButtonLink'
 import { PlusCircleIcon } from '@heroicons/react/24/outline'
+import { EntityListLayout } from '@/layout/entity/EntityListLayout'
 
-export const CategoryList = () => {
+export const ListCategoryPage = () => {
     const { data, isError } = useQuery({
         queryKey: ['list-categories'],
         queryFn: listAllCategories
     })
 
     return (
-        <ListElementsContainer
-            title="Categorias"
-            buttonsContainer={
-                <ButtonLink
-                    icon={<PlusCircleIcon />}
-                    size="large"
-                    text="Nueva categoria"
-                    to="/products/categories/new"
-                    color="blue"
-                />
-            }
-
-            dataContainer={
+        <EntityListLayout>
+            <EntityListLayout.Header title='Categorias'
+                actions={
+                    <ButtonLink
+                        icon={<PlusCircleIcon />}
+                        size="large"
+                        text="Nueva categoria"
+                        to="/products/categories/new"
+                        color="blue"
+                    />
+                }></EntityListLayout.Header>
+            <EntityListLayout.Content>
                 <TableContainer
                     headers={['ID', 'Nombre', 'Editar']}
                     isError={isError}
-                    isEmpty={!data?.length}
+                    isEmpty={!data?.length
+                    }
                 >
                     {
                         data?.map((category: CategoryItem) => (
@@ -50,8 +50,8 @@ export const CategoryList = () => {
                         ))
 
                     }
-                </TableContainer>
-            }
-        />
+                </TableContainer >
+            </EntityListLayout.Content>
+        </EntityListLayout>
     )
 }

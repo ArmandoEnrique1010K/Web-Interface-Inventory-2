@@ -263,10 +263,6 @@ export const ListProductPage = () => {
                     }
 
                 </TableContainer>
-
-
-
-
             </EntityListLayout.Content>
         </EntityListLayout>
     )

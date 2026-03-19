@@ -4,19 +4,19 @@ import { updateCategory } from "../../api/CategoryAPI";
 import type { CategoryForm } from "../../types";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { BaseForm } from "@/components/BaseForm";
 import type { GeneralError } from "types";
 import { Button } from "@/ui/Button";
 import { InputText } from "@/ui/fields/InputText";
 import { ButtonLink } from "@/ui/ButtonLink";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
+import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 
 type Props = {
     data: CategoryForm;
     categoryId: string;
 }
 
-export const CategoryEditForm = ({ data, categoryId }: Props) => {
+export const EditCategoryPage = ({ data, categoryId }: Props) => {
     const navigate = useNavigate();
 
     const { register, handleSubmit, setError, formState: { errors } } = useForm<CategoryForm>({
@@ -66,11 +66,10 @@ export const CategoryEditForm = ({ data, categoryId }: Props) => {
     }
 
     return (
-        <>
-            <BaseForm
-                title={`Editar categoria #${categoryId}`}
-                onSubmit={handleSubmit(handleForm)}
-                inputsFields={
+        <EntityFormLayout>
+            <EntityFormLayout.Title>{`Editar categoria #${categoryId}`}</EntityFormLayout.Title>
+            <EntityFormLayout.Form onSubmit={handleSubmit(handleForm)}>
+                <EntityFormLayout.Inputs>
                     <InputText
                         id="name"
                         label="Nombre"
@@ -78,15 +77,12 @@ export const CategoryEditForm = ({ data, categoryId }: Props) => {
                         type="text"
                         errorMessage={errors.name}
                         functionEnabled={register('name')} />
-
-                }
-                buttons={
-                    <>
-                        <Button icon={<ArrowUpCircleIcon />} size="large" text="Editar categoria" type="submit" color="green" />
-                        <ButtonLink icon={<XCircleIcon />} size="large" text="Volver" color="gray" to="/products/categories" />
-                    </>
-                }
-            />
-        </>
+                </EntityFormLayout.Inputs>
+                <EntityFormLayout.Actions>
+                    <Button icon={<ArrowUpCircleIcon />} size="large" text="Editar categoria" type="submit" color="green" />
+                    <ButtonLink icon={<XCircleIcon />} size="large" text="Volver" color="gray" to="/products/categories" />
+                </EntityFormLayout.Actions>
+            </EntityFormLayout.Form>
+        </EntityFormLayout>
     )
 }

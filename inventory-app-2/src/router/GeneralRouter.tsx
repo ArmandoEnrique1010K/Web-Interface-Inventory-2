@@ -1,34 +1,27 @@
-
-
 import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom'
 import { AuthLayout } from '@/layout/app/AuthLayout'
-import { LoginForm } from '@/features/Auth/components/LoginForm'
+import { LoginForm } from '@/features/Auth/views/LoginForm'
 import { DashboardLayout } from '@/layout/app/DashboardLayout'
-import { RestoreUserPasswordForm } from '@/features/Auth/components/RestoreUserPasswordForm'
-import { ValidateUserTokenForm } from '@/features/Auth/components/ValidateUserTokenForm'
-import { UpdateUserPasswordForm } from '@/features/Auth/components/UpdateUserPasswordForm'
+import { RestoreUserPasswordForm } from '@/features/Auth/views/RestoreUserPasswordForm'
+import { ValidateUserTokenForm } from '@/features/Auth/views/ValidateUserTokenForm'
+import { UpdateUserPasswordForm } from '@/features/Auth/views/UpdateUserPasswordForm'
 import { useSelector } from 'react-redux'
 import type { RootState } from '@/store/store'
 import { UserProfile } from '@/features/Profile/components/UserProfile'
 import { Loading } from '@/views/Loading'
 import type { MenuItem } from 'types'
 import { CubeIcon, DocumentDuplicateIcon, FlagIcon, MapIcon, MapPinIcon, NewspaperIcon, RectangleGroupIcon, TagIcon, TruckIcon } from '@heroicons/react/24/outline'
-import { CategoryAddForm } from '@/features/Product/components/category/CategoryAddForm'
-import { CategoryList } from '@/features/Product/components/category/CategoryList'
-import { CategoryEditLoader } from '@/features/Product/components/category/CategoryEditLoader'
+import { NewCategoryPage } from '@/features/Product/views/category/NewCategoryPage'
+import { ListCategoryPage } from '@/features/Product/views/category/ListCategoryPage'
 import { NavbarContainer } from '@/components/NavbarContainer'
-import { TypeList } from '@/features/Product/components/type/TypeList'
-import { TypeAddForm } from '@/features/Product/components/type/TypeAddForm'
-import { TypeEditLoader } from '@/features/Product/components/type/TypeEditLoader'
 import { CreditsDetails } from '@/features/Credits/components/CreditsDetails'
 import { ProfileEditLoader } from '@/features/Profile/components/ProfileEditLoader'
-import { ModelList } from '@/features/Product/components/model/ModelList'
-import { ModelAddInProductForm } from '@/features/Product/components/model/ModelAddInProductForm'
-import { ModelEditLoader } from '@/features/Product/components/model/ModelEditLoader'
+import { ListModelPage } from '@/features/Product/views/model/ListModelPage'
+import { NewModelProductPage } from '@/features/Product/views/product/NewModelProductPage'
 import { CompanyList } from '@/features/StockLot/components/company/CompanyList'
 import { CompanyAddForm } from '@/features/StockLot/components/company/CompanyAddForm'
 import { CompanyEditLoader } from '@/features/StockLot/components/company/CompanyEditLoader'
-import { ModelDetails } from '@/features/Product/components/model/ModelDetails'
+import { DetailsModelPage } from '@/features/Product/views/model/DetailsModelPage'
 import { StockLotList } from '@/features/StockLot/components/stocklot/StockLotList'
 import { StockLotRegisterForm } from '@/features/StockLot/components/stocklot/StockLotRegisterForm'
 import { StockLotIncreaseForm } from '@/features/StockLot/components/stocklot/StockLotIncreaseForm'
@@ -53,6 +46,11 @@ import { DetailsProductPage } from '@/features/Product/views/product/DetailsProd
 import { ListProductPage } from '@/features/Product/views/product/ListProductPage'
 import { NewProductPage } from '@/features/Product/views/product/NewProductPage'
 import { LoaderProductPage } from '@/features/Product/views/product/LoaderProductPage'
+import { ListTypePage } from '@/features/Product/views/type/ListTypePage'
+import { NewTypePage } from '@/features/Product/views/type/NewTypePage'
+import { LoaderTypePage } from '@/features/Product/views/type/LoaderTypePage'
+import { LoaderCategoryPage } from '@/features/Product/views/category/LoaderCategoryPage'
+import { LoaderModelPage } from '@/features/Product/views/model/LoaderModelPage';
 
 const productItems: MenuItem[] = [
     {
@@ -157,21 +155,21 @@ export const GeneralRouter = () => {
                             <Route path="edit/:id" element={<LoaderProductPage />} />
 
                             {/* RELACIONADO A MODELS */}
-                            <Route path="models" element={<ModelList />} />
+                            <Route path="models" element={<ListModelPage />} />
                             {/* :id es el ID del producto que corresponde al modelo */}
-                            <Route path=":id/models/new" element={<ModelAddInProductForm />} />
-                            <Route path=":productId/models/edit/:modelId" element={<ModelEditLoader />} />
-                            <Route path=":productId/models/:modelId" element={<ModelDetails />} />
+                            <Route path=":id/models/new" element={<NewModelProductPage />} />
+                            <Route path=":productId/models/edit/:modelId" element={<LoaderModelPage />} />
+                            <Route path=":productId/models/:modelId" element={<DetailsModelPage />} />
 
                             {/* RELACIONADO A CATEGORIES */}
-                            <Route path="categories" element={<CategoryList />} />
-                            <Route path="categories/new" element={<CategoryAddForm />} />
-                            <Route path="categories/edit/:id" element={<CategoryEditLoader />} />
+                            <Route path="categories" element={<ListCategoryPage />} />
+                            <Route path="categories/new" element={<NewCategoryPage />} />
+                            <Route path="categories/edit/:id" element={<LoaderCategoryPage />} />
 
                             {/* RELACIONADO A TYPES */}
-                            <Route path="types" element={<TypeList />} />
-                            <Route path="types/new" element={<TypeAddForm />} />
-                            <Route path="types/edit/:id" element={<TypeEditLoader />} />
+                            <Route path="types" element={<ListTypePage />} />
+                            <Route path="types/new" element={<NewTypePage />} />
+                            <Route path="types/edit/:id" element={<LoaderTypePage />} />
                         </Route>
 
                         <Route path='stocklots' element={

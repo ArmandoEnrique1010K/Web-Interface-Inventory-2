@@ -2,10 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { TextMessage } from "@/components/TextMessage";
 import { Error } from "@/views/Error";
-import { ModelEditForm } from "./ModelEditForm";
+import { EditModelPage } from "./EditModelPage";
 import { getModel } from "../../api/ModelAPI";
 
-export const ModelEditLoader = () => {
+export const LoaderModelPage = () => {
     const params = useParams();
     const modelId = params.modelId!;
     const productId = params.productId!;
@@ -27,6 +27,6 @@ export const ModelEditLoader = () => {
     }
 
     if (data) return (
-        <ModelEditForm data={data} modelId={modelId} productId={productId} />
+        <EditModelPage data={data} modelId={modelId} productId={productId} />
     )
 }

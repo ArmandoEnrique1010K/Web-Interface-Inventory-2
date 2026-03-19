@@ -7,7 +7,7 @@ type Props = {
 
 export const EntityDetailsLayout = ({ children }: Props) => {
     return (
-        <div className='p-6'>
+        <div className='p-6 w-full'>
             {children}
         </div>
     )
@@ -36,7 +36,7 @@ EntityDetailsLayout.Header = ({ title, actions }: HeaderProps) => {
 EntityDetailsLayout.Content = ({ children }: Props) => {
     return (
         <div className="flex flex-col justify-center items-center">
-            <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-8 gap-6 w-full">
+            <div className=" mx-auto grid grid-cols-1 lg:grid-cols-8 gap-6 w-full">
                 {children}
             </div>
         </div>
@@ -61,7 +61,7 @@ EntityDetailsLayout.Right = ({ children }: Props) => {
 
 EntityDetailsLayout.Summary = ({ children }: Props) => {
     return (
-        <div className="mt-6 w-full max-w-6xl mx-auto">
+        <div className="w-full mx-auto">
             {children}
         </div>
     )

@@ -1,16 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import { getType } from "../../api/TypeAPI";
-import { TypeEditForm } from "./TypeEditForm";
+import { getCategory } from "../../api/CategoryAPI";
 import { TextMessage } from "@/components/TextMessage";
+import { EditCategoryPage } from "./EditCategoryPage";
 
-export const TypeEditLoader = () => {
+export const LoaderCategoryPage = () => {
     const params = useParams();
-    const typeId = params.id!;
+    const categoryId = params.id!;
 
     const { data, isLoading, isError } = useQuery({
-        queryKey: ['edit-type', typeId],
-        queryFn: () => getType(typeId),
+        queryKey: ['edit-category', categoryId],
+        queryFn: () => getCategory(categoryId),
         retry: false,
     })
 
@@ -24,6 +24,6 @@ export const TypeEditLoader = () => {
     }
 
     if (data) return (
-        <TypeEditForm data={data} typeId={typeId} />
+        <EditCategoryPage data={data} categoryId={categoryId} />
     )
 }
