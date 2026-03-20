@@ -24,9 +24,11 @@ import { Modal } from '@/components/Modal'
 import { NewProductPage } from './NewProductPage'
 
 export const ListProductPage = () => {
-
+    
     const [isAddModalOpen, setAddModalOpen] = useState(false);
-
+    
+    const [editModalOpen, setEditModalOpen] = useState(false);
+    
     const [searchParams, setSearchParams] = useSearchParams()
     const page = Number(searchParams.get('page') ?? 0)
     const name = searchParams.get('name') ?? ''
@@ -34,10 +36,10 @@ export const ListProductPage = () => {
     const typeId = searchParams.get('typeId') ?? undefined
     const statusParam = searchParams.get('status')
     const status =
-        statusParam === null
-            ? undefined
-            : statusParam === 'true'
-
+        statusParam === null ?
+        undefined :
+        statusParam === 'true'
+    
     const [form, setForm] = useState({
         page: page,
         name: name,
@@ -45,11 +47,11 @@ export const ListProductPage = () => {
         typeId: typeId ?? '',
         status: status === undefined ? '' : String(status),
     })
-
+    
     // No se recomienda usar un hook useEffectEvent ni useEffect en React 19
     // Problema: useEffectEvent NO reemplaza a useEffect para sincronizar estado.
     // Estás copiando estado derivado → anti-pattern
-
+    
     // useEffectEvent(() => {
     //     setForm({
     //         page: page,
@@ -59,11 +61,11 @@ export const ListProductPage = () => {
     //         status: status === undefined ? '' : String(status),
     //     })
     // })
-
-
+    
+    
     const { data, isError } = useQuery({
         queryKey: ['list-products', { name, categoryId, typeId, status, page }],
-
+        
         queryFn: () => listAllProducts({
             page: page,
             name: name,
@@ -72,7 +74,7 @@ export const ListProductPage = () => {
             status: status
         }),
     })
-
+    
     const content = data?.content || []
     // OBTENER LAS CARACTERISTICAS Y LOS TIPOS
     const { data: categoriesData } = useQuery({
@@ -83,50 +85,52 @@ export const ListProductPage = () => {
         queryKey: ['list-types'],
         queryFn: listAllTypes
     })
-
+    
     const categories = categoriesData?.map((category: CategoryItem) => ({
         value: category.id,
         label: category.name,
     })) || []
-
-
+    
+    
     const types = typesData?.map((type: TypeItem) => ({
         value: type.id,
         label: type.name,
     })) || []
-
+    
     const generateCaracterist = (product: ProductItem) => {
         if (+product.categoryId === 1) {
             return `${product.typeName}`
         }
-
+        
         if (+product.categoryId !== 1) {
             return `${product.typeName} de ${product.categoryName}`
         }
-
+        
     }
-
-
+    
+    
     const statusOptions = [
         { value: '', label: 'Todos los estados' },
         { value: 'true', label: 'Activos' },
         { value: 'false', label: 'Inactivos' },
     ]
-
+    
     const isSmallScreen = useMediaQuery({ query: '(max-width: 920px)' })
-
+    
     return (
         <EntityListLayout>
             <EntityListLayout.Header title='Productos'
                 actions={
                     <>
-                        {/* <ButtonLink
+                         <ButtonLink
                             icon={<PlusCircleIcon />}
                             size="large"
                             text="Nuevo producto"
                             to="/products/new"
                             color="blue"
-                        /> */}
+                        />
+                        
+                        {/* TODO: No mostrar una ventana modal al agregar un producto */}
                         <Button
                             icon={<PlusCircleIcon />}
                             size="large"
@@ -276,6 +280,9 @@ export const ListProductPage = () => {
                                 } />
 
                                 <BaseTableCell isCenter data={
+                                // TODO: Aqui debe mostrar una ventana modal para editar
+                                
+                                
                                     //* SOLAMENTE SI UN PRODUCTO ESTA ACTIVO, PUEDE SER EDITADO
                                     product.status === true ?
                                         <ButtonLink
@@ -296,4 +303,3 @@ export const ListProductPage = () => {
         </EntityListLayout>
     )
 }
-

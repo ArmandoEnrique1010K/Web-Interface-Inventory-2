@@ -87,7 +87,6 @@ const stockLotsItems: MenuItem[] = [
         to: '/stocklots/companies'
     }
 ]
-
 const locationItems: MenuItem[] = [
     {
         label: 'Ubicaciones',

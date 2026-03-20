@@ -2,12 +2,13 @@ import { Title } from "@/components/Title"
 
 // COMPOSICION DE COMPONENTES
 type Props = {
-    children: React.ReactNode
+    children: React.ReactNode,
+    isCompact?: boolean // prop para compactar el tamaño del formulario
 }
 
-export const EntityFormLayout = ({ children }: Props) => {
+export const EntityFormLayout = ({ children, isCompact }: Props) => {
     return (
-        <div className='p-6'>
+        <div className={`${isCompact ? '' : 'p-6'}`}>
             {children}
         </div>
     )
@@ -58,17 +59,25 @@ EntityFormLayout.Form = ({ onSubmit, children }: FormProps) => {
     )
 }
 
-
-EntityFormLayout.Inputs = ({ children }: Props) => {
+type InputsProps = {
+    onSubmit: React.SubmitEventHandler < HTMLFormElement >
+        children: React.ReactNode
+}
+EntityFormLayout.Inputs = ({ children, isCompact }: InputsProps) => {
     return (
-        <div className='space-y-4'>
+        <div className={`${isCompact ? '' : 'space-y-4'}`}>
             {children}
         </div>
 
     )
 }
 
-EntityFormLayout.Actions = ({ children }: Props) => {
+type ActionsProps = {
+    onSubmit: React.SubmitEventHandler < HTMLFormElement >
+        children: React.ReactNode
+}
+
+EntityFormLayout.Actions = ({ children }: ActionsProps) => {
     return (
         <div className="flex flex-row gap-2 justify-center pt-6">
             {children}
@@ -76,3 +85,5 @@ EntityFormLayout.Actions = ({ children }: Props) => {
 
     )
 }
+
+
