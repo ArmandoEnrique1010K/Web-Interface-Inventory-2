@@ -5,8 +5,6 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { updateLocation } from '../../api/LocationAPI';
 import type { GeneralError } from '@/types/index';
 import { toast } from 'sonner';
-import { ListElementsContainer } from '@/views/ListElementsContainer';
-import { BaseForm } from '@/components/BaseForm';
 import { Button } from '@/ui/Button';
 import { ButtonLink } from '@/ui/ButtonLink';
 import { ArrowUpCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
@@ -17,13 +15,14 @@ import { useState } from 'react';
 import { SelectOptionFilter } from '@/ui/filters/SelectOptionFilter';
 import { SelectOption } from '@/ui/fields/SelectOption';
 import { TextMessage } from '@/components/TextMessage';
+import { EntityFormLayout } from '@/layout/entity/EntityFormLayout';
 
 type Props = {
     data: LocationItem
     locationId: string;
 }
 
-export const LocationEditForm = ({ data, locationId }: Props) => {
+export const EditLocationPage = ({ data, locationId }: Props) => {
 
     const navigate = useNavigate();
 
@@ -113,66 +112,64 @@ export const LocationEditForm = ({ data, locationId }: Props) => {
 
 
     return (
-        <ListElementsContainer title={`Editar ubicación ${locationId}`}>
-            <BaseForm
+        <EntityFormLayout>
+            <EntityFormLayout.Header title={`Editar ubicación ${locationId}`}></EntityFormLayout.Header>
+            <EntityFormLayout.Form
                 onSubmit={handleSubmit(handleForm)}
-                buttons={
-                    <>
-                        <Button icon={<ArrowUpCircleIcon />} size="large" text="Editar ubicación" type="submit" color="green" />
-                        <ButtonLink icon={<XCircleIcon />} size="large" text="Volver" color="gray" to="/locations" />
-                    </>
-                }
-                inputs={
-                    <>
-                        <InputText
-                            id="name"
-                            label="Nombre"
-                            placeholder="Nombre de la ubicación"
-                            type="text"
-                            errorMessage={errors.name}
-                            functionEnabled={register('name')} />
+            >
+                <EntityFormLayout.Inputs>
+                    <InputText
+                        id="name"
+                        label="Nombre"
+                        placeholder="Nombre de la ubicación"
+                        type="text"
+                        errorMessage={errors.name}
+                        functionEnabled={register('name')} />
 
-                        <InputText
-                            id="address"
-                            label="Dirección"
-                            placeholder="Dirección o referencia"
-                            type="text"
-                            errorMessage={errors.address}
-                            functionEnabled={register('address')} />
+                    <InputText
+                        id="address"
+                        label="Dirección"
+                        placeholder="Dirección o referencia"
+                        type="text"
+                        errorMessage={errors.address}
+                        functionEnabled={register('address')} />
 
-                        <div className="flex flex-col space-y-1 w-full pt-2">
-                            <SelectOptionFilter
-                                name='regionId'
-                                label='Región'
-                                options={regions}
-                                onChange={(e) => setSelectedRegionId(e.target.value)}
-                                value={selectedRegionId!}
-                            />
-                            <div className="min-h-6">
-                                <p className="text-red-700 text-sm">
-                                    {selectedRegionId === '0' ? 'Seleccione una región' : ''}
-                                </p>
-                            </div>
-                        </div>
-
-                        <SelectOption id="subregionId" label='Subregión'
-                            errorMessage={errors.subregionId}
-                            functionEnabled={register('subregionId')}
-                            options={subregions}
-                            textInNullOption='Seleccione una subregión'
-                            disabled={selectedRegionId === '0'}
+                    <div className="flex flex-col space-y-1 w-full pt-2">
+                        <SelectOptionFilter
+                            name='regionId'
+                            label='Región'
+                            options={regions}
+                            onChange={(e) => setSelectedRegionId(e.target.value)}
+                            value={selectedRegionId!}
                         />
+                        <div className="min-h-6">
+                            <p className="text-red-700 text-sm">
+                                {selectedRegionId === '0' ? 'Seleccione una región' : ''}
+                            </p>
+                        </div>
+                    </div>
+
+                    <SelectOption id="subregionId" label='Subregión'
+                        errorMessage={errors.subregionId}
+                        functionEnabled={register('subregionId')}
+                        options={subregions}
+                        textInNullOption='Seleccione una subregión'
+                        disabled={selectedRegionId === '0'}
+                    />
 
 
-                        {/* <SelectOption id="subregionId" label='Subregión'
+                    {/* <SelectOption id="subregionId" label='Subregión'
                             errorMessage={errors.subregionId}
                             functionEnabled={register('subregionId')}
                             options={subregions}
                             textInNullOption='Seleccione una subregión' /> */}
 
-                    </>
-                }
-            />
-        </ListElementsContainer>
+                </EntityFormLayout.Inputs>
+                <EntityFormLayout.Actions>
+                    <Button icon={<ArrowUpCircleIcon />} size="large" text="Editar ubicación" type="submit" color="green" />
+                    <ButtonLink icon={<XCircleIcon />} size="large" text="Volver" color="gray" to="/locations" />
+                </EntityFormLayout.Actions>
+            </EntityFormLayout.Form>
+        </EntityFormLayout>
     )
 }

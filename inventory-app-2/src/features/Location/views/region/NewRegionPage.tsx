@@ -51,9 +51,7 @@ export const NewRegionPage = () => {
 
     return (
         <EntityFormLayout>
-            <EntityFormLayout.Title >
-                Añadir nueva región
-            </EntityFormLayout.Title>
+            <EntityFormLayout.Header title='Añadir nueva región'></EntityFormLayout.Header>
             <EntityFormLayout.Form onSubmit={handleSubmit((data) => mutate(data))}>
                 <EntityFormLayout.Inputs>
                     <InputText

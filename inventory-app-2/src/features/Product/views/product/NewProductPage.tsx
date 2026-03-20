@@ -95,8 +95,7 @@ export const NewProductPage = () => {
 
     return (
         <EntityFormLayout>
-
-            <EntityFormLayout.Title>Añadir nuevo producto</EntityFormLayout.Title>
+            <EntityFormLayout.Header title="Añadir nuevo producto"></EntityFormLayout.Header>
             <EntityFormLayout.Form onSubmit={
                 handleSubmit((data) => {
 

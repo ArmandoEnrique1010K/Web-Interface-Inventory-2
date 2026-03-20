@@ -67,7 +67,7 @@ export const EditRegionPage = ({ data, regionId }: Props) => {
 
     return (
         <EntityFormLayout>
-            <EntityFormLayout.Title>{`Editar región ${regionId}`}</EntityFormLayout.Title>
+            <EntityFormLayout.Header title={`Editar región ${regionId}`}></EntityFormLayout.Header>
             <EntityFormLayout.Form onSubmit={handleSubmit(handleForm)}>
                 <EntityFormLayout.Inputs>
                     <InputText
@@ -77,12 +77,10 @@ export const EditRegionPage = ({ data, regionId }: Props) => {
                         type="text"
                         errorMessage={errors.name}
                         functionEnabled={register('name')} />
-
                 </EntityFormLayout.Inputs>
                 <EntityFormLayout.Actions>
                     <Button icon={<ArrowUpCircleIcon />} size="large" text="Editar región" type="submit" color="green" />
                     <ButtonLink icon={<XCircleIcon />} size="large" text="Volver" color="gray" to="/locations/regions" />
-
                 </EntityFormLayout.Actions>
             </EntityFormLayout.Form>
         </EntityFormLayout>

@@ -6,7 +6,6 @@ import { listAllRegions } from "../../api/RegionAPI"
 import { listAllSubregionsByRegionId } from "../../api/SubregionAPI"
 import type { LocationItem, RegionItem, SubregionItem } from "../../types"
 import { useMediaQuery } from "react-responsive"
-import { ListElementsContainer } from "@/views/ListElementsContainer"
 import { ButtonLink } from "@/ui/ButtonLink"
 import { PlusCircleIcon } from "@heroicons/react/24/outline"
 import { FiltersFormContainer } from "@/components/FiltersFormContainer"
@@ -17,9 +16,10 @@ import { TableContainer } from "@/components/TableContainer"
 import { TableRowContainer } from "@/components/TableRowContainer"
 import { BaseTableCell } from "@/components/BaseTableCell"
 import { Paginator } from "@/components/Paginator"
-import { LocationChangeStatus } from "./LocationChangeStatus"
+import { LocationChangeStatus } from "../../components/location/LocationChangeStatus"
+import { EntityListLayout } from "@/layout/entity/EntityListLayout"
 
-export const LocationList = () => {
+export const ListLocationPage = () => {
     const [searchParams, setSearchParams] = useSearchParams()
     const page = Number(searchParams.get('page') ?? 0)
     const name = searchParams.get('name') ?? ''
@@ -93,19 +93,18 @@ export const LocationList = () => {
 
 
     return (
-
-        <ListElementsContainer
-            title="Ubicaciones"
-            buttons={
-                <ButtonLink
-                    icon={<PlusCircleIcon />}
-                    size="large"
-                    text="Nueva ubicación"
-                    to="/locations/new"
-                    color="blue"
-                />
-            }
-            searchParams={
+        <EntityListLayout>
+            <EntityListLayout.Header title="Ubicaciones"
+                actions={
+                    <ButtonLink
+                        icon={<PlusCircleIcon />}
+                        size="large"
+                        text="Nueva ubicación"
+                        to="/locations/new"
+                        color="blue"
+                    />
+                }></EntityListLayout.Header>
+            <EntityListLayout.Content>
                 <FiltersFormContainer onSubmit={
                     (e) => {
                         e.preventDefault()
@@ -170,83 +169,79 @@ export const LocationList = () => {
                         />
 
                     </div>
-
                 </FiltersFormContainer>
-            }
-        >
-            {
-                data && <SearchCounter totalElements={data.totalElements} page={data.page} size={data.size} last={data.last} />
-            }
 
-            <TableContainer
-                headers={['ID', 'Nombre', 'Ubicación', 'Subregión', 'Estado', 'Editar']}
-                isError={isError}
-                isEmpty={!content?.length}
-            >
-                {
-                    content?.map((location: LocationItem) => {
-                        return <TableRowContainer key={location.id}>
-                            <BaseTableCell data={location.id} />
-                            <BaseTableCell data={
-                                <div className='flex flex-col gap-1'>
-                                    {location.name}
-                                </div>
-                            } />
-                            <BaseTableCell data={
-                                location.address
-                            } />
-                            <BaseTableCell data={
-                                location.subregionName
-                            } />
+                <TableContainer
+                    headers={['ID', 'Nombre', 'Ubicación', 'Subregión', 'Estado', 'Editar']}
+                    isError={isError}
+                    isEmpty={!content?.length}
+                    itemsCounter={
+                        data && <SearchCounter totalElements={data.totalElements} page={data.page} size={data.size} last={data.last} />
+                    }
+                    paginator={
+                        (content?.length && data) ? (
+                            <Paginator
+                                currentPage={data?.page}
+                                totalPages={data?.totalPages}
+                                isFirst={data?.first}
+                                isLast={data?.last}
+                                onPageChange={(page) => {
+                                    setForm(prev => ({
+                                        ...prev,
+                                        page
+                                    }))
+                                    const params = new URLSearchParams()
 
-                            <BaseTableCell data={
-                                <LocationChangeStatus size="small" locationId={location.id.toString()} value={location.status ? 'Activo' : 'Inactivo'} />
-                            } />
+                                    if (form.name) params.set('name', form.name)
+                                    if (form.regionId) params.set('regionId', form.regionId)
+                                    if (form.subregionId) params.set('subregionId', form.subregionId)
+                                    if (form.status !== '') params.set('status', form.status)
 
-                            <BaseTableCell isCenter data={
-                                location.status === true ?
-                                    <ButtonLink
-                                        size="small"
-                                        text="Editar"
-                                        to={`/locations/edit/${location.id}`}
-                                        color="blue"
+                                    params.set('page', page.toString())
 
-                                    /> : ''
-                            } />
-                        </TableRowContainer>
-                    })
-                }
-            </TableContainer>
+                                    setSearchParams(params)
 
-            {
-                (content?.length && data) ? (
-                    <Paginator
-                        currentPage={data?.page}
-                        totalPages={data?.totalPages}
-                        isFirst={data?.first}
-                        isLast={data?.last}
-                        onPageChange={(page) => {
-                            setForm(prev => ({
-                                ...prev,
-                                page
-                            }))
-                            const params = new URLSearchParams()
+                                }}
+                            />
+                        ) : null
+                    }
+                >
+                    {
+                        content?.map((location: LocationItem) => {
+                            return <TableRowContainer key={location.id}>
+                                <BaseTableCell data={location.id} />
+                                <BaseTableCell data={
+                                    <div className='flex flex-col gap-1'>
+                                        {location.name}
+                                    </div>
+                                } />
+                                <BaseTableCell data={
+                                    location.address
+                                } />
+                                <BaseTableCell data={
+                                    location.subregionName
+                                } />
 
-                            if (form.name) params.set('name', form.name)
-                            if (form.regionId) params.set('regionId', form.regionId)
-                            if (form.subregionId) params.set('subregionId', form.subregionId)
-                            if (form.status !== '') params.set('status', form.status)
+                                <BaseTableCell data={
+                                    <LocationChangeStatus size="small" locationId={location.id.toString()} value={location.status ? 'Activo' : 'Inactivo'} />
+                                } />
 
-                            params.set('page', page.toString())
+                                <BaseTableCell isCenter data={
+                                    location.status === true ?
+                                        <ButtonLink
+                                            size="small"
+                                            text="Editar"
+                                            to={`/locations/edit/${location.id}`}
+                                            color="blue"
 
-                            setSearchParams(params)
-
-                        }}
-                    />
-                ) : null
-            }
-        </ListElementsContainer>
-
+                                        /> : ''
+                                } />
+                            </TableRowContainer>
+                        })
+                    }
+                </TableContainer>
+            </EntityListLayout.Content>
+        </EntityListLayout>
 
     )
 }

@@ -5,8 +5,6 @@ import { useForm } from "react-hook-form";
 import type { GeneralError } from "@/types/index";
 import { updateSubregion } from "../../api/SubregionAPI";
 import { toast } from "sonner";
-import { ListElementsContainer } from "@/views/ListElementsContainer";
-import { BaseForm } from "@/components/BaseForm";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { Button } from "@/ui/Button";
 import { ButtonLink } from "@/ui/ButtonLink";
@@ -14,6 +12,7 @@ import { InputText } from "@/ui/fields/InputText";
 import { SelectOption } from "@/ui/fields/SelectOption";
 import { listAllRegions } from "../../api/RegionAPI";
 import { TextMessage } from "@/components/TextMessage";
+import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 
 
 type Props = {
@@ -21,7 +20,7 @@ type Props = {
     subregionId: string;
 }
 
-export const SubregionEditForm = ({ data, subregionId }: Props) => {
+export const EditSubregionPage = ({ data, subregionId }: Props) => {
     const navigate = useNavigate();
 
     const { register, handleSubmit, setError, formState: { errors } } = useForm<SubregionForm>({
@@ -86,37 +85,37 @@ export const SubregionEditForm = ({ data, subregionId }: Props) => {
 
 
     return (
-        <ListElementsContainer title={`Editar subregión ${subregionId}`}>
-            <BaseForm
+        <EntityFormLayout>
+            <EntityFormLayout.Header title={`Editar subregión ${subregionId}`}></EntityFormLayout.Header>
+            <EntityFormLayout.Form
                 onSubmit={handleSubmit(handleForm)}
-                buttons={
-                    <>
-                        <Button icon={<ArrowUpCircleIcon />} size="large" text="Editar subregión" type="submit" color="green" />
-                        <ButtonLink icon={<XCircleIcon />} size="large" text="Volver" color="gray" to="/locations/subregions" />
-                    </>
-                }
-                inputs={
-                    <>
-                        <InputText
-                            id="name"
-                            label="Nombre"
-                            placeholder="Nombre de la región"
-                            type="text"
-                            errorMessage={errors.name}
-                            functionEnabled={register('name')} />
+            >
+                <EntityFormLayout.Inputs>
+                    <InputText
+                        id="name"
+                        label="Nombre"
+                        placeholder="Nombre de la región"
+                        type="text"
+                        errorMessage={errors.name}
+                        functionEnabled={register('name')} />
 
 
-                        <SelectOption
-                            id="regionId"
-                            label="Región"
-                            errorMessage={errors.regionId}
-                            functionEnabled={register('regionId')}
-                            options={regions}
-                            textInNullOption="Seleccione un tipo"
-                        />
-                    </>
-                }
-            />
-        </ListElementsContainer>
+                    <SelectOption
+                        id="regionId"
+                        label="Región"
+                        errorMessage={errors.regionId}
+                        functionEnabled={register('regionId')}
+                        options={regions}
+                        textInNullOption="Seleccione un tipo"
+                    />
+                </EntityFormLayout.Inputs>
+
+                <EntityFormLayout.Actions>
+                    <Button icon={<ArrowUpCircleIcon />} size="large" text="Editar subregión" type="submit" color="green" />
+                    <ButtonLink icon={<XCircleIcon />} size="large" text="Volver" color="gray" to="/locations/subregions" />
+
+                </EntityFormLayout.Actions>
+            </EntityFormLayout.Form>
+        </EntityFormLayout>
     )
 }

@@ -17,7 +17,7 @@ import { Button } from "@/ui/Button"
 import { ButtonLink } from "@/ui/ButtonLink"
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline"
 
-export const LocationAddForm = () => {
+export const NewLocationPage = () => {
 
     const initialValues: LocationForm = {
         name: '',

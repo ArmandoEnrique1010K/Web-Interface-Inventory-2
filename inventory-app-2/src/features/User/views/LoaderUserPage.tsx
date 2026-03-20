@@ -3,9 +3,9 @@ import { useParams } from "react-router-dom";
 import type { UserRolesDetails } from "../types";
 import { getUserRoles } from "../api/UserAPI";
 import { TextMessage } from "@/components/TextMessage";
-import { UserAlterRolesForm } from "./UserAlterRolesForm";
+import { AlterRolesUserPage } from "./AlterRolesUserPage";
 
-export const UserAlterRolesLoader = () => {
+export const LoaderUserPage = () => {
     const params = useParams();
     const userId = params.id!;
 
@@ -25,6 +25,6 @@ export const UserAlterRolesLoader = () => {
     }
 
     if (data) return (
-        <UserAlterRolesForm data={data} userId={userId} />
+        <AlterRolesUserPage data={data} userId={userId} />
     )
 }

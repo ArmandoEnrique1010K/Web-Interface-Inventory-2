@@ -5,10 +5,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateUserRoles } from "../api/UserAPI";
 import type { GeneralError } from "@/types/index";
 import { toast } from "sonner";
-import { BaseForm } from "@/components/BaseForm";
 import { Button } from "@/ui/Button";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { ButtonLink } from "@/ui/ButtonLink";
+import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 
 type Props = {
     data: UserRolesDetails
@@ -16,7 +16,7 @@ type Props = {
 }
 
 
-export const UserAlterRolesForm = ({ data, userId }: Props) => {
+export const AlterRolesUserPage = ({ data, userId }: Props) => {
     const navigate = useNavigate();
 
     const { register, handleSubmit, setError } = useForm<RolesForm>({
@@ -67,20 +67,14 @@ export const UserAlterRolesForm = ({ data, userId }: Props) => {
 
 
     return (
-        <BaseForm
-            title={`Alterar roles del usuario #${userId}`}
-            onSubmit={handleSubmit(handleForm)}
-            buttons={
-                <>
-                    <Button icon={<ArrowUpCircleIcon />} size="large" text="Alterar roles" type="submit" color="green" />
-                    <ButtonLink icon={<XCircleIcon />} size="large" text="Volver" color="gray" to="/users" />
-                </>
-            }
-            helpText={
-                "Tenga cuidado al alterar los roles de un usuario, podria acceder a información confidencial; recuerde que lo altera bajo su propia responsabilidad. Por defecto los usuarios siempre van a tener el rol de 'Usuario'"
-            }
-            inputsFields={
-                <>
+        <EntityFormLayout>
+            <EntityFormLayout.Header
+                title={`Alterar roles del usuario #${userId}`}
+                helpText="Tenga cuidado al alterar los roles de un usuario, podria acceder a información confidencial; recuerde que lo altera bajo su propia responsabilidad. Por defecto los usuarios siempre van a tener el rol de 'Usuario'"
+            ></EntityFormLayout.Header>
+            <EntityFormLayout.Form onSubmit={handleSubmit(handleForm)}
+            >
+                <EntityFormLayout.Inputs>
                     <label className="text-md font-bold">Roles</label>
 
                     {/* Campos de tipo checkbox para los roles */}
@@ -114,8 +108,15 @@ export const UserAlterRolesForm = ({ data, userId }: Props) => {
                         </label>
 
                     </div>
-                </>
-            }
-        />
+
+                </EntityFormLayout.Inputs>
+                <EntityFormLayout.Actions>
+                    <Button icon={<ArrowUpCircleIcon />} size="large" text="Alterar roles" type="submit" color="green" />
+                    <ButtonLink icon={<XCircleIcon />} size="large" text="Volver" color="gray" to="/users" />
+
+                </EntityFormLayout.Actions>
+            </EntityFormLayout.Form>
+
+        </EntityFormLayout>
     )
 }

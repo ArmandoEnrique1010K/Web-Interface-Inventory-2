@@ -2,9 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { TextMessage } from "@/components/TextMessage";
 import { getSubregion } from "../../api/SubregionAPI";
-import { SubregionEditForm } from "./SubregionEditForm";
+import { EditSubregionPage } from "./EditSubregionPage";
 
-export const SubregionEditLoader = () => {
+export const LoaderSubregionPage = () => {
     const params = useParams();
     const subregionId = params.id!;
 
@@ -24,6 +24,6 @@ export const SubregionEditLoader = () => {
     }
 
     if (data) return (
-        <SubregionEditForm data={data} subregionId={subregionId} />
+        <EditSubregionPage data={data} subregionId={subregionId} />
     )
 }

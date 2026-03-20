@@ -2,10 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { TextMessage } from "@/components/TextMessage";
 import { getLocation } from "../../api/LocationAPI";
-import { LocationEditForm } from "./LocationEditForm";
+import { EditLocationPage } from "./EditLocationPage";
 import type { LocationItem } from "../../types";
 
-export const LocationEditLoader = () => {
+export const LoaderLocationPage = () => {
     const params = useParams();
     const locationId = params.id!;
 
@@ -25,6 +25,6 @@ export const LocationEditLoader = () => {
     }
 
     if (data) return (
-        <LocationEditForm data={data} locationId={locationId} />
+        <EditLocationPage data={data} locationId={locationId} />
     )
 }

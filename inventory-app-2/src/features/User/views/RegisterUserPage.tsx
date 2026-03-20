@@ -5,14 +5,14 @@ import { useMutation } from "@tanstack/react-query"
 import { registerUser } from "../api/UserAPI"
 import type { GeneralError } from "@/types/index"
 import { toast } from "sonner"
-import { BaseForm } from "@/components/BaseForm"
 import { InputText } from "@/ui/fields/InputText"
 import { Button } from "@/ui/Button"
 import { ButtonLink } from "@/ui/ButtonLink"
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline"
 import { InputPassword } from "@/ui/fields/InputPassword"
+import { EntityFormLayout } from "@/layout/entity/EntityFormLayout"
 
-export const UserAddForm = () => {
+export const RegisterUserPage = () => {
 
     const initialValues: UserRegisterForm = {
         firstname: '',
@@ -60,11 +60,10 @@ export const UserAddForm = () => {
 
 
     return (
-        <BaseForm
-            title="Registrar nuevo usuario"
-            onSubmit={handleSubmit((data) => mutate(data))}
-            inputsFields={
-                <>
+        <EntityFormLayout>
+            <EntityFormLayout.Header title="Registrar nuevo usuario"></EntityFormLayout.Header>
+            <EntityFormLayout.Form onSubmit={handleSubmit((data) => mutate(data))}>
+                <EntityFormLayout.Inputs>
                     <InputText
                         id="firstname"
                         label="Nombre"
@@ -139,14 +138,13 @@ export const UserAddForm = () => {
 
                     </div>
 
-                </>
-            }
-            buttons={
-                <>
+                </EntityFormLayout.Inputs>
+                <EntityFormLayout.Actions>
                     <Button icon={<ArrowUpCircleIcon />} size="large" text='Registrar usuario' type="submit" color="green" />
                     <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to="/users" />
-                </>
-            }
-        />
+
+                </EntityFormLayout.Actions>
+            </EntityFormLayout.Form>
+        </EntityFormLayout>
     )
 }

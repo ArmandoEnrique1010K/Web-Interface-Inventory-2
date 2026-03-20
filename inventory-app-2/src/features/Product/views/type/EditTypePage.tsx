@@ -67,7 +67,7 @@ export const EditTypePage = ({ data, typeId }: Props) => {
 
     return (
         <EntityFormLayout>
-            <EntityFormLayout.Title>{`Editar tipo #${typeId}`}</EntityFormLayout.Title>
+            <EntityFormLayout.Header title={`Editar tipo #${typeId}`}></EntityFormLayout.Header>
             <EntityFormLayout.Form onSubmit={handleSubmit(handleForm)}>
                 <EntityFormLayout.Inputs>
                     <InputText

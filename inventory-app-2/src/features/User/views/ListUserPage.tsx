@@ -5,7 +5,6 @@ import { listAllUsers } from "../api/UserAPI"
 import { listAllRoles } from "../api/RoleAPI"
 import type { RoleItem, UserItem } from "../types"
 import { useMediaQuery } from "react-responsive"
-import { ListElementsContainer } from "@/views/ListElementsContainer"
 import { FiltersFormContainer } from "@/components/FiltersFormContainer"
 import { InputTextFilter } from "@/ui/filters/InputTextFilter"
 import { SearchCounter } from "@/components/SearchCounter"
@@ -16,9 +15,10 @@ import { BaseTableCell } from "@/components/BaseTableCell"
 import { ButtonLink } from "@/ui/ButtonLink"
 import { Paginator } from "@/components/Paginator"
 import { PlusCircleIcon } from "@heroicons/react/24/outline"
-import { UserChangeStatus } from "./UserChangeStatus"
+import { UserChangeStatus } from "../components/UserChangeStatus"
+import { EntityListLayout } from "@/layout/entity/EntityListLayout"
 
-export const UserList = () => {
+export const ListUserPage = () => {
 
     const [searchParams, setSearchParams] = useSearchParams()
     const page = Number(searchParams.get('page') ?? 0)
@@ -65,18 +65,19 @@ export const UserList = () => {
     const isSmallScreen = useMediaQuery({ query: '(max-width: 479px)' })
 
     return (
-        <ListElementsContainer
-            title="Usuarios registrados"
-            buttonsContainer={
-                <ButtonLink
-                    icon={<PlusCircleIcon />}
-                    size="large"
-                    text="Registrar usuario"
-                    to="/users/new"
-                    color="blue"
-                />
-            }
-            searchParamsContainer={
+        <EntityListLayout>
+
+            <EntityListLayout.Header title="Usuarios registrados"
+                actions={
+                    <ButtonLink
+                        icon={<PlusCircleIcon />}
+                        size="large"
+                        text="Registrar usuario"
+                        to="/users/new"
+                        color="blue"
+                    />
+                }></EntityListLayout.Header>
+            <EntityListLayout.Content>
                 <FiltersFormContainer onSubmit={
                     (e) => {
                         e.preventDefault()
@@ -122,45 +123,14 @@ export const UserList = () => {
                     </div>
 
                 </FiltersFormContainer>
-            }
-
-            dataContainer={
                 <TableContainer
-                    headers={['ID', 'Nombres', 'DNI', 'Roles', 'Estado', 'Alterar roles']}
+                    headers={['ID', 'Nombres', 'DNI',
+                        'Roles', 'Estado', 'Alterar roles']}
                     isError={isError}
                     isEmpty={!content?.length}
                     itemsCounter={
                         data && <SearchCounter totalElements={data.totalElements} page={data.page} size={data.size} last={data.last} />
                     }
-                    tableRows={
-                        content?.map((user: UserItem) => {
-                            return <TableRowContainer key={user.id}>
-                                <BaseTableCell data={user.id} />
-                                <BaseTableCell data={
-                                    <div className='flex flex-col gap-1'>
-                                        {user.firstname} {user.lastname}
-                                    </div>
-                                } />
-                                <BaseTableCell data={user.dni} />
-                                <BaseTableCell data={user.roles.map(r => r + " ")} />
-                                <BaseTableCell data={
-                                    <UserChangeStatus userId={user.id.toString()} value={user.status === true ? 'Activo' : 'Inactivo'} size={"small"} />
-                                } />
-
-                                <BaseTableCell isCenter data={
-                                    user.status === true ?
-                                        <ButtonLink
-                                            size="small"
-                                            text="Alterar roles"
-                                            to={`/users/${user.id}/alter`}
-                                            color="red"
-                                        /> : ''
-                                } />
-
-                            </TableRowContainer>
-                        })
-                    }
-
                     paginator={
                         (content?.length && data) ? (
                             <Paginator
@@ -186,13 +156,38 @@ export const UserList = () => {
                                 }}
                             />
                         ) : null
+                    }>
 
+                    {
+                        content?.map((user: UserItem) => {
+                            return <TableRowContainer key={user.id}>
+                                <BaseTableCell data={user.id} />
+                                <BaseTableCell data={
+                                    <div className='flex flex-col gap-1'>
+                                        {user.firstname} {user.lastname}
+                                    </div>
+                                } />
+                                <BaseTableCell data={user.dni} />
+                                <BaseTableCell data={user.roles.map(r => r + " ")} />
+                                <BaseTableCell data={
+                                    <UserChangeStatus userId={user.id.toString()} value={user.status === true ? 'Activo' : 'Inactivo'} size={"small"} />
+                                } />
+                                <BaseTableCell isCenter data={
+                                    user.status === true ?
+                                        <ButtonLink
+                                            size="small"
+                                            text="Alterar roles"
+                                            to={`/users/${user.id}/alter`}
+                                            color="red"
+                                        /> : ''}
+                                />
+                            </TableRowContainer>
+                        })
                     }
-                />
-            }
-        >
+                </TableContainer>
+            </EntityListLayout.Content>
 
-
-        </ListElementsContainer>
+        </EntityListLayout >
     )
 }
+

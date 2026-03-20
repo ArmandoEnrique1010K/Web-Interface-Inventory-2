@@ -32,14 +32,11 @@ import { StockLotDetails } from '@/features/StockLot/components/stocklot/StockLo
 import { ListRegionPage } from '@/features/Location/views/region/ListRegionPage'
 import { NewRegionPage } from '@/features/Location/views/region/NewRegionPage'
 import { LoaderRegionPage } from '@/features/Location/views/region/LoaderRegionPage'
-import { SubregionAddForm } from '@/features/Location/components/subregion/SubregionAddForm'
-import { SubregionEditLoader } from '@/features/Location/components/subregion/SubregionEditLoader'
-import { LocationList } from '@/features/Location/components/location/LocationList'
-import { LocationAddForm } from '@/features/Location/components/location/LocationAddForm'
-import { LocationEditLoader } from '@/features/Location/components/location/LocationEditLoader'
-import { UserList } from '@/features/User/components/UserList'
-import { UserAddForm } from '@/features/User/components/UserAddForm'
-import { UserAlterRolesLoader } from '@/features/User/components/UserAlterRolesLoader'
+import { NewSubregionPage } from '@/features/Location/views/subregion/NewSubregionPage'
+import { LoaderSubregionPage } from '@/features/Location/views/subregion/LoaderSubregionPage'
+import { ListLocationPage } from '@/features/Location/views/location/ListLocationPage'
+import { NewLocationPage } from '@/features/Location/views/location/NewLocationPage'
+import { LoaderLocationPage } from '@/features/Location/views/location/LoaderLocationPage'
 import { MovementList } from '@/features/Movement/components/MovementList'
 import { DetailsProductPage } from '@/features/Product/views/product/DetailsProductPage'
 import { ListProductPage } from '@/features/Product/views/product/ListProductPage'
@@ -50,7 +47,10 @@ import { NewTypePage } from '@/features/Product/views/type/NewTypePage'
 import { LoaderTypePage } from '@/features/Product/views/type/LoaderTypePage'
 import { LoaderCategoryPage } from '@/features/Product/views/category/LoaderCategoryPage'
 import { LoaderModelPage } from '@/features/Product/views/model/LoaderModelPage';
-import { SubListRegionPage } from '@/features/Location/components/subregion/SubregionList'
+import { ListSubregionPage } from '@/features/Location/views/subregion/ListSubregionPage'
+import { ListUserPage } from '@/features/User/views/ListUserPage'
+import { RegisterUserPage } from '@/features/User/views/RegisterUserPage'
+import { LoaderUserPage } from '@/features/User/views/LoaderUserPage'
 
 const productItems: MenuItem[] = [
     {
@@ -198,26 +198,26 @@ export const GeneralRouter = () => {
                                 <Outlet />
                             </NavbarContainer>
                         }>
-                            <Route index element={<LocationList />} />
-                            <Route path="new" element={<LocationAddForm />} />
-                            <Route path="edit/:id" element={<LocationEditLoader />} />
+                            <Route index element={<ListLocationPage />} />
+                            <Route path="new" element={<NewLocationPage />} />
+                            <Route path="edit/:id" element={<LoaderLocationPage />} />
 
                             <Route path="regions" element={<ListRegionPage />} />
                             <Route path="regions/new" element={<NewRegionPage />} />
                             <Route path="regions/edit/:id" element={<LoaderRegionPage />} />
 
-                            <Route path="subregions" element={<SubListRegionPage />} />
-                            <Route path="subregions/add" element={<SubregionAddForm />} />
-                            <Route path="subregions/edit/:id" element={<SubregionEditLoader />} />
+                            <Route path="subregions" element={<ListSubregionPage />} />
+                            <Route path="subregions/add" element={<NewSubregionPage />} />
+                            <Route path="subregions/edit/:id" element={<LoaderSubregionPage />} />
                         </Route>
 
                         {/* RELACIONADO A USER */}
                         <Route path='users' element={
                             <Outlet />
                         }>
-                            <Route index element={<UserList />} />
-                            <Route path='new' element={<UserAddForm />} />
-                            <Route path=':id/alter' element={<UserAlterRolesLoader />} />
+                            <Route index element={<ListUserPage />} />
+                            <Route path='new' element={<RegisterUserPage />} />
+                            <Route path=':id/alter' element={<LoaderUserPage />} />
 
                         </Route>
                         {/* RELACIONADO A MOVEMENT */}

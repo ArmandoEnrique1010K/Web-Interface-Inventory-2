@@ -67,7 +67,7 @@ export const EditCategoryPage = ({ data, categoryId }: Props) => {
 
     return (
         <EntityFormLayout>
-            <EntityFormLayout.Title>{`Editar categoria #${categoryId}`}</EntityFormLayout.Title>
+            <EntityFormLayout.Header title={`Editar categoria #${categoryId}`}></EntityFormLayout.Header>
             <EntityFormLayout.Form onSubmit={handleSubmit(handleForm)}>
                 <EntityFormLayout.Inputs>
                     <InputText

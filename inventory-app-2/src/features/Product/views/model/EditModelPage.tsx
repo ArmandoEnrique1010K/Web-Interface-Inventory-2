@@ -81,7 +81,7 @@ export const EditModelPage = ({ data, modelId, productId }: Props) => {
 
     return (
         <EntityFormLayout>
-            <EntityFormLayout.Title>{`Editar modelo #${modelId}`}</EntityFormLayout.Title>
+            <EntityFormLayout.Header title={`Editar modelo #${modelId}`}></EntityFormLayout.Header>
             <EntityFormLayout.Form
                 onSubmit={handleSubmit((data) => {
                     handleForm({

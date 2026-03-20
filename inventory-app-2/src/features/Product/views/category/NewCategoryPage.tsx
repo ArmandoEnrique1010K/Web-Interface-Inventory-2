@@ -52,7 +52,7 @@ export const NewCategoryPage = () => {
 
     return (
         <EntityFormLayout>
-            <EntityFormLayout.Title>Añadir nueva categoria</EntityFormLayout.Title>
+            <EntityFormLayout.Header title="Añadir nueva categoria"></EntityFormLayout.Header>
             <EntityFormLayout.Form onSubmit={handleSubmit((data) => mutate(data))}>
                 <EntityFormLayout.Inputs>
                     <InputText

@@ -67,7 +67,7 @@ export const NewModelProductPage = () => {
     // EFECTO QUE SE EJECUTA SI HAY UNA IMAGEN QUE SE ESTA SUBIENDO
     return (
         <EntityFormLayout>
-            <EntityFormLayout.Title>{`Añadir nuevo modelo al producto #${id /* location.pathname.split('/')[2] */}`}</EntityFormLayout.Title>
+            <EntityFormLayout.Header title={`Añadir nuevo modelo al producto #${id /* location.pathname.split('/')[2] */}`}></EntityFormLayout.Header>
             <EntityFormLayout.Form onSubmit={handleSubmit((data) => {
                 mutate({
                     productId: id!,

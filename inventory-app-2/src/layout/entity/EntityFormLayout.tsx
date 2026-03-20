@@ -13,14 +13,34 @@ export const EntityFormLayout = ({ children }: Props) => {
     )
 }
 
-EntityFormLayout.Title = ({ children }: { children: string }) => {
-    return <Title>{children}</Title>
+type HeaderProps = {
+    title: string
+    helpText?: string
 }
+
+EntityFormLayout.Header = ({ title, helpText }: HeaderProps) => {
+    return (
+        <>
+            <Title>{title}</Title>
+
+            {helpText && (
+                <p className='pb-6 w-full'>
+                    {helpText}
+                </p>
+
+            )}
+        </>
+    )
+
+}
+
 
 type FormProps = {
     onSubmit: React.SubmitEventHandler<HTMLFormElement>
     children: React.ReactNode
 }
+
+
 
 EntityFormLayout.Form = ({ onSubmit, children }: FormProps) => {
     return (
@@ -38,14 +58,6 @@ EntityFormLayout.Form = ({ onSubmit, children }: FormProps) => {
     )
 }
 
-EntityFormLayout.HelpText = ({ children }: { children: string }) => {
-    return (
-        <p className='pb-6 w-full'>
-            {children}
-        </p>
-
-    )
-}
 
 EntityFormLayout.Inputs = ({ children }: Props) => {
     return (

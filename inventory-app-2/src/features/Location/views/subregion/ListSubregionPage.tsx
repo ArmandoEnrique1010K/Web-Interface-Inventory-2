@@ -1,7 +1,6 @@
 import { listAllSubregionsByRegionId } from '../../api/SubregionAPI'
 import { useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { ListElementsContainer } from '@/views/ListElementsContainer'
 import { ButtonLink } from '@/ui/ButtonLink'
 import { PlusCircleIcon } from '@heroicons/react/24/outline'
 import { TableContainer } from '@/components/TableContainer'
@@ -11,8 +10,9 @@ import { BaseTableCell } from '@/components/BaseTableCell'
 import { listAllRegions } from '../../api/RegionAPI'
 import { Button } from '@/ui/Button'
 import { useEffect } from 'react'
+import { EntityListLayout } from '@/layout/entity/EntityListLayout'
 
-export const SubListRegionPage = () => {
+export const ListSubregionPage = () => {
 
     const [searchParams, setSearchParams] = useSearchParams()
     const regionId = searchParams.get('regionId') ?? 1
@@ -38,18 +38,19 @@ export const SubListRegionPage = () => {
 
 
     return (
-        <ListElementsContainer
-            title="Subregiones agrupadas por región"
-            buttons={
-                <ButtonLink
-                    icon={<PlusCircleIcon />}
-                    size="large"
-                    text="Nueva subregión"
-                    to="/locations/subregions/add"
-                    color="blue"
-                />
-            }
-            searchParams={
+        <EntityListLayout>
+            <EntityListLayout.Header title="Subregiones agrupadas por región"
+                actions={
+                    <ButtonLink
+                        icon={<PlusCircleIcon />}
+                        size="large"
+                        text="Nueva subregión"
+                        to="/locations/subregions/add"
+                        color="blue"
+                    />
+                }>
+            </EntityListLayout.Header>
+            <EntityListLayout.Content>
                 <div className='flex flex-row gap-2 py-4'>
                     {
                         !isErrorRegion && dataRegion?.map((region: RegionItem) => (
@@ -66,31 +67,33 @@ export const SubListRegionPage = () => {
                         ))
                     }
                 </div>
-            }
-        >
-            <TableContainer
-                headers={['ID', 'Nombre', 'Editar']}
-                isError={isError}
-                isEmpty={!data?.length}
-            >
-                {
-                    data?.map((subregion: SubregionItem) => (
-                        <TableRowContainer key={subregion.id}>
-                            <BaseTableCell data={subregion.id} />
-                            <BaseTableCell data={subregion.name} />
-                            <BaseTableCell data={
-                                <ButtonLink
-                                    size="small"
-                                    text="Editar"
-                                    to={`/locations/subregions/edit/${subregion.id}`}
-                                    color="blue"
-                                />
-                            } isCenter />
-                        </TableRowContainer>
-                    ))
+                <TableContainer
+                    headers={['ID', 'Nombre', 'Editar']}
+                    isError={isError}
+                    isEmpty={!data?.length}
+                >
+                    {
+                        data?.map((subregion: SubregionItem) => (
+                            <TableRowContainer key={subregion.id}>
+                                <BaseTableCell data={subregion.id} />
+                                <BaseTableCell data={subregion.name} />
+                                <BaseTableCell data={
+                                    <ButtonLink
+                                        size="small"
+                                        text="Editar"
+                                        to={`/locations/subregions/edit/${subregion.id}`}
+                                        color="blue"
+                                    />
+                                } isCenter />
+                            </TableRowContainer>
+                        ))
 
-                }
-            </TableContainer>
-        </ListElementsContainer>
+                    }
+                </TableContainer>
+
+
+
+            </EntityListLayout.Content>
+        </EntityListLayout>
     )
 }
