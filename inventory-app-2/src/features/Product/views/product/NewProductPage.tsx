@@ -16,7 +16,7 @@ import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { UploadImage } from "@/ui/fields/UploadImage";
 import { Subtitle } from "@/components/Subtitle";
-import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
+import { EntityFormLayout } from "@/components/FormModalLayout";
 
 export const NewProductPage = () => {
     const [file, setFile] = useState<File | null>(null)
@@ -95,7 +95,6 @@ export const NewProductPage = () => {
 
     return (
         <EntityFormLayout>
-            <EntityFormLayout.Header title="Añadir nuevo producto"></EntityFormLayout.Header>
             <EntityFormLayout.Form onSubmit={
                 handleSubmit((data) => {
 

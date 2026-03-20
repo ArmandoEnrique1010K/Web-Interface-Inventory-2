@@ -62,7 +62,7 @@ export const Button = ({
             disabled={disabled}
             onClick={onClick}
         >
-            {icon && (
+            {icon && !isSmallScreen && (
                 <span className={`flex items-center justify-center size-8 ${isSmallScreen ? '' : (text && 'mr-2')}`}>
                     {icon}
                 </span>

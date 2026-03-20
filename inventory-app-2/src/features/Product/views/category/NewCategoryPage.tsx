@@ -9,7 +9,7 @@ import { Button } from "@/ui/Button";
 import type { GeneralError } from "types";
 import { ButtonLink } from "@/ui/ButtonLink";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
-import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
+import { EntityFormLayout } from "@/components/FormModalLayout";
 
 export const NewCategoryPage = () => {
 

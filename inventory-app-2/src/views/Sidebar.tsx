@@ -60,6 +60,7 @@ export const Sidebar = () => {
                     styles={{
                         bmBurgerButton: {
                             position: 'absolute',
+                            zIndex: '0', // No olvidar añadir un indice de alejamiento
                             width: 'auto',
                             height: 'auto',
                             left: '50%',

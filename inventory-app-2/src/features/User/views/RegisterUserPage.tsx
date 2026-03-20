@@ -10,7 +10,7 @@ import { Button } from "@/ui/Button"
 import { ButtonLink } from "@/ui/ButtonLink"
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline"
 import { InputPassword } from "@/ui/fields/InputPassword"
-import { EntityFormLayout } from "@/layout/entity/EntityFormLayout"
+import { EntityFormLayout } from "@/components/FormModalLayout"
 
 export const RegisterUserPage = () => {
 

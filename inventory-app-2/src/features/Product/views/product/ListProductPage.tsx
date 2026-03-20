@@ -19,8 +19,14 @@ import { SelectOptionFilter } from '@/ui/filters/SelectOptionFilter'
 import { PlusCircleIcon } from '@heroicons/react/24/outline'
 import { EntityListLayout } from '@/layout/entity/EntityListLayout'
 import { ProductChangeStatus } from '../../components/product/ProductChangeStatus'
+import { Button } from '@/ui/Button'
+import { Modal } from '@/components/Modal'
+import { NewProductPage } from './NewProductPage'
 
 export const ListProductPage = () => {
+
+    const [isAddModalOpen, setAddModalOpen] = useState(false);
+
     const [searchParams, setSearchParams] = useSearchParams()
     const page = Number(searchParams.get('page') ?? 0)
     const name = searchParams.get('name') ?? ''
@@ -113,13 +119,36 @@ export const ListProductPage = () => {
         <EntityListLayout>
             <EntityListLayout.Header title='Productos'
                 actions={
-                    <ButtonLink
-                        icon={<PlusCircleIcon />}
-                        size="large"
-                        text="Nuevo producto"
-                        to="/products/new"
-                        color="blue"
-                    />
+                    <>
+                        {/* <ButtonLink
+                            icon={<PlusCircleIcon />}
+                            size="large"
+                            text="Nuevo producto"
+                            to="/products/new"
+                            color="blue"
+                        /> */}
+                        <Button
+                            icon={<PlusCircleIcon />}
+                            size="large"
+                            text="Nuevo producto"
+                            color="blue"
+                            type='button'
+                            onClick={() => setAddModalOpen(true)}
+                        >
+
+                        </Button>
+                        <Modal
+                            isOpen={isAddModalOpen}
+                            onClose={() => setAddModalOpen(false)}
+                            size='lg'
+                            title='Añadir nuevo producto'
+                        >
+                            <NewProductPage />
+                        </Modal>
+
+                    </>
+
+
 
                 }></EntityListLayout.Header>
             <EntityListLayout.Content>

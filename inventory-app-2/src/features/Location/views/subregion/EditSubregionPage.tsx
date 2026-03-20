@@ -12,7 +12,7 @@ import { InputText } from "@/ui/fields/InputText";
 import { SelectOption } from "@/ui/fields/SelectOption";
 import { listAllRegions } from "../../api/RegionAPI";
 import { TextMessage } from "@/components/TextMessage";
-import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
+import { EntityFormLayout } from "@/components/FormModalLayout";
 
 
 type Props = {

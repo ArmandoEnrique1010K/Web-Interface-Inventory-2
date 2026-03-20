@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { Button } from "@/ui/Button";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { ButtonLink } from "@/ui/ButtonLink";
-import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
+import { EntityFormLayout } from "@/components/FormModalLayout";
 
 type Props = {
     data: UserRolesDetails

@@ -9,7 +9,7 @@ import type { GeneralError } from "types";
 import { registerType } from "../../api/TypeAPI";
 import { ButtonLink } from "@/ui/ButtonLink";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
-import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
+import { EntityFormLayout } from "@/components/FormModalLayout";
 
 export const NewTypePage = () => {
 

@@ -62,7 +62,7 @@ export const ButtonLink = ({
                     {icon}
                 </span>
             )}
-            <span>{isSmallScreen && icon || text}</span>
+            <span>{isSmallScreen && icon && text || text}</span>
         </Link>
     )
 }

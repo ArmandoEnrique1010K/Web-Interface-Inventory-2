@@ -127,7 +127,7 @@ export const DetailsModelPage = () => {
                                     isOpen={isQRModalOpen}
                                     onClose={() => setIsQRModalOpen(false)}
                                     url={import.meta.env.VITE_FRONTEND_DOMAIN + `/product/${data.productId}/model/${data.id}`}
-                                    title={`Código QR del producto ${data.productName}, ${data.name}`}
+                                // title={`Código QR del producto ${data.productName}, ${data.name}`}
                                 />
                             </RightPanelContainer.Detail>
 

@@ -15,7 +15,7 @@ import { useState } from 'react';
 import { SelectOptionFilter } from '@/ui/filters/SelectOptionFilter';
 import { SelectOption } from '@/ui/fields/SelectOption';
 import { TextMessage } from '@/components/TextMessage';
-import { EntityFormLayout } from '@/layout/entity/EntityFormLayout';
+import { EntityFormLayout } from '@/components/FormModalLayout';
 
 type Props = {
     data: LocationItem

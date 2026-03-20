@@ -11,7 +11,7 @@ import { Button } from '@/ui/Button'
 import { registerSubregion } from '../../api/SubregionAPI'
 import { SelectOption } from '@/ui/fields/SelectOption'
 import { listAllRegions } from '../../api/RegionAPI'
-import { EntityFormLayout } from '@/layout/entity/EntityFormLayout'
+import { EntityFormLayout } from '@/components/FormModalLayout'
 
 export const NewSubregionPage = () => {
 
