@@ -36,7 +36,18 @@ export const ProductChangeStatus = ({ from, productId, value, size }: { from?: s
     return (
         <form onSubmit={handleSubmit(() => mutate())} className="text-center">
             {/* TODO: AÑADIR UN ICONO PARA MOSTRAR CUANDO EL PRODUCTO ESTE ACTIVO */}
-            <Button icon={size === 'large' && <XMarkIcon />} text={value} type="submit" size={size} color={value === 'Activo' ? 'green-outline' : 'red-outline'} />
+            <Button
+                icon={size === 'large' && <XMarkIcon />}
+                text={value}
+                type="submit"
+                size={size}
+                color={value === 'Activo' ? 'green-outline' : 'red-outline'}
+                showIconOnMobile={false}
+                showTextOnMobile={true}
+                isLargeOnMobile={false}
+
+
+            />
         </form>
     )
 }

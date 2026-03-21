@@ -36,8 +36,9 @@ export const InputPassword = ({ id, label, placeholder, errorMessage, functionEn
 
                 <Button
                     size="small"
+                    showIconOnMobile
                     icon={showPassword ? <EyeSlashIcon className="size-6" /> : <EyeIcon className="size-6" />}
-                    type={"button"} color={showPassword ? 'green-outline' : 'red-outline'} onClick={() => setShowPassword(!showPassword)} />
+                    type={"button"} color={showPassword ? 'gray-outline' : 'blue-outline'} onClick={() => setShowPassword(!showPassword)} />
 
             </div>
 

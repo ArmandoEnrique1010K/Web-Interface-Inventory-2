@@ -1,5 +1,4 @@
 import { handleApplyStyleColor } from "@/utils/handleApplyStyleColor"
-import { useMediaQuery } from "react-responsive"
 import { Link } from "react-router-dom"
 
 type Props = {
@@ -11,28 +10,33 @@ type Props = {
     aditionalStyles?: string
     onClick?: () => void
     icon?: React.ReactNode
+    showTextOnMobile?: boolean
+    showIconOnMobile?: boolean
+    isLargeOnMobile?: boolean
 }
 
 export const ButtonLink = ({
     text,
     aditionalStyles,
     size,
+    isLarge,
     to,
     color,
-    isLarge,
     onClick,
-    icon
+    icon,
+    showTextOnMobile = false,
+    showIconOnMobile = true,
+    isLargeOnMobile = false,
 }: Props) => {
-    const isSmallScreen = useMediaQuery({ query: '(max-width: 640px)' })
 
     const baseStyles = `
-        inline-flex items-center justify-center 
+        inline-flex items-center justify-center ${isLargeOnMobile && 'w-full sm:w-max'}
         font-medium
         select-none
         whitespace-nowrap
         cursor-pointer
         transition-all duration-200
-        focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
+        focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 gap-2
         active:scale-95
     `
     // active añade un estilo cuando el usuario mantiene pulsado el botón
@@ -40,7 +44,7 @@ export const ButtonLink = ({
     const sizeStyles =
         size === 'small'
             ? 'text-sm px-3 py-1.5 rounded-md'
-            : 'text-base px-4 py-2 rounded-lg'
+            : 'text-lg px-6 py-2 rounded-lg'
 
     const widthStyles = isLarge ? 'w-full' : ''
 
@@ -58,11 +62,23 @@ export const ButtonLink = ({
             `}
         >
             {icon && (
-                <span className={`flex items-center justify-center size-8 ${isSmallScreen ? '' : 'mr-2'}`}>
+                <span
+                    className={`
+                        flex items-center justify-center size-8
+                        ${text ? '' : ''}
+                        ${showIconOnMobile ? '' : 'hidden sm:inline'}
+                    `}
+                >
                     {icon}
                 </span>
             )}
-            <span>{isSmallScreen && icon && text || text}</span>
+
+            {/* TEXTO */}
+            {text && (
+                <span className={showTextOnMobile ? '' : 'hidden sm:inline'}>
+                    {text}
+                </span>
+            )}
         </Link>
     )
 }

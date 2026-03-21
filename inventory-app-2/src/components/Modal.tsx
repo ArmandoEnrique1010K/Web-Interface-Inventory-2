@@ -20,11 +20,13 @@ export const Modal = ({ isOpen, onClose, children, size = 'md', title }: ModalPr
         xl: 'max-w-4xl'
     }
 
-    const isSmallScreen = useMediaQuery({ query: '(max-width: 480px)' })
+    const isSmallScreen = useMediaQuery({ query: '(max-width: 640px)' })
 
 
     return (
-        <Dialog.Root open={isOpen} onOpenChange={onClose}>
+        <Dialog.Root open={isOpen} onOpenChange={(open) => {
+            if (!open) onClose()
+        }}>
             <Dialog.Portal>
                 <Dialog.Overlay className="fixed inset-0 bg-black/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
                 <Dialog.Content
@@ -45,17 +47,20 @@ export const Modal = ({ isOpen, onClose, children, size = 'md', title }: ModalPr
 
                     className={`fixed overflow-y-auto
 ${isSmallScreen
-                            ? 'inset-0 w-full h-full rounded-none flex flex-col'
-                            : `left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full ${sizeClasses[size]} max-h-[90vh] rounded-lg`
+                            ? 'inset-0 w-full h-full rounded-none flex flex-col p-4'
+                            : `left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full ${sizeClasses[size]} max-h-[90vh] rounded-lg p-6`
                         }
-bg-white shadow-lg py-1 ${isSmallScreen ? 'px-2' : 'px-4'}
+bg-white shadow-lg 
 `}
                 >
                     {
-                        title && <Dialog.Title className="text-4xl font-semibold pb-4 mt-4 mr-12">{title}</Dialog.Title>
+                        title && <Dialog.Title className="text-4xl font-semibold pb-4 mr-12">{title}</Dialog.Title>
+                    }
+                    {
+                        <Dialog.Description className='hidden'>Descripcion</Dialog.Description>
                     }
                     <Dialog.Close
-                        className={`${handleApplyStyleColor('red')} absolute ${isSmallScreen ? 'right-2' : 'right-4'} top-4 border-none rounded-sm opacity-70 focus:ring-0 focus:outline-none disabled:pointer-events-none`}
+                        className={`${handleApplyStyleColor('red')} absolute ${isSmallScreen ? 'right-4 top-4' : 'right-6 top-6'} border-none rounded-sm opacity-70 focus:ring-0 focus:outline-none disabled:pointer-events-none`}
                     >
                         <XMarkIcon className="size-8 hover:cursor-pointer" />
                         <span className="sr-only">Close</span>

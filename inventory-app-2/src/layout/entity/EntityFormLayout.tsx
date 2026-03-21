@@ -15,14 +15,14 @@ export const EntityFormLayout = ({ children, isCompact }: Props) => {
 }
 
 type HeaderProps = {
-    title: string
+    title?: string
     helpText?: string
 }
 
 EntityFormLayout.Header = ({ title, helpText }: HeaderProps) => {
     return (
         <>
-            <Title>{title}</Title>
+            {title && <Title>{title}</Title>}
 
             {helpText && (
                 <p className='pb-6 w-full'>
@@ -39,11 +39,12 @@ EntityFormLayout.Header = ({ title, helpText }: HeaderProps) => {
 type FormProps = {
     onSubmit: React.SubmitEventHandler<HTMLFormElement>
     children: React.ReactNode
+    styled?: boolean
 }
 
 
 
-EntityFormLayout.Form = ({ onSubmit, children }: FormProps) => {
+EntityFormLayout.Form = ({ onSubmit, children, styled }: FormProps) => {
     return (
         <form onSubmit={
             // (e) => {
@@ -51,7 +52,7 @@ EntityFormLayout.Form = ({ onSubmit, children }: FormProps) => {
             //     onSubmit(e);
             // }
             onSubmit
-        } className="p-6 bg-white shadow-sm rounded-xl border border-gray-200 " autoComplete="off" noValidate>
+        } className={`${styled ? 'p-6 bg-white shadow-sm rounded-xl border border-gray-200' : 'pt-2'} `} autoComplete="off" noValidate >
             {children}
 
         </form >
@@ -60,26 +61,28 @@ EntityFormLayout.Form = ({ onSubmit, children }: FormProps) => {
 }
 
 type InputsProps = {
-    onSubmit: React.SubmitEventHandler < HTMLFormElement >
-        children: React.ReactNode
+    children: React.ReactNode
+    isCompact?: boolean,
 }
+
 EntityFormLayout.Inputs = ({ children, isCompact }: InputsProps) => {
     return (
-        <div className={`${isCompact ? '' : 'space-y-4'}`}>
-            {children}
-        </div>
-
+        <>
+            <div className={`${isCompact ? 'space-y-2' : 'space-y-4'}`}>
+                {children}
+            </div>
+        </>
     )
 }
 
 type ActionsProps = {
-    onSubmit: React.SubmitEventHandler < HTMLFormElement >
-        children: React.ReactNode
+    children: React.ReactNode
+    isCompact?: boolean
 }
 
-EntityFormLayout.Actions = ({ children }: ActionsProps) => {
+EntityFormLayout.Actions = ({ children, isCompact }: ActionsProps) => {
     return (
-        <div className="flex flex-row gap-2 justify-center pt-6">
+        <div className={`flex flex-row gap-2 justify-center ${isCompact ? 'pt-4' : 'pt-6'}`}>
             {children}
         </div>
 

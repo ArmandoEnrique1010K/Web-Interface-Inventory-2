@@ -16,7 +16,7 @@ import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { UploadImage } from "@/ui/fields/UploadImage";
 import { Subtitle } from "@/components/Subtitle";
-import { EntityFormLayout } from "@/components/FormModalLayout";
+import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 
 export const NewProductPage = () => {
     const [file, setFile] = useState<File | null>(null)
@@ -95,7 +95,11 @@ export const NewProductPage = () => {
 
     return (
         <EntityFormLayout>
-            <EntityFormLayout.Form onSubmit={
+            <EntityFormLayout.Header title="Agregar nuevo producto">
+
+            </EntityFormLayout.Header>
+
+            <EntityFormLayout.Form styled onSubmit={
                 handleSubmit((data) => {
 
                     mutate({
@@ -222,8 +226,27 @@ export const NewProductPage = () => {
                 </EntityFormLayout.Inputs>
 
                 <EntityFormLayout.Actions>
-                    <Button icon={<ArrowUpCircleIcon />} disabled={isPending} size="large" text="Añadir producto" type="submit" color="green" />
-                    <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to="/products" />
+                    <Button
+                        icon={<ArrowUpCircleIcon />}
+                        disabled={isPending}
+                        size="large"
+                        text="Añadir"
+                        type="submit"
+                        color="green"
+                        showTextOnMobile
+                        showIconOnMobile={false}
+                        isLargeOnMobile
+                    />
+                    <ButtonLink
+                        icon={<XCircleIcon />}
+                        size="large"
+                        text="Cancelar"
+                        color="gray"
+                        to="/products"
+                        showTextOnMobile
+                        showIconOnMobile={false}
+                        isLargeOnMobile
+                    />
                 </EntityFormLayout.Actions>
 
 

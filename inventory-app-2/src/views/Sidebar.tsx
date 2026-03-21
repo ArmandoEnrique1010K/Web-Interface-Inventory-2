@@ -74,10 +74,10 @@ export const Sidebar = () => {
             </div>
             <div className="min-h-screen bg-slate-900 text-slate-300 hidden sm:flex flex-col justify-between border-r border-slate-800">
                 <div className="h-max">
-                    <div className="flex flex-col items-center my-4">
-                        <img src="/inventory.png" className="bg-white rounded-full p-2" alt="Logo" />
+                    <div className="flex flex-col items-center my-4 sm:px-2">
+                        <img src="/inventory.png" className="bg-white rounded-full p-2 lg:size-24 size-20" alt="Logo" />
                         {/* whitespace-nowrap evita que el texto tenga saltos de linea */}
-                        <h1 className="mx-4 my-2 text-xl whitespace-nowrap text-center">Empresa sin nombre</h1>
+                        <h1 className="mx-4 my-2 text-xl whitespace-nowrap text-center lg:block hidden">Empresa sin nombre</h1>
                     </div>
 
                     <nav className="flex flex-col justify-center items-center space-y-1 mb-1">
@@ -90,7 +90,7 @@ export const Sidebar = () => {
                             ${styleToCurrentPath(item.to)}
                             `}>
                                 <div>{item.icon}</div>
-                                <span className="py-1">{item.label}</span>
+                                <span className="py-1 lg:block hidden">{item.label}</span>
                             </Link>
                         ))}
                     </nav>
@@ -107,7 +107,7 @@ export const Sidebar = () => {
                             ${styleToCurrentPath("/credits")}
                              `}>
                             <div><DocumentTextIcon className="size-6" /></div>
-                            <span className="py-1">Creditos del autor</span>
+                            <span className="py-1 lg:block hidden">Creditos del autor</span>
                         </Link>
 
                         <Link to={"/profile"} className={`
@@ -117,7 +117,7 @@ export const Sidebar = () => {
                             transition-colors                            
                             ${styleToCurrentPath("/profile")}`}>
                             <div><UserCircleIcon className="size-6" /></div>
-                            <span className="py-1">Perfil</span>
+                            <span className="py-1 lg:block hidden">Perfil</span>
                         </Link>
 
                         <form
@@ -134,7 +134,7 @@ export const Sidebar = () => {
                             hover:cursor-pointer
                             ">
                                 <div><ArrowRightStartOnRectangleIcon className="size-6" /></div>
-                                <span className="py-1">Cerrar sesión</span>
+                                <span className="py-1 lg:block hidden">Cerrar sesión</span>
                             </button>
                         </form>
 

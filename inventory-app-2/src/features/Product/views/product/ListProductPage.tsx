@@ -21,14 +21,14 @@ import { EntityListLayout } from '@/layout/entity/EntityListLayout'
 import { ProductChangeStatus } from '../../components/product/ProductChangeStatus'
 import { Button } from '@/ui/Button'
 import { Modal } from '@/components/Modal'
-import { NewProductPage } from './NewProductPage'
-
+import { LoaderProductPage } from './LoaderProductPage'
 export const ListProductPage = () => {
-    
-    const [isAddModalOpen, setAddModalOpen] = useState(false);
-    
+
+
     const [editModalOpen, setEditModalOpen] = useState(false);
-    
+    const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
+
+
     const [searchParams, setSearchParams] = useSearchParams()
     const page = Number(searchParams.get('page') ?? 0)
     const name = searchParams.get('name') ?? ''
@@ -37,9 +37,9 @@ export const ListProductPage = () => {
     const statusParam = searchParams.get('status')
     const status =
         statusParam === null ?
-        undefined :
-        statusParam === 'true'
-    
+            undefined :
+            statusParam === 'true'
+
     const [form, setForm] = useState({
         page: page,
         name: name,
@@ -47,11 +47,11 @@ export const ListProductPage = () => {
         typeId: typeId ?? '',
         status: status === undefined ? '' : String(status),
     })
-    
+
     // No se recomienda usar un hook useEffectEvent ni useEffect en React 19
     // Problema: useEffectEvent NO reemplaza a useEffect para sincronizar estado.
     // Estás copiando estado derivado → anti-pattern
-    
+
     // useEffectEvent(() => {
     //     setForm({
     //         page: page,
@@ -61,11 +61,11 @@ export const ListProductPage = () => {
     //         status: status === undefined ? '' : String(status),
     //     })
     // })
-    
-    
+
+
     const { data, isError } = useQuery({
         queryKey: ['list-products', { name, categoryId, typeId, status, page }],
-        
+
         queryFn: () => listAllProducts({
             page: page,
             name: name,
@@ -74,7 +74,7 @@ export const ListProductPage = () => {
             status: status
         }),
     })
-    
+
     const content = data?.content || []
     // OBTENER LAS CARACTERISTICAS Y LOS TIPOS
     const { data: categoriesData } = useQuery({
@@ -85,53 +85,55 @@ export const ListProductPage = () => {
         queryKey: ['list-types'],
         queryFn: listAllTypes
     })
-    
+
     const categories = categoriesData?.map((category: CategoryItem) => ({
         value: category.id,
         label: category.name,
     })) || []
-    
-    
+
+
     const types = typesData?.map((type: TypeItem) => ({
         value: type.id,
         label: type.name,
     })) || []
-    
+
     const generateCaracterist = (product: ProductItem) => {
         if (+product.categoryId === 1) {
             return `${product.typeName}`
         }
-        
+
         if (+product.categoryId !== 1) {
             return `${product.typeName} de ${product.categoryName}`
         }
-        
+
     }
-    
-    
+
+
     const statusOptions = [
         { value: '', label: 'Todos los estados' },
         { value: 'true', label: 'Activos' },
         { value: 'false', label: 'Inactivos' },
     ]
-    
+
     const isSmallScreen = useMediaQuery({ query: '(max-width: 920px)' })
-    
+
     return (
         <EntityListLayout>
             <EntityListLayout.Header title='Productos'
                 actions={
                     <>
-                         <ButtonLink
+                        <ButtonLink
                             icon={<PlusCircleIcon />}
                             size="large"
                             text="Nuevo producto"
                             to="/products/new"
                             color="blue"
+                            showIconOnMobile={false}
+                            showTextOnMobile
                         />
-                        
+
                         {/* TODO: No mostrar una ventana modal al agregar un producto */}
-                        <Button
+                        {/* <Button
                             icon={<PlusCircleIcon />}
                             size="large"
                             text="Nuevo producto"
@@ -148,7 +150,7 @@ export const ListProductPage = () => {
                             title='Añadir nuevo producto'
                         >
                             <NewProductPage />
-                        </Modal>
+                        </Modal> */}
 
                     </>
 
@@ -280,21 +282,42 @@ export const ListProductPage = () => {
                                 } />
 
                                 <BaseTableCell isCenter data={
-                                // TODO: Aqui debe mostrar una ventana modal para editar
-                                
-                                
+                                    // TODO: Aqui debe mostrar una ventana modal para editar
+
                                     //* SOLAMENTE SI UN PRODUCTO ESTA ACTIVO, PUEDE SER EDITADO
                                     product.status === true ?
-                                        <ButtonLink
+                                        <Button
+                                            type='button'
                                             size="small"
                                             text="Editar"
-                                            to={`/products/edit/${product.id}`}
                                             color="blue"
-
+                                            onClick={() => {
+                                                setEditModalOpen(true)
+                                                setSelectedProduct(product.id.toString())
+                                            }}
+                                            showTextOnMobile
                                         /> : ''
                                 } />
+
                             </TableRowContainer>
-                        })
+
+                        }
+                        )
+                    }
+                    {
+                        // Solamente debe renderizar la ventana modal cuando haya un producto seleccionado, de lo contrario no funcionara
+                        editModalOpen && selectedProduct && <Modal
+                            isOpen={editModalOpen}
+                            onClose={() => {
+                                setEditModalOpen(false)
+                                setSelectedProduct(null)
+                            }
+                            }
+                            size='lg'
+                            title={`Editar producto #${selectedProduct}`}
+                        >
+                            <LoaderProductPage productId={selectedProduct} closeModal={setEditModalOpen} />
+                        </Modal>
 
                     }
 

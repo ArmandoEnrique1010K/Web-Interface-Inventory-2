@@ -22,9 +22,6 @@ import { QRModal } from "../../components/QRModal"
 import { ModelChangeStatus } from "../../components/model/ModelChangeStatus"
 
 export const DetailsProductPage = () => {
-    // const isLargeScreen = useMediaQuery({ query: '(min-width: 1024px)' })
-    // const isMediumScreen = useMediaQuery({ query: '(min-width: 850px)' })
-    // const isSmallScreen = useMediaQuery({ query: '(min-width: 900px)' })
 
     const [searchParams, setSearchParams] = useSearchParams()
     const modelIdParam = searchParams.get("modelId")
@@ -114,9 +111,34 @@ export const DetailsProductPage = () => {
                 title={productData.name}
                 actions={
                     <>
-                        <ButtonLink icon={<PlusCircleIcon />} size="large" to={`/products/${productId}/models/new`} color="green" text="Añadir modelo" />
-                        <ButtonLink icon={<PencilSquareIcon />} size="large" to={`/products/edit/${productId}`} color="blue" text="Editar producto" />
-                        <ProductChangeStatus from='product-details' size="large" productId={productId!} value={productData!.status ? 'Desactivar producto' : 'Activar producto'} />
+                        <ButtonLink
+                            icon={<PlusCircleIcon />}
+                            size="large"
+                            to={`/products/${productId}/models/new`}
+                            color="green"
+                            text="Añadir modelo"
+                            showIconOnMobile={false}
+                            showTextOnMobile={true}
+                            isLargeOnMobile={false}
+                        />
+                        <ButtonLink
+                            icon={<PencilSquareIcon />}
+                            size="large"
+                            to={`/products/edit/${productId}`}
+                            color="blue"
+                            text="Editar producto"
+                            showIconOnMobile={false}
+                            showTextOnMobile={true}
+                            isLargeOnMobile={false}
+
+                        />
+                        <ProductChangeStatus
+                            from='product-details'
+                            size="large"
+                            productId={productId!}
+                            value={productData!.status ? 'Desactivar producto' : 'Activar producto'}
+
+                        />
                     </>
                 }
             ></EntityDetailsLayout.Header>

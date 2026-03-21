@@ -23,6 +23,7 @@ export const Paginator = ({
     const goNext = () => onPageChange(currentPage + 1)
     const goToPage = (page: number) => onPageChange(page);
 
+    // Se ocultaran algunos botones en dispositivos moviles
     const isMobile = useMediaQuery({ query: '(max-width: 639.99px)' })
 
     //* En dispositivos moviles no se mostraran los botones de las paginas x - 2, x - 1, x + 1, x + 2, donde x es la pagina actual
@@ -37,6 +38,7 @@ export const Paginator = ({
                     onClick={goFirst}
                     size="small"
                     aditionalStyles="px-2"
+                    showTextOnMobile
                 />
                 <Button
                     text="◄"
@@ -46,6 +48,7 @@ export const Paginator = ({
                     onClick={goPrev}
                     size="small"
                     aditionalStyles="px-2"
+                    showTextOnMobile
                 />
 
                 {
@@ -87,6 +90,7 @@ export const Paginator = ({
                     color="none"
                     size="small"
                     aditionalStyles="px-2"
+                    showTextOnMobile
                 />
 
                 {
@@ -132,6 +136,7 @@ export const Paginator = ({
                     onClick={goNext}
                     size="small"
                     aditionalStyles="px-2"
+                    showTextOnMobile
                 />
 
                 <Button
@@ -142,6 +147,7 @@ export const Paginator = ({
                     onClick={goLast}
                     size="small"
                     aditionalStyles="px-2"
+                    showTextOnMobile
                 />
             </div>
         </div>

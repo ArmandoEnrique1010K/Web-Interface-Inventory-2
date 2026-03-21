@@ -22,7 +22,7 @@ type HeaderProps = {
 AuthFormLayout.Header = ({ title, helpText }: HeaderProps) => {
     return (
         <>
-            <h1 className="text-2xl font-bold text-slate-900 text-center mb-4">{title}</h1>
+            <h1 className="sm:text-4xl text-2xl font-bold text-slate-900 text-center sm:mb-6 mb-4">{title}</h1>
 
             {helpText && (
                 <p className='text-sm text-slate-600 mb-4 text-center'>
@@ -55,6 +55,7 @@ AuthFormLayout.Form = ({ isPending, buttonText, children, onSubmit }: FormProps)
                 isLarge={true}
                 aditionalStyles="mt-2"
                 disabled={isPending}
+                showTextOnMobile
             />
         </form>
 

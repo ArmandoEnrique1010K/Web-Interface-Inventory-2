@@ -5,11 +5,12 @@ interface QRModalProps {
     isOpen: boolean
     onClose: () => void
     url: string
+    title: string
 }
 
-export const QRModal = ({ isOpen, onClose, url }: QRModalProps) => {
+export const QRModal = ({ isOpen, onClose, url, title }: QRModalProps) => {
     return (
-        <Modal isOpen={isOpen} onClose={onClose} size="sm">
+        <Modal isOpen={isOpen} onClose={onClose} size="md" title={title}>
             <div className='my-4'>
                 Toma captura del QR para compartir el producto
             </div>

@@ -12,7 +12,7 @@ import { ArrowUpCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
 import { useState } from 'react'
 import type { ModelInProductForm } from '../../types';
 import { UploadImage } from '@/ui/fields/UploadImage';
-import { EntityFormLayout } from '@/components/FormModalLayout';
+import { EntityFormLayout } from '@/layout/entity/EntityFormLayout';
 
 // TODO: ESTO DEBE ESTAR DENTRO DEL MODULO PRODUCT
 export const NewModelProductPage = () => {

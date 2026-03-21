@@ -1,4 +1,4 @@
-export const handleApplyStyleColor = (color: 'blue' | 'green' | 'red' | 'green-outline' | 'red-outline' | 'gray' | 'none') => {
+export const handleApplyStyleColor = (color: 'blue' | 'green' | 'red' | 'green-outline' | 'red-outline' | 'gray' | 'none' | 'blue-outline' | 'gray-outline') => {
     if (color === 'blue') {
         return "bg-blue-600 hover:bg-blue-700 focus-visible:ring-blue-500 text-white"
     }
@@ -18,6 +18,14 @@ export const handleApplyStyleColor = (color: 'blue' | 'green' | 'red' | 'green-o
     if (color === 'red-outline') {
         return "bg-red-100 hover:bg-red-200 focus-visible:ring-red-500 text-red-700"
     }
+    if (color === 'blue-outline') {
+        return "bg-blue-100 hover:bg-blue-200 focus-visible:ring-blue-500 text-blue-700"
+    }
+
+    if (color === 'gray-outline') {
+        return "bg-slate-100 hover:bg-slate-200 focus-visible:ring-slate-500 text-slate-700"
+    }
+
 
     if (color === 'gray') {
         return "bg-slate-600 hover:bg-slate-700 focus-visible:ring-slate-500 text-white"

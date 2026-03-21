@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import type { CategoryItem, ProductUpdateForm, TypeItem } from '../../types';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -10,18 +9,18 @@ import { InputText } from '@/ui/fields/InputText';
 import { SelectOption } from '@/ui/fields/SelectOption';
 import { listAllCategories } from '../../api/CategoryAPI';
 import { listAllTypes } from '../../api/TypeAPI';
-import { ButtonLink } from '@/ui/ButtonLink';
 import { ArrowUpCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { TextMessage } from '@/components/TextMessage';
-import { EntityFormLayout } from '@/components/FormModalLayout';
+import { EntityFormLayout } from '@/layout/entity/EntityFormLayout';
 
 type Props = {
     data: ProductUpdateForm;
     productId: string;
+    closeModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const EditProductPage = ({ data, productId }: Props) => {
-    const navigate = useNavigate();
+export const EditProductPage = ({ data, productId, closeModal }: Props) => {
+    // const navigate = useNavigate();
 
     const { register, handleSubmit, setError, formState: { errors } } = useForm<ProductUpdateForm>({
         defaultValues: {
@@ -62,7 +61,8 @@ export const EditProductPage = ({ data, productId }: Props) => {
             queryClient.invalidateQueries({ queryKey: ["list-products"] })
             queryClient.invalidateQueries({ queryKey: ["edit-product", productId] })
             toast.success(data)
-            navigate("/products")
+            // navigate("/products")
+            closeModal(false)
         }
     })
 
@@ -99,10 +99,9 @@ export const EditProductPage = ({ data, productId }: Props) => {
     }
 
     return (
-        <EntityFormLayout>
-            <EntityFormLayout.Header title={`Editar producto #${productId}`}></EntityFormLayout.Header>
-            <EntityFormLayout.Form onSubmit={handleSubmit(handleForm)}>
-                <EntityFormLayout.Inputs>
+        <EntityFormLayout isCompact>
+            <EntityFormLayout.Form styled={false} onSubmit={handleSubmit(handleForm)}>
+                <EntityFormLayout.Inputs isCompact>
                     <InputText
                         id="name"
                         label="Nombre"
@@ -153,10 +152,30 @@ export const EditProductPage = ({ data, productId }: Props) => {
                         textInNullOption="Seleccione un tipo"
                     />
                 </EntityFormLayout.Inputs>
-                <EntityFormLayout.Actions>
+                <EntityFormLayout.Actions isCompact>
                     <>
-                        <Button icon={<ArrowUpCircleIcon />} size="large" text="Editar producto" type="submit" color="green" />
-                        <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to="/products" />
+                        <Button
+                            icon={<ArrowUpCircleIcon />}
+                            size="large"
+                            text="Editar"
+                            type="submit"
+                            color="green"
+                            showIconOnMobile={false}
+                            showTextOnMobile={true}
+                            isLargeOnMobile={true}
+                        />
+                        {/* <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to="/products" /> */}
+                        <Button
+                            type='button'
+                            icon={<XCircleIcon />}
+                            size='large'
+                            text='Cancelar'
+                            color='gray'
+                            onClick={() => closeModal(false)}
+                            showIconOnMobile={false}
+                            showTextOnMobile={true}
+                            isLargeOnMobile={true}
+                        />
                     </>
                 </EntityFormLayout.Actions>
             </EntityFormLayout.Form>

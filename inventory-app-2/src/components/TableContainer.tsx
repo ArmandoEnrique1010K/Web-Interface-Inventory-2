@@ -25,8 +25,7 @@ export const TableContainer = ({ title, itemsCounter, headers, isError, isEmpty,
 
     return (
         // TODO: ES IMPOSIBLE AÑADIR UN STICKY
-        // <div className="overflow-x-auto overflow-y-auto max-h-[500px] bg-white shadow-sm rounded-xl border border-gray-200 p-6">
-        <div className='bg-white shadow-sm rounded-xl border border-gray-200 p-6'>
+        <div className='bg-white shadow-sm rounded-xl border border-gray-200 sm:p-6 p-4'>
 
             {
                 isError && <TextMessage text="Ha ocurrido un error" align="center" color="red" />
@@ -65,7 +64,7 @@ export const TableContainer = ({ title, itemsCounter, headers, isError, isEmpty,
 
                     </div>
                     {paginator &&
-                        <div className="pt-8">
+                        <div className="sm:pt-8 pt-4">
                             {paginator}
                         </div>
                     }

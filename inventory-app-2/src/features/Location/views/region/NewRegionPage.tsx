@@ -9,7 +9,7 @@ import { InputText } from '@/ui/fields/InputText'
 import { ArrowUpCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
 import { ButtonLink } from '@/ui/ButtonLink'
 import { Button } from '@/ui/Button'
-import { EntityFormLayout } from '@/components/FormModalLayout'
+import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 
 export const NewRegionPage = () => {
 

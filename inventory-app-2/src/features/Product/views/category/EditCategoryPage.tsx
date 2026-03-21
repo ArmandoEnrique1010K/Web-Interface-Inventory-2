@@ -9,7 +9,7 @@ import { Button } from "@/ui/Button";
 import { InputText } from "@/ui/fields/InputText";
 import { ButtonLink } from "@/ui/ButtonLink";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
-import { EntityFormLayout } from "@/components/FormModalLayout";
+import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 
 type Props = {
     data: CategoryForm;

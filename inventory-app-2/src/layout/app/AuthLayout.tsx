@@ -4,7 +4,7 @@ export const AuthLayout = () => {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-slate-100 px-4 py-8">
-            <div className="bg-white shadow-xl hover:shadow-2xl transition-shadow rounded-2xl w-full max-w-md p-6">
+            <div className="bg-white shadow-xl hover:shadow-2xl transition-shadow rounded-2xl w-full max-w-md sm:p-6 p-4">
                 <div className="hidden md:flex justify-center mb-6">
                     <img
                         src="/imprenta.png"

@@ -12,7 +12,7 @@ import { Button } from '@/ui/Button';
 import { ButtonLink } from '@/ui/ButtonLink';
 import { useState } from 'react';
 import { UploadImage } from '@/ui/fields/UploadImage';
-import { EntityFormLayout } from '../../../../components/FormModalLayout';
+import { EntityFormLayout } from '@/layout/entity/EntityFormLayout';
 
 type Props = {
     data: ModelItem & { file: File };

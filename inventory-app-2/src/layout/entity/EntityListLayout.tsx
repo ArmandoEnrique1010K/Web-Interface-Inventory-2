@@ -7,7 +7,7 @@ type Props = {
 
 export const EntityListLayout = ({ children }: Props) => {
     return (
-        <div className='p-6'>
+        <div className='sm:p-6 p-4 '>
             {children}
         </div>
     )
