@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form"
 import { XMarkIcon } from "@heroicons/react/24/outline"
 import { changeStatusUser } from "../api/UserAPI"
 
-export const UserChangeStatus = ({ userId, value, size }: { userId: string, value: string, size: 'small' | 'large' }) => {
+export const StatusUserButton = ({ userId, value, size }: { userId: string, value: string, size: 'small' | 'large' }) => {
     const { handleSubmit } = useForm();
     const queryClient = useQueryClient();
 
@@ -21,14 +21,14 @@ export const UserChangeStatus = ({ userId, value, size }: { userId: string, valu
         },
         onSuccess: async (data) => {
             toast.success(data)
-            queryClient.invalidateQueries({ queryKey: ['edit-user', userId] })
-            queryClient.invalidateQueries({ queryKey: ['list-users'] })
+            queryClient.invalidateQueries({ queryKey: ['users'] })
+            queryClient.invalidateQueries({ queryKey: ['user', userId] })
         }
     })
 
     return (
         <form onSubmit={handleSubmit(() => mutate())} className="text-center ">
-            <Button icon={size === 'large' && <XMarkIcon />} text={value} type="submit" size={size} color={value === 'Activo' ? 'green-outline' : 'red-outline'} />
+            <Button icon={size === 'large' && <XMarkIcon />} text={value} type="submit" size={size} color={value === 'Activo' ? 'green-outline' : 'red-outline'} showTextOnMobile />
         </form>
     )
 }

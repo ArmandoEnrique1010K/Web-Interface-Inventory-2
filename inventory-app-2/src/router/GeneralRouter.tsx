@@ -42,12 +42,10 @@ import { ListProductPage } from '@/features/Product/views/product/ListProductPag
 import { NewProductPage } from '@/features/Product/views/product/NewProductPage'
 import { ListTypePage } from '@/features/Product/views/type/ListTypePage'
 import { NewTypePage } from '@/features/Product/views/type/NewTypePage'
-import { LoaderTypePage } from '@/features/Product/views/type/LoaderTypePage'
-import { LoaderCategoryPage } from '@/features/Product/views/category/LoaderCategoryPage'
 import { ListSubregionPage } from '@/features/Location/views/subregion/ListSubregionPage'
 import { ListUserPage } from '@/features/User/views/ListUserPage'
 import { RegisterUserPage } from '@/features/User/views/RegisterUserPage'
-import { LoaderUserPage } from '@/features/User/views/LoaderUserPage'
+import { LoaderUser } from '@/features/User/components/LoaderUser'
 
 const productItems: MenuItem[] = [
     {
@@ -151,18 +149,16 @@ export const GeneralRouter = () => {
 
                             {/* RELACIONADO A MODELS */}
                             <Route path="models" element={<ListModelPage />} />
-                            {/* :id es el ID del producto que corresponde al modelo */}
+                            {/* :productId es el ID del producto que corresponde al modelo */}
                             <Route path=":productId/models/:modelId" element={<DetailsModelPage />} />
 
                             {/* RELACIONADO A CATEGORIES */}
                             <Route path="categories" element={<ListCategoryPage />} />
                             <Route path="categories/new" element={<NewCategoryPage />} />
-                            <Route path="categories/edit/:id" element={<LoaderCategoryPage />} />
 
                             {/* RELACIONADO A TYPES */}
                             <Route path="types" element={<ListTypePage />} />
                             <Route path="types/new" element={<NewTypePage />} />
-                            <Route path="types/edit/:id" element={<LoaderTypePage />} />
                         </Route>
 
                         <Route path='stocklots' element={
@@ -210,7 +206,7 @@ export const GeneralRouter = () => {
                         }>
                             <Route index element={<ListUserPage />} />
                             <Route path='new' element={<RegisterUserPage />} />
-                            <Route path=':id/alter' element={<LoaderUserPage />} />
+                            <Route path=':id/alter' element={<LoaderUser />} />
 
                         </Route>
                         {/* RELACIONADO A MOVEMENT */}

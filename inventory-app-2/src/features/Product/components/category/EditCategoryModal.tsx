@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom"
 import { updateCategory } from "../../api/CategoryAPI";
 import type { CategoryForm } from "../../types";
 import { useForm } from "react-hook-form";
@@ -7,17 +6,16 @@ import { toast } from "sonner";
 import type { GeneralError } from "types";
 import { Button } from "@/ui/Button";
 import { InputText } from "@/ui/fields/InputText";
-import { ButtonLink } from "@/ui/ButtonLink";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 
 type Props = {
     data: CategoryForm;
     categoryId: string;
+    setModalOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const EditCategoryPage = ({ data, categoryId }: Props) => {
-    const navigate = useNavigate();
+export const EditCategoryModal = ({ data, categoryId, setModalOpen }: Props) => {
 
     const { register, handleSubmit, setError, formState: { errors } } = useForm<CategoryForm>({
         defaultValues: {
@@ -50,10 +48,11 @@ export const EditCategoryPage = ({ data, categoryId }: Props) => {
             }
         },
         onSuccess: (data) => {
-            queryClient.invalidateQueries({ queryKey: ["list-categories"] })
-            queryClient.invalidateQueries({ queryKey: ["edit-category", categoryId] })
+            queryClient.invalidateQueries({ queryKey: ["categories"] })
+            queryClient.invalidateQueries({ queryKey: ["category", categoryId] })
             toast.success(data)
-            navigate("/products/categories")
+            // navigate("/products/categories")
+            setModalOpen(false)
         }
     })
 
@@ -66,10 +65,9 @@ export const EditCategoryPage = ({ data, categoryId }: Props) => {
     }
 
     return (
-        <EntityFormLayout>
-            <EntityFormLayout.Header title={`Editar categoria #${categoryId}`}></EntityFormLayout.Header>
+        <EntityFormLayout isCompact>
             <EntityFormLayout.Form onSubmit={handleSubmit(handleForm)}>
-                <EntityFormLayout.Inputs>
+                <EntityFormLayout.Inputs isCompact>
                     <InputText
                         id="name"
                         label="Nombre"
@@ -78,9 +76,28 @@ export const EditCategoryPage = ({ data, categoryId }: Props) => {
                         errorMessage={errors.name}
                         functionEnabled={register('name')} />
                 </EntityFormLayout.Inputs>
-                <EntityFormLayout.Actions>
-                    <Button icon={<ArrowUpCircleIcon />} size="large" text="Editar categoria" type="submit" color="green" />
-                    <ButtonLink icon={<XCircleIcon />} size="large" text="Volver" color="gray" to="/products/categories" />
+                <EntityFormLayout.Actions isCompact>
+                    <Button
+                        icon={<ArrowUpCircleIcon />}
+                        size="large"
+                        text="Editar"
+                        type="submit"
+                        color="green"
+                        showIconOnMobile={false}
+                        showTextOnMobile
+                        isLargeOnMobile
+                    />
+                    <Button
+                        icon={<XCircleIcon />}
+                        type="button"
+                        size="large"
+                        text="Volver"
+                        color="gray"
+                        onClick={() => setModalOpen(false)}
+                        showIconOnMobile={false}
+                        showTextOnMobile
+                        isLargeOnMobile
+                    />
                 </EntityFormLayout.Actions>
             </EntityFormLayout.Form>
         </EntityFormLayout>

@@ -6,7 +6,7 @@ type Props = {
     value: string[] // Cambiado de string a string[]
 }
 
-export const SelectCheckboxFilter = ({ name, label, options, onChange, value }: Props) => {
+export const SelectCheckboxGroupFilter = ({ name, label, options, onChange, value }: Props) => {
     const handleCheckboxChange = (optionValue: string, isChecked: boolean) => {
         let newSelectedValues: string[];
 
@@ -39,7 +39,7 @@ export const SelectCheckboxFilter = ({ name, label, options, onChange, value }: 
                         />
                         <label
                             htmlFor={`${name}-${option.value}`}
-                            className="text-sm font-base text-gray-700 cursor-pointer"
+                            className="text-base text-gray-700 cursor-pointer"
                         >
                             {option.label}
                         </label>

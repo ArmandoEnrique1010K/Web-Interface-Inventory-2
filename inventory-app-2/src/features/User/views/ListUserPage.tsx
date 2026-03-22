@@ -8,15 +8,18 @@ import { FiltersFormContainer } from "@/components/FiltersFormContainer"
 import { InputTextFilter } from "@/ui/filters/InputTextFilter"
 import { SearchCounter } from "@/components/SearchCounter"
 import { TableContainer } from "@/components/TableContainer"
-import { SelectCheckboxFilter } from "@/ui/filters/SelectCheckboxFilter"
+import { SelectCheckboxGroupFilter } from "@/ui/filters/SelectCheckboxGroupFilter"
 import { TableRowContainer } from "@/components/TableRowContainer"
 import { BaseTableCell } from "@/components/BaseTableCell"
 import { ButtonLink } from "@/ui/ButtonLink"
 import { Paginator } from "@/components/Paginator"
 import { PlusCircleIcon } from "@heroicons/react/24/outline"
-import { UserChangeStatus } from "../components/UserChangeStatus"
+import { StatusUserButton } from "../components/StatusUserButton"
 import { EntityListLayout } from "@/layout/entity/EntityListLayout"
 import { handleApplyRoleStyle } from "@/utils/handleApplyRoleStyle"
+import { Button } from "@/ui/Button"
+import { Modal } from "@/components/Modal"
+import { LoaderUser } from "../components/LoaderUser"
 
 export const ListUserPage = () => {
 
@@ -41,7 +44,7 @@ export const ListUserPage = () => {
     })
 
     const { data, isError } = useQuery({
-        queryKey: ['list-users', { name, idRoles, page }],
+        queryKey: ['users', { name, idRoles, page }],
 
         queryFn: () => listAllUsers({
             page: page,
@@ -54,7 +57,7 @@ export const ListUserPage = () => {
     console.log(content)
 
     const { data: rolesData } = useQuery({
-        queryKey: ['list-roles'],
+        queryKey: ['roles'],
         queryFn: listAllRoles
     })
 
@@ -62,6 +65,9 @@ export const ListUserPage = () => {
         value: role.id.toString(),
         label: role.label,
     })) || []
+
+    const [selectedUser, setSelectedUser] = useState('');
+    const [showAlterRolesModal, setShowAlterRolesModal] = useState(false);
 
 
     return (
@@ -75,6 +81,8 @@ export const ListUserPage = () => {
                         text="Registrar usuario"
                         to="/users/new"
                         color="blue"
+                        showIconOnMobile={false}
+                        showTextOnMobile
                     />
                 }></EntityListLayout.Header>
             <EntityListLayout.Content>
@@ -108,7 +116,7 @@ export const ListUserPage = () => {
                             setForm(prev => ({ ...prev, name: e.target.value }))
                         }
                     />
-                    <SelectCheckboxFilter
+                    <SelectCheckboxGroupFilter
                         name='idRoles'
                         label='Roles'
                         options={roles}
@@ -175,20 +183,42 @@ export const ListUserPage = () => {
 
                                 } />
                                 <BaseTableCell data={
-                                    <UserChangeStatus userId={user.id.toString()} value={user.status === true ? 'Activo' : 'Inactivo'} size={"small"} />
+                                    <StatusUserButton userId={user.id.toString()} value={user.status === true ? 'Activo' : 'Inactivo'} size={"small"} />
                                 } />
                                 <BaseTableCell isCenter data={
                                     user.status === true ?
-                                        <ButtonLink
+                                        <Button
+                                            type="button"
                                             size="small"
                                             text="Alterar roles"
-                                            to={`/users/${user.id}/alter`}
                                             color="red-outline"
+                                            onClick={() => {
+                                                setShowAlterRolesModal(true)
+                                                setSelectedUser(user.id.toString())
+                                            }}
+                                            showTextOnMobile
                                         /> : ''}
                                 />
                             </TableRowContainer>
                         })
                     }
+                    {
+                        // Solamente debe renderizar la ventana modal cuando haya un producto seleccionado, de lo contrario no funcionara
+                        showAlterRolesModal && selectedUser && <Modal
+                            isOpen={showAlterRolesModal}
+                            onClose={() => {
+                                setShowAlterRolesModal(false)
+                                setSelectedUser('')
+                            }
+                            }
+                            size='lg'
+                            title={`Alterar roles del usuario #${selectedUser}`}
+                        >
+                            <LoaderUser userId={selectedUser} showModal={setShowAlterRolesModal} />
+                        </Modal>
+
+                    }
+
                 </TableContainer>
             </EntityListLayout.Content>
 

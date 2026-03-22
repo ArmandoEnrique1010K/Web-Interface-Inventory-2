@@ -1,16 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
 import type { UserRolesDetails } from "../types";
 import { getUserRoles } from "../api/UserAPI";
 import { TextMessage } from "@/components/TextMessage";
-import { AlterRolesUserPage } from "./AlterRolesUserPage";
+import { AlterRolesUserModal } from "./AlterRolesUserModal";
 
-export const LoaderUserPage = () => {
-    const params = useParams();
-    const userId = params.id!;
+type Props = {
+    userId: string,
+    showModal: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export const LoaderUser = ({ userId, showModal }: Props) => {
 
     const { data, isLoading, isError } = useQuery<UserRolesDetails>({
-        queryKey: ['edit-roles', userId],
+        queryKey: ['roles', userId],
         queryFn: () => getUserRoles(userId),
         retry: false,
     })
@@ -25,6 +27,6 @@ export const LoaderUserPage = () => {
     }
 
     if (data) return (
-        <AlterRolesUserPage data={data} userId={userId} />
+        <AlterRolesUserModal data={data} userId={userId} showModal={showModal} />
     )
 }

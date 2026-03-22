@@ -1,16 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
-import { getCategory } from "../../api/CategoryAPI";
+import { getType } from "../../api/TypeAPI";
 import { TextMessage } from "@/components/TextMessage";
-import { EditCategoryPage } from "./EditCategoryPage";
+import { EditTypeModal } from "./EditTypeModal";
 
-export const LoaderCategoryPage = () => {
-    const params = useParams();
-    const categoryId = params.id!;
+type Props = {
+    typeId: string,
+    setModalOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
 
+export const LoaderType = ({ typeId, setModalOpen }: Props) => {
     const { data, isLoading, isError } = useQuery({
-        queryKey: ['edit-category', categoryId],
-        queryFn: () => getCategory(categoryId),
+        queryKey: ['type', typeId],
+        queryFn: () => getType(typeId),
         retry: false,
     })
 
@@ -24,6 +25,6 @@ export const LoaderCategoryPage = () => {
     }
 
     if (data) return (
-        <EditCategoryPage data={data} categoryId={categoryId} />
+        <EditTypeModal data={data} typeId={typeId} setModalOpen={setModalOpen} />
     )
 }

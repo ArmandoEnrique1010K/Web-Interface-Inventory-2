@@ -17,15 +17,16 @@ export const EntityFormLayout = ({ children, isCompact }: Props) => {
 type HeaderProps = {
     title?: string
     helpText?: string
+    isCompact?: boolean
 }
 
-EntityFormLayout.Header = ({ title, helpText }: HeaderProps) => {
+EntityFormLayout.Header = ({ title, helpText, isCompact }: HeaderProps) => {
     return (
         <>
             {title && <Title>{title}</Title>}
 
             {helpText && (
-                <p className='pb-6 w-full'>
+                <p className={`${isCompact ? 'pb-4' : 'pb-6'} w-full text-sm text-slate-700`}>
                     {helpText}
                 </p>
 

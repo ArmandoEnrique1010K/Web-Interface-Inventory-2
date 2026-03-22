@@ -7,8 +7,16 @@ import { listAllTypes } from '../../api/TypeAPI'
 import { ButtonLink } from '@/ui/ButtonLink'
 import { PlusCircleIcon } from '@heroicons/react/24/outline'
 import { EntityListLayout } from '@/layout/entity/EntityListLayout'
+import { useState } from 'react'
+import { Button } from '@/ui/Button'
+import { Modal } from '@/components/Modal'
+import { LoaderType } from '../../components/type/LoaderType'
 
 export const ListTypePage = () => {
+
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [selectedType, setSelectedType] = useState('');
+
     const { data, isError } = useQuery({
         queryKey: ['list-types'],
         queryFn: listAllTypes
@@ -25,6 +33,8 @@ export const ListTypePage = () => {
                         text="Nuevo tipo"
                         to="/products/types/new"
                         color="blue"
+                        showIconOnMobile={false}
+                        showTextOnMobile
                     />
                 }></EntityListLayout.Header>
             <EntityListLayout.Content>
@@ -39,17 +49,41 @@ export const ListTypePage = () => {
                                 <BaseTableCell data={type.id} />
                                 <BaseTableCell data={type.name} />
                                 <BaseTableCell isCenter data={
-                                    <ButtonLink
+                                    <Button
+                                        type='button'
                                         size="small"
                                         text="Editar"
-                                        to={`/products/types/edit/${type.id}`}
                                         color="blue"
+                                        onClick={() => {
+                                            setShowEditModal(true)
+                                            setSelectedType(type.id.toString())
+                                        }}
+                                        showTextOnMobile
                                     />
                                 } />
-
                             </TableRowContainer>
                         ))
                     }
+                    {
+                        // Solamente debe renderizar la ventana modal cuando haya un producto seleccionado, de lo contrario no funcionara
+                        showEditModal && selectedType && <Modal
+                            isOpen={showEditModal}
+                            onClose={() => {
+                                setShowEditModal(false)
+                                setSelectedType('')
+                            }}
+                            size='lg'
+                            title={`Editar tipo #${selectedType}`}
+                        >
+                            <LoaderType
+                                typeId={selectedType}
+                                setModalOpen={setShowEditModal}
+                            />
+                        </Modal>
+
+                    }
+
+
                 </TableContainer>
             </EntityListLayout.Content>
         </EntityListLayout>

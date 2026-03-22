@@ -7,10 +7,18 @@ import { BaseTableCell } from '@/components/BaseTableCell'
 import { ButtonLink } from '@/ui/ButtonLink'
 import { PlusCircleIcon } from '@heroicons/react/24/outline'
 import { EntityListLayout } from '@/layout/entity/EntityListLayout'
+import { useState } from 'react'
+import { Button } from '@/ui/Button'
+import { Modal } from '@/components/Modal'
+import { LoaderCategory } from '../../components/category/LoaderCategory'
 
 export const ListCategoryPage = () => {
+
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [selectedCategory, setSelectedCategory] = useState('');
+
     const { data, isError } = useQuery({
-        queryKey: ['list-categories'],
+        queryKey: ['categories'],
         queryFn: listAllCategories
     })
 
@@ -24,6 +32,8 @@ export const ListCategoryPage = () => {
                         text="Nueva categoria"
                         to="/products/categories/new"
                         color="blue"
+                        showIconOnMobile={false}
+                        showTextOnMobile
                     />
                 }></EntityListLayout.Header>
             <EntityListLayout.Content>
@@ -39,17 +49,41 @@ export const ListCategoryPage = () => {
                                 <BaseTableCell data={category.id} />
                                 <BaseTableCell data={category.name} />
                                 <BaseTableCell data={
-                                    <ButtonLink
+                                    <Button
+                                        type='button'
                                         size="small"
                                         text="Editar"
-                                        to={`/products/categories/edit/${category.id}`}
                                         color="blue"
+                                        onClick={() => {
+                                            setShowEditModal(true)
+                                            setSelectedCategory(category.id.toString())
+                                        }}
+                                        showTextOnMobile
                                     />
                                 } isCenter />
                             </TableRowContainer>
                         ))
 
                     }
+                    {
+                        // Solamente debe renderizar la ventana modal cuando haya un producto seleccionado, de lo contrario no funcionara
+                        showEditModal && selectedCategory && <Modal
+                            isOpen={showEditModal}
+                            onClose={() => {
+                                setShowEditModal(false)
+                                setSelectedCategory('')
+                            }}
+                            size='lg'
+                            title={`Editar categoria #${selectedCategory}`}
+                        >
+                            <LoaderCategory
+                                categoryId={selectedCategory}
+                                setModalOpen={setShowEditModal}
+                            />
+                        </Modal>
+
+                    }
+
                 </TableContainer >
             </EntityListLayout.Content>
         </EntityListLayout>

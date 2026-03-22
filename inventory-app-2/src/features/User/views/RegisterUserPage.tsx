@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form"
+import { useForm, type UseFormRegisterReturn } from "react-hook-form"
 import type { UserRegisterForm } from "../types"
 import { useNavigate } from "react-router-dom"
 import { useMutation } from "@tanstack/react-query"
@@ -11,6 +11,7 @@ import { ButtonLink } from "@/ui/ButtonLink"
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline"
 import { InputPassword } from "@/ui/fields/InputPassword"
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout"
+import { SelectCheckboxGroup } from "@/ui/fields/SelectCheckboxGroup"
 
 export const RegisterUserPage = () => {
 
@@ -57,12 +58,26 @@ export const RegisterUserPage = () => {
     })
 
 
+    const rolesGroup: { name: string, action: UseFormRegisterReturn }[] = [
+        {
+            name: 'Operador',
+            action: register('operator')
+        },
+        {
+            name: 'Secretario',
+            action: register('secretary')
+        },
+        {
+            name: 'Administrador',
+            action: register('admin')
+        }
+    ]
 
 
     return (
         <EntityFormLayout>
             <EntityFormLayout.Header title="Registrar nuevo usuario"></EntityFormLayout.Header>
-            <EntityFormLayout.Form onSubmit={handleSubmit((data) => mutate(data))}>
+            <EntityFormLayout.Form styled onSubmit={handleSubmit((data) => mutate(data))}>
                 <EntityFormLayout.Inputs>
                     <InputText
                         id="firstname"
@@ -103,11 +118,10 @@ export const RegisterUserPage = () => {
                         functionEnabled={register('password')} />
 
 
-                    {/* TODO: SEPARAR ESTE CAMPO EN UN COMPONENTE APARTE */}
+                    <SelectCheckboxGroup group={rolesGroup} label="Roles" />
 
-                    <label className="text-md font-bold">Roles</label>
+                    {/* <label className="text-md font-bold">Roles</label>
 
-                    {/* Campos de tipo checkbox para los roles */}
                     <div className="flex flex-col gap-3 pt-2">
                         <label className="flex items-center gap-2">
                             <input
@@ -136,7 +150,7 @@ export const RegisterUserPage = () => {
                             Administrador
                         </label>
 
-                    </div>
+                    </div> */}
 
                 </EntityFormLayout.Inputs>
                 <EntityFormLayout.Actions>
