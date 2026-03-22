@@ -2,14 +2,6 @@ import { Subtitle } from '../Subtitle'
 
 type Props = {
     subtitle?: string
-    // selectButtons?: React.ReactNode,
-    // details: {
-    //     name: string,
-    //     value: string | React.ReactNode,
-    //     condition?: React.ReactNode // Condicion que debe ser verdadera para mostrar el detalle
-    //     isButton?: boolean // Aplica estilos si contiene un boton
-    // }[]
-
     children?: React.ReactNode
 
 }

@@ -16,17 +16,12 @@ import { NavbarContainer } from '@/components/NavbarContainer'
 import { CreditsDetails } from '@/features/Credits/components/CreditsDetails'
 import { LoaderProfile } from '@/features/Profile/components/LoaderProfile'
 import { ListModelPage } from '@/features/Product/views/model/ListModelPage'
-import { CompanyList } from '@/features/StockLot/components/company/CompanyList'
-import { CompanyAddForm } from '@/features/StockLot/components/company/CompanyAddForm'
-import { CompanyEditLoader } from '@/features/StockLot/components/company/CompanyEditLoader'
+import { ListCompanyPage } from '@/features/StockLot/views/company/ListCompanyPage'
+import { NewCompanyPage } from '@/features/StockLot/views/company/NewCompanyPage'
 import { DetailsModelPage } from '@/features/Product/views/model/DetailsModelPage'
-import { StockLotList } from '@/features/StockLot/components/stocklot/StockLotList'
-import { StockLotRegisterForm } from '@/features/StockLot/components/stocklot/StockLotRegisterForm'
-import { StockLotIncreaseForm } from '@/features/StockLot/components/stocklot/StockLotIncreaseForm'
-import { StockLotDecreaseForm } from '../features/StockLot/components/stocklot/StockLotDecreaseForm';
-import { StockLotRecoveryForm } from '@/features/StockLot/components/stocklot/StockLotRecoveryForm'
-import { StockLotTransferStocksLoader } from '@/features/StockLot/components/stocklot/StockLotTransferStocksLoader'
-import { StockLotDetails } from '@/features/StockLot/components/stocklot/StockLotDetails'
+import { ListStockLotPage } from '@/features/StockLot/views/stocklot/ListStockLotPage'
+import { NewStockLotPage } from '@/features/StockLot/views/stocklot/NewStockLotPage'
+import { DetailsStockLotPage } from '@/features/StockLot/views/stocklot/DetailsStockLotPage'
 import { ListRegionPage } from '@/features/Location/views/region/ListRegionPage'
 import { NewRegionPage } from '@/features/Location/views/region/NewRegionPage'
 import { NewSubregionPage } from '@/features/Location/views/subregion/NewSubregionPage'
@@ -196,18 +191,18 @@ export const GeneralRouter = () => {
                                 <Outlet />
                             </NavbarContainer>
                         }>
-                            <Route index element={<StockLotList />} />
-                            <Route path="new" element={<StockLotRegisterForm />} />
-                            <Route path=":id" element={<StockLotDetails />} />
-                            <Route path=":id/increase" element={<StockLotIncreaseForm />} />
-                            <Route path=":id/decrease" element={<StockLotDecreaseForm />} />
-                            <Route path=":id/recovery" element={<StockLotRecoveryForm />} />
-                            <Route path=":id/transfer" element={<StockLotTransferStocksLoader />} />
+                            <Route index element={<ListStockLotPage />} />
+                            <Route path="new" element={<NewStockLotPage />} />
+                            <Route path=":id" element={<DetailsStockLotPage />} />
+                            {/* <Route path=":id/increase" element={<IncreaseStockLotModal />} />
+                            <Route path=":id/decrease" element={<DecreaseStockLotModal />} />
+                            <Route path=":id/recovery" element={<RecoveryStockLotModal />} />
+                            <Route path=":id/transfer" element={<LoaderTransferStockLot />} /> */}
 
                             {/* RELACIONADO A COMPANIES */}
-                            <Route path="companies" element={<CompanyList />} />
-                            <Route path="companies/new" element={<CompanyAddForm />} />
-                            <Route path="companies/edit/:id" element={<CompanyEditLoader />} />
+                            <Route path="companies" element={<ListCompanyPage />} />
+                            <Route path="companies/new" element={<NewCompanyPage />} />
+                            {/* <Route path="companies/edit/:id" element={<LoaderCompany />} /> */}
                         </Route>
 
 

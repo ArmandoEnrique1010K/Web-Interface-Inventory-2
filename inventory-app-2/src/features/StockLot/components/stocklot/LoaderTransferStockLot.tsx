@@ -1,14 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
-import { useParams } from 'react-router-dom';
 import { getStockLot } from '../../api/StockLotAPI';
 import { TextMessage } from '@/components/TextMessage';
-import { StockLotTransferStocksForm } from './StockLotTransferStocksForm';
+import { TransferStockLotModal } from './TransferStockLotModal';
 import type { StockLotDetailsItem } from '../../types';
 
-export const StockLotTransferStocksLoader = () => {
+type Props = {
+    stockLotId: string,
+    showModal: React.Dispatch<React.SetStateAction<boolean>>
+}
 
-    const params = useParams();
-    const stockLotEmitterId = params.id!;
+export const LoaderTransferStockLot = ({ stockLotId, showModal }: Props) => {
+
+    const stockLotEmitterId = stockLotId
 
     const { data, isLoading, isError } = useQuery<StockLotDetailsItem>({
         queryKey: ['stocklot', stockLotEmitterId],
@@ -25,6 +28,6 @@ export const StockLotTransferStocksLoader = () => {
     }
 
     if (data) return (
-        <StockLotTransferStocksForm data={data} stockLotEmitterId={stockLotEmitterId} />
+        <TransferStockLotModal data={data} stockLotEmitterId={stockLotEmitterId} showModal={showModal} />
     )
 }

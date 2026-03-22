@@ -62,6 +62,14 @@ EntityDetailsLayout.Column = ({ children }: Props) => {
 }
 
 
+EntityDetailsLayout.Grid = ({ children }: Props) => {
+    return (
+        <div className="flex flex-col gap-8">
+            {children}
+        </div>
+    )
+}
+
 EntityDetailsLayout.Summary = ({ children }: Props) => {
     return (
         <div className="w-full mx-auto">

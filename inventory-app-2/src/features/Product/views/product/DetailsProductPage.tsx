@@ -9,7 +9,6 @@ import { useSearchParams } from "react-router-dom"
 import type { ModelItem } from '../../types/index';
 import { useState } from "react"
 import { PanelContainer } from "@/components/containers/PanelContainer"
-import { LeftPanelContainer } from "@/components/LeftPanelContainer"
 import { TableContainer } from "@/components/TableContainer"
 import { TableRowContainer } from "@/components/TableRowContainer"
 import { BaseTableCell } from "@/components/BaseTableCell"
@@ -130,7 +129,7 @@ export const DetailsProductPage = () => {
                             </PanelContainer.Detail>
                         </PanelContainer.DetailsGrid>
 
-                        <LeftPanelContainer.Image
+                        <PanelContainer.Image
                             url={selectedModel.imageUrl}
                             name={selectedModel.name}
                             legend={`${productData.name}, ${selectedModel.name}`}

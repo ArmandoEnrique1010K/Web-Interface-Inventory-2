@@ -1,12 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
 import { TextMessage } from "@/components/TextMessage";
 import { getCompany } from "../../api/CompanyAPI";
-import { CompanyEditForm } from "./CompanyEditForm";
+import { EditCompanyModal } from "./EditCompanyModal";
 
-export const CompanyEditLoader = () => {
-    const params = useParams();
-    const companyId = params.id!;
+type Props = {
+    companyId: string,
+    showModal: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export const LoaderCompany = ({ companyId, showModal }: Props) => {
 
     const { data, isLoading, isError } = useQuery({
         queryKey: ['company', companyId],
@@ -24,6 +26,6 @@ export const CompanyEditLoader = () => {
     }
 
     if (data) return (
-        <CompanyEditForm data={data} companyId={companyId} />
+        <EditCompanyModal data={data} companyId={companyId} showModal={showModal} />
     )
 }

@@ -1,24 +1,21 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { BaseForm } from "@/components/BaseForm";
 import type { GeneralError } from "types";
 import { Button } from "@/ui/Button";
 import { InputText } from "@/ui/fields/InputText";
-import { ListElementsContainer } from "@/views/ListElementsContainer";
-import { ButtonLink } from "@/ui/ButtonLink";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import type { CompanyForm } from "../../types";
 import { updateCompany } from "../../api/CompanyAPI";
+import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 
 type Props = {
     data: CompanyForm;
     companyId: string;
+    showModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const CompanyEditForm = ({ data, companyId }: Props) => {
-    const navigate = useNavigate();
+export const EditCompanyModal = ({ data, companyId, showModal }: Props) => {
 
     const { register, handleSubmit, setError, formState: { errors } } = useForm<CompanyForm>({
         defaultValues: {
@@ -54,7 +51,7 @@ export const CompanyEditForm = ({ data, companyId }: Props) => {
             queryClient.invalidateQueries({ queryKey: ["companies"] })
             queryClient.invalidateQueries({ queryKey: ["company", companyId] })
             toast.success(data)
-            navigate("/stocklots/companies")
+            showModal(false)
         }
     })
 
@@ -67,27 +64,44 @@ export const CompanyEditForm = ({ data, companyId }: Props) => {
     }
 
     return (
-        <>
-            <ListElementsContainer title={`Editar empresa importadora ${companyId}`}>
-                <BaseForm
-                    onSubmit={handleSubmit(handleForm)}
-                    buttons={
-                        <>
-                            <Button icon={<ArrowUpCircleIcon />} size="large" text="Editar empresa" type="submit" color="green" />
-                            <ButtonLink icon={<XCircleIcon />} size="large" text="Volver" color="gray" to="/stocklots/companies" />
-                        </>
-                    }
-                    inputs={
-                        <InputText
-                            id="name"
-                            label="Nombre"
-                            placeholder="Nombre de la empresa"
-                            type="text"
-                            errorMessage={errors.name}
-                            functionEnabled={register('name')} />
-                    }
-                />
-            </ListElementsContainer>
-        </>
+        <EntityFormLayout isCompact>
+            <EntityFormLayout.Form onSubmit={handleSubmit(handleForm)}
+            >
+                <EntityFormLayout.Inputs isCompact>
+                    <InputText
+                        id="name"
+                        label="Nombre"
+                        placeholder="Nombre de la empresa"
+                        type="text"
+                        errorMessage={errors.name}
+                        functionEnabled={register('name')} />
+                </EntityFormLayout.Inputs>
+
+                <EntityFormLayout.Actions isCompact>
+                    <Button
+                        icon={<ArrowUpCircleIcon />}
+                        size="large"
+                        text="Editar"
+                        type="submit"
+                        color="green"
+                        showIconOnMobile={false}
+                        showTextOnMobile
+                        isLargeOnMobile
+                    />
+                    <Button
+                        icon={<XCircleIcon />}
+                        size="large"
+                        text="Volver"
+                        type='button'
+                        color="gray"
+                        onClick={() => showModal(false)}
+                        showIconOnMobile={false}
+                        showTextOnMobile
+                        isLargeOnMobile
+                    />
+                </EntityFormLayout.Actions>
+
+            </EntityFormLayout.Form>
+        </EntityFormLayout >
     )
 }

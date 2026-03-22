@@ -1,28 +1,23 @@
-import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { listAllStockLotsByModelAndExcludeOne, transferStockLot } from "../../api/StockLotAPI";
 import type { GeneralError } from "@/types/index";
 import { toast } from "sonner";
-import { ListElementsContainer } from "@/views/ListElementsContainer";
-import { BaseForm } from "@/components/BaseForm";
 import { Button } from "@/ui/Button";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
-import { ButtonLink } from "@/ui/ButtonLink";
 import { InputText } from "@/ui/fields/InputText";
 import type { StockLotDetailsItem, StockLotTransferForm } from "../../types";
 import { SelectOption } from "@/ui/fields/SelectOption";
-import { TextMessage } from "@/components/TextMessage";
+import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 
 type Props = {
     data: StockLotDetailsItem,
-    stockLotEmitterId: string
+    stockLotEmitterId: string,
+    showModal: React.Dispatch<React.SetStateAction<boolean>>
+
 }
 
-export const StockLotTransferStocksForm = ({ data, stockLotEmitterId }: Props) => {
-
-
-    const navigate = useNavigate();
+export const TransferStockLotModal = ({ data, stockLotEmitterId, showModal }: Props) => {
 
     const { register, handleSubmit, setError, formState: { errors } } = useForm<StockLotTransferForm>({
         defaultValues: {
@@ -59,7 +54,7 @@ export const StockLotTransferStocksForm = ({ data, stockLotEmitterId }: Props) =
             queryClient.invalidateQueries({ queryKey: ["stocklots"] })
             queryClient.invalidateQueries({ queryKey: ['stocklot', stockLotEmitterId] })
             toast.success(data)
-            navigate("/stocklots")
+            showModal(false)
         }
     })
 
@@ -81,38 +76,24 @@ export const StockLotTransferStocksForm = ({ data, stockLotEmitterId }: Props) =
         label: stockLot.batch,
     })) || []
 
-    // TODO: SE PODRIA MOSTRAR UN COMPONENTE PARA UN MENSAJE DE ERROR
-    // Si no hay lotes de stock asociados, entonces no debe hacer nada
-    if (stockLotsByModelAndCompany.length === 0) {
-        // return (
-        //     <div className="text-center py-8">
-        //         <p className="text-gray-600 mb-4">No hay lotes de stock disponibles para transferir</p>
-        //         <button onClick={() => navigate('/stocklots')}>
-        //             Regresar
-        //         </button>
-        //     </div>
-        // )
-
-        return <TextMessage text='Ha ocurrido un error' align='left' color='red' />
-
-    }
 
     return (
-        <>
-            <ListElementsContainer title={`Transferir 'x' unidades del lote de stock ${stockLotEmitterId} a otro lote de stock`}>
-                <BaseForm
-                    onSubmit={handleSubmit(handleForm)}
-                    buttons={
+        <EntityFormLayout isCompact>
+            <EntityFormLayout.Form
+                onSubmit={handleSubmit(handleForm)}
+            >
+                {
+                    stockLotsByModelAndCompany.length === 0 ? (
                         <>
-                            <Button icon={<ArrowUpCircleIcon />} size="large" text="Transferir" type="submit" color="green" />
-                            <ButtonLink icon={<XCircleIcon />} size="large" text="Volver" color="gray" to="/stocklots" />
+                            <EntityFormLayout.Header
+                                helpText="No se ha encontrado otro lote de stock que pertenezca al mismo modelo y a la misma empresa importadora del producto seleccionado">
+                            </EntityFormLayout.Header>
                         </>
-                    }
-                    inputs={
-                        <>
+                    ) : (
+                        <EntityFormLayout.Inputs isCompact>
                             <InputText
                                 id="quantity"
-                                label="Cantidad o unidades a incrementar"
+                                label="Unidades a transferir"
                                 placeholder="Cantidad"
                                 type="text"
                                 errorMessage={errors.quantity}
@@ -138,10 +119,41 @@ export const StockLotTransferStocksForm = ({ data, stockLotEmitterId }: Props) =
                                 textInNullOption="Seleccione un código del lote de stock receptor"
                             />
 
-                        </>
+                        </EntityFormLayout.Inputs>
+                    )
+                }
+                <EntityFormLayout.Actions isCompact>
+                    {
+                        stockLotsByModelAndCompany.length !== 0 && (
+                            <Button
+                                icon={<ArrowUpCircleIcon />}
+                                size="large"
+                                text="Transferir"
+                                type="submit"
+                                color="green"
+                                showIconOnMobile={false}
+                                showTextOnMobile
+                                isLargeOnMobile
+                            />
+
+                        )
                     }
-                />
-            </ListElementsContainer>
-        </>
+                    <Button
+                        icon={<XCircleIcon />}
+                        size="large"
+                        text="Volver"
+                        color="gray"
+                        type='button'
+                        onClick={() => showModal(false)}
+                        showIconOnMobile={false}
+                        showTextOnMobile
+                        isLargeOnMobile
+                    />
+
+                </EntityFormLayout.Actions>
+
+
+            </EntityFormLayout.Form>
+        </EntityFormLayout >
     )
 }

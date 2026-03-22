@@ -176,7 +176,7 @@ export const ListUserPage = () => {
                                     <span className="flex flex-wrap gap-2 text-sm">
                                         {
                                             user.roles.map(role => (
-                                                <span className={`px-3 py-1 rounded-4xl ${handleApplyRoleStyle(role as 'Usuario' | 'Operador' | 'Secretario' | 'Administrador')}`}>{role}</span>
+                                                <span key={role} className={`px-3 py-1 rounded-4xl ${handleApplyRoleStyle(role as 'Usuario' | 'Operador' | 'Secretario' | 'Administrador')}`}>{role}</span>
                                             ))
                                         }
                                     </span>

@@ -1,0 +1,123 @@
+import { useForm } from "react-hook-form";
+import type { StockLotAdjustmentForm } from "../../types";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { increaseStockLot } from "../../api/StockLotAPI";
+import type { GeneralError } from "@/types/index";
+import { toast } from "sonner";
+import { Button } from "@/ui/Button";
+import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
+import { InputText } from "@/ui/fields/InputText";
+import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
+
+type Props = {
+    stockLotId: string,
+    showModal: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export const IncreaseStockLotModal = ({ stockLotId, showModal }: Props) => {
+
+    const { register, handleSubmit, setError, formState: { errors } } = useForm<StockLotAdjustmentForm>({
+        defaultValues: {
+            quantity: '',
+            comment: '',
+        }
+    })
+    const queryClient = useQueryClient();
+
+    const { mutate } = useMutation({
+        mutationFn: increaseStockLot,
+        onError: (error: GeneralError) => {
+            // Error de campo
+            if (error.type === 'FIELD_ERROR') {
+                Object.entries(error.fields).forEach(([field, message]) => {
+                    setError(field as keyof StockLotAdjustmentForm, {
+                        type: 'server',
+                        message: message as string,
+                    })
+                })
+
+                toast.error(error.message)
+                return
+            }
+
+            // Error general
+            if (error.type === 'GENERAL_ERROR') {
+                toast.error(error.message)
+                return
+            }
+        },
+        onSuccess: (data) => {
+            queryClient.invalidateQueries({ queryKey: ["stocklots"] })
+            queryClient.invalidateQueries({ queryKey: ["stocklot", stockLotId] })
+            toast.success(data)
+            showModal(false)
+        }
+    })
+
+    const handleForm = (formData: StockLotAdjustmentForm) => {
+        const data = {
+            formData,
+            stockLotId
+        }
+        mutate(data)
+    }
+
+    return (
+        <EntityFormLayout isCompact>
+            <EntityFormLayout.Form
+                onSubmit={handleSubmit(handleForm)}
+            // buttons={
+            //     <>
+            //     </>
+            // }
+            // inputs={
+            //     <>
+            //     </>
+            // }
+            >
+                <EntityFormLayout.Inputs isCompact>
+                    <InputText
+                        id="quantity"
+                        label="Unidades a incrementar"
+                        placeholder="Cantidad"
+                        type="text"
+                        errorMessage={errors.quantity}
+                        functionEnabled={register('quantity')} />
+
+                    <InputText
+                        id="comment"
+                        label="Comentario breve"
+                        placeholder="Comentario..."
+                        type="text"
+                        errorMessage={errors.comment}
+                        functionEnabled={register('comment')} />
+
+                </EntityFormLayout.Inputs>
+                <EntityFormLayout.Actions isCompact>
+                    <Button
+                        icon={<ArrowUpCircleIcon />}
+                        size="large"
+                        text="Agregar"
+                        type="submit"
+                        color="green"
+                        showIconOnMobile={false}
+                        showTextOnMobile
+                        isLargeOnMobile
+                    />
+                    <Button
+                        icon={<XCircleIcon />}
+                        size="large"
+                        text="Volver"
+                        color="gray"
+                        type='button'
+                        onClick={() => showModal(false)}
+                        showIconOnMobile={false}
+                        showTextOnMobile
+                        isLargeOnMobile
+                    />
+
+                </EntityFormLayout.Actions>
+            </EntityFormLayout.Form>
+        </EntityFormLayout >
+    )
+}
