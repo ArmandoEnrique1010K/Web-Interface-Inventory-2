@@ -7,10 +7,17 @@ import type { RegionItem } from '../../types'
 import { TableRowContainer } from '@/components/TableRowContainer'
 import { BaseTableCell } from '@/components/BaseTableCell'
 import { EntityListLayout } from '@/layout/entity/EntityListLayout'
+import { useState } from 'react'
+import { Button } from '@/ui/Button'
+import { Modal } from '@/components/Modal'
+import { LoaderRegion } from '../../components/region/LoaderRegion'
 
 export const ListRegionPage = () => {
+    const [showEditRegionModal, setShowEditRegionModal] = useState(false);
+    const [selectedRegion, setSelectedRegion] = useState('');
+
     const { data, isError } = useQuery({
-        queryKey: ['list-regions'],
+        queryKey: ['regions'],
         queryFn: listAllRegions
     })
 
@@ -24,6 +31,8 @@ export const ListRegionPage = () => {
                         text="Nueva región"
                         to="/locations/regions/new"
                         color="blue"
+                        showIconOnMobile={false}
+                        showTextOnMobile
                     />
                 }></EntityListLayout.Header>
             <EntityListLayout.Content>
@@ -38,18 +47,42 @@ export const ListRegionPage = () => {
                             <TableRowContainer key={region.id}>
                                 <BaseTableCell data={region.id} />
                                 <BaseTableCell data={region.name} />
-                                <BaseTableCell data={
-                                    <ButtonLink
+                                <BaseTableCell isCenter data={
+                                    <Button
+                                        type='button'
                                         size="small"
                                         text="Editar"
-                                        to={`/locations/regions/edit/${region.id}`}
                                         color="blue"
+                                        onClick={() => {
+                                            setShowEditRegionModal(true)
+                                            setSelectedRegion(region.id.toString())
+                                        }}
+                                        showTextOnMobile
                                     />
-                                } isCenter />
+
+                                } />
                             </TableRowContainer>
                         ))
 
                     }
+
+                    {
+                        showEditRegionModal && selectedRegion && <Modal
+                            isOpen={showEditRegionModal}
+                            onClose={() => {
+                                setShowEditRegionModal(false)
+                                setSelectedRegion('')
+                            }}
+                            size='lg'
+                            title={`Editar region #${selectedRegion}`}
+                        >
+                            <LoaderRegion
+                                regionId={selectedRegion}
+                                showModal={setShowEditRegionModal}
+                            />
+                        </Modal>
+                    }
+
                 </TableContainer>
 
             </EntityListLayout.Content>

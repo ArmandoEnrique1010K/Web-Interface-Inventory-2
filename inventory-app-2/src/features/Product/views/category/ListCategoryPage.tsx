@@ -75,6 +75,7 @@ export const ListCategoryPage = () => {
                             }}
                             size='lg'
                             title={`Editar categoria #${selectedCategory}`}
+                            locked
                         >
                             <LoaderCategory
                                 categoryId={selectedCategory}

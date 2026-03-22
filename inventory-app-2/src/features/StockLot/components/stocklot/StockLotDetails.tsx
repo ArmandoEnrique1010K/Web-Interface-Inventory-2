@@ -12,7 +12,7 @@ export const StockLotDetails = () => {
     const { id: stockLotId } = useParams();
 
     const { data, isLoading } = useQuery<StockLotDetailsItem>({
-        queryKey: ['stock-lot-details', stockLotId],
+        queryKey: ['stocklot', stockLotId],
         queryFn: () => getStockLot(stockLotId!),
         enabled: !!stockLotId
     })

@@ -16,8 +16,11 @@ import { TableContainer } from "@/components/TableContainer"
 import { TableRowContainer } from "@/components/TableRowContainer"
 import { BaseTableCell } from "@/components/BaseTableCell"
 import { Paginator } from "@/components/Paginator"
-import { LocationChangeStatus } from "../../components/location/LocationChangeStatus"
+import { StatusLocationButton } from "../../components/location/StatusLocationButton"
 import { EntityListLayout } from "@/layout/entity/EntityListLayout"
+import { Button } from "@/ui/Button"
+import { Modal } from "@/components/Modal"
+import { LoaderLocation } from "../../components/location/LoaderLocation"
 
 export const ListLocationPage = () => {
     const [searchParams, setSearchParams] = useSearchParams()
@@ -50,7 +53,7 @@ export const ListLocationPage = () => {
     })
 
     const { data, isError } = useQuery({
-        queryKey: ['list-locations', { name, regionId, subregionId, status, page }],
+        queryKey: ['locations', { name, regionId, subregionId, status, page }],
 
         queryFn: () => listAllLocations({
             page: page,
@@ -64,11 +67,11 @@ export const ListLocationPage = () => {
     const content = data?.content || []
 
     const { data: regionsData } = useQuery({
-        queryKey: ['list-regions'],
+        queryKey: ['regions'],
         queryFn: listAllRegions
     })
     const { data: subregionsData } = useQuery({
-        queryKey: ['list-subregions-by-region', form.regionId],
+        queryKey: ['subregions', 'region', form.regionId],
         queryFn: () => listAllSubregionsByRegionId(form.regionId!),
         enabled: !!form.regionId // solo ejecuta si hay region
     })
@@ -90,11 +93,14 @@ export const ListLocationPage = () => {
         { value: 'false', label: 'Inactivos' },
     ]
     const isSmallScreen = useMediaQuery({ query: '(max-width: 479px)' })
+    const [editModalOpen, setEditModalOpen] = useState(false);
+    const [selectedLocation, setSelectedLocation] = useState('');
 
 
     return (
         <EntityListLayout>
-            <EntityListLayout.Header title="Ubicaciones"
+            <EntityListLayout.Header
+                title="Ubicaciones"
                 actions={
                     <ButtonLink
                         icon={<PlusCircleIcon />}
@@ -102,6 +108,8 @@ export const ListLocationPage = () => {
                         text="Nueva ubicación"
                         to="/locations/new"
                         color="blue"
+                        showIconOnMobile={false}
+                        showTextOnMobile
                     />
                 }></EntityListLayout.Header>
             <EntityListLayout.Content>
@@ -223,22 +231,47 @@ export const ListLocationPage = () => {
                                 } />
 
                                 <BaseTableCell data={
-                                    <LocationChangeStatus size="small" locationId={location.id.toString()} value={location.status ? 'Activo' : 'Inactivo'} />
+                                    <StatusLocationButton
+                                        size="small"
+                                        locationId={location.id.toString()} value={location.status ? 'Activo' : 'Inactivo'} />
                                 } />
 
                                 <BaseTableCell isCenter data={
                                     location.status === true ?
-                                        <ButtonLink
+                                        <Button
+                                            type='button'
                                             size="small"
                                             text="Editar"
-                                            to={`/locations/edit/${location.id}`}
                                             color="blue"
+                                            onClick={() => {
+                                                setEditModalOpen(true)
+                                                setSelectedLocation(location.id.toString())
+                                            }}
+                                            showTextOnMobile
 
                                         /> : ''
                                 } />
                             </TableRowContainer>
                         })
                     }
+                    {
+                        // Solamente debe renderizar la ventana modal cuando haya un producto seleccionado, de lo contrario no funcionara
+                        editModalOpen && selectedLocation && <Modal
+                            isOpen={editModalOpen}
+                            onClose={() => {
+                                setEditModalOpen(false)
+                                setSelectedLocation('')
+                            }
+                            }
+                            size='lg'
+                            title={`Editar ubicación #${selectedLocation}`}
+                            locked
+                        >
+                            <LoaderLocation locationId={selectedLocation} showModal={setEditModalOpen} />
+                        </Modal>
+
+                    }
+
                 </TableContainer>
             </EntityListLayout.Content>
         </EntityListLayout>

@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import type { RegionItem, SubregionForm } from "../../types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
@@ -7,7 +6,6 @@ import { updateSubregion } from "../../api/SubregionAPI";
 import { toast } from "sonner";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { Button } from "@/ui/Button";
-import { ButtonLink } from "@/ui/ButtonLink";
 import { InputText } from "@/ui/fields/InputText";
 import { SelectOption } from "@/ui/fields/SelectOption";
 import { listAllRegions } from "../../api/RegionAPI";
@@ -17,11 +15,11 @@ import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 
 type Props = {
     data: SubregionForm;
+    showModal: React.Dispatch<React.SetStateAction<boolean>>
     subregionId: string;
 }
 
-export const EditSubregionPage = ({ data, subregionId }: Props) => {
-    const navigate = useNavigate();
+export const EditSubregionModal = ({ data, subregionId, showModal }: Props) => {
 
     const { register, handleSubmit, setError, formState: { errors } } = useForm<SubregionForm>({
         defaultValues: {
@@ -54,11 +52,11 @@ export const EditSubregionPage = ({ data, subregionId }: Props) => {
             }
         },
         onSuccess: (data) => {
-            queryClient.invalidateQueries({ queryKey: ["list-subregions"] })
-            queryClient.invalidateQueries({ queryKey: ["edit-subregion", subregionId] })
+            queryClient.invalidateQueries({ queryKey: ["subregions"] })
+            queryClient.invalidateQueries({ queryKey: ["subregion", subregionId] })
             toast.success(data)
             // TODO: INVESTIGAR COMO SE PODRIA OBTENER EL ID DE LA REGION SELECCIONADA AL ENTRAR A ESTE COMPONENTE O CUANDO SE CAMBIA EL VALOR DEL FORMULARIO
-            navigate(`/locations/subregions`)
+            showModal(false)
         }
     })
     const handleForm = (formData: SubregionForm) => {
@@ -69,7 +67,7 @@ export const EditSubregionPage = ({ data, subregionId }: Props) => {
         mutate(data)
     }
     const { data: regionData, isLoading: regionLoading } = useQuery({
-        queryKey: ['list-regions'],
+        queryKey: ['regions'],
         queryFn: listAllRegions
     })
 
@@ -85,12 +83,11 @@ export const EditSubregionPage = ({ data, subregionId }: Props) => {
 
 
     return (
-        <EntityFormLayout>
-            <EntityFormLayout.Header title={`Editar subregión ${subregionId}`}></EntityFormLayout.Header>
+        <EntityFormLayout isCompact>
             <EntityFormLayout.Form
                 onSubmit={handleSubmit(handleForm)}
             >
-                <EntityFormLayout.Inputs>
+                <EntityFormLayout.Inputs isCompact>
                     <InputText
                         id="name"
                         label="Nombre"
@@ -110,9 +107,28 @@ export const EditSubregionPage = ({ data, subregionId }: Props) => {
                     />
                 </EntityFormLayout.Inputs>
 
-                <EntityFormLayout.Actions>
-                    <Button icon={<ArrowUpCircleIcon />} size="large" text="Editar subregión" type="submit" color="green" />
-                    <ButtonLink icon={<XCircleIcon />} size="large" text="Volver" color="gray" to="/locations/subregions" />
+                <EntityFormLayout.Actions isCompact>
+                    <Button
+                        icon={<ArrowUpCircleIcon />}
+                        size="large"
+                        text="Editar"
+                        type="submit"
+                        color="green"
+                        showIconOnMobile={false}
+                        showTextOnMobile
+                        isLargeOnMobile
+                    />
+                    <Button
+                        type="button"
+                        icon={<XCircleIcon />}
+                        size="large"
+                        text="Volver"
+                        color="gray"
+                        onClick={() => showModal(false)}
+                        showIconOnMobile={false}
+                        showTextOnMobile
+                        isLargeOnMobile
+                    />
 
                 </EntityFormLayout.Actions>
             </EntityFormLayout.Form>

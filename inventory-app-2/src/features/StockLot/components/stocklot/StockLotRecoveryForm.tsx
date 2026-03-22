@@ -50,7 +50,7 @@ export const StockLotRecoveryForm = () => {
             }
         },
         onSuccess: (data) => {
-            queryClient.invalidateQueries({ queryKey: ["list-stocklots"] })
+            queryClient.invalidateQueries({ queryKey: ["stocklots"] })
             toast.success(data)
             navigate("/stocklots")
         }

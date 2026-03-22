@@ -5,8 +5,6 @@ import { registerLocation } from "../../api/LocationAPI"
 import type { GeneralError } from "@/types/index"
 import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
-import { ListElementsContainer } from "@/views/ListElementsContainer"
-import { BaseForm } from "@/components/BaseForm"
 import { InputText } from "@/ui/fields/InputText"
 import { SelectOption } from "@/ui/fields/SelectOption"
 import { SelectOptionFilter } from "@/ui/filters/SelectOptionFilter"
@@ -16,6 +14,7 @@ import { useState } from "react"
 import { Button } from "@/ui/Button"
 import { ButtonLink } from "@/ui/ButtonLink"
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline"
+import { EntityFormLayout } from "@/layout/entity/EntityFormLayout"
 
 export const NewLocationPage = () => {
 
@@ -59,12 +58,12 @@ export const NewLocationPage = () => {
     const [selectedRegionId, setSelectedRegionId] = useState('0');
 
     const { data: regionsData } = useQuery({
-        queryKey: ['list-regions'],
+        queryKey: ['regions'],
         queryFn: listAllRegions
     })
 
     const { data: subregionsData } = useQuery({
-        queryKey: ['list-subregions-by-region', selectedRegionId],
+        queryKey: ['subregions', 'region', selectedRegionId],
         queryFn: () => listAllSubregionsByRegionId(selectedRegionId.toString()),
         enabled: !!selectedRegionId // solo ejecuta si hay region
     })
@@ -84,10 +83,13 @@ export const NewLocationPage = () => {
     })) || []
 
     return (
-        <ListElementsContainer title="Añadir nueva ubicación">
-            <BaseForm
+        <EntityFormLayout>
+
+            <EntityFormLayout.Header title="Añadir nueva ubicación"></EntityFormLayout.Header>
+            <EntityFormLayout.Form styled
                 onSubmit={handleSubmit((data) => mutate(data))}
-                inputs={
+            >
+                <EntityFormLayout.Inputs>
                     <>
                         <InputText
                             id="name"
@@ -129,15 +131,31 @@ export const NewLocationPage = () => {
                             textInNullOption='Seleccione una subregión'
                             disabled={selectedRegionId === '0'}
                         />
+
                     </>
-                }
-                buttons={
-                    <>
-                        <Button icon={<ArrowUpCircleIcon />} size="large" text='Añadir ubicación' type="submit" color="green" />
-                        <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to="/locations" />
-                    </>
-                }
-            />
-        </ListElementsContainer>
+                </EntityFormLayout.Inputs>
+                <EntityFormLayout.Actions>
+                    <Button icon={<ArrowUpCircleIcon />}
+                        size="large"
+                        text='Añadir'
+                        type="submit"
+                        color="green"
+                        showIconOnMobile={false}
+                        showTextOnMobile
+                        isLargeOnMobile
+                    />
+                    <ButtonLink
+                        icon={<XCircleIcon />}
+                        size="large"
+                        text="Cancelar"
+                        color="gray"
+                        to="/locations"
+                        showIconOnMobile={false}
+                        showTextOnMobile
+                        isLargeOnMobile
+                    />
+                </EntityFormLayout.Actions>
+            </EntityFormLayout.Form>
+        </EntityFormLayout >
     )
 }

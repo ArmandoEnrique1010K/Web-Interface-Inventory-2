@@ -1,7 +1,7 @@
 import { Subtitle } from '../Subtitle'
 
 type Props = {
-    subtitle: string
+    subtitle?: string
     // selectButtons?: React.ReactNode,
     // details: {
     //     name: string,
@@ -17,7 +17,7 @@ type Props = {
 export const PanelContainer = ({ subtitle, children }: Props) => {
     return (
         <div className="flex flex-col gap-4">
-            <Subtitle>{subtitle}</Subtitle>
+            {subtitle && <Subtitle>{subtitle}</Subtitle>}
             {children}
         </div>
     )
@@ -39,7 +39,7 @@ PanelContainer.Actions = ({ children }: ActionsProps) => {
 
 PanelContainer.DetailsGrid = ({ children }: { children: React.ReactNode }) => {
     return (
-        <div className="grid grid-cols-1 gap-y-2 text-sm mt-2">
+        <div className="grid grid-cols-1 gap-y-3 text-sm mt-2">
             {children}
         </div>
     )
@@ -53,8 +53,8 @@ type DetailProps = {
 PanelContainer.Detail = ({ label, children, isButton }: DetailProps) => {
     return (
         <div className="grid grid-cols-2 items-center">
-            <div className="font-semibold">{label}:</div>
-            <div className={isButton ? 'flex justify-start' : ''}>
+            <div className="text-sm text-gray-500">{label}:</div>
+            <div className={isButton ? 'flex justify-start' : 'text-md'}>
                 {children}
             </div>
         </div>

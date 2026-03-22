@@ -7,7 +7,6 @@ import { ValidateUserTokenForm } from '@/features/Auth/views/ValidateUserTokenFo
 import { UpdateUserPasswordForm } from '@/features/Auth/views/UpdateUserPasswordForm'
 import { useSelector } from 'react-redux'
 import type { RootState } from '@/store/store'
-import { UserProfile } from '@/features/Profile/components/UserProfile'
 import { Loading } from '@/views/Loading'
 import type { MenuItem } from 'types'
 import { CubeIcon, DocumentDuplicateIcon, FlagIcon, MapIcon, MapPinIcon, NewspaperIcon, RectangleGroupIcon, TagIcon, TruckIcon } from '@heroicons/react/24/outline'
@@ -15,7 +14,7 @@ import { NewCategoryPage } from '@/features/Product/views/category/NewCategoryPa
 import { ListCategoryPage } from '@/features/Product/views/category/ListCategoryPage'
 import { NavbarContainer } from '@/components/NavbarContainer'
 import { CreditsDetails } from '@/features/Credits/components/CreditsDetails'
-import { ProfileEditLoader } from '@/features/Profile/components/ProfileEditLoader'
+import { LoaderProfile } from '@/features/Profile/components/LoaderProfile'
 import { ListModelPage } from '@/features/Product/views/model/ListModelPage'
 import { CompanyList } from '@/features/StockLot/components/company/CompanyList'
 import { CompanyAddForm } from '@/features/StockLot/components/company/CompanyAddForm'
@@ -30,12 +29,9 @@ import { StockLotTransferStocksLoader } from '@/features/StockLot/components/sto
 import { StockLotDetails } from '@/features/StockLot/components/stocklot/StockLotDetails'
 import { ListRegionPage } from '@/features/Location/views/region/ListRegionPage'
 import { NewRegionPage } from '@/features/Location/views/region/NewRegionPage'
-import { LoaderRegionPage } from '@/features/Location/views/region/LoaderRegionPage'
 import { NewSubregionPage } from '@/features/Location/views/subregion/NewSubregionPage'
-import { LoaderSubregionPage } from '@/features/Location/views/subregion/LoaderSubregionPage'
 import { ListLocationPage } from '@/features/Location/views/location/ListLocationPage'
 import { NewLocationPage } from '@/features/Location/views/location/NewLocationPage'
-import { LoaderLocationPage } from '@/features/Location/views/location/LoaderLocationPage'
 import { MovementList } from '@/features/Movement/components/MovementList'
 import { DetailsProductPage } from '@/features/Product/views/product/DetailsProductPage'
 import { ListProductPage } from '@/features/Product/views/product/ListProductPage'
@@ -45,7 +41,7 @@ import { NewTypePage } from '@/features/Product/views/type/NewTypePage'
 import { ListSubregionPage } from '@/features/Location/views/subregion/ListSubregionPage'
 import { ListUserPage } from '@/features/User/views/ListUserPage'
 import { RegisterUserPage } from '@/features/User/views/RegisterUserPage'
-import { LoaderUser } from '@/features/User/components/LoaderUser'
+import { UserProfilePage } from '@/features/Profile/views/UserProfilePage'
 
 const productItems: MenuItem[] = [
     {
@@ -161,12 +157,45 @@ export const GeneralRouter = () => {
                             <Route path="types/new" element={<NewTypePage />} />
                         </Route>
 
+                        {/* RELACIONADO A USER */}
+                        <Route path='users' element={
+                            <Outlet />
+                        }>
+                            <Route index element={<ListUserPage />} />
+                            <Route path='new' element={<RegisterUserPage />} />
+                        </Route>
+
+                        {/* RELACIONADO A LOCATION */}
+                        <Route path='locations' element={
+                            <NavbarContainer menuItems={locationItems} keyword='locations'>
+                                <Outlet />
+                            </NavbarContainer>
+                        }>
+                            <Route index element={<ListLocationPage />} />
+                            <Route path="new" element={<NewLocationPage />} />
+
+                            <Route path="regions" element={<ListRegionPage />} />
+                            <Route path="regions/new" element={<NewRegionPage />} />
+
+                            <Route path="subregions" element={<ListSubregionPage />} />
+                            <Route path="subregions/new" element={<NewSubregionPage />} />
+                        </Route>
+
+                        {/* RELACIONADO A PROFILE */}
+                        <Route path="profile" element={
+                            <Outlet />
+                        }>
+                            <Route index element={<UserProfilePage />} />
+                            <Route path='update' element={<LoaderProfile />} />
+                        </Route>
+
+                        {/* TODO: CONTINUAR AQUI */}
+                        {/* RELACIONADO A STOCKLOT */}
                         <Route path='stocklots' element={
                             <NavbarContainer menuItems={stockLotsItems} keyword='stocklots'>
                                 <Outlet />
                             </NavbarContainer>
                         }>
-                            {/* RELACIONADO A STOCKLOT */}
                             <Route index element={<StockLotList />} />
                             <Route path="new" element={<StockLotRegisterForm />} />
                             <Route path=":id" element={<StockLotDetails />} />
@@ -182,33 +211,7 @@ export const GeneralRouter = () => {
                         </Route>
 
 
-                        <Route path='locations' element={
-                            <NavbarContainer menuItems={locationItems} keyword='locations'>
-                                <Outlet />
-                            </NavbarContainer>
-                        }>
-                            <Route index element={<ListLocationPage />} />
-                            <Route path="new" element={<NewLocationPage />} />
-                            <Route path="edit/:id" element={<LoaderLocationPage />} />
 
-                            <Route path="regions" element={<ListRegionPage />} />
-                            <Route path="regions/new" element={<NewRegionPage />} />
-                            <Route path="regions/edit/:id" element={<LoaderRegionPage />} />
-
-                            <Route path="subregions" element={<ListSubregionPage />} />
-                            <Route path="subregions/add" element={<NewSubregionPage />} />
-                            <Route path="subregions/edit/:id" element={<LoaderSubregionPage />} />
-                        </Route>
-
-                        {/* RELACIONADO A USER */}
-                        <Route path='users' element={
-                            <Outlet />
-                        }>
-                            <Route index element={<ListUserPage />} />
-                            <Route path='new' element={<RegisterUserPage />} />
-                            <Route path=':id/alter' element={<LoaderUser />} />
-
-                        </Route>
                         {/* RELACIONADO A MOVEMENT */}
                         <Route path='movements' element={
                             <Outlet />
@@ -218,13 +221,6 @@ export const GeneralRouter = () => {
                         </Route>
 
 
-                        {/* RELACIONADO A PROFILE */}
-                        <Route path="profile" element={
-                            <Outlet />
-                        }>
-                            <Route index element={<UserProfile />} />
-                            <Route path='update' element={<ProfileEditLoader />} />
-                        </Route>
 
                         {/* RELACIONADO A CREDITS */}
                         <Route path="credits" element={

@@ -11,7 +11,7 @@ export const StockLotTransferStocksLoader = () => {
     const stockLotEmitterId = params.id!;
 
     const { data, isLoading, isError } = useQuery<StockLotDetailsItem>({
-        queryKey: ['stock-lot-details', stockLotEmitterId],
+        queryKey: ['stocklot', stockLotEmitterId],
         queryFn: () => getStockLot(stockLotEmitterId),
         retry: false,
     })

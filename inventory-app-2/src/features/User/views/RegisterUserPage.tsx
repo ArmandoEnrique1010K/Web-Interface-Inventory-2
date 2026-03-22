@@ -154,8 +154,27 @@ export const RegisterUserPage = () => {
 
                 </EntityFormLayout.Inputs>
                 <EntityFormLayout.Actions>
-                    <Button icon={<ArrowUpCircleIcon />} size="large" text='Registrar usuario' type="submit" color="green" />
-                    <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to="/users" />
+                    <Button
+                        icon={<ArrowUpCircleIcon />}
+                        size="large"
+                        text='Registrar'
+                        type="submit"
+                        color="green"
+                        showIconOnMobile={false}
+                        showTextOnMobile
+                        isLargeOnMobile
+
+                    />
+                    <ButtonLink
+                        icon={<XCircleIcon />}
+                        size="large"
+                        text="Cancelar"
+                        color="gray"
+                        to="/users"
+                        showIconOnMobile={false}
+                        showTextOnMobile
+                        isLargeOnMobile
+                    />
 
                 </EntityFormLayout.Actions>
             </EntityFormLayout.Form>

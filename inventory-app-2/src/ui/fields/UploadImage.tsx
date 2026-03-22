@@ -56,7 +56,6 @@ export const UploadImage = ({
                 onChange={handleChange}
             />
 
-            {/* TODO: POR ALGUNA RAZON NO PUEDO RENDERIZAR AQUI EL COMPONENTE PROPIO <Button/> */}
             {/* Botón estilizado */}
             <label
                 htmlFor={id}

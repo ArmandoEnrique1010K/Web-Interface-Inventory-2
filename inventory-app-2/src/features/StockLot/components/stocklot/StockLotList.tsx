@@ -71,7 +71,7 @@ export const StockLotList = () => {
     })
 
     const { data, isError } = useQuery({
-        queryKey: ['list-stocklots', {
+        queryKey: ['stocklots', {
             minQuantityReceived, maxQuantityReceived, minQuantityAvailable, maxQuantityAvailable,
             minCreatedAt, maxCreatedAt, keyword, companyId, categoryId, typeId, modelId, page
         }],
@@ -96,17 +96,17 @@ export const StockLotList = () => {
 
     // OBTENER LAS EMPRESAS IMPORTADORAS, CATEGORIAS, TIPOS Y MODELOS
     const { data: companyData } = useQuery({
-        queryKey: ['list-companies'],
+        queryKey: ['companies'],
         queryFn: listAllCompanies,
     })
 
     const { data: categoriesData } = useQuery({
-        queryKey: ['list-categories'],
+        queryKey: ['categories'],
         queryFn: listAllCategories
     })
 
     const { data: typesData } = useQuery({
-        queryKey: ['list-types'],
+        queryKey: ['types'],
         queryFn: listAllTypes
     })
 

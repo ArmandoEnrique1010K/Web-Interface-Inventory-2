@@ -145,7 +145,11 @@ export const EditModelModal = ({ data, modelId, setEditCurrentModelModalOpen }: 
                         size="large"
                         text="Editar modelo"
                         type="submit"
-                        color="green" />
+                        color="green"
+                        showIconOnMobile={false}
+                        showTextOnMobile
+                        isLargeOnMobile
+                    />
                     <Button
                         type='button'
                         icon={<XCircleIcon />}
@@ -153,6 +157,9 @@ export const EditModelModal = ({ data, modelId, setEditCurrentModelModalOpen }: 
                         text="Cancelar"
                         color="gray"
                         onClick={() => setEditCurrentModelModalOpen(false)}
+                        showIconOnMobile={false}
+                        showTextOnMobile
+                        isLargeOnMobile
                     />
 
                 </EntityFormLayout.Actions>

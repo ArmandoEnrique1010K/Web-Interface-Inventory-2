@@ -9,8 +9,12 @@ import { TableRowContainer } from '@/components/TableRowContainer'
 import { BaseTableCell } from '@/components/BaseTableCell'
 import { listAllRegions } from '../../api/RegionAPI'
 import { Button } from '@/ui/Button'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { EntityListLayout } from '@/layout/entity/EntityListLayout'
+import { Modal } from '@/components/Modal'
+import { LoaderSubregion } from '../../components/subregion/LoaderSubregion'
+import { FiltersFormContainer } from '@/components/FiltersFormContainer'
+import { ButtonsGroupFilter } from '@/ui/filters/ButtonsGroupFilter'
 
 export const ListSubregionPage = () => {
 
@@ -27,46 +31,51 @@ export const ListSubregionPage = () => {
     }, [searchParams, setSearchParams])
 
     const { data, isError } = useQuery({
-        queryKey: ['list-subregions-by-region', regionId],
+        queryKey: ['subregions', 'region', regionId],
         queryFn: () => listAllSubregionsByRegionId(regionId.toString())
     })
 
-    const { data: dataRegion, isError: isErrorRegion } = useQuery({
-        queryKey: ['list-regions'],
+    const { data: dataRegion, isError: isErrorRegion } = useQuery<RegionItem[]>({
+        queryKey: ['regions'],
         queryFn: listAllRegions
     })
+
+    const [showEditSubregionModal, setShowEditSubregionModal] = useState(false);
+    const [selectedSubregion, setSelectedSubregion] = useState('');
 
 
     return (
         <EntityListLayout>
-            <EntityListLayout.Header title="Subregiones agrupadas por región"
+            <EntityListLayout.Header title="Subregiones"
                 actions={
                     <ButtonLink
                         icon={<PlusCircleIcon />}
                         size="large"
                         text="Nueva subregión"
-                        to="/locations/subregions/add"
+                        to="/locations/subregions/new"
                         color="blue"
+                        showIconOnMobile={false}
+                        showTextOnMobile
                     />
-                }>
+                }
+            >
             </EntityListLayout.Header>
             <EntityListLayout.Content>
-                <div className='flex flex-row gap-2 py-4'>
+                <FiltersFormContainer hiddenButton>
                     {
-                        !isErrorRegion && dataRegion?.map((region: RegionItem) => (
-                            <Button key={region.id} size='large' text={region.name} type={'button'} color={'blue'} onClick={
-                                () => {
-                                    const params = new URLSearchParams();
-                                    params.set('regionId', region.id.toString())
-
+                        !isErrorRegion && dataRegion && (
+                            <ButtonsGroupFilter
+                                label='Región'
+                                group={dataRegion}
+                                value={regionId.toString()}
+                                onChange={(newRegionId: string) => {
+                                    const params = new URLSearchParams(searchParams)
+                                    params.set('regionId', newRegionId)
                                     setSearchParams(params)
-                                }
-                            }
-                                aditionalStyles={searchParams.get('regionId') === region.id.toString() ? 'bg-gray-800' : ''}
-                            />
-                        ))
+                                }}
+                            />)
                     }
-                </div>
+                </FiltersFormContainer>
                 <TableContainer
                     headers={['ID', 'Nombre', 'Editar']}
                     isError={isError}
@@ -78,17 +87,41 @@ export const ListSubregionPage = () => {
                                 <BaseTableCell data={subregion.id} />
                                 <BaseTableCell data={subregion.name} />
                                 <BaseTableCell data={
-                                    <ButtonLink
+                                    <Button
+                                        type='button'
                                         size="small"
                                         text="Editar"
-                                        to={`/locations/subregions/edit/${subregion.id}`}
                                         color="blue"
+                                        onClick={() => {
+                                            setShowEditSubregionModal(true)
+                                            setSelectedSubregion(subregion.id.toString())
+                                        }}
+                                        showTextOnMobile
                                     />
                                 } isCenter />
                             </TableRowContainer>
                         ))
+                    }
+                    {
+                        showEditSubregionModal && selectedSubregion && <Modal
+                            isOpen={showEditSubregionModal}
+                            onClose={() => {
+                                setShowEditSubregionModal(false)
+                                setSelectedSubregion('')
+                            }}
+                            size='lg'
+                            title={`Editar subregión #${selectedSubregion}`}
+                        >
+                            <LoaderSubregion
+                                subregionId={selectedSubregion}
+                                showModal={setShowEditSubregionModal}
+                            />
+                        </Modal>
 
                     }
+
+
+
                 </TableContainer>
 
 

@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { TextMessage } from "@/components/TextMessage";
-import { UpdateProfileForm } from "./UpdateProfileForm";
-import { getUserProfile } from "../api/ProfileAPI";
+import { EditProfilePage } from "../views/EditProfilePage";
+import { getUserProfilePage } from "../api/ProfileAPI";
 
-export const ProfileEditLoader = () => {
+export const LoaderProfile = () => {
     const { data, isLoading, isError } = useQuery({
         queryKey: ['profile'],
-        queryFn: () => getUserProfile(),
+        queryFn: () => getUserProfilePage(),
         retry: false,
     })
 
@@ -20,6 +20,6 @@ export const ProfileEditLoader = () => {
     }
 
     if (data) return (
-        <UpdateProfileForm data={data} />
+        <EditProfilePage data={data} />
     )
 }

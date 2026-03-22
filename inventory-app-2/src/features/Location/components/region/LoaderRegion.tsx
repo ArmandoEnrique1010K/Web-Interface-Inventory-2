@@ -1,12 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
 import { TextMessage } from "@/components/TextMessage";
 import { getRegion } from "../../api/RegionAPI";
-import { EditRegionPage } from "./EditRegionPage";
+import { EditRegionModal } from "./EditRegionModal";
 
-export const LoaderRegionPage = () => {
-    const params = useParams();
-    const regionId = params.id!;
+type Props = {
+    regionId: string,
+    showModal: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export const LoaderRegion = ({ regionId, showModal }: Props) => {
 
     const { data, isLoading, isError } = useQuery({
         queryKey: ['edit-region', regionId],
@@ -24,6 +26,6 @@ export const LoaderRegionPage = () => {
     }
 
     if (data) return (
-        <EditRegionPage data={data} regionId={regionId} />
+        <EditRegionModal data={data} regionId={regionId} showModal={showModal} />
     )
 }

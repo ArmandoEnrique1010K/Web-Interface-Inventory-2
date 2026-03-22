@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form"
 import { XMarkIcon } from "@heroicons/react/24/outline"
 import { changeStatusLocation } from "../../api/LocationAPI"
 
-export const LocationChangeStatus = ({ locationId, value, size }: { locationId: string, value: string, size: 'small' | 'large' }) => {
+export const StatusLocationButton = ({ locationId, value, size }: { locationId: string, value: string, size: 'small' | 'large' }) => {
     const { handleSubmit } = useForm();
     const queryClient = useQueryClient();
 
@@ -22,14 +22,21 @@ export const LocationChangeStatus = ({ locationId, value, size }: { locationId: 
         },
         onSuccess: async (data) => {
             toast.success(data)
-            queryClient.invalidateQueries({ queryKey: ['edit-location', locationId] })
-            queryClient.invalidateQueries({ queryKey: ['list-locations'] })
+            queryClient.invalidateQueries({ queryKey: ['location', locationId] })
+            queryClient.invalidateQueries({ queryKey: ['locations'] })
         }
     })
 
     return (
         <form onSubmit={handleSubmit(() => mutate())} className="text-center ">
-            <Button icon={size === 'large' && <XMarkIcon />} text={value} type="submit" size={size} color={value === 'Activo' ? 'green' : 'red'} />
+            <Button
+                icon={size === 'large' && <XMarkIcon />}
+                text={value}
+                type="submit"
+                size={size}
+                color={value === 'Activo' ? 'green-outline' : 'red-outline'}
+                showTextOnMobile
+            />
         </form>
     )
 }

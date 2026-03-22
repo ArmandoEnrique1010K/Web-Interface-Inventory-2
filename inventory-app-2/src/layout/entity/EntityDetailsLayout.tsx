@@ -1,4 +1,5 @@
 import { Title } from "@/components/Title"
+import type React from "react"
 
 // COMPOSICION DE COMPONENTES
 type Props = {
@@ -33,10 +34,19 @@ EntityDetailsLayout.Header = ({ title, actions }: HeaderProps) => {
     )
 }
 
-EntityDetailsLayout.Content = ({ children }: Props) => {
+type ContentProps = {
+    children: React.ReactNode,
+    columns?: number
+}
+
+EntityDetailsLayout.Content = ({ children, columns = 2 }: ContentProps) => {
+    const gridCols = columns === 1
+        ? 'md:grid-cols-1'
+        : 'md:grid-cols-8'
+
     return (
         <div className="flex flex-col justify-center items-center">
-            <div className=" mx-auto grid grid-cols-1 md:grid-cols-8 gap-6 w-full">
+            <div className={`mx-auto grid grid-cols-1 ${gridCols} gap-6 w-full`}>
                 {children}
             </div>
         </div>

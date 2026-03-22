@@ -1,12 +1,10 @@
 import type { LocationForm, LocationItem, RegionItem, SubregionItem } from '../../types'
-import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { updateLocation } from '../../api/LocationAPI';
 import type { GeneralError } from '@/types/index';
 import { toast } from 'sonner';
 import { Button } from '@/ui/Button';
-import { ButtonLink } from '@/ui/ButtonLink';
 import { ArrowUpCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { InputText } from '@/ui/fields/InputText';
 import { listAllRegions } from '../../api/RegionAPI';
@@ -14,17 +12,16 @@ import { listAllSubregionsByRegionId } from '../../api/SubregionAPI';
 import { useState } from 'react';
 import { SelectOptionFilter } from '@/ui/filters/SelectOptionFilter';
 import { SelectOption } from '@/ui/fields/SelectOption';
-import { TextMessage } from '@/components/TextMessage';
 import { EntityFormLayout } from '@/layout/entity/EntityFormLayout';
 
 type Props = {
     data: LocationItem
+    showModal: React.Dispatch<React.SetStateAction<boolean>>
     locationId: string;
 }
 
-export const EditLocationPage = ({ data, locationId }: Props) => {
+export const EditLocationModal = ({ data, locationId, showModal }: Props) => {
 
-    const navigate = useNavigate();
 
     const { register, handleSubmit, setError, formState: { errors } } = useForm<LocationForm>({
         defaultValues: {
@@ -58,10 +55,10 @@ export const EditLocationPage = ({ data, locationId }: Props) => {
             }
         },
         onSuccess: (data) => {
-            queryClient.invalidateQueries({ queryKey: ["list-locations"] })
-            queryClient.invalidateQueries({ queryKey: ["edit-location", locationId] })
+            queryClient.invalidateQueries({ queryKey: ["locations"] })
+            queryClient.invalidateQueries({ queryKey: ["location", locationId] })
             toast.success(data)
-            navigate("/locations")
+            showModal(false)
         }
     })
 
@@ -80,13 +77,13 @@ export const EditLocationPage = ({ data, locationId }: Props) => {
 
     const [selectedRegionId, setSelectedRegionId] = useState<string>(data.regionId);
 
-    const { data: regionsData, isLoading: regionsLoading } = useQuery({
-        queryKey: ['list-regions'],
+    const { data: regionsData /*, isLoading: regionsLoading */ } = useQuery({
+        queryKey: ['regions'],
         queryFn: listAllRegions
     })
 
     const { data: subregionsData, isLoading: subregionsLoading } = useQuery({
-        queryKey: ['list-subregions-by-region', selectedRegionId],
+        queryKey: ['subregions', 'region', selectedRegionId],
         queryFn: () => listAllSubregionsByRegionId(selectedRegionId!),
         enabled: !!selectedRegionId // solo ejecuta si hay region
     })
@@ -106,18 +103,18 @@ export const EditLocationPage = ({ data, locationId }: Props) => {
     })) || []
 
 
-    if (regionsLoading || subregionsLoading) {
-        return <TextMessage text="Cargando..." align="left" color="black" />
-    }
+    // Recordar que he desactivado esta condicion porque si una lista se esta cargando, se ocultara el formulario y sera reemplazado por el siguiente componente
+    // if (regionsLoading || subregionsLoading) {
+    //     return <TextMessage text="Cargando..." align="left" color="black" />
+    // }
 
 
     return (
-        <EntityFormLayout>
-            <EntityFormLayout.Header title={`Editar ubicación ${locationId}`}></EntityFormLayout.Header>
+        <EntityFormLayout isCompact>
             <EntityFormLayout.Form
                 onSubmit={handleSubmit(handleForm)}
             >
-                <EntityFormLayout.Inputs>
+                <EntityFormLayout.Inputs isCompact>
                     <InputText
                         id="name"
                         label="Nombre"
@@ -153,7 +150,11 @@ export const EditLocationPage = ({ data, locationId }: Props) => {
                         errorMessage={errors.subregionId}
                         functionEnabled={register('subregionId')}
                         options={subregions}
-                        textInNullOption='Seleccione una subregión'
+                        textInNullOption={
+                            subregionsLoading
+                                ? 'Cargando subregiones...'
+                                : 'Seleccione una subregión'
+                        }
                         disabled={selectedRegionId === '0'}
                     />
 
@@ -165,9 +166,28 @@ export const EditLocationPage = ({ data, locationId }: Props) => {
                             textInNullOption='Seleccione una subregión' /> */}
 
                 </EntityFormLayout.Inputs>
-                <EntityFormLayout.Actions>
-                    <Button icon={<ArrowUpCircleIcon />} size="large" text="Editar ubicación" type="submit" color="green" />
-                    <ButtonLink icon={<XCircleIcon />} size="large" text="Volver" color="gray" to="/locations" />
+                <EntityFormLayout.Actions isCompact>
+                    <Button
+                        icon={<ArrowUpCircleIcon />}
+                        size="large"
+                        text="Editar"
+                        type="submit"
+                        color="green"
+                        showIconOnMobile={false}
+                        showTextOnMobile
+                        isLargeOnMobile
+                    />
+                    <Button
+                        icon={<XCircleIcon />}
+                        size="large"
+                        text="Volver"
+                        type='button'
+                        color="gray"
+                        onClick={() => showModal(false)}
+                        showIconOnMobile={false}
+                        showTextOnMobile
+                        isLargeOnMobile
+                    />
                 </EntityFormLayout.Actions>
             </EntityFormLayout.Form>
         </EntityFormLayout>

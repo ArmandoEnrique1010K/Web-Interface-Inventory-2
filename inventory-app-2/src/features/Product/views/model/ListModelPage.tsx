@@ -323,6 +323,7 @@ export const ListModelPage = () => {
                             }
                             size='lg'
                             title={`Editar modelo #${selectedModel}`}
+                            locked
                         >
                             <LoaderModel modelId={+selectedModel} setEditCurrentModelModalOpen={setEditModalOpen} />
                         </Modal>

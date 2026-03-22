@@ -20,6 +20,7 @@ export const DetailsModelPage = () => {
     const [editModalOpen, setEditModalOpen] = useState(false);
 
     const { data, isLoading } = useQuery<ModelDetailsItem>({
+        //*  En este caso como modelId se obtiene de los parametros, existe la posibilidad de que sea nulo
         queryKey: ['model', modelId ? +modelId : 0],
         queryFn: () => getModel(modelId!),
         // Si el id existe, ejecuta la función getProduct, de lo contrario no lo va a ejecutar
@@ -203,6 +204,7 @@ export const DetailsModelPage = () => {
                                             }
                                             size='lg'
                                             title={`Editar el producto #${productId}`}
+                                            locked
                                         >
 
                                             <LoaderProduct modelId={+modelId} productId={productId.toString()} closeModal={setEditModalOpen} />

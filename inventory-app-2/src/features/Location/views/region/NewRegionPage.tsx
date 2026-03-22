@@ -52,7 +52,7 @@ export const NewRegionPage = () => {
     return (
         <EntityFormLayout>
             <EntityFormLayout.Header title='Añadir nueva región'></EntityFormLayout.Header>
-            <EntityFormLayout.Form onSubmit={handleSubmit((data) => mutate(data))}>
+            <EntityFormLayout.Form styled onSubmit={handleSubmit((data) => mutate(data))}>
                 <EntityFormLayout.Inputs>
                     <InputText
                         id="name"
@@ -63,8 +63,8 @@ export const NewRegionPage = () => {
                         functionEnabled={register('name')} />
                 </EntityFormLayout.Inputs>
                 <EntityFormLayout.Actions>
-                    <Button icon={<ArrowUpCircleIcon />} size="large" text='Añadir región' type="submit" color="green" />
-                    <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to="/locations/regions" />
+                    <Button icon={<ArrowUpCircleIcon />} size="large" text='Añadir' type="submit" color="green" showIconOnMobile={false} showTextOnMobile isLargeOnMobile />
+                    <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to="/locations/regions" showIconOnMobile={false} showTextOnMobile isLargeOnMobile />
                 </EntityFormLayout.Actions>
             </EntityFormLayout.Form>
         </EntityFormLayout >

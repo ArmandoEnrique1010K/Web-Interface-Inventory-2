@@ -49,8 +49,8 @@ export const LoginForm = () => {
         },
         onSuccess: async (data) => {
             toast.success(data)
-            const userProfile = await currentSession()
-            dispatch(setUserRoles(userProfile.data.roles))
+            const UserProfilePage = await currentSession()
+            dispatch(setUserRoles(UserProfilePage.data.roles))
             dispatch(setAuthenticated())
             navigate('/')
         }

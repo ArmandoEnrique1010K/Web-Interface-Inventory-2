@@ -51,8 +51,8 @@ export const CompanyEditForm = ({ data, companyId }: Props) => {
             }
         },
         onSuccess: (data) => {
-            queryClient.invalidateQueries({ queryKey: ["list-companies"] })
-            queryClient.invalidateQueries({ queryKey: ["edit-company", companyId] })
+            queryClient.invalidateQueries({ queryKey: ["companies"] })
+            queryClient.invalidateQueries({ queryKey: ["company", companyId] })
             toast.success(data)
             navigate("/stocklots/companies")
         }

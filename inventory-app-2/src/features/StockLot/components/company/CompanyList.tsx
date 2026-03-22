@@ -10,7 +10,7 @@ import type { CompanyItem } from '../../types'
 
 export const CompanyList = () => {
     const { data, isError } = useQuery({
-        queryKey: ['list-companies'],
+        queryKey: ['companies'],
         queryFn: listAllCompanies
     })
 

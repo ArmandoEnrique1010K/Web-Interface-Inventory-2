@@ -138,19 +138,9 @@ export const DetailsProductPage = () => {
 
                         <PanelContainer.DetailsGrid>
                             <PanelContainer.Detail label="Editar producto">
-                                {/* <ButtonLink
-                                    size="small"
-                                    to={`/products/edit/${productId}`}
-                                    color="blue"
-                                    text="Editar"
-                                    showIconOnMobile={false}
-                                    showTextOnMobile={true}
-                                    isLargeOnMobile={false}
-                                /> */}
                                 <Button
                                     size="small"
                                     text="Editar"
-                                    // to={`/products/${productId}/models/edit/${selectedModel.id}`}
                                     color="blue"
                                     type="button"
                                     showTextOnMobile
@@ -167,6 +157,7 @@ export const DetailsProductPage = () => {
                                         }
                                         size='lg'
                                         title={`Editar el producto #${productId}`}
+                                        locked
                                     >
 
                                         <LoaderProduct modelId={idModel} productId={productId.toString()} closeModal={setEditModalOpen} />
@@ -229,7 +220,6 @@ export const DetailsProductPage = () => {
                                 size="small"
                                 color="green"
                                 text="Añadir"
-                                showIconOnMobile={false}
                                 showTextOnMobile={true}
                                 isLargeOnMobile={false}
                                 onClick={() => {
@@ -245,6 +235,7 @@ export const DetailsProductPage = () => {
                                     }
                                     size='lg'
                                     title={`Añadir nuevo modelo al producto #${productId}`}
+                                    locked
                                 >
                                     <NewModelProductModal setAddModelModalOpen={setAddModelModalOpen} productId={productId} />
                                 </Modal>
@@ -316,6 +307,7 @@ export const DetailsProductPage = () => {
                                             }
                                             size='lg'
                                             title={`Editar modelo #${selectedModel.id}`}
+                                            locked
                                         >
                                             <LoaderModel modelId={selectedModel.id} setEditCurrentModelModalOpen={setEditCurrentModelModalOpen} />
                                         </Modal>

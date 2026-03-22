@@ -18,7 +18,7 @@ export const ListTypePage = () => {
     const [selectedType, setSelectedType] = useState('');
 
     const { data, isError } = useQuery({
-        queryKey: ['list-types'],
+        queryKey: ['types'],
         queryFn: listAllTypes
     })
 
@@ -74,6 +74,7 @@ export const ListTypePage = () => {
                             }}
                             size='lg'
                             title={`Editar tipo #${selectedType}`}
+                            locked
                         >
                             <LoaderType
                                 typeId={selectedType}

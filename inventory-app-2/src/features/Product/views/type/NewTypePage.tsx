@@ -67,7 +67,7 @@ export const NewTypePage = () => {
 
                 </EntityFormLayout.Inputs>
                 <EntityFormLayout.Actions>
-                    <Button icon={<ArrowUpCircleIcon />} size="large" text="Añadir tipo" type="submit" color="green" />
+                    <Button icon={<ArrowUpCircleIcon />} size="large" text="Añadir" type="submit" color="green" />
                     <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to="/products/types" />
                 </EntityFormLayout.Actions>
             </EntityFormLayout.Form>

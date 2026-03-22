@@ -121,41 +121,15 @@ export const ListProductPage = () => {
         <EntityListLayout>
             <EntityListLayout.Header title='Productos'
                 actions={
-                    <>
-                        <ButtonLink
-                            icon={<PlusCircleIcon />}
-                            size="large"
-                            text="Nuevo producto"
-                            to="/products/new"
-                            color="blue"
-                            showIconOnMobile={false}
-                            showTextOnMobile
-                        />
-
-                        {/* TODO: No mostrar una ventana modal al agregar un producto */}
-                        {/* <Button
-                            icon={<PlusCircleIcon />}
-                            size="large"
-                            text="Nuevo producto"
-                            color="blue"
-                            type='button'
-                            onClick={() => setAddModalOpen(true)}
-                        >
-
-                        </Button>
-                        <Modal
-                            isOpen={isAddModalOpen}
-                            onClose={() => setAddModalOpen(false)}
-                            size='lg'
-                            title='Añadir nuevo producto'
-                        >
-                            <NewProductPage />
-                        </Modal> */}
-
-                    </>
-
-
-
+                    <ButtonLink
+                        icon={<PlusCircleIcon />}
+                        size="large"
+                        text="Nuevo producto"
+                        to="/products/new"
+                        color="blue"
+                        showIconOnMobile={false}
+                        showTextOnMobile
+                    />
                 }></EntityListLayout.Header>
             <EntityListLayout.Content>
 
@@ -282,8 +256,6 @@ export const ListProductPage = () => {
                                 } />
 
                                 <BaseTableCell isCenter data={
-                                    // TODO: Aqui debe mostrar una ventana modal para editar
-
                                     //* SOLAMENTE SI UN PRODUCTO ESTA ACTIVO, PUEDE SER EDITADO
                                     product.status === true ?
                                         <Button
@@ -315,6 +287,7 @@ export const ListProductPage = () => {
                             }
                             size='lg'
                             title={`Editar producto #${selectedProduct}`}
+                            locked
                         >
                             <LoaderProduct productId={selectedProduct} closeModal={setEditModalOpen} />
                         </Modal>

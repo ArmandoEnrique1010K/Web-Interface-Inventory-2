@@ -66,7 +66,7 @@ export const MovementList = () => {
 
 
     const { data, isError } = useQuery({
-        queryKey: ['list-movements', {
+        queryKey: ['movements', {
             minQuantity, maxQuantity, minCreatedAt, maxCreatedAt, movementType,
             username, keyword, deliveryLineId, modelId, userId, stockLotReceiverId, page
         }],

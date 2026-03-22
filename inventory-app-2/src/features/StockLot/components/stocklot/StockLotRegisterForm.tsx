@@ -58,7 +58,7 @@ export const StockLotRegisterForm = () => {
     })
 
     const { data: companiesData } = useQuery({
-        queryKey: ['list-companies'],
+        queryKey: ['companies'],
         queryFn: listAllCompanies
     })
     const companies = companiesData?.map((company: CompanyItem) => ({
@@ -113,7 +113,7 @@ export const StockLotRegisterForm = () => {
                     }
                     buttons={
                         <>
-                            <Button icon={<ArrowUpCircleIcon />} size="large" text='Añadir lote de stock' type="submit" color="green" />
+                            <Button icon={<ArrowUpCircleIcon />} size="large" text='Añadir' type="submit" color="green" />
                             <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to="/stocklots" />
                         </>
                     }

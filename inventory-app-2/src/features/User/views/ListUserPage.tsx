@@ -213,6 +213,7 @@ export const ListUserPage = () => {
                             }
                             size='lg'
                             title={`Alterar roles del usuario #${selectedUser}`}
+                            locked
                         >
                             <LoaderUser userId={selectedUser} showModal={setShowAlterRolesModal} />
                         </Modal>

@@ -72,7 +72,7 @@ export const CompanyAddForm = () => {
                     }
                     buttons={
                         <>
-                            <Button icon={<ArrowUpCircleIcon />} size="large" text='Añadir empresa' type="submit" color="green" />
+                            <Button icon={<ArrowUpCircleIcon />} size="large" text='Añadir' type="submit" color="green" />
                             <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to="/stocklots/companies" />
                         </>
                     }

@@ -64,8 +64,20 @@ export const NewCategoryPage = () => {
                         functionEnabled={register('name')} />
                 </EntityFormLayout.Inputs>
                 <EntityFormLayout.Actions>
-                    <Button icon={<ArrowUpCircleIcon />} size="large" text='Añadir categoria' type="submit" color="green" />
-                    <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to="/products/categories" />
+                    <Button icon={<ArrowUpCircleIcon />}
+                        size="large"
+                        text='Añadir'
+                        type="submit"
+                        color="green"
+                        showIconOnMobile={false}
+                        showTextOnMobile
+                        isLargeOnMobile
+                    />
+                    <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to="/products/categories"
+                        showIconOnMobile={false}
+                        showTextOnMobile
+                        isLargeOnMobile
+                    />
                 </EntityFormLayout.Actions>
             </EntityFormLayout.Form>
         </EntityFormLayout>

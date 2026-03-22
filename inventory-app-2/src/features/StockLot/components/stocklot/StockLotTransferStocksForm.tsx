@@ -56,8 +56,8 @@ export const StockLotTransferStocksForm = ({ data, stockLotEmitterId }: Props) =
             }
         },
         onSuccess: (data) => {
-            queryClient.invalidateQueries({ queryKey: ["list-stocklots"] })
-            queryClient.invalidateQueries({ queryKey: ['get-stocklot', stockLotEmitterId] })
+            queryClient.invalidateQueries({ queryKey: ["stocklots"] })
+            queryClient.invalidateQueries({ queryKey: ['stocklot', stockLotEmitterId] })
             toast.success(data)
             navigate("/stocklots")
         }
@@ -73,7 +73,7 @@ export const StockLotTransferStocksForm = ({ data, stockLotEmitterId }: Props) =
 
     // OBTENER LOS LOTES DE STOCK CORRESPONDIENTES AL MODELO
     const { data: stockLotsData } = useQuery({
-        queryKey: ['list-stockLots-by-model', data.modelId],
+        queryKey: ['stocklots', 'model', data.modelId],
         queryFn: () => listAllStockLotsByModelAndExcludeOne(stockLotEmitterId, data.companyId, data.modelId),
     })
     const stockLotsByModelAndCompany = stockLotsData?.map((stockLot: StockLotDetailsItem) => ({

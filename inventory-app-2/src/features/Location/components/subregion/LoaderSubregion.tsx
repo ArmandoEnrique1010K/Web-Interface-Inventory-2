@@ -1,15 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
 import { TextMessage } from "@/components/TextMessage";
 import { getSubregion } from "../../api/SubregionAPI";
-import { EditSubregionPage } from "./EditSubregionPage";
+import { EditSubregionModal } from "./EditSubregionModal";
 
-export const LoaderSubregionPage = () => {
-    const params = useParams();
-    const subregionId = params.id!;
+type Props = {
+    subregionId: string,
+    showModal: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export const LoaderSubregion = ({ subregionId, showModal }: Props) => {
 
     const { data, isLoading, isError } = useQuery({
-        queryKey: ['edit-subregion', subregionId],
+        queryKey: ['subregion', subregionId],
         queryFn: () => getSubregion(subregionId),
         retry: false,
     })
@@ -24,6 +26,6 @@ export const LoaderSubregionPage = () => {
     }
 
     if (data) return (
-        <EditSubregionPage data={data} subregionId={subregionId} />
+        <EditSubregionModal data={data} subregionId={subregionId} showModal={showModal} />
     )
 }

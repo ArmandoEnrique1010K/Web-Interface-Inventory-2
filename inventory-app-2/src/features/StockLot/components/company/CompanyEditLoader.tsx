@@ -9,7 +9,7 @@ export const CompanyEditLoader = () => {
     const companyId = params.id!;
 
     const { data, isLoading, isError } = useQuery({
-        queryKey: ['edit-company', companyId],
+        queryKey: ['company', companyId],
         queryFn: () => getCompany(companyId),
         retry: false,
     })

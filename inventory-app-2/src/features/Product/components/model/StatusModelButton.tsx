@@ -38,7 +38,14 @@ export const StatusModelButton = ({ from, modelId, productId, value, size }: { f
 
     return (
         <form onSubmit={handleSubmit(() => mutate())} >
-            <Button icon={size === 'large' && <XMarkIcon />} text={value} type="submit" size={size} color={value === 'Activo' ? 'green-outline' : 'red-outline'} />
+            <Button
+                icon={size === 'large' && <XMarkIcon />}
+                text={value}
+                type="submit"
+                size={size}
+                color={value === 'Activo' ? 'green-outline' : 'red-outline'}
+                showTextOnMobile
+            />
         </form>
     )
 }

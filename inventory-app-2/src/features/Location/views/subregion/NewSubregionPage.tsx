@@ -53,7 +53,7 @@ export const NewSubregionPage = () => {
         }
     })
     const { data: regionsData } = useQuery({
-        queryKey: ['list-regions'],
+        queryKey: ['regions'],
         queryFn: listAllRegions
     })
 
@@ -65,9 +65,9 @@ export const NewSubregionPage = () => {
 
 
     return (
-        <EntityFormLayout>
+        <EntityFormLayout >
             <EntityFormLayout.Header title="Añadir nueva subregión"></EntityFormLayout.Header>
-            <EntityFormLayout.Form onSubmit={handleSubmit((data) => {
+            <EntityFormLayout.Form styled onSubmit={handleSubmit((data) => {
                 mutate(data)
             })}>
 
@@ -90,8 +90,14 @@ export const NewSubregionPage = () => {
 
                 </EntityFormLayout.Inputs>
                 <EntityFormLayout.Actions>
-                    <Button icon={<ArrowUpCircleIcon />} size="large" text='Añadir subregión' type="submit" color="green" />
-                    <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to="/locations/subregions" />
+                    <Button icon={<ArrowUpCircleIcon />} size="large" text='Añadir' type="submit" color="green" showIconOnMobile={false}
+                        showTextOnMobile
+                        isLargeOnMobile
+                    />
+                    <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to="/locations/subregions" showIconOnMobile={false}
+                        showTextOnMobile
+                        isLargeOnMobile
+                    />
 
                 </EntityFormLayout.Actions>
             </EntityFormLayout.Form>
