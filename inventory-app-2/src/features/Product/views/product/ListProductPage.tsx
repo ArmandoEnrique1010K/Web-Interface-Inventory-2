@@ -18,10 +18,10 @@ import { InputTextFilter } from '@/ui/filters/InputTextFilter'
 import { SelectOptionFilter } from '@/ui/filters/SelectOptionFilter'
 import { PlusCircleIcon } from '@heroicons/react/24/outline'
 import { EntityListLayout } from '@/layout/entity/EntityListLayout'
-import { ProductChangeStatus } from '../../components/product/ProductChangeStatus'
+import { StatusProductButton } from '../../components/product/StatusProductButton'
 import { Button } from '@/ui/Button'
 import { Modal } from '@/components/Modal'
-import { LoaderProductPage } from './LoaderProductPage'
+import { LoaderProduct } from '../../components/product/LoaderProduct'
 export const ListProductPage = () => {
 
 
@@ -64,7 +64,7 @@ export const ListProductPage = () => {
 
 
     const { data, isError } = useQuery({
-        queryKey: ['list-products', { name, categoryId, typeId, status, page }],
+        queryKey: ['products', { name, categoryId, typeId, status, page }],
 
         queryFn: () => listAllProducts({
             page: page,
@@ -78,11 +78,11 @@ export const ListProductPage = () => {
     const content = data?.content || []
     // OBTENER LAS CARACTERISTICAS Y LOS TIPOS
     const { data: categoriesData } = useQuery({
-        queryKey: ['list-categories'],
+        queryKey: ['categories'],
         queryFn: listAllCategories
     })
     const { data: typesData } = useQuery({
-        queryKey: ['list-types'],
+        queryKey: ['types'],
         queryFn: listAllTypes
     })
 
@@ -277,8 +277,8 @@ export const ListProductPage = () => {
                                     </div>
                                 } />
 
-                                <BaseTableCell data={
-                                    <ProductChangeStatus size="small" productId={product.id.toString()} value={product.status ? 'Activo' : 'Inactivo'} />
+                                <BaseTableCell isCenter data={
+                                    <StatusProductButton size="small" productId={product.id.toString()} value={product.status ? 'Activo' : 'Inactivo'} />
                                 } />
 
                                 <BaseTableCell isCenter data={
@@ -316,7 +316,7 @@ export const ListProductPage = () => {
                             size='lg'
                             title={`Editar producto #${selectedProduct}`}
                         >
-                            <LoaderProductPage productId={selectedProduct} closeModal={setEditModalOpen} />
+                            <LoaderProduct productId={selectedProduct} closeModal={setEditModalOpen} />
                         </Modal>
 
                     }

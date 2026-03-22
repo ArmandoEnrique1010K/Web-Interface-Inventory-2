@@ -11,16 +11,21 @@ import { Paginator } from '../../../../components/Paginator'
 import { useMediaQuery } from 'react-responsive'
 import { SearchCounter } from '@/components/SearchCounter'
 import { FiltersFormContainer } from '@/components/FiltersFormContainer'
-import { ButtonLink } from '@/ui/ButtonLink'
 import { InputTextFilter } from '@/ui/filters/InputTextFilter'
 import { SelectOptionFilter } from '@/ui/filters/SelectOptionFilter'
 import { listAllModels } from '../../api/ModelAPI'
 import { InputDateFilter } from '@/ui/filters/InputDateFilter'
-import { ModelChangeStatus } from '../../components/model/ModelChangeStatus'
+import { StatusModelButton } from '../../components/model/StatusModelButton'
 import { EntityListLayout } from '@/layout/entity/EntityListLayout'
+import { Button } from '@/ui/Button'
+import { Modal } from '@/components/Modal'
+import { LoaderModel } from '../../components/model/LoaderModel'
 
 export const ListModelPage = () => {
     const [searchParams, setSearchParams] = useSearchParams()
+
+    const [editModalOpen, setEditModalOpen] = useState(false);
+    const [selectedModel, setSelectedModel] = useState('');
 
     const page = Number(searchParams.get('page') ?? 0)
     const keyword = searchParams.get('keyword') ?? ''
@@ -50,7 +55,7 @@ export const ListModelPage = () => {
 
 
     const { data, isError } = useQuery({
-        queryKey: ['list-models', { keyword, minStock, maxStock, minEntryDate, maxEntryDate, categoryId, typeId, status, page }],
+        queryKey: ['models', { keyword, minStock, maxStock, minEntryDate, maxEntryDate, categoryId, typeId, status, page }],
 
         queryFn: () => listAllModels({
             page: page,
@@ -69,11 +74,11 @@ export const ListModelPage = () => {
 
     // OBTENER LAS CARACTERISTICAS Y LOS TIPOS
     const { data: categoriesData } = useQuery({
-        queryKey: ['list-categories'],
+        queryKey: ['categories'],
         queryFn: listAllCategories
     })
     const { data: typesData } = useQuery({
-        queryKey: ['list-types'],
+        queryKey: ['types'],
         queryFn: listAllTypes
     })
 
@@ -278,22 +283,53 @@ export const ListModelPage = () => {
                                 </div>} />
 
                                 <BaseTableCell data={
-                                    <ModelChangeStatus size="small" modelId={model.id.toString()} productId={model.productId} value={model.status ? 'Activo' : 'Inactivo'} />
+                                    <StatusModelButton size="small" modelId={model.id.toString()} productId={model.productId} value={model.status ? 'Activo' : 'Inactivo'} />
                                 } />
 
                                 <BaseTableCell isCenter data={
                                     //* SOLAMENTE SI UN PRODUCTO ESTA ACTIVO, PUEDE SER EDITADO
                                     model.status === true ?
-                                        <ButtonLink
+                                        // <ButtonLink
+                                        //     size="small"
+                                        //     text="Editar"
+                                        //     to={`/products/${model.productId}/models/edit/${model.id}`}
+                                        //     color="blue"
+                                        // /> : ''
+                                        <Button
+                                            type='button'
                                             size="small"
                                             text="Editar"
-                                            to={`/products/${model.productId}/models/edit/${model.id}`}
                                             color="blue"
+                                            onClick={() => {
+                                                setEditModalOpen(true)
+                                                setSelectedModel(model.id.toString())
+                                            }}
+                                            showTextOnMobile
                                         /> : ''
                                 } />
                             </TableRowContainer>
+
                         })
                     }
+
+                    {
+                        // Solamente debe renderizar la ventana modal cuando haya un producto seleccionado, de lo contrario no funcionara
+                        editModalOpen && selectedModel && <Modal
+                            isOpen={editModalOpen}
+                            onClose={() => {
+                                setEditModalOpen(false)
+                                setSelectedModel('')
+                            }
+                            }
+                            size='lg'
+                            title={`Editar modelo #${selectedModel}`}
+                        >
+                            <LoaderModel modelId={+selectedModel} setEditCurrentModelModalOpen={setEditModalOpen} />
+                        </Modal>
+
+                    }
+
+
                 </TableContainer>
             </EntityListLayout.Content>
         </EntityListLayout>

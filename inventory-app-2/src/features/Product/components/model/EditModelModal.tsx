@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import type { ModelInProductForm, ModelItem } from '../../types';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -9,7 +8,6 @@ import { InputText } from '@/ui/fields/InputText';
 import { InputDate } from '@/ui/fields/InputDate';
 import { ArrowUpCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { Button } from '@/ui/Button';
-import { ButtonLink } from '@/ui/ButtonLink';
 import { useState } from 'react';
 import { UploadImage } from '@/ui/fields/UploadImage';
 import { EntityFormLayout } from '@/layout/entity/EntityFormLayout';
@@ -17,11 +15,10 @@ import { EntityFormLayout } from '@/layout/entity/EntityFormLayout';
 type Props = {
     data: ModelItem & { file: File };
     modelId: string;
-    productId: string;
+    setEditCurrentModelModalOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const EditModelPage = ({ data, modelId, productId }: Props) => {
-    const navigate = useNavigate();
+export const EditModelModal = ({ data, modelId, setEditCurrentModelModalOpen }: Props) => {
 
     const { register, handleSubmit, setError, control, formState: { errors } } = useForm<ModelInProductForm & { file: File }>({
         defaultValues: {
@@ -61,10 +58,11 @@ export const EditModelPage = ({ data, modelId, productId }: Props) => {
             }
         },
         onSuccess: (data) => {
-            queryClient.invalidateQueries({ queryKey: ["list-models"] })
-            queryClient.invalidateQueries({ queryKey: ["edit-model", modelId] })
+            queryClient.invalidateQueries({ queryKey: ["models"] })
+            queryClient.invalidateQueries({ queryKey: ["model", +modelId] })
             toast.success(data)
-            navigate(`/products/${productId}?modelId=${modelId}`)
+            // navigate(`/products/${productId}?modelId=${modelId}`)
+            setEditCurrentModelModalOpen(false)
         }
     })
 
@@ -80,9 +78,8 @@ export const EditModelPage = ({ data, modelId, productId }: Props) => {
 
 
     return (
-        <EntityFormLayout>
-            <EntityFormLayout.Header title={`Editar modelo #${modelId}`}></EntityFormLayout.Header>
-            <EntityFormLayout.Form
+        <EntityFormLayout isCompact>
+            <EntityFormLayout.Form styled={false}
                 onSubmit={handleSubmit((data) => {
                     handleForm({
                         ...data,
@@ -90,7 +87,7 @@ export const EditModelPage = ({ data, modelId, productId }: Props) => {
                     })
                 })}
             >
-                <EntityFormLayout.Inputs>
+                <EntityFormLayout.Inputs isCompact>
                     <InputText
                         id="name"
                         label="Nombre"
@@ -142,9 +139,21 @@ export const EditModelPage = ({ data, modelId, productId }: Props) => {
                         setPreview={setPreview}
                     />
                 </EntityFormLayout.Inputs>
-                <EntityFormLayout.Actions>
-                    <Button icon={<ArrowUpCircleIcon />} size="large" text="Editar modelo" type="submit" color="green" />
-                    <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to={`/products/${productId}`} />
+                <EntityFormLayout.Actions isCompact>
+                    <Button
+                        icon={<ArrowUpCircleIcon />}
+                        size="large"
+                        text="Editar modelo"
+                        type="submit"
+                        color="green" />
+                    <Button
+                        type='button'
+                        icon={<XCircleIcon />}
+                        size="large"
+                        text="Cancelar"
+                        color="gray"
+                        onClick={() => setEditCurrentModelModalOpen(false)}
+                    />
 
                 </EntityFormLayout.Actions>
             </EntityFormLayout.Form>

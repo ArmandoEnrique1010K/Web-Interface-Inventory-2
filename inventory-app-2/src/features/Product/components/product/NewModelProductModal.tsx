@@ -1,22 +1,24 @@
 import { useForm } from 'react-hook-form'
-import { useNavigate, useParams } from 'react-router-dom'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { registerModelInProduct } from '../../api/ModelAPI';
 import type { GeneralError } from '@/types/index'
 import { toast } from 'sonner'
 import { InputText } from '@/ui/fields/InputText'
 import { InputDate } from '@/ui/fields/InputDate'
 import { Button } from '@/ui/Button'
-import { ButtonLink } from '@/ui/ButtonLink'
 import { ArrowUpCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
 import { useState } from 'react'
 import type { ModelInProductForm } from '../../types';
 import { UploadImage } from '@/ui/fields/UploadImage';
 import { EntityFormLayout } from '@/layout/entity/EntityFormLayout';
 
-// TODO: ESTO DEBE ESTAR DENTRO DEL MODULO PRODUCT
-export const NewModelProductPage = () => {
-    const { id } = useParams();
+type Props = {
+    setAddModelModalOpen: React.Dispatch<React.SetStateAction<boolean>>
+    productId: string
+}
+
+export const NewModelProductModal = ({ setAddModelModalOpen, productId }: Props) => {
+    // const { id } = useParams();
     const [file, setFile] = useState<File | null>(null)
     const [preview, setPreview] = useState<string | null>(null)
     const initialValues: ModelInProductForm = {
@@ -32,7 +34,7 @@ export const NewModelProductPage = () => {
     const { register, handleSubmit, setError, control, formState: { errors } } = useForm<ModelInProductForm & { file: File }>({
         defaultValues: initialValues
     })
-    const navigate = useNavigate();
+    const queryClient = useQueryClient();
 
     const { mutate } = useMutation({
         mutationFn: registerModelInProduct,
@@ -60,23 +62,27 @@ export const NewModelProductPage = () => {
         },
         onSuccess: async (data) => {
             toast.success(data)
-            navigate(`/products/${id}`)
+            // navigate(`/products/${id}`)
+            setAddModelModalOpen(false);
+            queryClient.invalidateQueries({ queryKey: ["products"] })
+            queryClient.invalidateQueries({ queryKey: ["product", productId] })
+            queryClient.invalidateQueries({ queryKey: ["models"] })
+
         }
     })
 
     // EFECTO QUE SE EJECUTA SI HAY UNA IMAGEN QUE SE ESTA SUBIENDO
     return (
-        <EntityFormLayout>
-            <EntityFormLayout.Header title={`Añadir nuevo modelo al producto #${id /* location.pathname.split('/')[2] */}`}></EntityFormLayout.Header>
-            <EntityFormLayout.Form onSubmit={handleSubmit((data) => {
+        <EntityFormLayout isCompact>
+            <EntityFormLayout.Form styled={false} onSubmit={handleSubmit((data) => {
                 mutate({
-                    productId: id!,
+                    productId: productId,
                     data: data,
                     ...(file && { file })
                 })
             })}
             >
-                <EntityFormLayout.Inputs>
+                <EntityFormLayout.Inputs isCompact>
                     <InputText
                         id="name"
                         label="Nombre"
@@ -133,9 +139,29 @@ export const NewModelProductPage = () => {
                         errorMessage={errors.caducityDate?.message}
                     />
                 </EntityFormLayout.Inputs>
-                <EntityFormLayout.Actions>
-                    <Button icon={<ArrowUpCircleIcon />} size="large" text="Añadir modelo" type="submit" color="green" />
-                    <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to={`/products/${id}`} />
+                <EntityFormLayout.Actions isCompact>
+                    <Button
+                        icon={<ArrowUpCircleIcon />}
+                        size="large"
+                        text="Añadir"
+                        type="submit"
+                        color="green"
+                        showIconOnMobile={false}
+                        showTextOnMobile={true}
+                        isLargeOnMobile={true}
+                        onClick={() => {
+                        }}
+                    />
+                    <Button icon={<XCircleIcon />}
+                        type='button'
+                        size="large" text="Cancelar" color="gray"
+                        onClick={() => {
+                            setAddModelModalOpen(false)
+                        }}
+                        showIconOnMobile={false}
+                        showTextOnMobile={true}
+                        isLargeOnMobile={true}
+                    />
                 </EntityFormLayout.Actions>
             </EntityFormLayout.Form>
         </EntityFormLayout>

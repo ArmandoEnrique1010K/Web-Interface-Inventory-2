@@ -2,18 +2,19 @@ import { useQuery } from "@tanstack/react-query";
 import { getProduct } from "../../api/ProductAPI";
 import { TextMessage } from "@/components/TextMessage";
 import { Error } from "@/views/Error";
-import { EditProductPage } from "./EditProductPage";
+import { EditProductModal } from "./EditProductModal";
 
 type Props = {
     productId: string,
+    modelId?: number
     closeModal: React.Dispatch<React.SetStateAction<boolean>>
 }
-export const LoaderProductPage = ({ productId, closeModal }: Props) => {
+export const LoaderProduct = ({ productId, closeModal, modelId }: Props) => {
     // const params = useParams();
     // const productId = params.id!;
 
     const { data, isLoading, isError } = useQuery({
-        queryKey: ['edit-product', productId],
+        queryKey: ['product', productId],
         queryFn: () => getProduct(productId),
         retry: false,
     })
@@ -27,6 +28,6 @@ export const LoaderProductPage = ({ productId, closeModal }: Props) => {
     }
 
     if (data) return (
-        <EditProductPage data={data} productId={productId} closeModal={closeModal} />
+        <EditProductModal data={data} productId={productId} modelId={modelId} closeModal={closeModal} />
     )
 }

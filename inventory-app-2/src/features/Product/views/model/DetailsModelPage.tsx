@@ -2,22 +2,25 @@ import { useParams } from 'react-router-dom'
 import type { ModelDetailsItem } from '../../types'
 import { getModel } from '../../api/ModelAPI'
 import { useQuery } from '@tanstack/react-query'
-import { PencilSquareIcon } from '@heroicons/react/24/outline'
-import { ButtonLink } from '@/ui/ButtonLink'
 import { Button } from '@/ui/Button'
 import { useState } from 'react'
 import { QRModal } from '../../components/QRModal'
-import { ProductChangeStatus } from '../../components/product/ProductChangeStatus';
-import { ModelChangeStatus } from '../../components/model/ModelChangeStatus';
-import { LeftPanelContainer } from '@/components/LeftPanelContainer'
-import { RightPanelContainer } from '@/components/RightPanelContainer'
+import { StatusProductButton } from '../../components/product/StatusProductButton';
+import { StatusModelButton } from '../../components/model/StatusModelButton';
 import { EntityDetailsLayout } from '@/layout/entity/EntityDetailsLayout'
+import { PanelContainer } from '@/components/containers/PanelContainer'
+import { Modal } from '@/components/Modal'
+import { LoaderModel } from '../../components/model/LoaderModel'
+import { LoaderProduct } from '../../components/product/LoaderProduct'
 
 export const DetailsModelPage = () => {
     const { modelId, productId } = useParams()
 
+    const [editCurrentModelModalOpen, setEditCurrentModelModalOpen] = useState(false);
+    const [editModalOpen, setEditModalOpen] = useState(false);
+
     const { data, isLoading } = useQuery<ModelDetailsItem>({
-        queryKey: ['model-details', modelId],
+        queryKey: ['model', modelId ? +modelId : 0],
         queryFn: () => getModel(modelId!),
         // Si el id existe, ejecuta la función getProduct, de lo contrario no lo va a ejecutar
         enabled: !!modelId
@@ -39,82 +42,116 @@ export const DetailsModelPage = () => {
         <EntityDetailsLayout>
             <EntityDetailsLayout.Header
                 title={data.productName + ", " + data.name}
-                actions={
-                    <>
-                        <ButtonLink icon={<PencilSquareIcon />} size="large" to={`/products/${productId}/models/edit/${modelId}`} color="blue" text="Editar modelo" />
-                        <ModelChangeStatus from='model-details' modelId={modelId!} size="large" productId={productId!} value={data!.status ? 'Desactivar modelo' : 'Activar modelo'} />
-                    </>
-                }
             ></EntityDetailsLayout.Header>
             <EntityDetailsLayout.Content>
-                <EntityDetailsLayout.Left>
-                    <LeftPanelContainer subtitle="Características del modelo">
+                <EntityDetailsLayout.Column>
+                    <PanelContainer subtitle="Características del modelo">
 
-                        <LeftPanelContainer.DetailsGroup>
-                            <LeftPanelContainer.Detail label="ID">
+                        <PanelContainer.DetailsGrid>
+                            <PanelContainer.Detail label="ID">
                                 {data.id}
-                            </LeftPanelContainer.Detail>
-                            <LeftPanelContainer.Detail label="Nombre">
+                            </PanelContainer.Detail>
+                            <PanelContainer.Detail label="Nombre">
                                 {data.name}
-                            </LeftPanelContainer.Detail>
-                            <LeftPanelContainer.Detail label="Fecha de entrada">
+                            </PanelContainer.Detail>
+                            <PanelContainer.Detail label="Fecha de entrada">
                                 {data.entryDate}
-                            </LeftPanelContainer.Detail>
-                            <LeftPanelContainer.Detail label="Fecha de caducidad">
+                            </PanelContainer.Detail>
+                            <PanelContainer.Detail label="Fecha de caducidad">
                                 {data.caducityDate}
-                            </LeftPanelContainer.Detail>
-                        </LeftPanelContainer.DetailsGroup>
-                        <LeftPanelContainer.Image
+                            </PanelContainer.Detail>
+                        </PanelContainer.DetailsGrid>
+                        <PanelContainer.Image
                             url={data.imageUrl}
                             name={data.name}
                             legend={`${data.productName}, ${data.name}`}
                         />
-                    </LeftPanelContainer>
-                </EntityDetailsLayout.Left>
-                <EntityDetailsLayout.Right>
-                    <RightPanelContainer subtitle={"Pertenece al producto"}>
-                        <RightPanelContainer.DetailsGrid>
-                            <RightPanelContainer.Detail label="ID">
+
+                        <PanelContainer.DetailsGrid>
+                            <PanelContainer.Detail label="Editar modelo">
+                                <Button
+                                    size="small"
+                                    text="Editar"
+                                    color="blue"
+                                    type="button"
+                                    showTextOnMobile
+                                    onClick={() => {
+                                        setEditCurrentModelModalOpen(true)
+                                    }}
+                                />
+                                {
+                                    editCurrentModelModalOpen && modelId && <Modal
+                                        isOpen={editCurrentModelModalOpen}
+                                        onClose={() => {
+                                            setEditCurrentModelModalOpen(false)
+                                        }
+                                        }
+                                        size='lg'
+                                        title={`Editar el modelo #${productId}`}
+                                    >
+
+                                        <LoaderModel modelId={+modelId} setEditCurrentModelModalOpen={setEditCurrentModelModalOpen} />
+                                    </Modal>
+                                }
+
+
+                            </PanelContainer.Detail>
+                            {/* <StatusModelButton 
+                            from='model-details' 
+                            modelId={modelId!} size="large" productId={productId!} value={data!.status ? 'Desactivar modelo' : 'Activar modelo'} /> */}
+
+                            <PanelContainer.Detail label="Estado del modelo">
+                                <StatusModelButton
+                                    from='product-details'
+                                    modelId={modelId!} size="small"
+                                    productId={productId!}
+                                    value={data.status ? 'Activo' : 'Inactivo'}
+                                />
+
+                            </PanelContainer.Detail>
+
+                        </PanelContainer.DetailsGrid>
+
+
+                    </PanelContainer>
+                </EntityDetailsLayout.Column>
+                <EntityDetailsLayout.Column>
+                    <PanelContainer subtitle={"Pertenece al producto"}>
+                        <PanelContainer.DetailsGrid>
+                            <PanelContainer.Detail label="ID">
                                 {data.id}
-                            </RightPanelContainer.Detail>
-                            <RightPanelContainer.Detail label="Nombre">
+                            </PanelContainer.Detail>
+                            <PanelContainer.Detail label="Nombre">
                                 {data.productName}
-                            </RightPanelContainer.Detail>
+                            </PanelContainer.Detail>
                             {
                                 Number(data.productLength) !== 0 && (
-                                    <RightPanelContainer.Detail label="Largo">
+                                    <PanelContainer.Detail label="Largo">
                                         {data.productLength} cm.
-                                    </RightPanelContainer.Detail>
+                                    </PanelContainer.Detail>
                                 )
                             }
                             {
                                 Number(data.productWidth) !== 0 && (
-                                    <RightPanelContainer.Detail label="Ancho">
+                                    <PanelContainer.Detail label="Ancho">
                                         {data.productWidth} cm.
-                                    </RightPanelContainer.Detail>
+                                    </PanelContainer.Detail>
                                 )
                             }
                             {
                                 Number(data.productHeight) !== 0 && (
-                                    <RightPanelContainer.Detail label="Altura">
+                                    <PanelContainer.Detail label="Altura">
                                         {data.productHeight} cm.
-                                    </RightPanelContainer.Detail>
+                                    </PanelContainer.Detail>
                                 )
                             }
-                            <RightPanelContainer.Detail label="Categoria">
+                            <PanelContainer.Detail label="Categoria">
                                 {data.categoryName}
-                            </RightPanelContainer.Detail>
-                            <RightPanelContainer.Detail label="Tipo">
+                            </PanelContainer.Detail>
+                            <PanelContainer.Detail label="Tipo">
                                 {data.typeName}
-                            </RightPanelContainer.Detail>
-                            <RightPanelContainer.Detail label="Estado del modelo" isButton>
-                                <ProductChangeStatus
-                                    productId={productId!}
-                                    value={data.status ? 'Activo' : 'Inactivo'}
-                                    size={"small"}
-                                />
-                            </RightPanelContainer.Detail>
-                            <RightPanelContainer.Detail label="Codigo QR">
+                            </PanelContainer.Detail>
+                            <PanelContainer.Detail label="Codigo QR">
                                 <Button
                                     text="Obtener QR"
                                     type="button"
@@ -127,25 +164,57 @@ export const DetailsModelPage = () => {
                                     isOpen={isQRModalOpen}
                                     onClose={() => setIsQRModalOpen(false)}
                                     url={import.meta.env.VITE_FRONTEND_DOMAIN + `/product/${data.productId}/model/${data.id}`}
-                                // title={`Código QR del producto ${data.productName}, ${data.name}`}
+                                    title={`Código QR del producto ${data.productName}, ${data.name}`}
                                 />
-                            </RightPanelContainer.Detail>
+                            </PanelContainer.Detail>
 
+                            <PanelContainer.Detail label="Estado del modelo" isButton>
+                                <StatusProductButton
+                                    productId={productId!}
+                                    value={data.status ? 'Activo' : 'Inactivo'}
+                                    size={"small"}
+                                />
+                            </PanelContainer.Detail>
                             {data.status && (
-                                <RightPanelContainer.Detail label="Editar producto">
-                                    <ButtonLink
+                                <PanelContainer.Detail label="Editar producto">
+                                    {/* <ButtonLink
                                         size="small"
                                         text="Editar"
                                         to={`/products/edit/${data.productId}`}
                                         color="blue"
+                                    /> */}
+                                    <Button
+                                        size="small"
+                                        text="Editar"
+                                        // to={`/products/${productId}/models/edit/${selectedModel.id}`}
+                                        color="blue"
+                                        type="button"
+                                        showTextOnMobile
+                                        onClick={() => {
+                                            setEditModalOpen(true)
+                                        }}
                                     />
-                                </RightPanelContainer.Detail>
+                                    {
+                                        editModalOpen && productId && modelId && <Modal
+                                            isOpen={editModalOpen}
+                                            onClose={() => {
+                                                setEditModalOpen(false)
+                                            }
+                                            }
+                                            size='lg'
+                                            title={`Editar el producto #${productId}`}
+                                        >
+
+                                            <LoaderProduct modelId={+modelId} productId={productId.toString()} closeModal={setEditModalOpen} />
+                                        </Modal>
+                                    }
+                                </PanelContainer.Detail>
                             )}
 
-                        </RightPanelContainer.DetailsGrid>
+                        </PanelContainer.DetailsGrid>
 
-                    </RightPanelContainer>
-                </EntityDetailsLayout.Right>
+                    </PanelContainer>
+                </EntityDetailsLayout.Column>
 
             </EntityDetailsLayout.Content>
 

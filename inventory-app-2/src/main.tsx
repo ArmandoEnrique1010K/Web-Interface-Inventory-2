@@ -9,6 +9,7 @@ import { AppInitializer } from '@/thunk/AppInitializer'
 
 // Nota: no renombrar el archivo index.css
 import "./index.css"
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 
 const queryClient = new QueryClient()
@@ -19,6 +20,8 @@ createRoot(document.getElementById('root')!).render(
         <Toaster position="top-right" duration={5000} richColors />
         <AppInitializer />
         <GeneralRouter />
+        <ReactQueryDevtools initialIsOpen={false} />
+
       </QueryClientProvider>
     </Provider>
   </StrictMode>,

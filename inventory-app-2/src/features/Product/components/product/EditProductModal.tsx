@@ -16,10 +16,11 @@ import { EntityFormLayout } from '@/layout/entity/EntityFormLayout';
 type Props = {
     data: ProductUpdateForm;
     productId: string;
+    modelId?: number;
     closeModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const EditProductPage = ({ data, productId, closeModal }: Props) => {
+export const EditProductModal = ({ data, productId, modelId, closeModal }: Props) => {
     // const navigate = useNavigate();
 
     const { register, handleSubmit, setError, formState: { errors } } = useForm<ProductUpdateForm>({
@@ -58,8 +59,13 @@ export const EditProductPage = ({ data, productId, closeModal }: Props) => {
             }
         },
         onSuccess: (data) => {
-            queryClient.invalidateQueries({ queryKey: ["list-products"] })
-            queryClient.invalidateQueries({ queryKey: ["edit-product", productId] })
+            queryClient.invalidateQueries({ queryKey: ["products"] })
+            queryClient.invalidateQueries({ queryKey: ["product", productId] })
+            queryClient.invalidateQueries({ queryKey: ["models"] })
+            if (modelId) {
+                queryClient.invalidateQueries({ queryKey: ["model", modelId] })
+            }
+            console.log("ID de modelo: " + modelId)
             toast.success(data)
             // navigate("/products")
             closeModal(false)

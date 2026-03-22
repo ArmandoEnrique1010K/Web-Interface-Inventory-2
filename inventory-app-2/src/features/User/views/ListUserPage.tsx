@@ -4,7 +4,6 @@ import { useSearchParams } from "react-router-dom"
 import { listAllUsers } from "../api/UserAPI"
 import { listAllRoles } from "../api/RoleAPI"
 import type { RoleItem, UserItem } from "../types"
-import { useMediaQuery } from "react-responsive"
 import { FiltersFormContainer } from "@/components/FiltersFormContainer"
 import { InputTextFilter } from "@/ui/filters/InputTextFilter"
 import { SearchCounter } from "@/components/SearchCounter"
@@ -17,6 +16,7 @@ import { Paginator } from "@/components/Paginator"
 import { PlusCircleIcon } from "@heroicons/react/24/outline"
 import { UserChangeStatus } from "../components/UserChangeStatus"
 import { EntityListLayout } from "@/layout/entity/EntityListLayout"
+import { handleApplyRoleStyle } from "@/utils/handleApplyRoleStyle"
 
 export const ListUserPage = () => {
 
@@ -51,6 +51,7 @@ export const ListUserPage = () => {
     })
 
     const content = data?.content || []
+    console.log(content)
 
     const { data: rolesData } = useQuery({
         queryKey: ['list-roles'],
@@ -62,7 +63,6 @@ export const ListUserPage = () => {
         label: role.label,
     })) || []
 
-    const isSmallScreen = useMediaQuery({ query: '(max-width: 479px)' })
 
     return (
         <EntityListLayout>
@@ -98,29 +98,25 @@ export const ListUserPage = () => {
                 }
 
                 >
-                    <div>
-                        <InputTextFilter
-                            name='name'
-                            label='Palabra clave'
-                            placeholder='Buscar usuarios por nombre, apellido, email y/o dni'
-                            type='text'
-                            value={form.name}
-                            onChange={(e) =>
-                                setForm(prev => ({ ...prev, name: e.target.value }))
-                            }
-                        />
-                    </div>
-                    <div className={`flex ${isSmallScreen ? 'flex-col gap-2' : 'flex-row gap-4'}`}>
-                        <SelectCheckboxFilter
-                            name='idRoles'
-                            label='Roles'
-                            options={roles}
-                            onChange={(selectedValues) =>
-                                setForm(prev => ({ ...prev, idRoles: selectedValues.map(Number) }))
-                            }
-                            value={form.idRoles.map(String)}  // Convert numbers to strings
-                        />
-                    </div>
+                    <InputTextFilter
+                        name='name'
+                        label='Palabra clave'
+                        placeholder='Buscar usuarios por nombre, apellido, email y/o dni'
+                        type='text'
+                        value={form.name}
+                        onChange={(e) =>
+                            setForm(prev => ({ ...prev, name: e.target.value }))
+                        }
+                    />
+                    <SelectCheckboxFilter
+                        name='idRoles'
+                        label='Roles'
+                        options={roles}
+                        onChange={(selectedValues) =>
+                            setForm(prev => ({ ...prev, idRoles: selectedValues.map(Number) }))
+                        }
+                        value={form.idRoles.map(String)}  // Convert numbers to strings
+                    />
 
                 </FiltersFormContainer>
                 <TableContainer
@@ -168,7 +164,16 @@ export const ListUserPage = () => {
                                     </div>
                                 } />
                                 <BaseTableCell data={user.dni} />
-                                <BaseTableCell data={user.roles.map(r => r + " ")} />
+                                <BaseTableCell data={
+                                    <span className="flex flex-wrap gap-2 text-sm">
+                                        {
+                                            user.roles.map(role => (
+                                                <span className={`px-3 py-1 rounded-4xl ${handleApplyRoleStyle(role as 'Usuario' | 'Operador' | 'Secretario' | 'Administrador')}`}>{role}</span>
+                                            ))
+                                        }
+                                    </span>
+
+                                } />
                                 <BaseTableCell data={
                                     <UserChangeStatus userId={user.id.toString()} value={user.status === true ? 'Activo' : 'Inactivo'} size={"small"} />
                                 } />
@@ -178,7 +183,7 @@ export const ListUserPage = () => {
                                             size="small"
                                             text="Alterar roles"
                                             to={`/users/${user.id}/alter`}
-                                            color="red"
+                                            color="red-outline"
                                         /> : ''}
                                 />
                             </TableRowContainer>

@@ -7,7 +7,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline"
 import { changeStatusModel } from "../../api/ModelAPI"
 import { useNavigate } from "react-router-dom"
 
-export const ModelChangeStatus = ({ from, modelId, productId, value, size }: { from?: string, modelId: string, productId: string, value: string, size: 'small' | 'large' }) => {
+export const StatusModelButton = ({ from, modelId, productId, value, size }: { from?: string, modelId: string, productId: string, value: string, size: 'small' | 'large' }) => {
     const { handleSubmit } = useForm();
     const queryClient = useQueryClient();
 
@@ -24,9 +24,9 @@ export const ModelChangeStatus = ({ from, modelId, productId, value, size }: { f
         },
         onSuccess: async (data) => {
             toast.success(data)
-            queryClient.invalidateQueries({ queryKey: ['product-details', productId] })
-            queryClient.invalidateQueries({ queryKey: ['models-in-product', productId] })
-            queryClient.invalidateQueries({ queryKey: ['list-models'] })
+            queryClient.invalidateQueries({ queryKey: ['product', productId] })
+            queryClient.invalidateQueries({ queryKey: ['models', 'product', productId] })
+            queryClient.invalidateQueries({ queryKey: ['models'] })
 
             if (from === 'model-details') {
                 navigate('/products/models')
@@ -37,7 +37,7 @@ export const ModelChangeStatus = ({ from, modelId, productId, value, size }: { f
     })
 
     return (
-        <form onSubmit={handleSubmit(() => mutate())} className="text-center ">
+        <form onSubmit={handleSubmit(() => mutate())} >
             <Button icon={size === 'large' && <XMarkIcon />} text={value} type="submit" size={size} color={value === 'Activo' ? 'green-outline' : 'red-outline'} />
         </form>
     )

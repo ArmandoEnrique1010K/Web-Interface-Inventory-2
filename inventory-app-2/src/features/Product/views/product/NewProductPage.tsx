@@ -73,11 +73,11 @@ export const NewProductPage = () => {
 
     // TODO: EN ALGUNA FUTURA ACTUALIZACION SE PUEDE HACER QUE SE MUESTRE UNA NOTIFICACION MIENTRAS SE SUBE LA IMAGEN
     const { data: categoriesData } = useQuery({
-        queryKey: ['list-categories'],
+        queryKey: ['categories'],
         queryFn: listAllCategories
     })
     const { data: typesData } = useQuery({
-        queryKey: ['list-types'],
+        queryKey: ['types'],
         queryFn: listAllTypes
     })
 

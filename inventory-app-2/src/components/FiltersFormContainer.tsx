@@ -12,7 +12,7 @@ export const FiltersFormContainer = ({
 }: Props) => {
     return (
         <form
-            className='bg-white rounded-xl shadow-sm border border-gray-200 sm:p-6  p-4 space-y-4'
+            className='bg-white rounded-xl shadow-sm border border-gray-200 sm:p-6 p-4 space-y-4'
             autoComplete="off" noValidate
             onSubmit={onSubmit}
         >

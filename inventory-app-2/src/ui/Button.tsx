@@ -44,7 +44,7 @@ export const Button = ({
     const sizeStyles =
         size === 'small'
             ? 'text-sm px-3 py-2 rounded-md'
-            : 'text-lg px-6 py-2 rounded-lg'
+            : 'text-lg px-4 py-2 rounded-lg'
 
     const widthStyles = isLarge ? 'w-full' : ''
 

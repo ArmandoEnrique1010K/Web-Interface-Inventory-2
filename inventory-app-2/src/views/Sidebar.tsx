@@ -51,7 +51,6 @@ export const Sidebar = () => {
         }
     })
 
-    // TODO: VERIFICAR LOS ESTILOS DEL PANEL IZQUIERDO
     return (
         <>
             <div className="sm:hidden block h-20 relative  items-center justify-center">
@@ -74,8 +73,8 @@ export const Sidebar = () => {
             </div>
             <div className="min-h-screen bg-slate-900 text-slate-300 hidden sm:flex flex-col justify-between border-r border-slate-800">
                 <div className="h-max">
-                    <div className="flex flex-col items-center my-4 sm:px-2">
-                        <img src="/inventory.png" className="bg-white rounded-full p-2 lg:size-24 size-20" alt="Logo" />
+                    <div className="flex flex-col items-center my-4 sm:px-1">
+                        <Link to={"/"}><img src="/transportation.svg" className="bg-slate-100 rounded-2xl p-1 lg:w-32 w-16" alt="Logo" /></Link>
                         {/* whitespace-nowrap evita que el texto tenga saltos de linea */}
                         <h1 className="mx-4 my-2 text-xl whitespace-nowrap text-center lg:block hidden">Empresa sin nombre</h1>
                     </div>

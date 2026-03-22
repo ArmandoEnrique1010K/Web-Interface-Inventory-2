@@ -36,28 +36,21 @@ EntityDetailsLayout.Header = ({ title, actions }: HeaderProps) => {
 EntityDetailsLayout.Content = ({ children }: Props) => {
     return (
         <div className="flex flex-col justify-center items-center">
-            <div className=" mx-auto grid grid-cols-1 lg:grid-cols-8 gap-6 w-full">
+            <div className=" mx-auto grid grid-cols-1 md:grid-cols-8 gap-6 w-full">
                 {children}
             </div>
         </div>
     )
 }
 
-EntityDetailsLayout.Left = ({ children }: Props) => {
+EntityDetailsLayout.Column = ({ children }: Props) => {
     return (
-        <div className="bg-white rounded-2xl shadow-sm p-4 flex flex-col gap-4 lg:col-span-5">
+        <div className="bg-white rounded-2xl shadow-sm p-4 flex flex-col gap-4 md:col-span-4">
             {children}
         </div>
     )
 }
 
-EntityDetailsLayout.Right = ({ children }: Props) => {
-    return (
-        <div className="bg-white rounded-2xl shadow-sm p-4 flex flex-col gap-4 lg:col-span-3">
-            {children}
-        </div>
-    )
-}
 
 EntityDetailsLayout.Summary = ({ children }: Props) => {
     return (

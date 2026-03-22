@@ -5,7 +5,7 @@ type Props = {
     size: 'small' | 'large'
     text: string
     to: string
-    color: 'blue' | 'green' | 'gray' | 'red'
+    color: 'blue' | 'green' | 'gray' | 'red' | 'red-outline'
     isLarge?: boolean
     aditionalStyles?: string
     onClick?: () => void
@@ -44,7 +44,7 @@ export const ButtonLink = ({
     const sizeStyles =
         size === 'small'
             ? 'text-sm px-3 py-1.5 rounded-md'
-            : 'text-lg px-6 py-2 rounded-lg'
+            : 'text-lg px-4 py-2 rounded-lg'
 
     const widthStyles = isLarge ? 'w-full' : ''
 

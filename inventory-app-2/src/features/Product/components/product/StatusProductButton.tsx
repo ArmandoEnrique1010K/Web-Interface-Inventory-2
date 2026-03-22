@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 import { XMarkIcon } from "@heroicons/react/24/outline"
 
-export const ProductChangeStatus = ({ from, productId, value, size }: { from?: string, productId: string, value: string, size: 'small' | 'large' }) => {
+export const StatusProductButton = ({ from, productId, value, size }: { from?: string, productId: string, value: string, size: 'small' | 'large' }) => {
     const { handleSubmit } = useForm();
     const navigate = useNavigate();
     const queryClient = useQueryClient();
@@ -23,7 +23,7 @@ export const ProductChangeStatus = ({ from, productId, value, size }: { from?: s
         },
         onSuccess: async (data) => {
             toast.success(data)
-            queryClient.invalidateQueries({ queryKey: ["list-products"] })
+            queryClient.invalidateQueries({ queryKey: ["products"] })
 
             if (from === 'product-details') {
                 navigate('/products')
@@ -34,7 +34,7 @@ export const ProductChangeStatus = ({ from, productId, value, size }: { from?: s
     })
 
     return (
-        <form onSubmit={handleSubmit(() => mutate())} className="text-center">
+        <form onSubmit={handleSubmit(() => mutate())} >
             {/* TODO: AÑADIR UN ICONO PARA MOSTRAR CUANDO EL PRODUCTO ESTE ACTIVO */}
             <Button
                 icon={size === 'large' && <XMarkIcon />}

@@ -72,3 +72,6 @@ export const CreditsDetails = () => {
         </ListElementsContainer>
     )
 }
+
+// NUEVO LOGOTIPO DE LA EMPRESA
+// https://www.svgrepo.com/svg/269884/transportation-big

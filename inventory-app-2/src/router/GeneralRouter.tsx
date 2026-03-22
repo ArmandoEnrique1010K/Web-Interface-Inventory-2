@@ -17,7 +17,6 @@ import { NavbarContainer } from '@/components/NavbarContainer'
 import { CreditsDetails } from '@/features/Credits/components/CreditsDetails'
 import { ProfileEditLoader } from '@/features/Profile/components/ProfileEditLoader'
 import { ListModelPage } from '@/features/Product/views/model/ListModelPage'
-import { NewModelProductPage } from '@/features/Product/views/product/NewModelProductPage'
 import { CompanyList } from '@/features/StockLot/components/company/CompanyList'
 import { CompanyAddForm } from '@/features/StockLot/components/company/CompanyAddForm'
 import { CompanyEditLoader } from '@/features/StockLot/components/company/CompanyEditLoader'
@@ -41,12 +40,10 @@ import { MovementList } from '@/features/Movement/components/MovementList'
 import { DetailsProductPage } from '@/features/Product/views/product/DetailsProductPage'
 import { ListProductPage } from '@/features/Product/views/product/ListProductPage'
 import { NewProductPage } from '@/features/Product/views/product/NewProductPage'
-import { LoaderProductPage } from '@/features/Product/views/product/LoaderProductPage'
 import { ListTypePage } from '@/features/Product/views/type/ListTypePage'
 import { NewTypePage } from '@/features/Product/views/type/NewTypePage'
 import { LoaderTypePage } from '@/features/Product/views/type/LoaderTypePage'
 import { LoaderCategoryPage } from '@/features/Product/views/category/LoaderCategoryPage'
-import { LoaderModelPage } from '@/features/Product/views/model/LoaderModelPage';
 import { ListSubregionPage } from '@/features/Location/views/subregion/ListSubregionPage'
 import { ListUserPage } from '@/features/User/views/ListUserPage'
 import { RegisterUserPage } from '@/features/User/views/RegisterUserPage'
@@ -151,13 +148,10 @@ export const GeneralRouter = () => {
                             <Route index element={<ListProductPage />} />
                             <Route path=":id" element={<DetailsProductPage />} />
                             <Route path="new" element={<NewProductPage />} />
-                            <Route path="edit/:id" element={<LoaderProductPage />} />
 
                             {/* RELACIONADO A MODELS */}
                             <Route path="models" element={<ListModelPage />} />
                             {/* :id es el ID del producto que corresponde al modelo */}
-                            <Route path=":id/models/new" element={<NewModelProductPage />} />
-                            <Route path=":productId/models/edit/:modelId" element={<LoaderModelPage />} />
                             <Route path=":productId/models/:modelId" element={<DetailsModelPage />} />
 
                             {/* RELACIONADO A CATEGORIES */}
