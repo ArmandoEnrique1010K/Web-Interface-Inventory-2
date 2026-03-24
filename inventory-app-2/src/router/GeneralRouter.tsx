@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux'
 import type { RootState } from '@/store/store'
 import { Loading } from '@/views/Loading'
 import type { MenuItem } from 'types'
-import { CubeIcon, DocumentDuplicateIcon, FlagIcon, MapIcon, MapPinIcon, NewspaperIcon, RectangleGroupIcon, TagIcon, TruckIcon } from '@heroicons/react/24/outline'
+import { ClipboardDocumentCheckIcon, ClipboardDocumentListIcon, ClipboardIcon, CubeIcon, DocumentDuplicateIcon, FlagIcon, MapIcon, MapPinIcon, NewspaperIcon, RectangleGroupIcon, TagIcon, TruckIcon } from '@heroicons/react/24/outline'
 import { NewCategoryPage } from '@/features/Product/views/category/NewCategoryPage'
 import { ListCategoryPage } from '@/features/Product/views/category/ListCategoryPage'
 import { NavbarContainer } from '@/components/NavbarContainer'
@@ -37,6 +37,10 @@ import { ListSubregionPage } from '@/features/Location/views/subregion/ListSubre
 import { ListUserPage } from '@/features/User/views/ListUserPage'
 import { RegisterUserPage } from '@/features/User/views/RegisterUserPage'
 import { UserProfilePage } from '@/features/Profile/views/UserProfilePage'
+import { ListDeliveryOrderPage } from '@/features/Order/views/deliveryOrder/ListDeliveryOrderPage'
+import { NewDeliveryOrderPage } from '@/features/Order/views/deliveryOrder/NewDeliveryOrderPage'
+import { DetailsDeliveryOrderPage } from '@/features/Order/views/deliveryOrder/DetailsDeliveryOrderPage'
+import { ListPendingDeliveryOrderPage } from '@/features/Order/views/deliveryOrder/ListPendingDeliveryOrderPage'
 
 const productItems: MenuItem[] = [
     {
@@ -89,9 +93,27 @@ const locationItems: MenuItem[] = [
         icon: <FlagIcon className='size-6' />,
         to: '/locations/regions'
     }
-
 ]
 
+
+const orderItems: MenuItem[] = [
+    {
+        label: 'Todas las ordenes',
+        icon: <ClipboardDocumentListIcon className='size-6' />,
+        to: "/orders"
+    },
+    {
+        label: 'Ordenes pendientes',
+        icon: <ClipboardDocumentCheckIcon className='size-6' />,
+        to: "/orders/pending"
+    },
+    {
+        label: 'Mis ordenes',
+        icon: <ClipboardIcon className='size-6' />,
+        to: "/orders/my-orders"
+    },
+
+]
 
 
 export const GeneralRouter = () => {
@@ -184,7 +206,6 @@ export const GeneralRouter = () => {
                             <Route path='update' element={<LoaderProfile />} />
                         </Route>
 
-                        {/* TODO: CONTINUAR AQUI */}
                         {/* RELACIONADO A STOCKLOT */}
                         <Route path='stocklots' element={
                             <NavbarContainer menuItems={stockLotsItems} keyword='stocklots'>
@@ -194,17 +215,27 @@ export const GeneralRouter = () => {
                             <Route index element={<ListStockLotPage />} />
                             <Route path="new" element={<NewStockLotPage />} />
                             <Route path=":id" element={<DetailsStockLotPage />} />
-                            {/* <Route path=":id/increase" element={<IncreaseStockLotModal />} />
-                            <Route path=":id/decrease" element={<DecreaseStockLotModal />} />
-                            <Route path=":id/recovery" element={<RecoveryStockLotModal />} />
-                            <Route path=":id/transfer" element={<LoaderTransferStockLot />} /> */}
 
                             {/* RELACIONADO A COMPANIES */}
                             <Route path="companies" element={<ListCompanyPage />} />
                             <Route path="companies/new" element={<NewCompanyPage />} />
-                            {/* <Route path="companies/edit/:id" element={<LoaderCompany />} /> */}
                         </Route>
 
+                        {/* TODO: CONTINUAR AQUI */}
+                        {/* RELACIONADO A ORDENES */}
+
+                        <Route path='orders' element={
+                            <NavbarContainer menuItems={orderItems} keyword='orders'>
+                                <Outlet />
+                            </NavbarContainer>
+                        }>
+                            <Route index element={<ListDeliveryOrderPage />} />
+                            <Route path="my-orders" element={<h1>Mis ordenes</h1>} />
+                            <Route path="pending" element={<ListPendingDeliveryOrderPage />} />
+                            <Route path="new" element={<NewDeliveryOrderPage />} />
+                            <Route path=":id" element={<DetailsDeliveryOrderPage />} />
+
+                        </Route>
 
 
                         {/* RELACIONADO A MOVEMENT */}

@@ -25,7 +25,7 @@ export const InputText = ({ id, label, placeholder, type, errorMessage, function
             <label className="text-sm font-medium text-slate-700" htmlFor={id}>{label}:</label>
 
             <input
-                className="outline-none focus:outline-none border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="outline-none focus:outline-none border border-slate-300 rounded-lg text-base px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 type={type}
                 placeholder={placeholder}
                 id={id}

@@ -270,7 +270,6 @@ export const ListProductPage = () => {
                                             showTextOnMobile
                                         /> : ''
                                 } />
-
                             </TableRowContainer>
 
                         }

@@ -120,7 +120,7 @@ export const RegisterUserPage = () => {
 
                     <SelectCheckboxGroup group={rolesGroup} label="Roles" />
 
-                    {/* <label className="text-md font-bold">Roles</label>
+                    {/* <label className="text-base font-bold">Roles</label>
 
                     <div className="flex flex-col gap-3 pt-2">
                         <label className="flex items-center gap-2">

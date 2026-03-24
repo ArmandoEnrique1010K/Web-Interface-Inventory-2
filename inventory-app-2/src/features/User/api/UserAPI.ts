@@ -42,9 +42,7 @@ export type ListFirstTenUsersByKeywordQueryParams = {
     name: string
 }
 
-// TODO: ESTE ENDPOINT SE VA A UTILIZAR CUANDO SE CREE UNA ORDEN DE ENTREGA
 export const listFirstTenUsersByKeyword = async (params: ListFirstTenUsersByKeywordQueryParams) => {
-
     try {
         const url = `/users/role/user`
         const { data } = await api.get<DataResponse>(url, { params: params })

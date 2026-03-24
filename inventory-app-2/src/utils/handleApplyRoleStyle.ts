@@ -9,7 +9,7 @@ const rolesColors: { role: string; style: string }[] = [
     },
     {
         role: 'Secretario',
-        style: 'bg-green-100 text-green-700'
+        style: 'bg-emerald-100 text-emerald-700'
     },
     {
         role: 'Administrador',
