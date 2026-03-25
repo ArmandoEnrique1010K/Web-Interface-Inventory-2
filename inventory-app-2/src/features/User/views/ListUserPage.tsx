@@ -54,7 +54,6 @@ export const ListUserPage = () => {
     })
 
     const content = data?.content || []
-    console.log(content)
 
     const { data: rolesData } = useQuery({
         queryKey: ['roles'],

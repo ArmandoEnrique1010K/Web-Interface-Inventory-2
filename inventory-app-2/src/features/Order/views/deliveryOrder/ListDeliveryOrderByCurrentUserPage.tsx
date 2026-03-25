@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { useState } from "react"
 import { useSearchParams, Link } from 'react-router-dom';
-import { listAllDeliveryOrders } from "../../api/DeliveryOrderAPI"
+import { listAllDeliveryOrdersByClient } from "../../api/DeliveryOrderAPI"
 import { EntityListLayout } from "@/layout/entity/EntityListLayout"
 import { ButtonLink } from "@/ui/ButtonLink"
 import { PlusCircleIcon } from "@heroicons/react/24/outline"
@@ -18,21 +18,18 @@ import { handleApplyDeliveryOrderStatusStyle } from "@/utils/handleApplyDelivery
 import { InputDateTimeFilter } from "@/ui/filters/InputDateTimeFilter";
 import { handleFormatDateTimeText } from "@/utils/handleFormatDateTimeText";
 
-export const ListDeliveryOrderPage = () => {
+export const ListDeliveryOrderByCurrentUserPage = () => {
     const [searchParams, setSearchParams] = useSearchParams()
     const page = Number(searchParams.get('page') ?? 0)
     const batch = searchParams.get('batch') ?? ''
     const startDate = searchParams.get('startDate') ?? ''
     const endDate = searchParams.get('endDate') ?? ''
-    const userClientName = searchParams.get('userClientName') ?? ''
-    // TODO: CORREGIR STATUS
     const status = searchParams.get('status') ?? ''
     const [form, setForm] = useState({
         page: page,
         batch,
         startDate,
         endDate,
-        userClientName,
         status: status === undefined ? '' : String(status),
     })
 
@@ -40,14 +37,13 @@ export const ListDeliveryOrderPage = () => {
 
     const { data, isError } = useQuery({
 
-        queryKey: ['deliveryOrders', { batch, startDate, endDate, userClientName, status, page }],
+        queryKey: ['deliveryOrders', { batch, startDate, endDate, status, page }],
 
-        queryFn: () => listAllDeliveryOrders({
+        queryFn: () => listAllDeliveryOrdersByClient({
             page: page,
             batch: batch,
             startDate: startDate,
             endDate: endDate,
-            userClientName: userClientName,
             status: status as 'ORDER_READY' | 'ORDER_PENDING' | 'ORDER_DELIVERED' | 'ORDER_CANCELED' | ''
         }),
     })
@@ -64,7 +60,7 @@ export const ListDeliveryOrderPage = () => {
     return (
         <EntityListLayout>
             <EntityListLayout.Header
-                title="Ordenes de entrega"
+                title="Mis ordenes de entrega"
                 actions={
                     <ButtonLink
                         icon={<PlusCircleIcon />}
@@ -86,7 +82,6 @@ export const ListDeliveryOrderPage = () => {
                         if (form.batch) params.set('batch', form.batch)
                         if (form.startDate) params.set('startDate', form.startDate)
                         if (form.endDate) params.set('endDate', form.endDate)
-                        if (form.userClientName) params.set('userClientName', form.userClientName)
                         if (form.status) params.set('status', form.status)
 
                         setSearchParams(params)
@@ -140,16 +135,6 @@ export const ListDeliveryOrderPage = () => {
                             setForm(prev => ({ ...prev, endDate: e.target.value }))
                         }
                     /> */}
-                    <InputTextFilter
-                        name='userClientName'
-                        label='Nombre del cliente'
-                        placeholder='Buscar por nombre del cliente'
-                        type='text'
-                        value={form.userClientName}
-                        onChange={(e) =>
-                            setForm(prev => ({ ...prev, userClientName: e.target.value }))
-                        }
-                    />
                     <SelectOptionFilter
                         name='status'
                         label='Estado'
@@ -163,7 +148,7 @@ export const ListDeliveryOrderPage = () => {
                 </FiltersFormContainer>
 
                 <TableContainer
-                    headers={["ID", "# de factura", "Fecha limite", "Cliente", "Estado"]}
+                    headers={["ID", "# de factura", "Fecha limite", "Estado"]}
                     isError={isError}
                     isEmpty={!content?.length}
                     itemsCounter={
@@ -193,7 +178,6 @@ export const ListDeliveryOrderPage = () => {
                                     if (form.startDate) params.set('startDate', form.startDate)
                                     if (form.endDate) params.set('endDate', form.endDate)
 
-                                    if (form.userClientName) params.set('userClientName', form.userClientName)
                                     if (form.status !== '') params.set('status', form.status)
 
                                     params.set('page', page.toString())
@@ -217,9 +201,6 @@ export const ListDeliveryOrderPage = () => {
                                             <span>{handleFormatDateTimeText(new Date(order.limitDate)).date} {handleFormatDateTimeText(new Date(order.limitDate)).hour}</span>
                                         </span>
                                     ) : 'Sin fecha'
-                                } />
-                                <BaseTableCell data={
-                                    <div className="text-sm">{order.userClientFullname}</div>
                                 } />
                                 <BaseTableCell isCenter data={
                                     <span className={`

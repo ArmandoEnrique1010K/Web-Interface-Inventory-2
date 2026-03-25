@@ -50,7 +50,7 @@ export function AsyncSelectField<T extends FieldValues>({
                 return [];
             }
         },
-        1
+        200 // El usuario debe escribir en el campo durante 200 milisegundos para mostrar los resultados
     );
 
 
@@ -82,7 +82,6 @@ export function AsyncSelectField<T extends FieldValues>({
                 name={name}
                 control={control}
                 render={({ field }) => (
-                    //* ¿COMO MINIMO DEBE ESCRIBIR 2 CARACTERES EN EL CAMPO?
                     <AsyncSelect
                         cacheOptions
                         defaultOptions={false}

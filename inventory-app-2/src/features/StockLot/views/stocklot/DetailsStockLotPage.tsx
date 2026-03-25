@@ -99,6 +99,10 @@ export const DetailsStockLotPage = () => {
                                 </PanelContainer.Detail>
                             </PanelContainer.DetailsGrid>
                         </PanelContainer>
+                    </EntityDetailsLayout.Grid>
+                    <EntityDetailsLayout.Grid>
+
+
                         <PanelContainer
                             subtitle="Cantidades">
                             <PanelContainer.DetailsGrid>
@@ -121,6 +125,10 @@ export const DetailsStockLotPage = () => {
                             </PanelContainer.DetailsGrid>
 
                         </PanelContainer>
+
+
+                    </EntityDetailsLayout.Grid>
+                    <EntityDetailsLayout.Grid>
                         <PanelContainer
                             subtitle={"Operaciones"}>
                             <PanelContainer.DetailsGrid>
@@ -184,7 +192,6 @@ export const DetailsStockLotPage = () => {
                                 </PanelContainer.Detail>
                             </PanelContainer.DetailsGrid>
                         </PanelContainer>
-
 
                     </EntityDetailsLayout.Grid>
 

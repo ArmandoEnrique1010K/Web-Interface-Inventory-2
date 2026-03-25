@@ -8,7 +8,7 @@ type Props = {
 
 export const PanelContainer = ({ subtitle, children }: Props) => {
     return (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 bg-white rounded-2xl shadow-sm p-4">
             {subtitle && <Subtitle>{subtitle}</Subtitle>}
             {children}
         </div>

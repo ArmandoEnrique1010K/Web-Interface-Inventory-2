@@ -41,6 +41,7 @@ import { ListDeliveryOrderPage } from '@/features/Order/views/deliveryOrder/List
 import { NewDeliveryOrderPage } from '@/features/Order/views/deliveryOrder/NewDeliveryOrderPage'
 import { DetailsDeliveryOrderPage } from '@/features/Order/views/deliveryOrder/DetailsDeliveryOrderPage'
 import { ListPendingDeliveryOrderPage } from '@/features/Order/views/deliveryOrder/ListPendingDeliveryOrderPage'
+import { ListDeliveryOrderByCurrentUserPage } from '@/features/Order/views/deliveryOrder/ListDeliveryOrderByCurrentUserPage'
 
 const productItems: MenuItem[] = [
     {
@@ -230,7 +231,7 @@ export const GeneralRouter = () => {
                             </NavbarContainer>
                         }>
                             <Route index element={<ListDeliveryOrderPage />} />
-                            <Route path="my-orders" element={<h1>Mis ordenes</h1>} />
+                            <Route path="my-orders" element={<ListDeliveryOrderByCurrentUserPage />} />
                             <Route path="pending" element={<ListPendingDeliveryOrderPage />} />
                             <Route path="new" element={<NewDeliveryOrderPage />} />
                             <Route path=":id" element={<DetailsDeliveryOrderPage />} />

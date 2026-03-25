@@ -97,6 +97,7 @@ export const ListPendingDeliveryOrderPage = () => {
                         }
                     />
 
+                    {/* TODO: DEBE SER UN CAMPO DE TIPO DATETIME */}
                     <InputDateFilter
                         name='startDate'
                         label='Fecha minima de creación'

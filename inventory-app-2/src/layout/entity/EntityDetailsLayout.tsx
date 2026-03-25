@@ -16,14 +16,36 @@ export const EntityDetailsLayout = ({ children }: Props) => {
 
 type HeaderProps = {
     title: string
+    textDetails?: React.ReactNode
     actions?: React.ReactNode
 }
 
 
-EntityDetailsLayout.Header = ({ title, actions }: HeaderProps) => {
+EntityDetailsLayout.Header = ({ title, textDetails, actions }: HeaderProps) => {
     return (
         <>
-            <Title>{title}</Title>
+            <div className="flex flex-1 flex-col sm:flex-row justify-between sm:gap-4 gap-0">
+                {
+                    textDetails ? (
+                        <>
+                            <div className="flex-5">
+                                <Title>{title}</Title>
+                            </div>
+                            <div className="flex-4 pb-6 sm:pb-0">
+                                {textDetails && (
+                                    <div className="text-xs">{textDetails}</div>
+                                )}
+                            </div>
+                        </>
+
+                    ) : (
+                        <>
+                            <Title>{title}</Title>
+                        </>
+                    )
+                }
+            </div>
+
 
             {actions && (
                 <div className='flex flex-row mb-6 gap-4'>
@@ -54,8 +76,9 @@ EntityDetailsLayout.Content = ({ children, columns = 2 }: ContentProps) => {
 }
 
 EntityDetailsLayout.Column = ({ children }: Props) => {
+    //  bg-white rounded-2xl shadow-sm p-4
     return (
-        <div className="bg-white rounded-2xl shadow-sm p-4 flex flex-col gap-4 md:col-span-4">
+        <div className=" flex flex-col gap-6 md:col-span-4">
             {children}
         </div>
     )
@@ -64,7 +87,7 @@ EntityDetailsLayout.Column = ({ children }: Props) => {
 
 EntityDetailsLayout.Grid = ({ children }: Props) => {
     return (
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col ">
             {children}
         </div>
     )

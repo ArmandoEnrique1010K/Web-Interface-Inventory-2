@@ -110,7 +110,6 @@ export const NewDeliveryOrderPage = () => {
                         errorMessage={errors.userIdClient?.message}
                         loadOptions={async (inputValue) => {
                             const data = await listFirstTenUsersByKeyword({ name: inputValue });
-                            console.log(data)
                             return data.map((user: { id: number; fullName: string }) => ({
                                 value: user.id,
                                 label: user.fullName,

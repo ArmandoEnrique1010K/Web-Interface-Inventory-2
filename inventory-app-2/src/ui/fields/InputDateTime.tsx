@@ -5,7 +5,7 @@ import DateTimePicker from "react-datetime-picker";
 import 'react-datetime-picker/dist/DateTimePicker.css';
 import 'react-calendar/dist/Calendar.css';
 import 'react-clock/dist/Clock.css';
-import { handleFormatDateTime } from "@/utils/handleFormatDateTime";
+import { handleFormatDateTimeWithoutT } from "@/utils/handleFormatDateTime";
 
 type InputDateTimeProps<T extends FieldValues> = {
     id: string;
@@ -34,14 +34,38 @@ export function InputDateTime<T extends FieldValues>({
                         <DateTimePicker
                             id={id}
                             name={name}
-                            // TODO: NO DEBE SER ASI EL DATO ENVIADO: "2025-12-31T05:00:00.000Z", SINO ASI: "2026-09-01 23:59:59"
                             value={field.value ? new Date(field.value) : null}
-                            onChange={(date) => {
-                                // Guardar como ISO (recomendado)
-                                field.onChange(date ? handleFormatDateTime(date) : null);
-                            }}
                             onBlur={field.onBlur}
                             format="y-MM-dd HH:mm:ss"
+                            onChange={(date) => {
+                                if (!date) {
+                                    field.onChange(null);
+                                    return;
+                                }
+
+                                const newDate = new Date(date);
+
+                                const previousDate = field.value
+                                    ? new Date(field.value)
+                                    : null;
+
+                                const userChangedTime =
+                                    previousDate &&
+                                    (
+                                        newDate.getHours() !== previousDate.getHours() ||
+                                        newDate.getMinutes() !== previousDate.getMinutes() ||
+                                        newDate.getSeconds() !== previousDate.getSeconds()
+                                    );
+
+                                // Si NO cambió la hora → aplicar 23:59:59
+                                if (!userChangedTime) {
+                                    newDate.setHours(23, 59, 59);
+                                }
+
+                                field.onChange(handleFormatDateTimeWithoutT(newDate));
+                            }}
+
+
                             // react-datetime-picker no aplica focus al contenedor
                             className="w-full border border-slate-300 rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500" yearPlaceholder="yyyy"
                             // Placeholder (propio para cada campo)
