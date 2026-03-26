@@ -31,7 +31,9 @@ export const InputDateFilter = ({ name, label, value, onChange }: Props) => {
 
                 className="outline-none focus:outline-none p-2 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full"
                 showPopperArrow={false}
-                popperPlacement="bottom-end"
+
+                // Ubicacion del calendario
+                popperPlacement="bottom-start"
                 locale={'spanish'}
             />
         </div>

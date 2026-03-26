@@ -66,6 +66,23 @@ export async function listAllModels(params: ModelQueryParams) {
     }
 }
 
+export type ModelSearchQueryParams = {
+    page?: number;
+    keyword?: string;
+}
+
+export async function searchActiveModelsByName(params: ModelSearchQueryParams) {
+    try {
+        const url = `/models/search`
+        const { data } = await api.get<DataPageResponse>(url, { params: params })
+        return data.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+
+}
+
+
 export async function getModel(id: string) {
     try {
         const url = `/models/${id}`

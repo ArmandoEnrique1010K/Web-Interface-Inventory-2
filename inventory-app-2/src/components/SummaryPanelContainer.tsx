@@ -4,7 +4,7 @@ type Props = {
 
 export const SummaryPanelContainer = ({ children }: Props) => {
     return (
-        <div className="pt-6 ">
+        <div className="">
             {children}
         </div>
     )

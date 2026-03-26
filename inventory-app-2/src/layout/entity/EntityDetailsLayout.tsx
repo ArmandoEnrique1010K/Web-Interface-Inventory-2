@@ -67,7 +67,7 @@ EntityDetailsLayout.Content = ({ children, columns = 2 }: ContentProps) => {
         : 'md:grid-cols-8'
 
     return (
-        <div className="flex flex-col justify-center items-center">
+        <div className="flex flex-col justify-center items-center pb-6">
             <div className={`mx-auto grid grid-cols-1 ${gridCols} gap-6 w-full`}>
                 {children}
             </div>

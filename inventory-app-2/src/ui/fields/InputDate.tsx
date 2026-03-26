@@ -73,8 +73,8 @@ export function InputDate<T extends FieldValues>({
                             wrapperClassName="w-full"
                             className="w-full outline-none focus:outline-none border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             showPopperArrow={false}
-                            // Alinea el calendario a lado derecho y abajo del campo seleccionador
-                            popperPlacement="bottom-end"
+                            // Alinea el calendario a lado izquierdo y abajo del campo seleccionador
+                            popperPlacement="bottom-start"
                             // Se coloca el valor de como se ha denominado al idioma registrado
                             locale={'spanish'}
                         />

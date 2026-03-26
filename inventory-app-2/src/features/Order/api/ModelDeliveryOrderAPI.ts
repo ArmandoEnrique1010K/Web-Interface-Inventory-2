@@ -1,5 +1,5 @@
 import { api } from "@/lib/axiosConfig";
-import type { GeneralResponse } from "@/types/index";
+import type { DataResponse, GeneralResponse } from "@/types/index";
 import { handleApiError } from "@/utils/handleApiError";
 
 export async function registerRelationModelToDeliveryOrder(modelId: string, deliveryOrderId: string) {
@@ -17,10 +17,8 @@ export async function registerRelationModelToDeliveryOrder(modelId: string, deli
 export async function listAllModelsByDeliveryOrder(deliveryOrderId: string) {
     try {
         const url = `/models-delivery-orders/models/deliveryOrder/${deliveryOrderId}`
-        const { data } = await api.get<GeneralResponse>(url)
-        if (data.type === 'success') {
-            return data.message
-        }
+        const { data } = await api.get<DataResponse>(url)
+        return data.data
     } catch (error: unknown) {
         handleApiError(error);
     }
