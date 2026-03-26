@@ -24,9 +24,9 @@ export async function listAllModelsByDeliveryOrder(deliveryOrderId: string) {
     }
 }
 
-export async function inactiveRelationModelToDeliveryOrder(deliveryOrderId: string) {
+export async function inactiveRelationModelToDeliveryOrder(modelDeliveryOrderId: string) {
     try {
-        const url = `/models-delivery-orders/${deliveryOrderId}`
+        const url = `/models-delivery-orders/${modelDeliveryOrderId}`
         const { data } = await api.patch<GeneralResponse>(url)
         if (data.type === 'success') {
             return data.message

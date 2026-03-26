@@ -33,6 +33,7 @@ export const DetailsDeliveryOrderPage = () => {
         enabled: !!deliveryOrderId
     })
 
+    // <ModelDeliveryOrderItem[]>
     // Obtiene la lista de modelos que corresponden a la orden de entrega
     const { data: modelsDeliveryOrderData, isLoading: isModelsDeliveryOrderDataLoading } = useQuery({
         queryKey: ['models', 'deliveryOrder', deliveryOrderId],
@@ -66,6 +67,7 @@ export const DetailsDeliveryOrderPage = () => {
         }
 
     }
+
 
     if (isDeliveryOrderDataLoading || isModelsDeliveryOrderDataLoading) {
         return <div>Cargando...</div>
@@ -159,7 +161,14 @@ export const DetailsDeliveryOrderPage = () => {
                         <EntityDetailsLayout.Column>
                             <PanelContainer subtitle="Imagen del modelo">
                                 {
-                                    selectedModel ? (<div>Cargar imagen</div>) : (
+                                    selectedModel ? (<>
+                                        <PanelContainer.Image
+                                            url={selectedModel.modelImageUrl}
+                                            name={selectedModel.name}
+                                            legend={`${selectedModel.productName}, ${selectedModel.modelName}`}
+                                        />
+
+                                    </>) : (
                                         <>
                                             <div>Añada al menos un modelo a la orden de entrega</div>
                                         </>
@@ -221,11 +230,17 @@ export const DetailsDeliveryOrderPage = () => {
 
                                             }
                                             }
-                                            size='lg'
+                                            size='xl'
                                             title={`Añadir nuevo modelo a la orden de entrega #${deliveryOrderId}`}
                                             locked
                                         >
-                                            <NewModelDeliveryOrderModal setAddModelDeliveryOrderModalOpen={setAddModelDeliveryOrderModalOpen} deliveryOrderId={deliveryOrderId} />
+                                            <NewModelDeliveryOrderModal
+                                                setAddModelDeliveryOrderModalOpen={setAddModelDeliveryOrderModalOpen}
+                                                deliveryOrderId={deliveryOrderId}
+                                                searchParams={searchParams}
+                                                setSearchParams={setSearchParams}
+                                                existingModels={modelsDeliveryOrderData}
+                                            />
                                         </Modal>
 
 
@@ -233,6 +248,29 @@ export const DetailsDeliveryOrderPage = () => {
                                     }
 
                                 </PanelContainer.Actions>
+                                <PanelContainer.DetailsGrid>
+
+                                    <PanelContainer.Detail label="ID de relación">
+                                        {selectedModel.id}
+                                    </PanelContainer.Detail>
+                                    <PanelContainer.Detail label="Producto">
+                                        {selectedModel.productName}
+                                    </PanelContainer.Detail>
+                                    <PanelContainer.Detail label="Modelo">
+                                        {selectedModel.modelName}
+                                    </PanelContainer.Detail>
+                                    <PanelContainer.Detail label="ID de modelo">
+                                        {selectedModel.modelId}
+                                    </PanelContainer.Detail>
+                                    <PanelContainer.Detail label="Cantidad requerida">
+                                        {selectedModel.requiredQuantityTotal}
+                                    </PanelContainer.Detail>
+
+
+                                </PanelContainer.DetailsGrid>
+
+
+
 
                             </PanelContainer>
                         </EntityDetailsLayout.Column>

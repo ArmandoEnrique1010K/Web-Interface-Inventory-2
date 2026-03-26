@@ -2,12 +2,13 @@ import { Title } from "@/components/Title"
 
 // COMPOSICION DE COMPONENTES
 type Props = {
-    children: React.ReactNode
+    children: React.ReactNode,
+    isCompact?: boolean
 }
 
-export const EntityListLayout = ({ children }: Props) => {
+export const EntityListLayout = ({ children, isCompact }: Props) => {
     return (
-        <div className='sm:p-6 p-4 '>
+        <div className={`${isCompact ? '' : 'sm:p-6 p-4'}`}>
             {children}
         </div>
     )

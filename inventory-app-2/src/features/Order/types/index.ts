@@ -23,7 +23,8 @@ export const modelDeliveryOrderSchema = z.object({
     requiredQuantityTotal: z.number(),
     modelId: z.string(),
     modelName: z.string(),
-    modelImageUrl: z.string()
+    modelImageUrl: z.string(),
+    productName: z.string(),
 })
 
 type DeliveryOrder = z.infer<typeof deliveryOrderSchema>

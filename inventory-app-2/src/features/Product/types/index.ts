@@ -79,6 +79,8 @@ export type ModelDetailsItem = Pick<Model,
     "id" | "name" | "imageUrl" | "entryDate" | "caducityDate" | "totalQuantityAvailable" | "totalQuantityReceived" |
     "totalQuantityDelivered" | "status" | "productId" | "productName" | "productLength" | "productWidth" | "productHeight" |
     "productStatus" | "categoryId" | "categoryName" | "typeId" | "typeName">;
+
+export type ModelSearchItem = Pick<Model, "id" | "name" | "imageUrl" | "productName" | "typeName" | "categoryId" | "categoryName">
 export type ProductItem = Pick<Product, "id" | "name" | "length" | "width" | "height" | "quantityModels" | "status" |
     "categoryId" | "categoryName" | "typeId" | "typeName">;
 export type TypeItem = Type
