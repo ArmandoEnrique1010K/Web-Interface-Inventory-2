@@ -23,6 +23,7 @@ type Props = {
     searchParams: URLSearchParams,
     setSearchParams: SetURLSearchParams
     existingModels: ModelDeliveryOrderItem[] // Nuevo prop
+    currentModelId: string,
 }
 
 export const NewModelDeliveryOrderModal = ({
@@ -30,7 +31,8 @@ export const NewModelDeliveryOrderModal = ({
     setAddModelDeliveryOrderModalOpen,
     searchParams,
     setSearchParams,
-    existingModels
+    existingModels,
+    currentModelId
 }: Props) => {
 
     const page = Number(searchParams.get('page') ?? 0)
@@ -64,7 +66,7 @@ export const NewModelDeliveryOrderModal = ({
 
     // Al imprimir los modelos existentes se tiene una propiedad llamada "id", que es el ID de la relacion entre modelo y orden de entrega
     // [ ]
-    console.log(existingModels)
+    // console.log(existingModels)
 
     return (
         <EntityFormLayout isCompact>
@@ -74,6 +76,7 @@ export const NewModelDeliveryOrderModal = ({
                         (e) => {
                             e.preventDefault()
                             const params = new URLSearchParams()
+                            if (currentModelId) params.set('modelId', currentModelId)
                             if (form.keyword) params.set('keyword', form.keyword)
                             setSearchParams(params)
                         }
@@ -112,7 +115,7 @@ export const NewModelDeliveryOrderModal = ({
                                                     page
                                                 }))
                                                 const params = new URLSearchParams()
-
+                                                if (currentModelId) params.set('modelId', currentModelId)
                                                 if (form.keyword) params.set('keyword', form.keyword)
                                                 params.set('page', page.toString())
 

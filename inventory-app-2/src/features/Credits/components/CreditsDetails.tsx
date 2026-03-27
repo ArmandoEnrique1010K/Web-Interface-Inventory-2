@@ -1,10 +1,11 @@
-import { ListElementsContainer } from "@/views/ListElementsContainer"
 import { CreditSection } from "./CreditSection"
 import { CreditItem } from './CreditItem';
+import { EntityDetailsLayout } from "@/layout/entity/EntityDetailsLayout";
 
 export const CreditsDetails = () => {
     return (
-        <ListElementsContainer title="Creditos">
+        <EntityDetailsLayout >
+            <EntityDetailsLayout.Header title="Creditos"></EntityDetailsLayout.Header>
             <CreditSection title="Información" type='text'>
                 <CreditItem type="div">Gracias por usar Inventory App</CreditItem>
                 <CreditItem type="div">Desarrollado por {
@@ -69,7 +70,7 @@ export const CreditsDetails = () => {
                 </CreditItem>
             </CreditSection>
 
-        </ListElementsContainer>
+        </EntityDetailsLayout>
     )
 }
 

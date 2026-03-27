@@ -52,8 +52,8 @@ export const AddModelDeliveryOrderButton = ({ modelId, deliveryOrderId, existing
     return (
         <>
             {
-                isAlreadyAdded ? (
-                    <form onSubmit={handleSubmit(() => mutateInactive())} >
+                !isAlreadyAdded ? (
+                    <form onSubmit={handleSubmit(() => mutateRegister())} >
                         <Button
                             text={"Añadir"}
                             type="submit"
@@ -62,12 +62,11 @@ export const AddModelDeliveryOrderButton = ({ modelId, deliveryOrderId, existing
                             showTextOnMobile={true}
                             isLargeOnMobile={false}
                         />
+
                     </form>
 
                 ) : (
-
-                    <form onSubmit={handleSubmit(() => mutateRegister())} >
-                        {/* TODO: AÑADIR UN ICONO PARA MOSTRAR CUANDO EL PRODUCTO ESTE ACTIVO */}
+                    <form onSubmit={handleSubmit(() => mutateInactive())} >
                         <Button
                             text={"Quitar"}
                             type="submit"
@@ -76,7 +75,9 @@ export const AddModelDeliveryOrderButton = ({ modelId, deliveryOrderId, existing
                             showTextOnMobile={true}
                             isLargeOnMobile={false}
                         />
+
                     </form>
+
 
 
                 )

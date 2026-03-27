@@ -7,7 +7,7 @@ import { generateSizes } from "@/utils/generateSizes"
 import { Button } from "@/ui/Button"
 import { useSearchParams } from "react-router-dom"
 import type { ModelItem } from '../../types/index';
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { PanelContainer } from "@/components/containers/PanelContainer"
 import { TableContainer } from "@/components/TableContainer"
 import { TableRowContainer } from "@/components/TableRowContainer"
@@ -62,6 +62,16 @@ export const DetailsProductPage = () => {
     const selectedIndex = modelsData.findIndex(
         (model: ModelItem) => model.id === Number(modelIdParam)
     )
+
+    // Por defecto va a seleccionar el primer modelo del producto
+    useEffect(() => {
+        if (selectedIndex === -1 && modelsData.length > 0) {
+            const lastModel = modelsData[modelsData.length - 1]
+            setSearchParams({ modelId: String(lastModel.id) })
+        }
+    }, [selectedIndex, modelsData, setSearchParams])
+
+
     const idModel = selectedIndex >= 0 ? selectedIndex : 0
     const selectedModel = modelsData[idModel]
 

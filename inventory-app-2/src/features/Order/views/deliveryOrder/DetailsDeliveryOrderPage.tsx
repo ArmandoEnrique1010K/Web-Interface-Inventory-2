@@ -7,7 +7,7 @@ import { PanelContainer } from "@/components/containers/PanelContainer";
 import { handleFormatDateTimeText } from "@/utils/handleFormatDateTimeText";
 import { listAllModelsByDeliveryOrder } from "../../api/ModelDeliveryOrderAPI";
 import { Button } from "@/ui/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal } from "@/components/Modal";
 import { NewModelDeliveryOrderModal } from "../../components/deliveryOrder/NewModelDeliveryOrderModal";
 
@@ -43,6 +43,15 @@ export const DetailsDeliveryOrderPage = () => {
 
     const selectedIndex = modelsDeliveryOrderData?.findIndex(
         (model: ModelDeliveryOrderItem) => model.id === Number(modelIdParam)) ?? -1;
+
+
+    // Seleccionar el primer modelo
+    useEffect(() => {
+        if (selectedIndex === -1 && modelsDeliveryOrderData?.length > 0) {
+            const lastModel = modelsDeliveryOrderData[modelsDeliveryOrderData.length - 1]
+            setSearchParams({ modelId: String(lastModel.id) })
+        }
+    }, [selectedIndex, modelsDeliveryOrderData, setSearchParams])
 
     const idModel = selectedIndex >= 0 ? selectedIndex : 0
     const selectedModel = modelsDeliveryOrderData?.[idModel]
@@ -226,8 +235,11 @@ export const DetailsDeliveryOrderPage = () => {
                                             onClose={() => {
                                                 setAddModelDeliveryOrderModalOpen(false)
                                                 // LIMPIAR PARAMETROS DE BUSQUEDA DENTRO DE LA VENTANA MODAL
-
-
+                                                setSearchParams((params) => {
+                                                    params.delete('keyword')
+                                                    params.delete('page')
+                                                    return params
+                                                })
                                             }
                                             }
                                             size='xl'
@@ -240,6 +252,7 @@ export const DetailsDeliveryOrderPage = () => {
                                                 searchParams={searchParams}
                                                 setSearchParams={setSearchParams}
                                                 existingModels={modelsDeliveryOrderData}
+                                                currentModelId={selectedModel.id}
                                             />
                                         </Modal>
 
@@ -249,22 +262,30 @@ export const DetailsDeliveryOrderPage = () => {
 
                                 </PanelContainer.Actions>
                                 <PanelContainer.DetailsGrid>
+                                    {
+                                        selectedModel ? (
+                                            <>
+                                                <PanelContainer.Detail label="ID de relación">
+                                                    {selectedModel.id}
+                                                </PanelContainer.Detail>
+                                                <PanelContainer.Detail label="Producto">
+                                                    {selectedModel.productName}
+                                                </PanelContainer.Detail>
+                                                <PanelContainer.Detail label="Modelo">
+                                                    {selectedModel.modelName}
+                                                </PanelContainer.Detail>
+                                                <PanelContainer.Detail label="ID de modelo">
+                                                    {selectedModel.modelId}
+                                                </PanelContainer.Detail>
+                                                <PanelContainer.Detail label="Cantidad requerida">
+                                                    {selectedModel.requiredQuantityTotal}
+                                                </PanelContainer.Detail>
 
-                                    <PanelContainer.Detail label="ID de relación">
-                                        {selectedModel.id}
-                                    </PanelContainer.Detail>
-                                    <PanelContainer.Detail label="Producto">
-                                        {selectedModel.productName}
-                                    </PanelContainer.Detail>
-                                    <PanelContainer.Detail label="Modelo">
-                                        {selectedModel.modelName}
-                                    </PanelContainer.Detail>
-                                    <PanelContainer.Detail label="ID de modelo">
-                                        {selectedModel.modelId}
-                                    </PanelContainer.Detail>
-                                    <PanelContainer.Detail label="Cantidad requerida">
-                                        {selectedModel.requiredQuantityTotal}
-                                    </PanelContainer.Detail>
+                                            </>
+                                        ) : (
+                                            <div>No hay modelos</div>
+                                        )
+                                    }
 
 
                                 </PanelContainer.DetailsGrid>
