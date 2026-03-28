@@ -3,21 +3,16 @@ import { useParams, useSearchParams } from "react-router-dom";
 import { getDeliveryOrder } from "../../api/DeliveryOrderAPI";
 import { EntityDetailsLayout } from "@/layout/entity/EntityDetailsLayout";
 import { type DeliveryOrderDetailsItem, type ModelDeliveryOrderItem } from "../../types";
-import { PanelContainer } from "@/components/containers/PanelContainer";
 import { handleFormatDateTimeText } from "@/utils/handleFormatDateTimeText";
 import { listAllModelsByDeliveryOrder } from "../../api/ModelDeliveryOrderAPI";
-import { Button } from "@/ui/Button";
 import { useEffect, useState } from "react";
-import { Modal } from "@/components/Modal";
-import { NewModelDeliveryOrderModal } from "../../components/deliveryOrder/NewModelDeliveryOrderModal";
+import { DetailsDeliveryOrderAndModelsView } from "../../components/deliveryOrder/DetailsDeliveryOrderAndModelsView";
+import { ListDeliveryLineByDeliveryOrder } from "../../components/deliveryOrder/ListDeliveryLineByDeliveryOrder";
 
 export const DetailsDeliveryOrderPage = () => {
 
     // ESTABLECE SI VA A MOSTRAR LA DESCRIPCION O LAS ORDENES DE ENTREGA
     const [showDescription, setShowDescription] = useState(true);
-
-    // VENTANA MODAL DE AÑADIR UN MODELO A LA ORDEN DE ENTREGA
-    const [addModelDeliveryOrderModalOpen, setAddModelDeliveryOrderModalOpen] = useState(false);
 
     // const location = useLocation();
     // const path = location.pathname;
@@ -53,29 +48,6 @@ export const DetailsDeliveryOrderPage = () => {
         }
     }, [selectedIndex, modelsDeliveryOrderData, setSearchParams])
 
-    const idModel = selectedIndex >= 0 ? selectedIndex : 0
-    const selectedModel = modelsDeliveryOrderData?.[idModel]
-    const hasNext = idModel > 0
-    const hasPrevious = idModel < (modelsDeliveryOrderData?.length || 0) - 1
-    const displayIndex = (modelsDeliveryOrderData?.length || 0) - idModel
-    const handleNext = () => {
-
-        if (idModel > 0) {
-            const prevModel = modelsDeliveryOrderData[idModel - 1]
-            setSearchParams({ modelId: String(prevModel.id) })
-        }
-
-    }
-
-    const handlePrevious = () => {
-        if (idModel < modelsDeliveryOrderData.length - 1) {
-            const nextModel = modelsDeliveryOrderData[idModel + 1]
-            setSearchParams({ modelId: String(nextModel.id) })
-
-
-        }
-
-    }
 
 
     if (isDeliveryOrderDataLoading || isModelsDeliveryOrderDataLoading) {
@@ -91,27 +63,33 @@ export const DetailsDeliveryOrderPage = () => {
             <EntityDetailsLayout.Header
                 title={`Orden de entrega #${deliveryOrderId}`}
                 actions={
-                    <>
-                        {/* <ButtonLink size={"large"} text={"Agregar modelo"} to={"/"} color={"blue"} showTextOnMobile /> */}
-                        <Button
-                            type={"button"}
-                            size="large"
-                            text="Descripción"
-                            showTextOnMobile
-                            color={`${showDescription ? 'blue' : 'blue-outline'}`}
+                    <div className="w-full border-b border-gray-200   mt-6">
+                        <button
+                            className={`w-1/2 px-4 py-2 text-center transition-all duration-200 border-b-2 font-medium text-base
+      ${showDescription
+                                    ? 'border-blue-600 text-blue-600 -mb-px bg-blue-100'
+                                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300  bg-gray-100'}
+    `}
                             onClick={() => setShowDescription(true)}
-                        />
-                        <Button
-                            type={"button"}
-                            size="large"
-                            text="Lineas de entrega"
-                            showTextOnMobile
-                            color={`${!showDescription ? 'blue' : 'blue-outline'}`}
-                            onClick={() => setShowDescription(false)}
-                        />
+                        >
+                            Descripción
+                        </button>
 
-                    </>
+                        <button
+                            className={`w-1/2 px-4 py-2 text-center transition-all duration-200 border-b-2 font-medium text-base
+      ${!showDescription
+                                    ? 'border-blue-600 text-blue-600 -mb-px bg-blue-100'
+                                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 bg-gray-100'}
+    `}
+                            onClick={() => setShowDescription(false)}
+                        >
+                            Líneas de entrega
+                        </button>
+                    </div>
+
+
                 }
+
                 textDetails={
                     <div className="text-right">
                         <div>
@@ -132,174 +110,19 @@ export const DetailsDeliveryOrderPage = () => {
                     </div>
                 }
 
-            ></EntityDetailsLayout.Header>
+            >
+            </EntityDetailsLayout.Header>
             {
                 showDescription ? (<>
-                    <EntityDetailsLayout.Content columns={1}>
-                        <EntityDetailsLayout.Column>
-                            <PanelContainer subtitle="Detalles">
-                                <PanelContainer.DetailsGrid>
-                                    <PanelContainer.Detail label="ID">
-                                        {deliveryOrderData.id}
-                                    </PanelContainer.Detail>
-                                    <PanelContainer.Detail label="Factura">
-                                        {deliveryOrderData.batch}
-                                    </PanelContainer.Detail>
-                                    <PanelContainer.Detail label="Cliente">
-                                        {deliveryOrderData.userClientFullname}
-                                    </PanelContainer.Detail>
-                                    <PanelContainer.Detail label="Fecha limite">
-                                        {deliveryOrderData.limitDate ? (
-                                            <span>{handleFormatDateTimeText(new Date(deliveryOrderData.limitDate)).date} {handleFormatDateTimeText(new Date(deliveryOrderData.limitDate)).hour}</span>
-                                        ) : (
-                                            <span>No disponible</span>
-                                        )}
-                                    </PanelContainer.Detail>
-                                    <PanelContainer.Detail label="Fecha limite prioritaria">
-                                        {deliveryOrderData.priorityDate ? deliveryOrderData.priorityDate : "No hay prioridad"}
-                                    </PanelContainer.Detail>
-                                    <PanelContainer.Detail label="Estado">
-                                        {deliveryOrderData.orderStatus}
-                                    </PanelContainer.Detail>
-                                </PanelContainer.DetailsGrid>
-                            </PanelContainer>
-
-                        </EntityDetailsLayout.Column>
-                    </EntityDetailsLayout.Content>
-                    <EntityDetailsLayout.Content columns={2}>
-                        <EntityDetailsLayout.Column>
-                            <PanelContainer subtitle="Imagen del modelo">
-                                {
-                                    selectedModel ? (<>
-                                        <PanelContainer.Image
-                                            url={selectedModel.modelImageUrl}
-                                            name={selectedModel.name}
-                                            legend={`${selectedModel.productName}, ${selectedModel.modelName}`}
-                                        />
-
-                                    </>) : (
-                                        <>
-                                            <div>Añada al menos un modelo a la orden de entrega</div>
-                                        </>
-                                    )
-                                }
-                            </PanelContainer>
-                        </EntityDetailsLayout.Column>
-                        <EntityDetailsLayout.Column>
-                            <PanelContainer subtitle="Modelo seleccionado">
-                                <PanelContainer.Actions>
-                                    <Button
-                                        text="◄"
-                                        type="button"
-                                        size="small"
-                                        color="blue"
-                                        onClick={handlePrevious}
-                                        disabled={!hasPrevious}
-                                        showTextOnMobile
-                                    />
-
-                                    <Button
-                                        text={`${displayIndex} de ${modelsDeliveryOrderData.length}`}
-                                        type="button"
-                                        color="none"
-                                        size="small"
-                                        disabled
-                                        showTextOnMobile
-                                    />
-
-                                    <Button
-                                        text="►"
-                                        type="button"
-                                        color="blue"
-                                        onClick={handleNext}
-                                        disabled={!hasNext}
-                                        size="small"
-                                        showTextOnMobile
-                                    />
-
-                                    <Button
-                                        type="button"
-                                        size="small"
-                                        color="green"
-                                        text="Añadir"
-                                        showTextOnMobile={true}
-                                        isLargeOnMobile={false}
-                                        onClick={() => {
-                                            setAddModelDeliveryOrderModalOpen(true)
-                                        }}
-                                    />
-
-                                    {
-                                        addModelDeliveryOrderModalOpen && deliveryOrderId && <Modal
-                                            isOpen={addModelDeliveryOrderModalOpen}
-                                            onClose={() => {
-                                                setAddModelDeliveryOrderModalOpen(false)
-                                                // LIMPIAR PARAMETROS DE BUSQUEDA DENTRO DE LA VENTANA MODAL
-                                                setSearchParams((params) => {
-                                                    params.delete('keyword')
-                                                    params.delete('page')
-                                                    return params
-                                                })
-                                            }
-                                            }
-                                            size='xl'
-                                            title={`Añadir nuevo modelo a la orden de entrega #${deliveryOrderId}`}
-                                            locked
-                                        >
-                                            <NewModelDeliveryOrderModal
-                                                setAddModelDeliveryOrderModalOpen={setAddModelDeliveryOrderModalOpen}
-                                                deliveryOrderId={deliveryOrderId}
-                                                searchParams={searchParams}
-                                                setSearchParams={setSearchParams}
-                                                existingModels={modelsDeliveryOrderData}
-                                                currentModelId={selectedModel.id}
-                                            />
-                                        </Modal>
+                    <DetailsDeliveryOrderAndModelsView />
 
 
+                </>) : <>
+                    {/* Lineas de entrega */}
 
-                                    }
+                    <ListDeliveryLineByDeliveryOrder />
 
-                                </PanelContainer.Actions>
-                                <PanelContainer.DetailsGrid>
-                                    {
-                                        selectedModel ? (
-                                            <>
-                                                <PanelContainer.Detail label="ID de relación">
-                                                    {selectedModel.id}
-                                                </PanelContainer.Detail>
-                                                <PanelContainer.Detail label="Producto">
-                                                    {selectedModel.productName}
-                                                </PanelContainer.Detail>
-                                                <PanelContainer.Detail label="Modelo">
-                                                    {selectedModel.modelName}
-                                                </PanelContainer.Detail>
-                                                <PanelContainer.Detail label="ID de modelo">
-                                                    {selectedModel.modelId}
-                                                </PanelContainer.Detail>
-                                                <PanelContainer.Detail label="Cantidad requerida">
-                                                    {selectedModel.requiredQuantityTotal}
-                                                </PanelContainer.Detail>
-
-                                            </>
-                                        ) : (
-                                            <div>No hay modelos</div>
-                                        )
-                                    }
-
-
-                                </PanelContainer.DetailsGrid>
-
-
-
-
-                            </PanelContainer>
-                        </EntityDetailsLayout.Column>
-
-                    </EntityDetailsLayout.Content>
-
-
-                </>) : <div>Lineas de entrega</div>
+                </>
             }
 
 

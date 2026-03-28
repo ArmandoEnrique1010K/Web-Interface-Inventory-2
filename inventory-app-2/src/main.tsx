@@ -17,7 +17,12 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
-        <Toaster position="top-right" duration={5000} richColors />
+        <Toaster
+          position="top-right"
+          duration={3000}
+          richColors
+        // TODO: EN ALGUNA FUTURA ACTUALIZACION SE PODRIA CORREGIR EL BOTON DE CERRAR NOTIFICACION, NO FUNCIONA SI SE TIENE ABIERTO UNA VENTANA MODAL
+        />
         <AppInitializer />
         <GeneralRouter />
         <ReactQueryDevtools initialIsOpen={false} />

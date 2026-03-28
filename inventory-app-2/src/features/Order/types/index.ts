@@ -27,8 +27,62 @@ export const modelDeliveryOrderSchema = z.object({
     productName: z.string(),
 })
 
+export const deliveryLineSchema = z.object({
+    id: z.number(),
+    requiredQuantity: z.number(),
+    deliveredQuantity: z.number(),
+    pendingQuantity: z.number(),
+    limitDate: z.string(),
+    updatedAt: z.string(),
+    lineStatus: z.string(), // ES UN ENUM
+
+    userUpdaterFullname: z.string(),
+
+    modelId: z.string(),
+    modelName: z.string(),
+    modelImageUrl: z.string(),
+    modelproductName: z.string(),
+
+    productId: z.string(),
+    productName: z.string(),
+
+    categoryId: z.string(),
+    categoryName: z.string(),
+
+    typeId: z.string(),
+    typeName: z.string(),
+
+    locationId: z.string(),
+    locationName: z.string(),
+
+    subregionId: z.string(),
+    subregionName: z.string(),
+
+    regionId: z.string(),
+    regionName: z.string(),
+
+
+    deliveryOrderId: z.string(),
+    deliveryOrderBatch: z.string(),
+    deliveryOrderLimitDate: z.string(),
+
+    movementComment: z.string(),
+    stockLotsIds: z.array(z.number()),
+    quantity: z.string(),
+})
+
+export const stockLotDeliveryLineSchema = z.object({
+    id: z.number(),
+    quantityUsed: z.number(),
+    createdAt: z.string(),
+    stockLotId: z.number(),
+    stockLotBatch: z.string()
+})
+
 type DeliveryOrder = z.infer<typeof deliveryOrderSchema>
 type ModelDeliveryOrder = z.infer<typeof modelDeliveryOrderSchema>
+type DeliveryLine = z.infer<typeof deliveryLineSchema>
+type StockLotDeliveryLine = z.infer<typeof stockLotDeliveryLineSchema>
 
 // DeliveryOrder
 export type DeliveryOrderForm = Pick<DeliveryOrder, "limitDate" | "userIdClient">;
@@ -42,3 +96,15 @@ export type DeliveryOrderClientDetailsItem = Pick<DeliveryOrder, "id" | "batch" 
 
 // ModelDeliveryOrder
 export type ModelDeliveryOrderItem = ModelDeliveryOrder;
+
+// DELIVERY LINE
+export type DeliveryLineForm = Pick<DeliveryLine, "requiredQuantity" | "locationId" | "limitDate">
+export type DeliveryLineAllocateForm = Pick<DeliveryLine, "quantity" | "stockLotsIds">
+export type DeliveryLineAlterForm = Pick<DeliveryLine, "quantity" | "movementComment">
+export type DeliveryLineUpdateForm = Pick<DeliveryLine, "requiredQuantity" | "limitDate" | "movementComment">
+
+export type DeliveryLineItem = Pick<DeliveryLine, "id" | "requiredQuantity" | "deliveredQuantity" | "pendingQuantity" | "limitDate" | "lineStatus" | "modelId" | "modelproductName" | "locationId" | "locationName" | "subregionId" | "subregionName" | "regionId" | "regionName">
+export type DeliveryLineDetailsItem = Pick<DeliveryLine, "id" | "requiredQuantity" | "deliveredQuantity" | "pendingQuantity" | "limitDate" | "updatedAt" | "lineStatus" | "userUpdaterFullname" | "locationId" | "locationName" | "regionId" | "regionName" | "modelId" | "modelName" | "modelImageUrl" | "productId" | "productName" | "categoryId" | "categoryName" | "typeId" | "typeName" | "deliveryOrderId" | "deliveryOrderBatch" | "deliveryOrderLimitDate">
+export type StockLotDeliveryLineItem = StockLotDeliveryLine
+
+export type LineStatusEnum = "LINE_MISSING" | "LINE_READY" | "LINE_PENDING" | "LINE_DELIVERED" | "LINE_CANCELED" | "LINE_EXCEEDED"

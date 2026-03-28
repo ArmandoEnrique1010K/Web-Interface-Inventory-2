@@ -49,6 +49,7 @@ body,
 /* Controla el espaciado del calendario */
 .react-datepicker {
     /*margin: 0.5rem;*/
+    border-radius: 10px;
 }
 
 .react-datepicker__header {
@@ -58,19 +59,23 @@ body,
 .react-datepicker__current-month {
     background-color: rgb(69, 85, 108);
     color: white;
+    font-size: 16px;
 }
 
 .react-datepicker__day-name,
 .react-datepicker__day {
     font-size: 14px;
-    margin: 2px;
+    margin: 0 0;
+    width: 44px;
+    font-family: Arial, Helvetica, sans-serif;
 }
+
 
 .react-datepicker__day-name{
         text-decoration: underline;
           text-decoration-style: dotted;
         text-transform: uppercase;
-        margin: 0 2px;
+        margin: 0 0;
         font-size: 14px;
         padding-top: 0;
         padding-bottom: 8px;
@@ -90,6 +95,21 @@ body,
 .react-datepicker__quarter-text:not([aria-disabled=true]):hover, 
 .react-datepicker__year-text:not([aria-disabled=true]):hover{
     background-color: rgb(239, 246,255);
+}
+
+/* FIN DE SEMANA */
+.react-datepicker__day--weekend{
+    color: #d10000
+}
+
+/* Aplica el estilo si ha seleccionado una fecha que es de un fin de semana */
+.react-datepicker__day--selected.react-datepicker__day--weekend{
+    color: white
+}
+
+/* DIA DEL MES SIGUIENTE O ANTERIOR QUE SE MUESTRA EN EL CALENDARIO DEL MES SELECCIONADO (ACTUAL) */
+.react-datepicker__day--outside-month{
+    color: #757575
 }
 
 .react-datepicker__day--today {
@@ -157,6 +177,10 @@ body,
     margin: 0;
 }
 
+.react-calendar__navigation__label__labelText{
+    font-size: 16px;
+}
+
 .react-calendar__navigation button:enabled:hover, .react-calendar__navigation button:enabled:focus{
     background-color: rgb(69, 85, 108);
 }
@@ -204,28 +228,38 @@ body,
 
 /* Dias de la semana */
 .react-calendar__month-view__weekdays{
+    font-size: 14px;
     text-decoration: none !important;
 }
 .react-calendar__month-view__weekdays__weekday{
-    padding: 10px 0;
+    padding: 8px 0 8px 0;
 }
 
 
 /* Dia del calendario */
 .react-calendar__tile{
-    padding: 4px 0;
+    padding: 6px 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
 }
 
 .react-calendar__tile--active{
         background-color: rgb(21, 93, 252);
     border-radius: 5px;
-
 }
+
+/* TODO: esta propiedad no funciona */
+.react-calendar__navigation__arrow:hover, .react-calendar__navigation__next-button:hover{
+    background-color: red;
+}
+
 /* Oculta los otros 2 botones */
 .react-calendar__navigation__prev2-button,
 .react-calendar__navigation__next2-button{
     display: none;
 }
+
+
 
 /* Desactiva el scroll que aparece en un input de tipo number */
 /* Chrome, Edge, Safari */

@@ -15,7 +15,7 @@ export const EntityListLayout = ({ children, isCompact }: Props) => {
 }
 
 type HeaderProps = {
-    title: string
+    title?: string
     actions?: React.ReactNode
 }
 
@@ -23,7 +23,7 @@ type HeaderProps = {
 EntityListLayout.Header = ({ title, actions }: HeaderProps) => {
     return (
         <>
-            <Title>{title}</Title>
+            {title && <Title>{title}</Title>}
 
             {actions && (
                 <div className='flex flex-row mb-6 gap-4'>
