@@ -1,9 +1,9 @@
 import type { DataResponse, GeneralResponse } from "@/types/index";
-import type { TypeForm } from "../types";
+import type { TypeForm, TypeItem } from "../types";
 import { api } from "@/lib/axiosConfig";
 import { handleApiError } from "@/utils/handleApiError";
 
-export async function registerType(formData: TypeForm) {
+export async function registerType(formData: TypeForm): Promise<string | void> {
     try {
         const url = `/types`
         const { data } = await api.post<GeneralResponse>(url, formData)
@@ -15,7 +15,7 @@ export async function registerType(formData: TypeForm) {
     }
 }
 
-export async function listAllTypes() {
+export async function listAllTypes(): Promise<TypeItem[]> {
     try {
         const url = `/types`
         const { data } = await api.get<DataResponse>(url)
@@ -25,7 +25,7 @@ export async function listAllTypes() {
     }
 }
 
-export async function getType(id: string) {
+export async function getType(id: string): Promise<TypeItem> {
     try {
         const url = `/types/${id}`
         const { data } = await api.get<DataResponse>(url)
@@ -40,7 +40,7 @@ type UpdateTypePayload = {
     formData: TypeForm;
 }
 
-export async function updateType({ typeId, formData }: UpdateTypePayload) {
+export async function updateType({ typeId, formData }: UpdateTypePayload): Promise<string | void> {
     try {
         const url = `/types/${typeId}`
         const { data } = await api.put<GeneralResponse>(url, formData)

@@ -5,6 +5,7 @@ export const categorySchema = z.object({
     name: z.string(),
 })
 
+
 export const modelSchema = z.object({
     id: z.number(),
     name: z.string(),
@@ -84,3 +85,5 @@ export type ModelSearchItem = Pick<Model, "id" | "name" | "imageUrl" | "productN
 export type ProductItem = Pick<Product, "id" | "name" | "length" | "width" | "height" | "quantityModels" | "status" |
     "categoryId" | "categoryName" | "typeId" | "typeName">;
 export type TypeItem = Type
+
+

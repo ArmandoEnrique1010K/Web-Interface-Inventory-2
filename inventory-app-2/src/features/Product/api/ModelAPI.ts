@@ -1,7 +1,7 @@
 import { api } from "@/lib/axiosConfig";
 import type { DataPageResponse, DataResponse, GeneralResponse } from "@/types/index";
 import { handleApiError } from "@/utils/handleApiError";
-import type { ModelInProductForm } from "../types";
+import type { ModelInProductForm, ModelItem } from "../types";
 
 
 type RegisterModelInProductPayload = {
@@ -11,7 +11,7 @@ type RegisterModelInProductPayload = {
 }
 
 
-export async function registerModelInProduct({ productId, data, file }: RegisterModelInProductPayload) {
+export async function registerModelInProduct({ productId, data, file }: RegisterModelInProductPayload): Promise<string | void> {
     // Configuracion para enviar los datos del formulario por separado: los datos y la imagen
     const formData = new FormData()
     formData.append("name", data.name)
@@ -33,7 +33,7 @@ export async function registerModelInProduct({ productId, data, file }: Register
     }
 }
 
-export async function listAllModelsByProductId(productId: string) {
+export async function listAllModelsByProductId(productId: string): Promise<ModelItem[]> {
     try {
         const url = `/models/product/${productId}`
         const { data } = await api.get<DataResponse>(url)
@@ -56,6 +56,7 @@ export type ModelQueryParams = {
     typeId?: string;
 }
 
+// TODO: CONTINUAR AQUI CON LA ASIGNACION DE PROMESAS DEVUELTAS POR LA FUNCIÓN
 export async function listAllModels(params: ModelQueryParams) {
     try {
         const url = `/models`

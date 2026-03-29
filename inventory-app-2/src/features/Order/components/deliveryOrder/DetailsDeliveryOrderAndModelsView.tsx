@@ -3,7 +3,7 @@ import { EntityDetailsLayout } from "@/layout/entity/EntityDetailsLayout"
 import { Button } from "@/ui/Button"
 import { handleFormatDateTimeText } from "@/utils/handleFormatDateTimeText"
 import { useQuery } from "@tanstack/react-query"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useParams, useSearchParams } from "react-router-dom"
 import { getDeliveryOrder } from "../../api/DeliveryOrderAPI"
 import type { DeliveryOrderDetailsItem, ModelDeliveryOrderItem } from "../../types"
@@ -12,13 +12,24 @@ import { NewModelDeliveryOrderModal } from "./NewModelDeliveryOrderModal"
 import { Modal } from "@/components/Modal"
 
 export const DetailsDeliveryOrderAndModelsView = () => {
+    const hasInitialized = useRef(false);
+
 
     // VENTANA MODAL DE AÑADIR UN MODELO A LA ORDEN DE ENTREGA
     const [addModelDeliveryOrderModalOpen, setAddModelDeliveryOrderModalOpen] = useState(false);
 
     // Parametros de busqueda
     const [searchParams, setSearchParams] = useSearchParams()
-    const modelIdParam = searchParams.get("modelId")
+    const modelIdParam = searchParams.get("currentModelId")
+
+    // Efecto para guardar cambios en el sessionStorage
+    useEffect(() => {
+        if (modelIdParam) {
+            sessionStorage.setItem('modelIdDeliveryOrder', modelIdParam);
+        }
+    }, [modelIdParam]);
+
+
     // Obtiene la orden de entrega por ID
     const { id: deliveryOrderId } = useParams();
 
@@ -35,17 +46,45 @@ export const DetailsDeliveryOrderAndModelsView = () => {
         enabled: !!deliveryOrderId,
     })
 
+    // Indice del modelo seleccionado de la orden de entrega
     const selectedIndex = modelsDeliveryOrderData?.findIndex(
         (model: ModelDeliveryOrderItem) => model.id === Number(modelIdParam)) ?? -1;
 
 
+
     // Seleccionar el primer modelo
     useEffect(() => {
-        if (selectedIndex === -1 && modelsDeliveryOrderData?.length > 0) {
-            const lastModel = modelsDeliveryOrderData[modelsDeliveryOrderData.length - 1]
-            setSearchParams({ modelId: String(lastModel.id) })
+        if (hasInitialized.current) return;
+
+        if (!modelsDeliveryOrderData?.length) return;
+
+        const storedModelId = sessionStorage.getItem('modelIdDeliveryOrder');
+
+        if (modelIdParam) {
+            hasInitialized.current = true;
+            return;
         }
-    }, [selectedIndex, modelsDeliveryOrderData, setSearchParams])
+
+        if (storedModelId) {
+            const exists = modelsDeliveryOrderData.some(
+                (model: ModelDeliveryOrderItem) => model.id === Number(storedModelId)
+            );
+
+            if (exists) {
+                setSearchParams({ currentModelId: storedModelId });
+                hasInitialized.current = true;
+                return;
+            }
+        }
+
+        // fallback: último modelo
+        const lastModel = modelsDeliveryOrderData[modelsDeliveryOrderData.length - 1];
+        setSearchParams({ currentModelId: String(lastModel.id) });
+
+        hasInitialized.current = true;
+
+    }, [modelsDeliveryOrderData, modelIdParam]);
+
 
     const idModel = selectedIndex >= 0 ? selectedIndex : 0
     const selectedModel = modelsDeliveryOrderData?.[idModel]
@@ -56,7 +95,7 @@ export const DetailsDeliveryOrderAndModelsView = () => {
 
         if (idModel > 0) {
             const prevModel = modelsDeliveryOrderData[idModel - 1]
-            setSearchParams({ modelId: String(prevModel.id) })
+            setSearchParams({ currentModelId: String(prevModel.id) })
         }
 
     }
@@ -64,9 +103,7 @@ export const DetailsDeliveryOrderAndModelsView = () => {
     const handlePrevious = () => {
         if (idModel < modelsDeliveryOrderData.length - 1) {
             const nextModel = modelsDeliveryOrderData[idModel + 1]
-            setSearchParams({ modelId: String(nextModel.id) })
-
-
+            setSearchParams({ currentModelId: String(nextModel.id) })
         }
 
     }
@@ -146,7 +183,7 @@ export const DetailsDeliveryOrderAndModelsView = () => {
                             />
 
                             <Button
-                                text={`${displayIndex} de ${modelsDeliveryOrderData.length}`}
+                                text={`${displayIndex} de ${modelsDeliveryOrderData?.length}`}
                                 type="button"
                                 color="none"
                                 size="small"
@@ -222,7 +259,7 @@ export const DetailsDeliveryOrderAndModelsView = () => {
                                             {selectedModel.modelName}
                                         </PanelContainer.Detail>
                                         <PanelContainer.Detail label="ID de modelo">
-                                            {selectedModel.modelId}
+                                            {selectedModel.currentModelId}
                                         </PanelContainer.Detail>
                                         <PanelContainer.Detail label="Cantidad requerida">
                                             {selectedModel.requiredQuantityTotal}

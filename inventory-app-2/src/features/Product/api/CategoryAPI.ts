@@ -1,9 +1,10 @@
 import { api } from "@/lib/axiosConfig"
-import type { CategoryForm } from "../types"
+import type { CategoryForm, CategoryItem } from "../types"
 import type { DataResponse, GeneralResponse } from "types"
 import { handleApiError } from "@/utils/handleApiError"
 
-export async function registerCategory(formData: CategoryForm) {
+// Solamente retorna un mensaje de acierto o de error
+export async function registerCategory(formData: CategoryForm): Promise<string | void> {
     try {
         const url = `/categories`
         const { data } = await api.post<GeneralResponse>(url, formData)
@@ -15,7 +16,7 @@ export async function registerCategory(formData: CategoryForm) {
     }
 }
 
-export async function listAllCategories() {
+export async function listAllCategories(): Promise<CategoryItem[]> {
     try {
         const url = `/categories`
         const { data } = await api.get<DataResponse>(url)
@@ -25,7 +26,7 @@ export async function listAllCategories() {
     }
 }
 
-export async function getCategory(id: string) {
+export async function getCategory(id: string): Promise<CategoryItem> {
     try {
         const url = `/categories/${id}`
         const { data } = await api.get<DataResponse>(url)
@@ -40,7 +41,7 @@ type UpdateCategoryPayload = {
     formData: CategoryForm;
 }
 
-export async function updateCategory({ categoryId, formData }: UpdateCategoryPayload) {
+export async function updateCategory({ categoryId, formData }: UpdateCategoryPayload): Promise<string | void> {
     try {
         const url = `/categories/${categoryId}`
         const { data } = await api.put<GeneralResponse>(url, formData)

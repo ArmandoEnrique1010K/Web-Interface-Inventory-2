@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { listAllCategories } from '../../api/CategoryAPI'
-import type { CategoryItem } from '../../types'
+import { type CategoryItem } from '../../types'
 import { TableContainer } from '@/components/TableContainer'
 import { TableRowContainer } from '@/components/TableRowContainer'
 import { BaseTableCell } from '@/components/BaseTableCell'
@@ -17,7 +17,7 @@ export const ListCategoryPage = () => {
     const [showEditModal, setShowEditModal] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState('');
 
-    const { data, isError } = useQuery({
+    const { data, isError } = useQuery<CategoryItem[]>({  // Cambiar a CategoryItem[]
         queryKey: ['categories'],
         queryFn: listAllCategories
     })

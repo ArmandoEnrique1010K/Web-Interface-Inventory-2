@@ -1,11 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { getDeliveryOrder } from "../../api/DeliveryOrderAPI";
 import { EntityDetailsLayout } from "@/layout/entity/EntityDetailsLayout";
-import { type DeliveryOrderDetailsItem, type ModelDeliveryOrderItem } from "../../types";
+import { type DeliveryOrderDetailsItem } from "../../types";
 import { handleFormatDateTimeText } from "@/utils/handleFormatDateTimeText";
-import { listAllModelsByDeliveryOrder } from "../../api/ModelDeliveryOrderAPI";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { DetailsDeliveryOrderAndModelsView } from "../../components/deliveryOrder/DetailsDeliveryOrderAndModelsView";
 import { ListDeliveryLineByDeliveryOrder } from "../../components/deliveryOrder/ListDeliveryLineByDeliveryOrder";
 
@@ -13,11 +12,6 @@ export const DetailsDeliveryOrderPage = () => {
 
     // ESTABLECE SI VA A MOSTRAR LA DESCRIPCION O LAS ORDENES DE ENTREGA
     const [showDescription, setShowDescription] = useState(true);
-
-    // const location = useLocation();
-    // const path = location.pathname;
-    const [searchParams, setSearchParams] = useSearchParams()
-    const modelIdParam = searchParams.get("modelId")
 
     // Obtiene la orden de entrega por ID
     const { id: deliveryOrderId } = useParams();
@@ -28,29 +22,9 @@ export const DetailsDeliveryOrderPage = () => {
         enabled: !!deliveryOrderId
     })
 
-    // <ModelDeliveryOrderItem[]>
-    // Obtiene la lista de modelos que corresponden a la orden de entrega
-    const { data: modelsDeliveryOrderData, isLoading: isModelsDeliveryOrderDataLoading } = useQuery({
-        queryKey: ['models', 'deliveryOrder', deliveryOrderId],
-        queryFn: () => listAllModelsByDeliveryOrder(deliveryOrderId!),
-        enabled: !!deliveryOrderId,
-    })
-
-    const selectedIndex = modelsDeliveryOrderData?.findIndex(
-        (model: ModelDeliveryOrderItem) => model.id === Number(modelIdParam)) ?? -1;
 
 
-    // Seleccionar el primer modelo
-    useEffect(() => {
-        if (selectedIndex === -1 && modelsDeliveryOrderData?.length > 0) {
-            const lastModel = modelsDeliveryOrderData[modelsDeliveryOrderData.length - 1]
-            setSearchParams({ modelId: String(lastModel.id) })
-        }
-    }, [selectedIndex, modelsDeliveryOrderData, setSearchParams])
-
-
-
-    if (isDeliveryOrderDataLoading || isModelsDeliveryOrderDataLoading) {
+    if (isDeliveryOrderDataLoading) {
         return <div>Cargando...</div>
     }
 
@@ -65,7 +39,7 @@ export const DetailsDeliveryOrderPage = () => {
                 actions={
                     <div className="w-full border-b border-gray-200   mt-6">
                         <button
-                            className={`w-1/2 px-4 py-2 text-center transition-all duration-200 border-b-2 font-medium text-base
+                            className={`w-1/2 px-4 py-2 text-center transition-all duration-200 border-b-2 font-medium text-base hover:cursor-pointer
       ${showDescription
                                     ? 'border-blue-600 text-blue-600 -mb-px bg-blue-100'
                                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300  bg-gray-100'}
@@ -76,7 +50,7 @@ export const DetailsDeliveryOrderPage = () => {
                         </button>
 
                         <button
-                            className={`w-1/2 px-4 py-2 text-center transition-all duration-200 border-b-2 font-medium text-base
+                            className={`w-1/2 px-4 py-2 text-center transition-all duration-200 border-b-2 font-medium text-base hover:cursor-pointer
       ${!showDescription
                                     ? 'border-blue-600 text-blue-600 -mb-px bg-blue-100'
                                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 bg-gray-100'}

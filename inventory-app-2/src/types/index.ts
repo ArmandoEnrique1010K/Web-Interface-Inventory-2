@@ -8,9 +8,20 @@ export const responseSchema = z.object({
     secretField: z.optional(z.string())
 })
 
-export const dataSchema = z.object({
-    data: z.any()
-})
+// export const dataSchema = z.object({
+//     data: z.any()
+// })
+
+
+export const createDataSchema = <T extends z.ZodType>(dataSchema: T) =>
+    z.object({
+        data: dataSchema.optional()
+    })
+
+
+// Schema específico para datos no tipados (manteniendo compatibilidad)
+export const dataSchema = createDataSchema(z.any())
+
 
 export const dataPageSchema = z.object({
     type: z.enum(['success', 'error']),
@@ -31,7 +42,14 @@ export const dataPageSchema = z.object({
 // export const pageDataSchema ...
 
 export type GeneralResponse = z.infer<typeof responseSchema>
-export type DataResponse = z.infer<typeof dataSchema>
+// export type DataResponse = z.infer<typeof dataSchema>
+
+// O si quieres mantener compatibilidad con Zod:
+export type DataResponse<T = unknown> = z.infer<typeof dataSchema> & {
+    data?: T
+}
+
+
 export type DataPageResponse = z.infer<typeof dataPageSchema>
 
 
