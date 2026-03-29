@@ -23,7 +23,7 @@ export const NewModelProductModal = ({ setAddModelModalOpen, productId }: Props)
     const [preview, setPreview] = useState<string | null>(null)
     const initialValues: ModelInProductForm = {
         name: '',
-        // TODO: EN LA API REST, SI O SI DEBE INTRODUCIR UNA FECHA
+        // TODO: URGENTE, EN LA API REST, SI O SI DEBE INTRODUCIR UNA FECHA
         // SELECCIONA LA FECHA DE HOY EN DIA (Valor por defecto), Tambien debe ser una fecha pasada o de hoy o ningun valor
         entryDate: new Date(new Date().setHours(12)).toISOString().split('T')[0], // 2026-03-11 -> String
         // La fecha de caducidad debe ser futura o ningun valor
@@ -122,7 +122,6 @@ export const NewModelProductModal = ({ setAddModelModalOpen, productId }: Props)
                     />
 
 
-                    {/* TODO: QUITAR EL TIPADO DE FILE */}
                     <InputDate<ModelInProductForm & { file: File }>
                         id="entryDate"
                         label="Fecha de entrada del modelo"

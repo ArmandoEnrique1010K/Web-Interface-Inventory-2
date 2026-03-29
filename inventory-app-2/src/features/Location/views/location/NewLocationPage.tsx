@@ -108,8 +108,7 @@ export const NewLocationPage = () => {
                             functionEnabled={register('address')} />
 
                         {/* ESTE CAMPO NO ESTA ASOCIADO AL FORMULARIO */}
-                        {/* TODO: APLICAR ESTILOS A ESTE CAMPO */}
-                        <div className="flex flex-col space-y-1 w-full pt-2">
+                        <div className="flex flex-col w-full space-y-1">
                             <SelectOptionFilter
                                 name='regionId'
                                 label='Región'

@@ -267,7 +267,6 @@ export const ListModelPage = () => {
                                 <BaseTableCell data={model.id} />
                                 <BaseTableCell data={
                                     <div className='flex flex-col gap-1'>
-                                        {/* TODO: CORREGIR EL ENLACE Y CREAR UN COMPONENTE PARA MOSTRAR LOS DATOS DEL MODELO */}
                                         <Link to={`/products/${model.productId}/models/${model.id}`} className='hover:text-blue-900'>
                                             <div>{model.name}</div>
                                             <div className='text-sm text-gray-500'>{model.productName}</div>

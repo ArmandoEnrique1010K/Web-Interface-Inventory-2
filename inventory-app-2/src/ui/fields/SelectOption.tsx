@@ -1,3 +1,4 @@
+import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import type { FieldError, UseFormRegisterReturn } from 'react-hook-form';
 type Props = {
     id: string; // Id del input
@@ -11,12 +12,15 @@ type Props = {
 }
 export const SelectOption = ({ id, name, label, errorMessage, functionEnabled, options, textInNullOption, disabled }: Props) => {
     return (
-        <div className="flex flex-col w-full space-y-1">
+        <div className="flex flex-col w-full space-y-1 relative">
             <label className="text-sm font-medium text-slate-700" htmlFor={id}>{label}:</label>
             <div className="flex flex-col gap-1">
 
-                <select className={`
-                outline-none focus:outline-none border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${disabled ? 'cursor-not-allowed text-gray-400' : 'cursor-pointer'} `} id={id}
+                <select className={`appearance-none
+                outline-none focus:outline-none border border-slate-300 rounded-lg 
+                px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 
+                ${disabled ? 'cursor-not-allowed text-gray-400 bg-slate-100' : 'cursor-pointer'} `}
+                    id={id}
                     name={name}
                     // NOTA: functionEnabled tiene unas propiedades internas, en la cual una de ellas es el name
                     {...functionEnabled}
@@ -49,6 +53,9 @@ export const SelectOption = ({ id, name, label, errorMessage, functionEnabled, o
                         ))
                     }
                 </select>
+                <div className="pointer-events-none absolute inset-y-0 right-2 top-0 flex items-center">
+                    <ChevronDownIcon className="size-6" />
+                </div>
 
                 {
 

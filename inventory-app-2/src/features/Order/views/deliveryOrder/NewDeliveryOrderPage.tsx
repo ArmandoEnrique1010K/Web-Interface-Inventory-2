@@ -18,6 +18,8 @@ export const NewDeliveryOrderPage = () => {
         limitDate: '',
         userIdClient: ''
     }
+
+    // NOTA: NO SE UTILIZA LA FUNCIÓN DE register
     const { handleSubmit, setError, control, formState: { errors } } = useForm<DeliveryOrderForm>({
         defaultValues: initialValues
     })
@@ -63,7 +65,6 @@ export const NewDeliveryOrderPage = () => {
 
                 <EntityFormLayout.Inputs>
 
-                    {/* TODO: AQUI DEBE SER UN LOCALDATETIME (FECHA Y HORA) */}
                     <InputDateTime<DeliveryOrderForm>
                         id="limitDate"
                         label="Fecha limite de entrega"
@@ -72,8 +73,6 @@ export const NewDeliveryOrderPage = () => {
                         errorMessage={errors.limitDate?.message}
                     />
 
-
-                    {/* TODO: AQUI VA UN CAMPO DE TIPO FILTRO PARA INTRODUCIR EL NOMBRE DEL USUARIO Y LUEGO LISTAR EN UN OPTION LOS PRIMEROS 10 USUARIOS POR EL NOMBRE */}
 
                     {/* INPUT PARA FILTRAR */}
                     {/* SELECT CON RESULTADOS */}

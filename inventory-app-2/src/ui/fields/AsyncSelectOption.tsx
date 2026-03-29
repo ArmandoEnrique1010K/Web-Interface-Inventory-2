@@ -1,5 +1,5 @@
 import AsyncSelect from "react-select/async";
-import type { ControlProps, CSSObjectWithLabel } from "react-select";
+import type { ControlProps, CSSObjectWithLabel, PlaceholderProps } from "react-select";
 import { Controller, type Control, type FieldPath, type FieldValues } from "react-hook-form";
 import debounce from 'lodash.debounce';
 
@@ -14,6 +14,7 @@ type AsyncSelectFieldProps<T extends FieldValues> = {
     control: Control<T>;
     errorMessage?: string;
     loadOptions: (inputValue: string) => Promise<Option[]>;
+    disabled?: boolean; // 👈 nueva prop
 };
 
 export function AsyncSelectField<T extends FieldValues>({
@@ -22,6 +23,7 @@ export function AsyncSelectField<T extends FieldValues>({
     control,
     errorMessage,
     loadOptions,
+    disabled = false, // valor por defecto
 }: AsyncSelectFieldProps<T>) {
 
     // // debounce para evitar spam
@@ -41,7 +43,7 @@ export function AsyncSelectField<T extends FieldValues>({
     // debounce para evitar spam
     const debouncedLoadOptions = debounce(
         async (inputValue: string) => {
-            if (!inputValue) return [];
+            if (!inputValue || disabled) return [];
 
             try {
                 const options = await loadOptions(inputValue);
@@ -66,10 +68,24 @@ export function AsyncSelectField<T extends FieldValues>({
             borderColor: state.isFocused ? '#3b82f6' : '#cbd5e1',
             padding: '2px',
             boxShadow: state.isFocused ? '0 0 0 2px #3b82f6' : 'none',
+            color: disabled ? 'gray' : 'red',
             '&:hover': {
-                borderColor: '#cbd5e1'
-            }
-        })
+                color: disabled ? 'gray' : 'rgba(0, 0, 0, 1)',
+            },
+
+            // Estilos del campo deshabilitado
+            backgroundColor: state.isDisabled ? '#f1f5f9 ' : 'white',
+            cursor: 'pointer',
+            opacity: 1
+        }),
+
+        // Estilos al texto cuando no se ha seleccionado ninguna opción
+        placeholder: (base: CSSObjectWithLabel, state: PlaceholderProps<Option, false>) => ({
+            ...base,
+            color: state.isDisabled ? '#99a1af' : 'black',
+        }),
+
+
     };
 
     return (
@@ -78,24 +94,29 @@ export function AsyncSelectField<T extends FieldValues>({
                 {label}
             </label>
 
-            <Controller
-                name={name}
-                control={control}
-                render={({ field }) => (
-                    <AsyncSelect
-                        cacheOptions
-                        defaultOptions={false}
-                        loadOptions={debouncedLoadOptions}
-                        onChange={(option: Option | null) => {
-                            field.onChange(option ? option.value : "");
-                        }}
-                        onBlur={field.onBlur}
-                        placeholder="Escriba aqui para buscar..."
-                        styles={customStyles}
+            <div className={`${disabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}>
+                <Controller
+                    name={name}
+                    control={control}
+                    render={({ field }) => (
+                        <AsyncSelect
+                            cacheOptions
+                            defaultOptions={false}
+                            loadOptions={debouncedLoadOptions}
+                            isDisabled={disabled}
+                            onChange={(option: Option | null) => {
+                                field.onChange(option ? option.value : "");
+                            }}
+                            onBlur={field.onBlur}
+                            placeholder="Escriba aqui para buscar..."
+                            styles={customStyles}
 
-                    />
-                )}
-            />
+                        />
+                    )}
+                />
+
+            </div>
+
 
             <div className="min-h-5">
                 {errorMessage && (

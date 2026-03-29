@@ -119,18 +119,18 @@ export const ListStockLotPage = () => {
     //* PARA EL ID DEL MODELO, EL USUARIO TENDRA QUE INTRODUCIRLO MANUALMENTE
 
     const companies = companyData?.map((company: CompanyItem) => ({
-        value: company.id,
+        value: company.id.toString(),
         label: company.name,
     })) || []
 
     const categories = categoriesData?.map((category: CategoryItem) => ({
-        value: category.id,
+        value: category.id.toString(),
         label: category.name,
     })) || []
 
 
     const types = typesData?.map((type: TypeItem) => ({
-        value: type.id,
+        value: type.id.toString(),
         label: type.name,
     })) || []
 

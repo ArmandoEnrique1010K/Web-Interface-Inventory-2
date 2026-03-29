@@ -7,7 +7,6 @@ import { ButtonLink } from "@/ui/ButtonLink"
 import { PlusCircleIcon } from "@heroicons/react/24/outline"
 import { FiltersFormContainer } from "@/components/FiltersFormContainer"
 import { InputTextFilter } from "@/ui/filters/InputTextFilter"
-import { InputDateFilter } from "@/ui/filters/InputDateFilter"
 import { TableContainer } from "@/components/TableContainer"
 import type { DeliveryOrderItem } from "../../types"
 import { SearchCounter } from "@/components/SearchCounter"
@@ -16,6 +15,7 @@ import { TableRowContainer } from "@/components/TableRowContainer"
 import { BaseTableCell } from "@/components/BaseTableCell"
 import { handleFormatDate } from "@/utils/handleFormatDate"
 import { handleApplyDeliveryOrderStatusStyle } from "@/utils/handleApplyDeliveryOrderStatusStyle";
+import { InputDateTimeFilter } from "@/ui/filters/InputDateTimeFilter";
 
 export const ListPendingDeliveryOrderPage = () => {
     const [searchParams, setSearchParams] = useSearchParams()
@@ -97,21 +97,21 @@ export const ListPendingDeliveryOrderPage = () => {
                         }
                     />
 
-                    {/* TODO: DEBE SER UN CAMPO DE TIPO DATETIME */}
-                    <InputDateFilter
-                        name='startDate'
+                    <InputDateTimeFilter
+                        name="startDate"
                         label='Fecha minima de creación'
                         value={form.startDate}
-                        onChange={(e) =>
-                            setForm(prev => ({ ...prev, startDate: e.target.value }))
+                        onChange={(value) =>
+                            setForm(prev => ({ ...prev, startDate: value }))
                         }
                     />
-                    <InputDateFilter
-                        name='endDate'
+
+                    <InputDateTimeFilter
+                        name="endDate"
                         label='Fecha maxima de creación'
                         value={form.endDate}
-                        onChange={(e) =>
-                            setForm(prev => ({ ...prev, endDate: e.target.value }))
+                        onChange={(value) =>
+                            setForm(prev => ({ ...prev, endDate: value }))
                         }
                     />
                     <InputTextFilter

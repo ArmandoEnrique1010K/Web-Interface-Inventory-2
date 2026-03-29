@@ -55,7 +55,6 @@ export const EditSubregionModal = ({ data, subregionId, showModal }: Props) => {
             queryClient.invalidateQueries({ queryKey: ["subregions"] })
             queryClient.invalidateQueries({ queryKey: ["subregion", subregionId] })
             toast.success(data)
-            // TODO: INVESTIGAR COMO SE PODRIA OBTENER EL ID DE LA REGION SELECCIONADA AL ENTRAR A ESTE COMPONENTE O CUANDO SE CAMBIA EL VALOR DEL FORMULARIO
             showModal(false)
         }
     })

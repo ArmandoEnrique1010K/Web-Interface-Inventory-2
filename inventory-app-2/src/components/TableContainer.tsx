@@ -24,7 +24,7 @@ export const TableContainer = ({ title, itemsCounter, headers, isError, isEmpty,
     // }
 
     return (
-        // TODO: ES IMPOSIBLE AÑADIR UN STICKY
+        // NOTA: ES IMPOSIBLE AÑADIR UN STICKY
         <div className='bg-white shadow-sm rounded-xl border border-gray-200 sm:p-6 p-4'>
 
             {

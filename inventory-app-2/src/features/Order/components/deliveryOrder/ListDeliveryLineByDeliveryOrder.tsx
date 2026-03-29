@@ -42,7 +42,9 @@ export const ListDeliveryLineByDeliveryOrder = () => {
     const modelId = searchParams.get('modelId') ?? undefined
 
 
-    // TODO: ESTO ES IMPOSIBLE? ELIMINAR EL SEARCH PARAM QUE CONTIENE EL MODELO SELECCIONADO
+    // TODO: URGENTE, CADA VEZ QUE SE RENDERICE ESTA VISTA, LOS QUERY PARAMS SE PIERDEN?
+    // SI O SI SE PIERDE EL QUERYPARAM DE "currentModelId", QUE REPRESENTA EL MODELO SELECCIONADO DE LA VISTA ANTERIOR
+    // PERO NO DEBE PERDERSE LOS QUERYPARAMS DE LOS FILTROS AL RECARGAR LA PAGINA
     useEffect(() => {
         setSearchParams({});
     }, [])
@@ -276,6 +278,8 @@ export const ListDeliveryLineByDeliveryOrder = () => {
                             value={form.location}
                             onChange={(e) => setForm(prev => ({ ...prev, location: e.target.value }))}
                         />
+
+                        {/* CADA VEZ QUE CAMBIE DE REGIONID, SUBREGIONID DEBE SER REINICIADO, ESTABLECER EL VALOR NULL */}
                         <SelectOptionFilter
                             name='regionId'
                             label='Región'
@@ -287,7 +291,8 @@ export const ListDeliveryLineByDeliveryOrder = () => {
                             textInNullOption="Todas las regiones"
                             value={form.regionId}
                         />
-                        {/* TODO: SI NO HA SELECCIONADO UNA REGION, ESTE CAMPO SE DEBE LIMPIAR QUE NO HAYA NINGUNA SUBREGION SELECCIONADA */}
+
+                        {/* SI NO HA SELECCIONADO UNA REGION, ESTE CAMPO SE DEBE LIMPIAR QUE NO HAYA NINGUNA SUBREGION SELECCIONADA */}
                         <SelectOptionFilter
                             name='subregionId'
                             label='Subregión:'

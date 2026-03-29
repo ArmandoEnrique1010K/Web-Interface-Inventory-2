@@ -12,6 +12,7 @@ import { Button } from '@/ui/Button'
 import { ButtonLink } from '@/ui/ButtonLink'
 import { ArrowUpCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
 import { EntityFormLayout } from '@/layout/entity/EntityFormLayout'
+import { AsyncSelectField } from '@/ui/fields/AsyncSelectOption'
 
 export const NewStockLotPage = () => {
 
@@ -22,7 +23,7 @@ export const NewStockLotPage = () => {
         companyId: ''
     }
 
-    const { register, handleSubmit, setError, formState: { errors } } = useForm<StockLotReceiveForm>({
+    const { register, handleSubmit, control, setError, formState: { errors } } = useForm<StockLotReceiveForm>({
         defaultValues: initialValues
     })
 
@@ -100,13 +101,21 @@ export const NewStockLotPage = () => {
                     />
 
                     {/* TODO: INVESTIGAR SOBRE COMO HACER QUE EL CAMPO DEL ID DEL MODELO SEA INTUITIVO */}
-                    <InputText
+                    {/* <InputText
                         id="modelId"
                         label="ID del modelo"
                         placeholder="Escriba el ID del modelo"
                         type="text"
                         errorMessage={errors.modelId}
-                        functionEnabled={register('modelId')} />
+                        functionEnabled={register('modelId')} /> */}
+                    <AsyncSelectField<StockLotReceiveForm>
+                        label="ID del modelo"
+                        name="modelId"
+                        control={control}
+                        errorMessage={errors.modelId?.message}
+                    />
+
+
                 </EntityFormLayout.Inputs>
 
                 <EntityFormLayout.Actions>

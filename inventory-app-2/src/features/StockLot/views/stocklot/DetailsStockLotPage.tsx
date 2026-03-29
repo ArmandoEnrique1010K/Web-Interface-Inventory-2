@@ -40,7 +40,7 @@ export const DetailsStockLotPage = () => {
     return (
         <EntityDetailsLayout>
             <EntityDetailsLayout.Header
-                title={data.batch} // TODO: PENDIENTE EL MANEJO DEL NOMBRE DEL LOTE
+                title={data.batch} // TODO: PENDIENTE EL MANEJO DEL NOMBRE DEL LOTE DESDE LA API REST
             ></EntityDetailsLayout.Header>
 
             <EntityDetailsLayout.Content>

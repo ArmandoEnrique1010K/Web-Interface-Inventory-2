@@ -5,7 +5,6 @@ import { toast } from "sonner"
 import { Button } from "@/ui/Button"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
-import { XMarkIcon } from "@heroicons/react/24/outline"
 
 export const StatusProductButton = ({ from, productId, value, size }: { from?: string, productId: string, value: string, size: 'small' | 'large' }) => {
     const { handleSubmit } = useForm();
@@ -35,9 +34,7 @@ export const StatusProductButton = ({ from, productId, value, size }: { from?: s
 
     return (
         <form onSubmit={handleSubmit(() => mutate())} >
-            {/* TODO: AÑADIR UN ICONO PARA MOSTRAR CUANDO EL PRODUCTO ESTE ACTIVO */}
             <Button
-                icon={size === 'large' && <XMarkIcon />}
                 text={value}
                 type="submit"
                 size={size}

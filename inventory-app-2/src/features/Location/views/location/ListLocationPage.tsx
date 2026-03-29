@@ -155,7 +155,7 @@ export const ListLocationPage = () => {
                             value={form.regionId}
                         />
 
-                        {/* TODO: LUEGO DE SELECCIONAR UNA REGION DEBE LISTAR TODAS LAS SUBREGIONES ASOCIADAS A ESA REGION */}
+                        {/* LUEGO DE SELECCIONAR UNA REGION DEBE LISTAR TODAS LAS SUBREGIONES ASOCIADAS A ESA REGION */}
                         <SelectOptionFilter
                             name='subregionId'
                             label='Subregión:'

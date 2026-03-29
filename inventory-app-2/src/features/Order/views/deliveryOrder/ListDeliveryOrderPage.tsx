@@ -25,7 +25,6 @@ export const ListDeliveryOrderPage = () => {
     const startDate = searchParams.get('startDate') ?? ''
     const endDate = searchParams.get('endDate') ?? ''
     const userClientName = searchParams.get('userClientName') ?? ''
-    // TODO: CORREGIR STATUS
     const status = searchParams.get('status') ?? ''
     const [form, setForm] = useState({
         page: page,
@@ -113,7 +112,6 @@ export const ListDeliveryOrderPage = () => {
                         }
                     />
 
-                    {/* TODO: CORREGIR LA LOGICA EN LA API REST */}
                     <InputDateTimeFilter
                         name="endDate"
                         label='Fecha maxima de creación'

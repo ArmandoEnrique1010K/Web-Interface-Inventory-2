@@ -24,7 +24,7 @@ type Props = {
     deliveryOrderId: string
 }
 
-// TODO: EL CAMPO LIMITDATE Y ... SE PODRIA HACER QUE EL VALOR SELECCIONADO PERSISTA EN EL SESSIONSTORAGE PARA SEGUIR GUARDANDO LINEAS DE ENTREGA
+// TODO: URGENTE EL CAMPO LIMITDATE, MODELID, REGIONID Y SUBREGIONID SE PODRIA HACER QUE EL VALOR SELECCIONADO PERSISTA EN EL SESSIONSTORAGE PARA SEGUIR GUARDANDO LINEAS DE ENTREGA
 export const AddDeliveryLineModal = ({ setAddDeliveryLineModalOpen, deliveryOrderId }: Props) => {
 
     const initialValues: DeliveryLineForm = {
@@ -150,7 +150,7 @@ export const AddDeliveryLineModal = ({ setAddDeliveryLineModalOpen, deliveryOrde
 
                     {/* CAMPO PARA SELECCIONAR UNA REGIÓN */}
 
-                    <div className="flex flex-col space-y-1 w-full pt-2">
+                    <div className="flex flex-col w-full space-y-1">
                         <SelectOptionFilter
                             name='regionId'
                             label='Región'
@@ -163,13 +163,13 @@ export const AddDeliveryLineModal = ({ setAddDeliveryLineModalOpen, deliveryOrde
                         />
                         <div className="min-h-6">
                             <p className="text-red-700 text-sm">
-                                {selectedRegionId === '0' && initialValues.locationId === '' ? 'Seleccione una región' : ''}
+                                {selectedRegionId === '0' && initialValues.locationId === '0' ? 'Seleccione una región' : ''}
                             </p>
                         </div>
                     </div>
 
                     {/* CAMPO PARA SELECCIONAR UNA SUBREGIÓN */}
-                    <div className="flex flex-col space-y-1 w-full pt-2">
+                    <div className="flex flex-col space-y-1 w-full">
                         <SelectOptionFilter
                             name='subregionId'
                             label='Subregión'
@@ -178,18 +178,14 @@ export const AddDeliveryLineModal = ({ setAddDeliveryLineModalOpen, deliveryOrde
                                 setSelectedSubregionId(e.target.value)
                             }}
                             value={selectedSubregionId}
-                            // TODO: AGREGAR UN DISEÑO AL CAMPO SELECTOPTION CUANDO ESTE DESHABILITADO
                             disabled={selectedRegionId === '0'}
                         />
                         <div className="min-h-6">
                             <p className="text-red-700 text-sm">
-                                {selectedSubregionId === '0' && initialValues.locationId === '' ? 'Seleccione una subregión' : ''}
+                                {selectedSubregionId === '0' && initialValues.locationId === '0' ? 'Seleccione una subregión' : ''}
                             </p>
                         </div>
                     </div>
-
-
-
 
 
                     {/* CAMPO PARA BUSCAR UBICACIONES */}
@@ -198,6 +194,7 @@ export const AddDeliveryLineModal = ({ setAddDeliveryLineModalOpen, deliveryOrde
                         label={'Ubicación'}
                         name={'locationId'}
                         errorMessage={errors.locationId?.message}
+                        disabled={selectedSubregionId === '0'}
                         loadOptions={async (inputValue) => {
                             const data = await listFirstTenLocationsByKeyword({ name: inputValue }, selectedRegionId, selectedSubregionId);
                             return data.map((location: { id: number; name: string }) => ({
@@ -207,6 +204,7 @@ export const AddDeliveryLineModal = ({ setAddDeliveryLineModalOpen, deliveryOrde
                         }}
 
                     />
+
 
 
                 </EntityFormLayout.Inputs>

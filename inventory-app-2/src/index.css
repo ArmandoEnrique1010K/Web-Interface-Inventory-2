@@ -148,6 +148,12 @@ body,
     height: max-content;
 }
 
+/* BOTON PARA ELIMINAR LA FECHA Y HORA SELECCIONADA */
+.react-datetime-picker__clear-button{
+    margin-right: -10px;
+}
+
+
 
 /* Estilos al calendario de React DateTime Picker*/
 .react-calendar{
@@ -248,7 +254,7 @@ body,
     border-radius: 5px;
 }
 
-/* TODO: esta propiedad no funciona */
+/*  NOTA: esta propiedad no funciona */
 .react-calendar__navigation__arrow:hover, .react-calendar__navigation__next-button:hover{
     background-color: red;
 }
