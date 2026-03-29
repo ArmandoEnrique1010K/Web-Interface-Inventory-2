@@ -82,13 +82,13 @@ export const NewProductPage = () => {
     })
 
     const categories = categoriesData?.map((category: CategoryItem) => ({
-        value: category.id,
+        value: category.id.toString(),
         label: category.name,
     })) || []
 
 
     const types = typesData?.map((type: TypeItem) => ({
-        value: type.id,
+        value: type.id.toString(),
         label: type.name,
     })) || []
 

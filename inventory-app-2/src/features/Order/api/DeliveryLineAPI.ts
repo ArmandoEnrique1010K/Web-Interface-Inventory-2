@@ -5,13 +5,13 @@ import { handleApiError } from "@/utils/handleApiError";
 
 
 export type RegisterDeliveryOrderPayload = {
-    modelDeliveryOrderId: string,
+    deliveryOrderId: string,
     formData: DeliveryLineForm
 }
 
-export async function registerDeliveryOrder({ modelDeliveryOrderId, formData }: RegisterDeliveryOrderPayload) {
+export async function registerDeliveryOrder({ deliveryOrderId, formData }: RegisterDeliveryOrderPayload) {
     try {
-        const url = `/delivery-lines/model-delivery-order/${modelDeliveryOrderId}`
+        const url = `/delivery-lines/delivery-order/${deliveryOrderId}`
         const { data } = await api.post<GeneralResponse>(url, formData)
         if (data.type === 'success') {
             return data.message

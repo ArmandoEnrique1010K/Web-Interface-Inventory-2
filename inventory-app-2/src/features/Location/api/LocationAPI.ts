@@ -33,6 +33,20 @@ export async function listAllLocations(params: LocationQueryParams) {
     }
 }
 
+export type ListFirstTenLocationByNameQueryParams = {
+    name: string
+}
+
+export async function listFirstTenLocationsByKeyword(params: ListFirstTenLocationByNameQueryParams, regionId: string, subregionId: string) {
+    try {
+        const url = `/locations/search/region/${regionId}/subregion/${subregionId}`
+        const { data } = await api.get<DataResponse>(url, { params: params })
+        return data.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+}
+
 export async function getLocation(id: string) {
     try {
         const url = `/locations/${id}`

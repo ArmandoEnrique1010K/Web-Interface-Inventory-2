@@ -6,10 +6,11 @@ type Props = {
     onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void,
     textInNullOption?: string,
     value: string
+    disabled?: boolean
 }
 
 
-export const SelectOptionFilter = ({ name, label, options, onChange, textInNullOption, value }: Props) => {
+export const SelectOptionFilter = ({ name, label, options, onChange, textInNullOption, value, disabled = false }: Props) => {
     return (
         <div className="flex flex-col w-full space-y-1">
             <label className="text-sm font-medium text-slate-700" htmlFor={name}>{label}:</label>
@@ -19,6 +20,7 @@ export const SelectOptionFilter = ({ name, label, options, onChange, textInNullO
                 name={name}
                 value={value}
                 onChange={onChange}
+                disabled={disabled}
             >
                 {textInNullOption && <option value="">
                     {textInNullOption || "Seleccione una opción"}

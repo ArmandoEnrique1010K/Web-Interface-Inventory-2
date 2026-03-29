@@ -29,9 +29,9 @@ export const modelDeliveryOrderSchema = z.object({
 
 export const deliveryLineSchema = z.object({
     id: z.number(),
-    requiredQuantity: z.number(),
-    deliveredQuantity: z.number(),
-    pendingQuantity: z.number(),
+    requiredQuantity: z.string(),
+    deliveredQuantity: z.string(),
+    pendingQuantity: z.string(),
     limitDate: z.string(),
     updatedAt: z.string(),
     lineStatus: z.string(), // ES UN ENUM
@@ -98,7 +98,7 @@ export type DeliveryOrderClientDetailsItem = Pick<DeliveryOrder, "id" | "batch" 
 export type ModelDeliveryOrderItem = ModelDeliveryOrder;
 
 // DELIVERY LINE
-export type DeliveryLineForm = Pick<DeliveryLine, "requiredQuantity" | "locationId" | "limitDate">
+export type DeliveryLineForm = Pick<DeliveryLine, "requiredQuantity" | "locationId" | "limitDate" | "modelId">
 export type DeliveryLineAllocateForm = Pick<DeliveryLine, "quantity" | "stockLotsIds">
 export type DeliveryLineAlterForm = Pick<DeliveryLine, "quantity" | "movementComment">
 export type DeliveryLineUpdateForm = Pick<DeliveryLine, "requiredQuantity" | "limitDate" | "movementComment">

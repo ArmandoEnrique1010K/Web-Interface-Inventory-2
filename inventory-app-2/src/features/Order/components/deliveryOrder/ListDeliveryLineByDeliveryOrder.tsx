@@ -19,6 +19,7 @@ import { listAllRegions } from '@/features/Location/api/RegionAPI';
 import { listAllSubregionsByRegionId } from '@/features/Location/api/SubregionAPI';
 import { listAllModelsByDeliveryOrder } from '../../api/ModelDeliveryOrderAPI';
 import type { RegionItem, SubregionItem } from '@/features/Location/types';
+import { AddDeliveryLineModal } from '../deliveryLine/AddDeliveryLineModal';
 
 export const ListDeliveryLineByDeliveryOrder = () => {
 
@@ -61,7 +62,12 @@ export const ListDeliveryLineByDeliveryOrder = () => {
         modelId: modelId ?? ''
     })
     const { data, isError } = useQuery({
-        queryKey: ['deliveryLines', 'deliveryOrder', deliveryOrderId!, { page }],
+        queryKey: ['deliveryLines', 'deliveryOrder', deliveryOrderId!,
+            {
+                page, minRequiredQuantity, maxRequiredQuantity, minLimitDate, maxLimitDate, lineStatus,
+                location, regionId, subregionId, modelId
+            }
+        ],
 
         queryFn: () => listAllDeliveryLinesByDeliveryOrder(
             deliveryOrderId!,
@@ -149,7 +155,10 @@ export const ListDeliveryLineByDeliveryOrder = () => {
                             title={`Agregar nueva linea de entrega a la orden de entrega #${deliveryOrderId}`}
                             locked
                         >
-                            Agregar nueva linea de entrega
+                            <AddDeliveryLineModal
+                                setAddDeliveryLineModalOpen={setAddDeliveryLineModalOpen}
+                                deliveryOrderId={deliveryOrderId!.toString()}
+                            />
                         </Modal>}
                     </>
                 }>
@@ -308,7 +317,7 @@ export const ListDeliveryLineByDeliveryOrder = () => {
                     </FiltersFormContainer>
 
                     <TableContainer
-                        headers={['ID', 'Nombre']}
+                        headers={['ID', 'Nombre', 'Ubicación', 'Cantidad', 'fecha limite', 'estado', 'operaciones']}
                         isError={isError}
                         isEmpty={!content.length}
                         itemsCounter={
@@ -351,6 +360,17 @@ export const ListDeliveryLineByDeliveryOrder = () => {
                             content?.map((deliveryLine: DeliveryLineItem) => {
                                 return <TableRowContainer key={deliveryLine.id}>
                                     <BaseTableCell data={deliveryLine.id} />
+                                    <BaseTableCell data={deliveryLine.modelproductName} />
+                                    <BaseTableCell data={deliveryLine.locationName} />
+                                    <BaseTableCell data={
+                                        <div>
+                                            {deliveryLine.deliveredQuantity} de {deliveryLine.requiredQuantity}
+                                        </div>
+                                    } />
+                                    <BaseTableCell data={deliveryLine.limitDate} />
+                                    <BaseTableCell data={deliveryLine.lineStatus} />
+                                    <BaseTableCell data={'Operaciones'} />
+
 
                                 </TableRowContainer>
                             })

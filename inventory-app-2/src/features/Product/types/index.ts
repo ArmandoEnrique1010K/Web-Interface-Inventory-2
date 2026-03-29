@@ -13,9 +13,9 @@ export const modelSchema = z.object({
     // en Zod, nullable permite que un campo tenga el valor null, mientras que optional hace que el campo sea completamente opcional, es decir que podria no existir
     entryDate: z.string().nullable(),
     caducityDate: z.string().nullable(),
-    totalQuantityAvailable: z.number(),
-    totalQuantityReceived: z.number(),
-    totalQuantityDelivered: z.number(),
+    totalQuantityAvailable: z.string(),
+    totalQuantityReceived: z.string(),
+    totalQuantityDelivered: z.string(),
     status: z.boolean(),
 
     productId: z.string(),
