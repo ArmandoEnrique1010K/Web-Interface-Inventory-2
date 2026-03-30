@@ -30,6 +30,9 @@ export const modelSchema = z.object({
 
     typeId: z.string(),
     typeName: z.string(),
+
+    // Concatenación
+    modelProductName: z.string(),
 })
 
 export const productSchema = z.object({
@@ -82,6 +85,9 @@ export type ModelDetailsItem = Pick<Model,
     "productStatus" | "categoryId" | "categoryName" | "typeId" | "typeName">;
 
 export type ModelSearchItem = Pick<Model, "id" | "name" | "imageUrl" | "productName" | "typeName" | "categoryId" | "categoryName">
+
+export type ModelSearchFirstTenItems = Pick<Model, "id" | "modelProductName">
+
 export type ProductItem = Pick<Product, "id" | "name" | "length" | "width" | "height" | "quantityModels" | "status" |
     "categoryId" | "categoryName" | "typeId" | "typeName">;
 export type TypeItem = Type

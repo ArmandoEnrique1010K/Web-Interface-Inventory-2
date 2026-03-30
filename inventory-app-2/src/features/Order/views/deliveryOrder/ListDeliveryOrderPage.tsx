@@ -105,7 +105,7 @@ export const ListDeliveryOrderPage = () => {
 
                     <InputDateTimeFilter
                         name="startDate"
-                        label='Fecha minima de creación'
+                        label='Fecha prioritaria minima de entrega'
                         value={form.startDate}
                         onChange={(value) =>
                             setForm(prev => ({ ...prev, startDate: value }))
@@ -114,7 +114,7 @@ export const ListDeliveryOrderPage = () => {
 
                     <InputDateTimeFilter
                         name="endDate"
-                        label='Fecha maxima de creación'
+                        label='Fecha prioritaria maxima de entrega'
                         value={form.endDate}
                         onChange={(value) =>
                             setForm(prev => ({ ...prev, endDate: value }))
@@ -161,7 +161,7 @@ export const ListDeliveryOrderPage = () => {
                 </FiltersFormContainer>
 
                 <TableContainer
-                    headers={["ID", "# de factura", "Fecha limite", "Cliente", "Estado"]}
+                    headers={["ID", "# de factura", "Fecha prioritaria", "Cliente", "Estado"]}
                     isError={isError}
                     isEmpty={!content?.length}
                     itemsCounter={
@@ -210,9 +210,9 @@ export const ListDeliveryOrderPage = () => {
                                     <Link to={`/orders/${order.id}`} className='hover:text-blue-900'>{order.batch}</Link>
                                 } />
                                 <BaseTableCell data={
-                                    order.limitDate ? (
+                                    order.priorityDate ? (
                                         <span>
-                                            <span>{handleFormatDateTimeText(new Date(order.limitDate)).date} {handleFormatDateTimeText(new Date(order.limitDate)).hour}</span>
+                                            <span>{handleFormatDateTimeText(new Date(order.priorityDate)).date} {handleFormatDateTimeText(new Date(order.priorityDate)).hour}</span>
                                         </span>
                                     ) : 'Sin fecha'
                                 } />

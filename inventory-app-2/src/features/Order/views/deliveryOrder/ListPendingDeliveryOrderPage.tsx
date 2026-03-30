@@ -13,9 +13,9 @@ import { SearchCounter } from "@/components/SearchCounter"
 import { Paginator } from "@/components/Paginator"
 import { TableRowContainer } from "@/components/TableRowContainer"
 import { BaseTableCell } from "@/components/BaseTableCell"
-import { handleFormatDate } from "@/utils/handleFormatDate"
 import { handleApplyDeliveryOrderStatusStyle } from "@/utils/handleApplyDeliveryOrderStatusStyle";
 import { InputDateTimeFilter } from "@/ui/filters/InputDateTimeFilter";
+import { handleFormatDateTimeText } from "@/utils/handleFormatDateTimeText";
 
 export const ListPendingDeliveryOrderPage = () => {
     const [searchParams, setSearchParams] = useSearchParams()
@@ -99,7 +99,7 @@ export const ListPendingDeliveryOrderPage = () => {
 
                     <InputDateTimeFilter
                         name="startDate"
-                        label='Fecha minima de creación'
+                        label='Fecha prioritaria minima de entrega'
                         value={form.startDate}
                         onChange={(value) =>
                             setForm(prev => ({ ...prev, startDate: value }))
@@ -108,7 +108,7 @@ export const ListPendingDeliveryOrderPage = () => {
 
                     <InputDateTimeFilter
                         name="endDate"
-                        label='Fecha maxima de creación'
+                        label='Fecha prioritaria maxima de entrega'
                         value={form.endDate}
                         onChange={(value) =>
                             setForm(prev => ({ ...prev, endDate: value }))
@@ -127,7 +127,7 @@ export const ListPendingDeliveryOrderPage = () => {
                 </FiltersFormContainer>
 
                 <TableContainer
-                    headers={["ID", "# de factura", "Fecha limite", "Cliente", "Estado"]}
+                    headers={["ID", "# de factura", "Fecha prioritaria", "Cliente", "Estado"]}
                     isError={isError}
                     isEmpty={!content?.length}
                     itemsCounter={
@@ -175,7 +175,11 @@ export const ListPendingDeliveryOrderPage = () => {
                                     <Link to={`/orders/${order.id}`} className='hover:text-blue-900'>{order.batch}</Link>
                                 } />
                                 <BaseTableCell data={
-                                    order.limitDate ? handleFormatDate(new Date(order.limitDate)) : 'Sin fecha'
+                                    order.priorityDate ? (
+                                        <span>
+                                            <span>{handleFormatDateTimeText(new Date(order.priorityDate)).date} {handleFormatDateTimeText(new Date(order.priorityDate)).hour}</span>
+                                        </span>
+                                    ) : 'Sin fecha'
                                 } />
                                 <BaseTableCell data={
                                     <div className="text-sm">{order.userClientFullname}</div>

@@ -91,7 +91,7 @@ export function AsyncSelectField<T extends FieldValues>({
     return (
         <div className="flex flex-col w-full space-y-1">
             <label className="text-sm font-medium text-slate-700">
-                {label}
+                {label}:
             </label>
 
             <div className={`${disabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}>

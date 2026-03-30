@@ -88,7 +88,7 @@ type StockLotDeliveryLine = z.infer<typeof stockLotDeliveryLineSchema>
 export type DeliveryOrderForm = Pick<DeliveryOrder, "limitDate" | "userIdClient">;
 export type DeliveryOrderCommentForm = Pick<DeliveryOrder, "movementComment">;
 
-export type DeliveryOrderItem = Pick<DeliveryOrder, "id" | "batch" | "limitDate" | "userClientFullname" | "orderStatus">;
+export type DeliveryOrderItem = Pick<DeliveryOrder, "id" | "batch" | "limitDate" | "priorityDate" | "userClientFullname" | "orderStatus">;
 export type DeliveryOrderDetailsItem = Pick<DeliveryOrder, "id" | "batch" | "limitDate" | "priorityDate" | "createdByUser" | "updatedByUser" | "userClientFullname" | "createdAt" | "updatedAt" | "orderStatus">;
 export type DeliveryOrderClientItem = Pick<DeliveryOrder, "id" | "batch" | "limitDate" | "priorityDate" | "orderStatus">
 export type DeliveryOrderClientDetailsItem = Pick<DeliveryOrder, "id" | "batch" | "limitDate" | "userClientFullname" | "orderStatus">

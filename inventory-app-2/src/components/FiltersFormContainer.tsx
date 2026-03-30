@@ -5,12 +5,14 @@ type Props = {
     onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void
     children: React.ReactNode
     hiddenButton?: boolean
+    // refetch?:  
 }
 
 export const FiltersFormContainer = ({
     onSubmit,
     children,
-    hiddenButton
+    hiddenButton,
+    // refetch
 }: Props) => {
     return (
         <form

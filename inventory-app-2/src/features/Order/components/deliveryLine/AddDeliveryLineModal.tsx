@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import type { DeliveryLineForm, ModelDeliveryOrderItem } from '../../types'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { registerDeliveryOrder } from '../../api/DeliveryLineAPI'
 import { toast } from 'sonner'
@@ -24,8 +24,12 @@ type Props = {
     deliveryOrderId: string
 }
 
-// TODO: URGENTE EL CAMPO LIMITDATE, MODELID, REGIONID Y SUBREGIONID SE PODRIA HACER QUE EL VALOR SELECCIONADO PERSISTA EN EL SESSIONSTORAGE PARA SEGUIR GUARDANDO LINEAS DE ENTREGA
+// NOTA: LOS CAMPOS LIMITDATE, MODELID, REGIONID Y SUBREGIONID MANTIENEN EL VALOR SELECCIONADO EN EL SESSIONSTORAGE PARA SEGUIR GUARDANDO LINEAS DE ENTREGA
+// CADA CAMBIO HECHO EN ESOS CAMPOS, SE VA A GUARDAR EN EL SESSIONSTORAGE
 export const AddDeliveryLineModal = ({ setAddDeliveryLineModalOpen, deliveryOrderId }: Props) => {
+
+    // KEY para almacenar los valores rellenados por el usuario del formulario
+    const STORAGE_KEY = "deliveryLineDraft";
 
     const initialValues: DeliveryLineForm = {
         requiredQuantity: '',
@@ -33,10 +37,18 @@ export const AddDeliveryLineModal = ({ setAddDeliveryLineModalOpen, deliveryOrde
         locationId: '',
         modelId: ''
     }
-    const { register, handleSubmit, setError, control, formState: { errors } } = useForm<DeliveryLineForm>({
-        defaultValues: initialValues
+
+    const saved = sessionStorage.getItem(STORAGE_KEY);
+    const parsed = saved ? JSON.parse(saved) : null;
+
+    const { register, handleSubmit, setError, control, formState: { errors }, setValue } = useForm<DeliveryLineForm>({
+        defaultValues: parsed || initialValues
     })
     const queryClient = useQueryClient();
+
+
+
+
     const { mutate } = useMutation({
         mutationFn: registerDeliveryOrder,
         onError: (error: GeneralError) => {
@@ -50,7 +62,6 @@ export const AddDeliveryLineModal = ({ setAddDeliveryLineModalOpen, deliveryOrde
                     })
                 })
 
-                console.log(error)
                 toast.error(error.message)
                 return
             }
@@ -80,8 +91,26 @@ export const AddDeliveryLineModal = ({ setAddDeliveryLineModalOpen, deliveryOrde
     }))
 
 
-    const [selectedRegionId, setSelectedRegionId] = useState('0');
-    const [selectedSubregionId, setSelectedSubregionId] = useState('0');
+    // Initialize state with saved values or defaults
+    const getInitialRegionId = () => {
+        const saved = sessionStorage.getItem(STORAGE_KEY);
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            return parsed.regionId || '0';
+        }
+        return '0';
+    };
+
+    const getInitialSubregionId = () => {
+        const saved = sessionStorage.getItem(STORAGE_KEY);
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            return parsed.subregionId || '0';
+        }
+        return '0';
+    };
+    const [selectedRegionId, setSelectedRegionId] = useState(getInitialRegionId);
+    const [selectedSubregionId, setSelectedSubregionId] = useState(getInitialSubregionId);
 
     const { data: regionsData } = useQuery({
         queryKey: ['regions'],
@@ -111,6 +140,34 @@ export const AddDeliveryLineModal = ({ setAddDeliveryLineModalOpen, deliveryOrde
         label: 'Seleccione una subregión'
     }) || []
 
+    useEffect(() => {
+        const saved = sessionStorage.getItem(STORAGE_KEY);
+        if (!saved) return;
+
+        const parsed = JSON.parse(saved);
+
+        // react-hook-form
+        Object.entries(parsed).forEach(([key, value]) => {
+            setValue(key as keyof DeliveryLineForm, value as string);
+        });
+    }, []);
+
+    // const limitDate = watch('limitDate') ? handleFormatDateTime(new Date(watch('limitDate'))) : '';
+    const limitDate = useWatch({ control, name: 'limitDate' })
+    // const locationId = useWatch({ control, name: 'locationId' });
+    const modelId = useWatch({ control, name: 'modelId' });
+
+
+    useEffect(() => {
+        const dataToSave = {
+            limitDate,
+            modelId,
+            regionId: selectedRegionId,
+            subregionId: selectedSubregionId,
+        };
+
+        sessionStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
+    }, [limitDate, modelId, selectedRegionId, selectedSubregionId]);
 
     return (
         <EntityFormLayout isCompact>
@@ -187,6 +244,8 @@ export const AddDeliveryLineModal = ({ setAddDeliveryLineModalOpen, deliveryOrde
                         </div>
                     </div>
 
+
+                    {/* TODO: URGENTE, CADA VEZ QUE CAMBIE EL VALOR DE LA SUBREGION, DEBE ESTABLECER LA UBICACION SELECCIONADA A 0 (ELIMINAR EL VALOR SELECCIONADO) */}
 
                     {/* CAMPO PARA BUSCAR UBICACIONES */}
                     <AsyncSelectField<DeliveryLineForm>

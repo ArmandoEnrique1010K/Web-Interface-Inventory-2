@@ -154,6 +154,14 @@ body,
 }
 
 
+/* ESTILO AL RELOJ */
+.react-datetime-picker__clock{
+    width: auto;
+    height: auto;
+    padding: 15px;
+    border-radius: 10px;
+}
+
 
 /* Estilos al calendario de React DateTime Picker*/
 .react-calendar{

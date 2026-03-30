@@ -25,7 +25,7 @@ export function InputDateTime<T extends FieldValues>({
             <Controller
                 name={name}
                 control={control}
-                // TODO: APLICAR NUEVOS ESTILOS AL CALENDARIO Y AL RELOJ
+                // TODO: APLICAR NUEVOS ESTILOS  AL RELOJ
                 render={({ field }) => {
                     return (
                         <DateTimePicker

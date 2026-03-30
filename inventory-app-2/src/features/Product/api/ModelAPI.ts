@@ -1,7 +1,7 @@
 import { api } from "@/lib/axiosConfig";
 import type { DataPageResponse, DataResponse, GeneralResponse } from "@/types/index";
 import { handleApiError } from "@/utils/handleApiError";
-import type { ModelInProductForm, ModelItem } from "../types";
+import type { ModelInProductForm, ModelItem, ModelSearchFirstTenItems } from "../types";
 
 
 type RegisterModelInProductPayload = {
@@ -66,6 +66,23 @@ export async function listAllModels(params: ModelQueryParams) {
         handleApiError(error);
     }
 }
+
+export type ListFirstTenModelsByKeywordParams = {
+    keyword: string;
+}
+
+
+export async function listFirstTenModelsByKeyword(params: ListFirstTenModelsByKeywordParams): Promise<ModelSearchFirstTenItems[]> {
+    try {
+        const url = `/models/search/models`
+        const { data } = await api.get<DataResponse>(url, { params: params })
+        return data.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+
+}
+
 
 export type ModelSearchQueryParams = {
     page?: number;

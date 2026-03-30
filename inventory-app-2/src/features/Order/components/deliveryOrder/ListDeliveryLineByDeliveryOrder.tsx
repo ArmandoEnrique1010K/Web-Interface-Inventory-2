@@ -8,7 +8,7 @@ import { FiltersFormContainer } from '@/components/FiltersFormContainer';
 import { TableContainer } from '@/components/TableContainer';
 import { Paginator } from '@/components/Paginator';
 import { SearchCounter } from '@/components/SearchCounter';
-import type { DeliveryLineItem, LineStatusEnum, ModelDeliveryOrderItem } from '../../types';
+import type { DeliveryLineItem, ModelDeliveryOrderItem } from '../../types';
 import { TableRowContainer } from '@/components/TableRowContainer';
 import { BaseTableCell } from '@/components/BaseTableCell';
 import { Modal } from '@/components/Modal';
@@ -25,67 +25,116 @@ export const ListDeliveryLineByDeliveryOrder = () => {
 
     const [addDeliveryLineModalOpen, setAddDeliveryLineModalOpen] = useState(false);
 
-    const [searchParams, setSearchParams] = useSearchParams();
-    const page = Number(searchParams.get('page') ?? 0)
+    // KEY para almacenar los valores rellenados en los filtros
+    const STORAGE_KEY = "deliveryLineFilters";
+    const SELECTED_DELIVERY_ORDER_KEY = "currentDeliveryOrderId"
 
-    // const location = useLocation();
-    // const path = location.pathname;
-
-    const minRequiredQuantity = searchParams.get('minRequiredQuantity') ?? ''
-    const maxRequiredQuantity = searchParams.get('maxRequiredQuantity') ?? ''
-    const minLimitDate = searchParams.get('minLimitDate') ?? ''
-    const maxLimitDate = searchParams.get('maxLimitDate') ?? ''
-    const lineStatus = searchParams.get('lineStatus') ?? ''
-    const location = searchParams.get('location') ?? ''
-    const subregionId = searchParams.get('subregionId') ?? undefined
-    const regionId = searchParams.get('regionId') ?? undefined
-    const modelId = searchParams.get('modelId') ?? undefined
-
-
-    // TODO: URGENTE, CADA VEZ QUE SE RENDERICE ESTA VISTA, LOS QUERY PARAMS SE PIERDEN?
-    // SI O SI SE PIERDE EL QUERYPARAM DE "currentModelId", QUE REPRESENTA EL MODELO SELECCIONADO DE LA VISTA ANTERIOR
-    // PERO NO DEBE PERDERSE LOS QUERYPARAMS DE LOS FILTROS AL RECARGAR LA PAGINA
-    useEffect(() => {
-        setSearchParams({});
-    }, [])
 
     const { id: deliveryOrderId } = useParams()
 
-    const [form, setForm] = useState({
-        page: page,
-        minRequiredQuantity,
-        maxRequiredQuantity,
-        minLimitDate,
-        maxLimitDate,
-        lineStatus: lineStatus === undefined ? '' : String(lineStatus),
-        location,
-        subregionId: subregionId ?? '',
-        regionId: regionId ?? '',
-        modelId: modelId ?? ''
-    })
+    const saved = sessionStorage.getItem(STORAGE_KEY);
+    const parsed = saved ? JSON.parse(saved) : null;
+
+    const [searchParams, setSearchParams] = useSearchParams();
+    const page = Number(searchParams?.get('page') ?? 0)
+    const getEmptyForm = () => ({
+        page: 0,
+        minRequiredQuantity: '',
+        maxRequiredQuantity: '',
+        minLimitDate: '',
+        maxLimitDate: '',
+        lineStatus: '',
+        location: '',
+        subregionId: '',
+        regionId: '',
+        modelId: ''
+    });
+
+    const [form, setForm] = useState(() => {
+        // Se utiliza una función para establecer los valores iniciales
+        if (deliveryOrderId !== sessionStorage.getItem(SELECTED_DELIVERY_ORDER_KEY)) {
+            return getEmptyForm();
+        }
+
+        return {
+            // page: Number(searchParams.get('page') ?? parsed?.page ?? 0),
+            page: page,
+            minRequiredQuantity: searchParams.get('minRequiredQuantity') ?? parsed?.minRequiredQuantity ?? '',
+            maxRequiredQuantity: searchParams.get('maxRequiredQuantity') ?? parsed?.maxRequiredQuantity ?? '',
+            minLimitDate: searchParams.get('minLimitDate') ?? parsed?.minLimitDate ?? '',
+            maxLimitDate: searchParams.get('maxLimitDate') ?? parsed?.maxLimitDate ?? '',
+            lineStatus: searchParams.get('lineStatus') ?? parsed?.lineStatus ?? '',
+            location: searchParams.get('location') ?? parsed?.location ?? '',
+            subregionId: searchParams.get('subregionId') ?? parsed?.subregionId ?? '',
+            regionId: searchParams.get('regionId') ?? parsed?.regionId ?? '',
+            modelId: searchParams.get('modelId') ?? parsed?.modelId ?? ''
+        }
+    });
+
+    useEffect(() => {
+        const currentId = sessionStorage.getItem(SELECTED_DELIVERY_ORDER_KEY);
+
+        if (currentId !== deliveryOrderId) {
+            sessionStorage.removeItem(STORAGE_KEY);
+            sessionStorage.setItem(SELECTED_DELIVERY_ORDER_KEY, deliveryOrderId!);
+
+            // Limpiar los queryParams si ha cambiado de orden de entrega
+            setSearchParams(new URLSearchParams(), { replace: true });
+        }
+    }, [deliveryOrderId]);
+
     const { data, isError } = useQuery({
         queryKey: ['deliveryLines', 'deliveryOrder', deliveryOrderId!,
-            {
-                page, minRequiredQuantity, maxRequiredQuantity, minLimitDate, maxLimitDate, lineStatus,
-                location, regionId, subregionId, modelId
-            }
+            // {
+            //     page, minRequiredQuantity, maxRequiredQuantity, minLimitDate, maxLimitDate, lineStatus,
+            //     location, regionId, subregionId, modelId
+            // }
+            searchParams.toString()
         ],
-
         queryFn: () => listAllDeliveryLinesByDeliveryOrder(
             deliveryOrderId!,
-            {
-                page: page,
-                minRequiredQuantity,
-                maxRequiredQuantity,
-                minLimitDate,
-                maxLimitDate,
-                lineStatus: lineStatus as LineStatusEnum,
-                location,
-                subregionId,
-                regionId,
-                modelId
-            }),
+            // {
+            //     page: page,
+            //     minRequiredQuantity: form.minRequiredQuantity,
+            //     maxRequiredQuantity: form.maxRequiredQuantity,
+            //     minLimitDate: form.minLimitDate,
+            //     maxLimitDate: form.maxLimitDate,
+            //     lineStatus: form.lineStatus as LineStatusEnum,
+            //     location: form.location,
+            //     subregionId: form.subregionId,
+            //     regionId: form.regionId,
+            //     modelId: form.modelId
+            // }
+            Object.fromEntries(searchParams)
+
+        ),
     })
+
+
+
+    useEffect(() => {
+        const saved = sessionStorage.getItem(STORAGE_KEY);
+        const parsed = saved ? JSON.parse(saved) : null;
+
+        const params = new URLSearchParams(searchParams.toString());
+
+        // ✅ eliminar correctamente
+        params.delete('currentModelId');
+
+        // ⚠️ evaluar sobre params, no searchParams
+        if (!params.toString() && parsed) {
+            Object.entries(parsed).forEach(([key, value]) => {
+                if (value !== '' && value !== null && value !== undefined) {
+                    params.set(key, String(value));
+                }
+            });
+        }
+
+        if (params.toString() !== searchParams.toString()) {
+            setSearchParams(params);
+        }
+
+    }, []);
 
     const content = data?.content || []
 
@@ -115,7 +164,7 @@ export const ListDeliveryLineByDeliveryOrder = () => {
 
     const { data: modelsByDeliveryOrderData } = useQuery({
         queryKey: ['models', 'deliveryOrder', deliveryOrderId],
-        queryFn: () => listAllModelsByDeliveryOrder(deliveryOrderId!)
+        queryFn: () => listAllModelsByDeliveryOrder(deliveryOrderId!),
     })
 
     const modelsInDeliveryOrder = modelsByDeliveryOrderData?.map((model: ModelDeliveryOrderItem) => ({
@@ -134,6 +183,48 @@ export const ListDeliveryLineByDeliveryOrder = () => {
         { value: 'LINE_EXCEEDED', label: 'Excedido' },
     ]
 
+    useEffect(() => {
+        if (!searchParams.toString() && parsed) {
+            const params = new URLSearchParams();
+
+            Object.entries(parsed).forEach(([key, value]) => {
+
+
+
+                if (value) {
+                    params.set(key, String(value));
+                }
+            });
+
+            setSearchParams(params);
+        }
+    }, []);
+
+    const buildParams = (form: {
+        page: number;
+        minRequiredQuantity: string;
+        maxRequiredQuantity: string;
+        minLimitDate: string;
+        maxLimitDate: string;
+        lineStatus: string;
+        location: string;
+        subregionId: string;
+        regionId: string;
+        modelId: string;
+    }) => {
+        const params = new URLSearchParams();
+
+        Object.entries(form).forEach(([key, value]) => {
+
+            if (key === 'page') return; // 🔥 clave
+
+            if (value !== '' && value !== null && value !== undefined) {
+                params.set(key, String(value));
+            }
+        });
+
+        return params;
+    };
 
 
     return (
@@ -168,8 +259,7 @@ export const ListDeliveryLineByDeliveryOrder = () => {
                 <EntityListLayout.Content>
                     <FiltersFormContainer onSubmit={(e) => {
                         e.preventDefault()
-                        const params = new URLSearchParams()
-
+                        const params = buildParams(form);
 
                         if (form.minRequiredQuantity) {
                             params.set('minRequiredQuantity', form.minRequiredQuantity)
@@ -219,8 +309,29 @@ export const ListDeliveryLineByDeliveryOrder = () => {
                         }
 
 
+                        // params.set('page', page.toString()); // resetear página al buscar
+
                         // setSearchParams(Object.fromEntries(params))
                         setSearchParams(params)
+
+                        // estado
+                        const newForm = {
+                            ...form,
+                        };
+                        setForm(newForm);
+
+                        // persistencia REAL (solo aquí)
+                        sessionStorage.setItem(STORAGE_KEY, JSON.stringify({
+                            lineStatus: form.lineStatus,
+                            location: form.location,
+                            maxLimitDate: form.maxLimitDate,
+                            maxRequiredQuantity: form.maxRequiredQuantity,
+                            minLimitDate: form.minLimitDate,
+                            minRequiredQuantity: form.minRequiredQuantity,
+                            modelId: form.modelId,
+                            regionId: form.regionId,
+                            subregionId: form.subregionId
+                        }));
 
                     }}>
                         <InputTextFilter
@@ -278,6 +389,7 @@ export const ListDeliveryLineByDeliveryOrder = () => {
                             value={form.location}
                             onChange={(e) => setForm(prev => ({ ...prev, location: e.target.value }))}
                         />
+                        {/* TODO: EN ALGUNA FUTURA ACTUALIZACIÓN SE PODRIA OPTAR POR SOLAMENTE LISTAR LAS REGIONES Y SUBREGIONES QUE ESTEN ASOCIADAS A LA ORDEN DE ENTREGA MEDIANTE UNA PETICION A LA API REST */}
 
                         {/* CADA VEZ QUE CAMBIE DE REGIONID, SUBREGIONID DEBE SER REINICIADO, ESTABLECER EL VALOR NULL */}
                         <SelectOptionFilter
@@ -285,7 +397,7 @@ export const ListDeliveryLineByDeliveryOrder = () => {
                             label='Región'
                             options={regions}
                             onChange={(e) =>
-                                setForm(prev => ({ ...prev, regionId: e.target.value }))
+                                setForm(prev => ({ ...prev, regionId: e.target.value, subregionId: '' }))
                             }
 
                             textInNullOption="Todas las regiones"
@@ -336,25 +448,26 @@ export const ListDeliveryLineByDeliveryOrder = () => {
                                     isFirst={data?.first}
                                     isLast={data?.last}
                                     onPageChange={(page) => {
+
+                                        const params = buildParams(form);
+                                        params.set('page', page.toString());
+                                        setSearchParams(params);
+
                                         setForm(prev => ({
                                             ...prev,
                                             page
                                         }))
-                                        const params = new URLSearchParams()
 
-                                        if (form.minRequiredQuantity) params.set('minRequiredQuantity', form.minRequiredQuantity)
-                                        if (form.maxRequiredQuantity) params.set('maxRequiredQuantity', form.maxRequiredQuantity);
-                                        if (form.minLimitDate) params.set('minLimitDate', form.minLimitDate);
-                                        if (form.maxLimitDate) params.set('maxLimitDate', form.maxLimitDate);
-                                        if (form.lineStatus) params.set('lineStatus', form.lineStatus);
-                                        if (form.location) params.set('location', form.location);
-                                        if (form.subregionId) params.set('subregionId', String(form.subregionId));
-                                        if (form.regionId) params.set('regionId', String(form.regionId));
-                                        if (form.modelId) params.set('modelId', String(form.modelId));
+                                        // if (form.minRequiredQuantity) params.set('minRequiredQuantity', form.minRequiredQuantity)
+                                        // if (form.maxRequiredQuantity) params.set('maxRequiredQuantity', form.maxRequiredQuantity);
+                                        // if (form.minLimitDate) params.set('minLimitDate', form.minLimitDate);
+                                        // if (form.maxLimitDate) params.set('maxLimitDate', form.maxLimitDate);
+                                        // if (form.lineStatus) params.set('lineStatus', form.lineStatus);
+                                        // if (form.location) params.set('location', form.location);
+                                        // if (form.subregionId) params.set('subregionId', String(form.subregionId));
+                                        // if (form.regionId) params.set('regionId', String(form.regionId));
+                                        // if (form.modelId) params.set('modelId', String(form.modelId));
 
-                                        params.set('page', page.toString())
-
-                                        setSearchParams(params)
 
                                     }}
                                 />
