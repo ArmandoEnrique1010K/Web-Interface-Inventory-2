@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import type { DeliveryLineForm, ModelDeliveryOrderItem } from '../../types'
+import type { ModelDeliveryOrderItem } from '../../types'
 import { useForm, useWatch } from 'react-hook-form'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { registerDeliveryOrder } from '../../api/DeliveryLineAPI'
@@ -14,7 +14,7 @@ import { listAllRegions } from '@/features/Location/api/RegionAPI'
 import { listAllSubregionsByRegionId } from '@/features/Location/api/SubregionAPI'
 import type { RegionItem, SubregionItem } from '@/features/Location/types'
 import { SelectOptionFilter } from '@/ui/filters/SelectOptionFilter'
-import { AsyncSelectField } from '@/ui/fields/AsyncSelectOption'
+import { AsyncSelectField, type Option } from '@/ui/fields/AsyncSelectOption'
 import { listFirstTenLocationsByKeyword } from '@/features/Location/api/LocationAPI'
 import { ArrowUpCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
 import { Button } from '@/ui/Button'
@@ -24,6 +24,12 @@ type Props = {
     deliveryOrderId: string
 }
 
+type DeliveryLineFormFields = {
+    requiredQuantity: string;
+    limitDate: string;
+    modelId: string;
+    locationId: Option | null;
+};
 // NOTA: LOS CAMPOS LIMITDATE, MODELID, REGIONID Y SUBREGIONID MANTIENEN EL VALOR SELECCIONADO EN EL SESSIONSTORAGE PARA SEGUIR GUARDANDO LINEAS DE ENTREGA
 // CADA CAMBIO HECHO EN ESOS CAMPOS, SE VA A GUARDAR EN EL SESSIONSTORAGE
 export const AddDeliveryLineModal = ({ setAddDeliveryLineModalOpen, deliveryOrderId }: Props) => {
@@ -31,17 +37,17 @@ export const AddDeliveryLineModal = ({ setAddDeliveryLineModalOpen, deliveryOrde
     // KEY para almacenar los valores rellenados por el usuario del formulario
     const STORAGE_KEY = "deliveryLineDraft";
 
-    const initialValues: DeliveryLineForm = {
+    const initialValues: DeliveryLineFormFields = {
+        locationId: null,
         requiredQuantity: '',
         limitDate: '',
-        locationId: '',
         modelId: ''
     }
 
     const saved = sessionStorage.getItem(STORAGE_KEY);
     const parsed = saved ? JSON.parse(saved) : null;
 
-    const { register, handleSubmit, setError, control, formState: { errors }, setValue } = useForm<DeliveryLineForm>({
+    const { register, handleSubmit, setError, control, formState: { errors }, setValue, resetField } = useForm<DeliveryLineFormFields>({
         defaultValues: parsed || initialValues
     })
     const queryClient = useQueryClient();
@@ -56,7 +62,7 @@ export const AddDeliveryLineModal = ({ setAddDeliveryLineModalOpen, deliveryOrde
             // Error de campo
             if (error.type === 'FIELD_ERROR') {
                 Object.entries(error.fields).forEach(([field, message]) => {
-                    setError(field as keyof DeliveryLineForm, {
+                    setError(field as keyof DeliveryLineFormFields, {
                         type: 'server',
                         message: message as string,
                     })
@@ -148,7 +154,7 @@ export const AddDeliveryLineModal = ({ setAddDeliveryLineModalOpen, deliveryOrde
 
         // react-hook-form
         Object.entries(parsed).forEach(([key, value]) => {
-            setValue(key as keyof DeliveryLineForm, value as string);
+            setValue(key as keyof DeliveryLineFormFields, value as string);
         });
     }, []);
 
@@ -169,12 +175,20 @@ export const AddDeliveryLineModal = ({ setAddDeliveryLineModalOpen, deliveryOrde
         sessionStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
     }, [limitDate, modelId, selectedRegionId, selectedSubregionId]);
 
+    useEffect(() => {
+        resetField("locationId");
+    }, [selectedRegionId, selectedSubregionId]);
+
     return (
         <EntityFormLayout isCompact>
             <EntityFormLayout.Form styled={false} onSubmit={handleSubmit((data) => {
                 mutate({
                     deliveryOrderId: deliveryOrderId,
-                    formData: data
+                    formData: {
+                        ...data,
+                        // IMPORTANTE, SE HA ESTABLECIDO EL TIPADO DE LOS CAMPOS POR SEPARADO Y EL TIPADO DE LOS DATOS QUE ESPERA LA API POR SEPARADO
+                        locationId: data.locationId?.value.toString() || ''
+                    }
                 })
             })}
             >
@@ -188,7 +202,7 @@ export const AddDeliveryLineModal = ({ setAddDeliveryLineModalOpen, deliveryOrde
                         functionEnabled={register('requiredQuantity')}
                     />
 
-                    <InputDateTime<DeliveryLineForm>
+                    <InputDateTime<DeliveryLineFormFields>
                         id={'limitDate'}
                         label={'Fecha limite de entrega'}
                         name={'limitDate'}
@@ -220,7 +234,7 @@ export const AddDeliveryLineModal = ({ setAddDeliveryLineModalOpen, deliveryOrde
                         />
                         <div className="min-h-6">
                             <p className="text-red-700 text-sm">
-                                {selectedRegionId === '0' && initialValues.locationId === '0' ? 'Seleccione una región' : ''}
+                                {selectedRegionId === '0' && initialValues.locationId === null ? 'Seleccione una región' : ''}
                             </p>
                         </div>
                     </div>
@@ -239,16 +253,13 @@ export const AddDeliveryLineModal = ({ setAddDeliveryLineModalOpen, deliveryOrde
                         />
                         <div className="min-h-6">
                             <p className="text-red-700 text-sm">
-                                {selectedSubregionId === '0' && initialValues.locationId === '0' ? 'Seleccione una subregión' : ''}
+                                {selectedSubregionId === '0' && initialValues.locationId === null ? 'Seleccione una subregión' : ''}
                             </p>
                         </div>
                     </div>
 
-
-                    {/* TODO: URGENTE, CADA VEZ QUE CAMBIE EL VALOR DE LA SUBREGION, DEBE ESTABLECER LA UBICACION SELECCIONADA A 0 (ELIMINAR EL VALOR SELECCIONADO) */}
-
                     {/* CAMPO PARA BUSCAR UBICACIONES */}
-                    <AsyncSelectField<DeliveryLineForm>
+                    <AsyncSelectField<DeliveryLineFormFields>
                         control={control}
                         label={'Ubicación'}
                         name={'locationId'}
@@ -263,8 +274,6 @@ export const AddDeliveryLineModal = ({ setAddDeliveryLineModalOpen, deliveryOrde
                         }}
 
                     />
-
-
 
                 </EntityFormLayout.Inputs>
                 <EntityFormLayout.Actions>

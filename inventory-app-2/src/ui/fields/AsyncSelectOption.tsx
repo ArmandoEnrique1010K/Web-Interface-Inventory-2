@@ -1,9 +1,8 @@
 import AsyncSelect from "react-select/async";
 import type { ControlProps, CSSObjectWithLabel, PlaceholderProps } from "react-select";
 import { Controller, type Control, type FieldPath, type FieldValues } from "react-hook-form";
-import debounce from 'lodash.debounce';
 
-type Option = {
+export type Option = {
     label: string;
     value: number | string;
 };
@@ -40,21 +39,20 @@ export function AsyncSelectField<T extends FieldValues>({
     //     },
     //     300
     // );
+
+
+
     // debounce para evitar spam
-    const debouncedLoadOptions = debounce(
-        async (inputValue: string) => {
-            if (!inputValue || disabled) return [];
+    const loadOptionsWrapper = async (inputValue: string) => {
+        if (!inputValue || disabled) return [];
 
-            try {
-                const options = await loadOptions(inputValue);
-                return options;
-            } catch {
-                return [];
-            }
-        },
-        200 // El usuario debe escribir en el campo durante 200 milisegundos para mostrar los resultados
-    );
-
+        try {
+            console.log(await loadOptions(inputValue));
+            return await loadOptions(inputValue);
+        } catch {
+            return [];
+        }
+    };
 
     // Estilos propios, no funciona con tailwindCSS
     const customStyles = {
@@ -88,6 +86,7 @@ export function AsyncSelectField<T extends FieldValues>({
 
     };
 
+
     return (
         <div className="flex flex-col w-full space-y-1">
             <label className="text-sm font-medium text-slate-700">
@@ -102,11 +101,33 @@ export function AsyncSelectField<T extends FieldValues>({
                         <AsyncSelect
                             cacheOptions
                             defaultOptions={false}
-                            loadOptions={debouncedLoadOptions}
+                            loadOptions={loadOptionsWrapper}
                             isDisabled={disabled}
-                            onChange={(option: Option | null) => {
-                                field.onChange(option ? option.value : "");
-                            }}
+
+
+                            // onChange={(option: Option | null) => {
+                            //     field.onChange(option ? option.value : "");
+                            // }}
+
+                            // value={disabled ? '' : field.value?.value}
+
+                            // value={
+                            //     field.value
+                            //         ? { value: field.value, label: String(field.value) }
+                            //         : null
+                            // }
+                            // value={field.value?.value?.toString() ?? null}
+                            value={field.value ?? null}
+
+                            isClearable
+
+
+
+                            // onChange={(option: Option | null) =>
+                            //     field.onChange(option?.value ?? undefined)
+                            // }
+                            // onChange={(option: Option | null) => field.onChange(option?.value?.toString())}
+                            onChange={(option: Option | null) => field.onChange(option)}
                             onBlur={field.onBlur}
                             placeholder="Escriba aqui para buscar..."
                             styles={customStyles}
@@ -114,7 +135,6 @@ export function AsyncSelectField<T extends FieldValues>({
                         />
                     )}
                 />
-
             </div>
 
 
