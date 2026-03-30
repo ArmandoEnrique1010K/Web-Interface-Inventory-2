@@ -172,7 +172,7 @@ export const ListPendingDeliveryOrderPage = () => {
                             return <TableRowContainer key={order.id}>
                                 <BaseTableCell data={order.id} />
                                 <BaseTableCell data={
-                                    <Link to={`/orders/${order.id}`} className='hover:text-blue-900'>{order.batch}</Link>
+                                    <Link to={`/orders/pending/${order.id}`} className='hover:text-blue-900'>{order.batch}</Link>
                                 } />
                                 <BaseTableCell data={
                                     order.priorityDate ? (

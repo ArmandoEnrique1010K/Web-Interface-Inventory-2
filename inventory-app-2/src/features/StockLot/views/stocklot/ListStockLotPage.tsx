@@ -2,8 +2,8 @@ import { useQuery } from '@tanstack/react-query'
 import { useEffectEvent, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { listAllStockLots } from '../../api/StockLotAPI'
-import { listAllCategories } from '@/features/Product/api/CategoryAPI'
-import { listAllTypes } from '@/features/Product/api/TypeAPI'
+import { listAllActiveCategories } from '@/features/Product/api/CategoryAPI'
+import { listAllActiveTypes } from '@/features/Product/api/TypeAPI'
 import { listAllCompanies } from '../../api/CompanyAPI'
 import type { CategoryItem, TypeItem } from '@/features/Product/types'
 import type { CompanyItem, StockLotItem } from '../../types'
@@ -107,13 +107,13 @@ export const ListStockLotPage = () => {
     })
 
     const { data: categoriesData } = useQuery({
-        queryKey: ['categories'],
-        queryFn: listAllCategories
+        queryKey: ['categories', 'active'],
+        queryFn: listAllActiveCategories
     })
 
     const { data: typesData } = useQuery({
-        queryKey: ['types'],
-        queryFn: listAllTypes
+        queryKey: ['types', 'active'],
+        queryFn: listAllActiveTypes
     })
 
     //* PARA EL ID DEL MODELO, EL USUARIO TENDRA QUE INTRODUCIRLO MANUALMENTE

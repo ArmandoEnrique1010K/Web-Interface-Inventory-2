@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form'
-import type { CompanyItem, StockLotReceiveForm } from '../../types'
+import type { CompanyItem } from '../../types'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { registerStockLot } from '../../api/StockLotAPI'
 import type { GeneralError } from '@/types/index'
@@ -12,19 +12,26 @@ import { Button } from '@/ui/Button'
 import { ButtonLink } from '@/ui/ButtonLink'
 import { ArrowUpCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
 import { EntityFormLayout } from '@/layout/entity/EntityFormLayout'
-import { AsyncSelectField } from '@/ui/fields/AsyncSelectOption'
+import { AsyncSelectField, type Option } from '@/ui/fields/AsyncSelectOption'
 import { listFirstTenModelsByKeyword } from '@/features/Product/api/ModelAPI'
+
+type StockLotFields = {
+    quantity: string;
+    comment: string;
+    modelId: Option | null,
+    companyId: string
+}
 
 export const NewStockLotPage = () => {
 
-    const initialValues: StockLotReceiveForm = {
+    const initialValues: StockLotFields = {
         quantity: '',
         comment: '',
-        modelId: '',
+        modelId: null,
         companyId: ''
     }
 
-    const { register, handleSubmit, control, setError, formState: { errors } } = useForm<StockLotReceiveForm>({
+    const { register, handleSubmit, control, setError, formState: { errors } } = useForm<StockLotFields>({
         defaultValues: initialValues
     })
 
@@ -36,7 +43,7 @@ export const NewStockLotPage = () => {
             // Error de campo
             if (error.type === 'FIELD_ERROR') {
                 Object.entries(error.fields).forEach(([field, message]) => {
-                    setError(field as keyof StockLotReceiveForm, {
+                    setError(field as keyof StockLotFields, {
                         type: 'server',
                         message: message as string,
                     })
@@ -74,10 +81,15 @@ export const NewStockLotPage = () => {
             <EntityFormLayout.Header title="Registrar nuevo lote de stock"></EntityFormLayout.Header>
             <EntityFormLayout.Form styled
 
-                onSubmit={handleSubmit((data) => mutate(data))}
+                onSubmit={handleSubmit((data) => mutate({
+                    formData: {
+                        ...data,
+                        modelId: data.modelId?.value.toString() || ''
+                    }
+                }))}
             >
                 <EntityFormLayout.Inputs>
-                    {/* TODO: URGENTE, EN LA API REST SE PODRIA DEFINIR UN CAMPO PARA COLOCAR LA FECHA, QUE SEA LA FECHA DE HOY O ANTERIOR A ESA PARA REGISTRAR EL LOTE DE ENTREGA */}
+                    {/* TODO:, EN UNA FUTURA ACTUALIZACIÓN, EN LA API REST SE PODRIA DEFINIR UN CAMPO PARA COLOCAR LA FECHA, QUE SEA LA FECHA DE HOY O ANTERIOR A ESA PARA REGISTRAR EL LOTE DE ENTREGA */}
                     <InputText
                         id="quantity"
                         label="Cantidad"
@@ -102,7 +114,7 @@ export const NewStockLotPage = () => {
                         textInNullOption="Seleccione una empresa importadora"
                     />
 
-                    <AsyncSelectField<StockLotReceiveForm>
+                    <AsyncSelectField<StockLotFields>
                         label="ID del modelo"
                         name="modelId"
                         control={control}

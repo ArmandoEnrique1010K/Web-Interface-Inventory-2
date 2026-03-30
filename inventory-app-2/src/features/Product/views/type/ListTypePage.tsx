@@ -11,6 +11,7 @@ import { useState } from 'react'
 import { Button } from '@/ui/Button'
 import { Modal } from '@/components/Modal'
 import { LoaderType } from '../../components/type/LoaderType'
+import { StatusTypeButton } from '../../components/type/StatusTypeButton'
 
 export const ListTypePage = () => {
 
@@ -39,7 +40,7 @@ export const ListTypePage = () => {
                 }></EntityListLayout.Header>
             <EntityListLayout.Content>
                 <TableContainer
-                    headers={['ID', 'Nombre', 'Editar']}
+                    headers={['ID', 'Nombre', 'Editar', 'Estado']}
                     isError={isError}
                     isEmpty={!data?.length}
                 >
@@ -61,6 +62,14 @@ export const ListTypePage = () => {
                                         showTextOnMobile
                                     />
                                 } />
+                                <BaseTableCell isCenter data={
+                                    <StatusTypeButton
+                                        typeId={type.id.toString()}
+                                        text={type.status ? 'Activo' : 'Inactivo'}
+                                    />
+                                }></BaseTableCell>
+
+
                             </TableRowContainer>
                         ))
                     }

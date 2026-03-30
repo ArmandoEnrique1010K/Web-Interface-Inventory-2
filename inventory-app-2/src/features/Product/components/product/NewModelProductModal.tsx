@@ -23,7 +23,6 @@ export const NewModelProductModal = ({ setAddModelModalOpen, productId }: Props)
     const [preview, setPreview] = useState<string | null>(null)
     const initialValues: ModelInProductForm = {
         name: '',
-        // TODO: URGENTE, EN LA API REST, SI O SI DEBE INTRODUCIR UNA FECHA
         // SELECCIONA LA FECHA DE HOY EN DIA (Valor por defecto), Tambien debe ser una fecha pasada o de hoy o ningun valor
         entryDate: new Date(new Date().setHours(12)).toISOString().split('T')[0], // 2026-03-11 -> String
         // La fecha de caducidad debe ser futura o ningun valor
@@ -39,7 +38,6 @@ export const NewModelProductModal = ({ setAddModelModalOpen, productId }: Props)
     const { mutate } = useMutation({
         mutationFn: registerModelInProduct,
         onError: (error: GeneralError) => {
-            console.log(error)
             // Error de campo
             if (error.type === 'FIELD_ERROR') {
                 Object.entries(error.fields).forEach(([field, message]) => {
@@ -49,7 +47,6 @@ export const NewModelProductModal = ({ setAddModelModalOpen, productId }: Props)
                     })
                 })
 
-                console.log(error)
                 toast.error(error.message)
                 return
             }

@@ -25,7 +25,7 @@ export const UploadImage = ({
 
         if (selectedFile) {
             // Obtiene el tipo de dato del archivo
-            console.log(selectedFile.type);
+            // console.log(selectedFile.type);
 
             // Si no coincide con el tipo de archivo image
             if (!selectedFile.type.startsWith('image/')) {

@@ -87,13 +87,13 @@ export const ListProductPage = () => {
     })
 
     const categories = categoriesData?.map((category: CategoryItem) => ({
-        value: category.id,
+        value: category.id.toString(),
         label: category.name,
     })) || []
 
 
     const types = typesData?.map((type: TypeItem) => ({
-        value: type.id,
+        value: type.id.toString(),
         label: type.name,
     })) || []
 
@@ -252,7 +252,11 @@ export const ListProductPage = () => {
                                 } />
 
                                 <BaseTableCell isCenter data={
-                                    <StatusProductButton size="small" productId={product.id.toString()} value={product.status ? 'Activo' : 'Inactivo'} />
+                                    <StatusProductButton
+                                        size="small"
+                                        productId={product.id.toString()}
+                                        isActive={product.status}
+                                    />
                                 } />
 
                                 <BaseTableCell isCenter data={

@@ -9,8 +9,8 @@ import { InputText } from "@/ui/fields/InputText";
 import { Button } from "@/ui/Button";
 import { InputDate } from "@/ui/fields/InputDate";
 import { SelectOption } from "@/ui/fields/SelectOption";
-import { listAllCategories } from "../../api/CategoryAPI";
-import { listAllTypes } from "../../api/TypeAPI";
+import { listAllActiveCategories } from "../../api/CategoryAPI";
+import { listAllActiveTypes } from "../../api/TypeAPI";
 import { ButtonLink } from "@/ui/ButtonLink";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
@@ -44,7 +44,6 @@ export const NewProductPage = () => {
     const { mutate, isPending } = useMutation({
         mutationFn: registerProduct,
         onError: (error: GeneralError) => {
-            console.log(error)
             // Error de campo
             if (error.type === 'FIELD_ERROR') {
                 Object.entries(error.fields).forEach(([field, message]) => {
@@ -54,7 +53,6 @@ export const NewProductPage = () => {
                     })
                 })
 
-                console.log(error)
                 toast.error(error.message)
                 return
             }
@@ -73,12 +71,12 @@ export const NewProductPage = () => {
 
     // TODO: EN ALGUNA FUTURA ACTUALIZACION SE PUEDE HACER QUE SE MUESTRE UNA NOTIFICACION MIENTRAS SE SUBE LA IMAGEN
     const { data: categoriesData } = useQuery({
-        queryKey: ['categories'],
-        queryFn: listAllCategories
+        queryKey: ['categories', 'active'],
+        queryFn: listAllActiveCategories
     })
     const { data: typesData } = useQuery({
-        queryKey: ['types'],
-        queryFn: listAllTypes
+        queryKey: ['types', 'active'],
+        queryFn: listAllActiveTypes
     })
 
     const categories = categoriesData?.map((category: CategoryItem) => ({

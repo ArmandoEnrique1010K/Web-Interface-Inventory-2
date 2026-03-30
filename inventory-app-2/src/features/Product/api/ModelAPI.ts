@@ -11,7 +11,7 @@ type RegisterModelInProductPayload = {
 }
 
 
-export async function registerModelInProduct({ productId, data, file }: RegisterModelInProductPayload): Promise<string | void> {
+export async function registerModelInProduct({ productId, data, file }: RegisterModelInProductPayload): Promise<string> {
     // Configuracion para enviar los datos del formulario por separado: los datos y la imagen
     const formData = new FormData()
     formData.append("name", data.name)
@@ -28,6 +28,8 @@ export async function registerModelInProduct({ productId, data, file }: Register
         if (data.type === 'success') {
             return data.message
         }
+
+        return ""
     } catch (error) {
         handleApiError(error);
     }
@@ -89,7 +91,7 @@ export type ModelSearchQueryParams = {
     keyword?: string;
 }
 
-export async function searchActiveModelsByName(params: ModelSearchQueryParams) {
+export async function listActiveModelsByName(params: ModelSearchQueryParams) {
     try {
         const url = `/models/search`
         const { data } = await api.get<DataPageResponse>(url, { params: params })

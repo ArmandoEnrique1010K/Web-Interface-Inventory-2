@@ -4,7 +4,7 @@ import { Paginator } from '@/components/Paginator'
 import { SearchCounter } from '@/components/SearchCounter'
 import { TableContainer } from '@/components/TableContainer'
 import { TableRowContainer } from '@/components/TableRowContainer'
-import { searchActiveModelsByName } from '@/features/Product/api/ModelAPI'
+import { listActiveModelsByName } from '@/features/Product/api/ModelAPI'
 import type { ModelSearchItem } from '@/features/Product/types'
 import { EntityFormLayout } from '@/layout/entity/EntityFormLayout'
 import { EntityListLayout } from '@/layout/entity/EntityListLayout'
@@ -46,7 +46,7 @@ export const NewModelDeliveryOrderModal = ({
     const { data, isError } = useQuery({
         queryKey: ['products', { keyword, page }],
 
-        queryFn: () => searchActiveModelsByName({
+        queryFn: () => listActiveModelsByName({
             page: page,
             keyword: keyword,
         }),

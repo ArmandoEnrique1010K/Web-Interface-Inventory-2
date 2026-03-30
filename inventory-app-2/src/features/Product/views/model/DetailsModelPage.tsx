@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import type { ModelDetailsItem } from '../../types'
 import { getModel } from '../../api/ModelAPI'
 import { useQuery } from '@tanstack/react-query'
@@ -24,7 +24,8 @@ export const DetailsModelPage = () => {
         queryKey: ['model', modelId ? +modelId : 0],
         queryFn: () => getModel(modelId!),
         // Si el id existe, ejecuta la función getProduct, de lo contrario no lo va a ejecutar
-        enabled: !!modelId
+        enabled: !!modelId,
+        retry: 0
     })
     const [isQRModalOpen, setIsQRModalOpen] = useState(false)
     const handleOpenQR = () => {
@@ -36,9 +37,22 @@ export const DetailsModelPage = () => {
     }
 
     if (!data) {
-        return <div>Modelo no encontrado o desactivado</div>
-    }
+        // TODO: MEJORAR ESTE MENSAJE DE ERROR
+        return (
+            <div className="text-center p-8">
+                <h2 className="text-xl font-semibold text-red-600 mb-2">
+                    Error de Validación
+                </h2>
+                <p className="text-gray-600 mb-4">
+                    El modelo #{modelId} no pertenece al producto #{productId}.
+                </p>
+                <Link to={'/'}>
+                    IR A INICIO
+                </Link>
+            </div>
 
+        )
+    }
     return (
         <EntityDetailsLayout>
             <EntityDetailsLayout.Header
@@ -169,10 +183,10 @@ export const DetailsModelPage = () => {
                                 />
                             </PanelContainer.Detail>
 
-                            <PanelContainer.Detail label="Estado del modelo" isButton>
+                            <PanelContainer.Detail label="Estado del producto" isButton>
                                 <StatusProductButton
+                                    isActive={data.productStatus}
                                     productId={productId!}
-                                    value={data.status ? 'Activo' : 'Inactivo'}
                                     size={"small"}
                                 />
                             </PanelContainer.Detail>

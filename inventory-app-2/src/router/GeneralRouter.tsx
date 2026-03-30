@@ -231,10 +231,18 @@ export const GeneralRouter = () => {
                             </NavbarContainer>
                         }>
                             <Route index element={<ListDeliveryOrderPage />} />
-                            <Route path="my-orders" element={<ListDeliveryOrderByCurrentUserPage />} />
-                            <Route path="pending" element={<ListPendingDeliveryOrderPage />} />
-                            <Route path="new" element={<NewDeliveryOrderPage />} />
                             <Route path=":id" element={<DetailsDeliveryOrderPage />} />
+
+                            <Route path="pending" element={<ListPendingDeliveryOrderPage />} />
+                            <Route path="pending/:id" element={<DetailsDeliveryOrderPage />} />
+
+
+                            <Route path="my-orders" element={<ListDeliveryOrderByCurrentUserPage />} />
+                            <Route path="my-orders/:id" element={<DetailsDeliveryOrderPage />} />
+
+
+
+                            <Route path="new" element={<NewDeliveryOrderPage />} />
 
                         </Route>
 

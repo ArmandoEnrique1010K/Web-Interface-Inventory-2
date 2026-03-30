@@ -3,6 +3,7 @@ import { z } from "zod"
 export const categorySchema = z.object({
     id: z.number(),
     name: z.string(),
+    status: z.boolean()
 })
 
 
@@ -62,6 +63,7 @@ export const productSchema = z.object({
 export const typeSchema = z.object({
     id: z.number(),
     name: z.string(),
+    status: z.boolean()
 })
 
 type Category = z.infer<typeof categorySchema>

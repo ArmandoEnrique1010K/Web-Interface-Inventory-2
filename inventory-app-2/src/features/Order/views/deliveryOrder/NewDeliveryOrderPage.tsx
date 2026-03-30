@@ -1,4 +1,3 @@
-import type { DeliveryOrderForm } from '../../types'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
@@ -11,36 +10,37 @@ import { Button } from '@/ui/Button'
 import { ButtonLink } from '@/ui/ButtonLink'
 import { ArrowUpCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
 import { InputDateTime } from '@/ui/fields/InputDateTime'
-import { AsyncSelectField } from '@/ui/fields/AsyncSelectOption'
+import { AsyncSelectField, type Option } from '@/ui/fields/AsyncSelectOption'
+
+type DeliveryOrderFormFields = {
+    limitDate: string,
+    userIdClient: Option | null
+}
 
 export const NewDeliveryOrderPage = () => {
-    const initialValues: DeliveryOrderForm = {
+    const initialValues: DeliveryOrderFormFields = {
         limitDate: '',
-        userIdClient: ''
+        userIdClient: null
     }
 
     // NOTA: NO SE UTILIZA LA FUNCIÓN DE register
-    const { handleSubmit, setError, control, formState: { errors } } = useForm<DeliveryOrderForm>({
+    const { handleSubmit, setError, control, formState: { errors } } = useForm<DeliveryOrderFormFields>({
         defaultValues: initialValues
     })
     const navigate = useNavigate();
     const { mutate } = useMutation({
         mutationFn: registerDeliveryOrder,
         onError: (error: GeneralError) => {
-            console.log(error)
             if (error.type === 'FIELD_ERROR') {
                 Object.entries(error.fields).forEach(([field, message]) => {
-                    setError(field as keyof DeliveryOrderForm, {
+                    setError(field as keyof DeliveryOrderFormFields, {
                         type: 'server',
                         message: message as string,
                     })
                 })
-
-                console.log(error)
                 toast.error(error.message)
                 return
             }
-
             if (error.type === 'GENERAL_ERROR') {
                 toast.error(error.message)
                 return
@@ -59,13 +59,20 @@ export const NewDeliveryOrderPage = () => {
             <EntityFormLayout.Header title='Agregar nueva orden de entrega'></EntityFormLayout.Header>
             <EntityFormLayout.Form styled onSubmit={
                 handleSubmit((data) => {
-                    mutate(data)
+                    // mutate(data)
+
+                    mutate({
+                        formData: {
+                            ...data,
+                            userIdClient: data.userIdClient?.value.toString() || ''
+                        }
+                    })
                 })
             }>
 
                 <EntityFormLayout.Inputs>
 
-                    <InputDateTime<DeliveryOrderForm>
+                    <InputDateTime<DeliveryOrderFormFields>
                         id="limitDate"
                         label="Fecha limite de entrega"
                         name="limitDate"
@@ -102,7 +109,7 @@ export const NewDeliveryOrderPage = () => {
                                     : 'Seleccione un cliente'
                         }
                     /> */}
-                    <AsyncSelectField<DeliveryOrderForm>
+                    <AsyncSelectField<DeliveryOrderFormFields>
                         label="Cliente"
                         name="userIdClient"
                         control={control}

@@ -259,7 +259,7 @@ export const DetailsDeliveryOrderAndModelsView = () => {
                                             {selectedModel.modelName}
                                         </PanelContainer.Detail>
                                         <PanelContainer.Detail label="ID de modelo">
-                                            {selectedModel.currentModelId}
+                                            {selectedModel.modelId}
                                         </PanelContainer.Detail>
                                         <PanelContainer.Detail label="Cantidad requerida">
                                             {selectedModel.requiredQuantityTotal}

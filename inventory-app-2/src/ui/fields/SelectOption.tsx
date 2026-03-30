@@ -53,7 +53,7 @@ export const SelectOption = ({ id, name, label, errorMessage, functionEnabled, o
                         ))
                     }
                 </select>
-                <div className="pointer-events-none absolute inset-y-0 right-2 top-0 flex items-center">
+                <div className="pointer-events-none absolute inset-y-0 right-2 top-7 h-8 flex items-center">
                     <ChevronDownIcon className="size-6" />
                 </div>
 

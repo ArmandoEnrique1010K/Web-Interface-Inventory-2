@@ -56,6 +56,7 @@ export const ListDeliveryOrderByCurrentUserPage = () => {
         { value: 'ORDER_DELIVERED', label: 'Entregado' },
         { value: 'ORDER_CANCELED', label: 'Eliminado' },
     ]
+    //*: SI UN PRODUCTO ESTA DESACTIVADO PODRA SER VISTO EN LAS ORDENES DE ENTREGA POR UN USUARIO (QUE ES EL MISMO QUE HA INICIADO SESION)
 
     return (
         <EntityListLayout>
@@ -108,7 +109,6 @@ export const ListDeliveryOrderByCurrentUserPage = () => {
                         }
                     />
 
-                    {/* TODO: URGENTE, CORREGIR LA LOGICA EN LA API REST */}
                     <InputDateTimeFilter
                         name="endDate"
                         label='Fecha prioritaria maxima de entrega'
@@ -193,7 +193,7 @@ export const ListDeliveryOrderByCurrentUserPage = () => {
                             return <TableRowContainer key={order.id}>
                                 <BaseTableCell data={order.id} />
                                 <BaseTableCell data={
-                                    <Link to={`/orders/${order.id}`} className='hover:text-blue-900'>{order.batch}</Link>
+                                    <Link to={`/orders/my-orders/${order.id}`} className='hover:text-blue-900'>{order.batch}</Link>
                                 } />
                                 <BaseTableCell data={
                                     order.priorityDate ? (

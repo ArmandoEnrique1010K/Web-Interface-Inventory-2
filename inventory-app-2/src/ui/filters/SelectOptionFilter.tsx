@@ -45,7 +45,7 @@ export const SelectOptionFilter = ({ name, label, options, onChange, textInNullO
                     ))
                 }
             </select>
-            <div className="pointer-events-none absolute inset-y-0 right-2 top-5 flex items-center">
+            <div className="pointer-events-none absolute inset-y-0 right-2 top-7 flex items-center h-8">
                 <ChevronDownIcon className="size-6 text-black font-bold" />
             </div>
 

@@ -15,10 +15,9 @@ type InputDateProps<T extends FieldValues> = {
     control: Control<T>;
     errorMessage?: string;
 };
-// TODO: URGENTE INTENTAR QUITAR LA PROP NAME
-
-// TODO: INVESTIGAR COMO SE HA INFERIDO EL TIPO DE DATO DE T
-// TODO: PROBLEMA AL SELECCIONAR UNA FECHA, NO SELECCIONA LA FECHA AL PULSAR EN EL CALENDARIO
+// T es un parámetro de tipo genérico que se utiliza para asegurar que el componente InputDate sea capaz de manejar cualquier tipo de formulario de React Hook Form.
+// Para que un componente sea capaz de manejar cualquier tipo de formulario, se debe utilizar un tipo genérico.
+// El tipo genérico se utiliza para asegurar que el componente InputDate pueda heredar las propiedades del tipo genérico (en este caso, FieldValues).
 export function InputDate<T extends FieldValues>({
     id,
     label,

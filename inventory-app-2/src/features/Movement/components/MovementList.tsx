@@ -90,8 +90,7 @@ export const MovementList = () => {
 
     // TODO: CONTINUAR AQUI LUEGO DE COMPLETAR EL MODULO ORDER
     const content = data?.content || []
-
-    console.log(data)
+    // console.log(data)
 
     const isSmallScreen = useMediaQuery({ query: '(max-width: 479px)' })
 

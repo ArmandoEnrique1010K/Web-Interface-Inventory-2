@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { getProduct } from "../../api/ProductAPI"
 import { useLocation, useParams } from "react-router-dom"
-import type { ModelDetailsItem, ProductItem } from "../../types"
+import type { ProductItem } from "../../types"
 import { listAllModelsByProductId } from "../../api/ModelAPI"
 import { generateSizes } from "@/utils/generateSizes"
 import { Button } from "@/ui/Button"
@@ -49,7 +49,7 @@ export const DetailsProductPage = () => {
         enabled: !!productId
     })
 
-    const { data: modelsData = [], isLoading: isModelsLoading, isError: isModelsError } = useQuery<ModelDetailsItem[]>({
+    const { data: modelsData = [], isLoading: isModelsLoading, isError: isModelsError } = useQuery({
         queryKey: ['models', 'product', productId],
         queryFn: () => listAllModelsByProductId(productId!),
         enabled: !!productId
@@ -108,9 +108,6 @@ export const DetailsProductPage = () => {
         return <div>Producto no encontrado o desactivado</div>
     }
 
-    // TODO: URGENTE , INVESTIGAR QUE HACER CON UN PRODUCTO QUE ESTE CON UN ESTADO INACTIVO
-    // TODO: CORREGIR LA API REST, SI UN PRODUCTO ESTA DESACTIVADO, TODAVIA PUEDE SER EDITADO Y VISTO POR UN ADMINISTRADOR
-    // TODO: SI UN PRODUCTO ESTA DESACTIVADO NO PODRA SER VISTO POR LOS USUARIOS
     return (
         <EntityDetailsLayout>
             <EntityDetailsLayout.Header
@@ -178,10 +175,9 @@ export const DetailsProductPage = () => {
 
                             <PanelContainer.Detail label="Estado del producto">
                                 <StatusProductButton
-                                    from='product-details'
                                     size="small"
                                     productId={productId!}
-                                    value={productData.status ? 'Activo' : 'Inactivo'}
+                                    isActive={productData.status}
                                 />
 
                             </PanelContainer.Detail>

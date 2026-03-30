@@ -27,6 +27,7 @@ export const StatusModelButton = ({ from, modelId, productId, value, size }: { f
             queryClient.invalidateQueries({ queryKey: ['product', productId] })
             queryClient.invalidateQueries({ queryKey: ['models', 'product', productId] })
             queryClient.invalidateQueries({ queryKey: ['models'] })
+            queryClient.invalidateQueries({ queryKey: ['model', modelId ? +modelId : 0] })
 
             if (from === 'model-details') {
                 navigate('/products/models')

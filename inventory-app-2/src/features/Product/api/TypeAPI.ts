@@ -25,6 +25,17 @@ export async function listAllTypes(): Promise<TypeItem[]> {
     }
 }
 
+export async function listAllActiveTypes(): Promise<TypeItem[]> {
+    try {
+        const url = `/types/active`
+        const { data } = await api.get<DataResponse>(url)
+        return data.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+}
+
+
 export async function getType(id: string): Promise<TypeItem> {
     try {
         const url = `/types/${id}`
@@ -44,6 +55,18 @@ export async function updateType({ typeId, formData }: UpdateTypePayload): Promi
     try {
         const url = `/types/${typeId}`
         const { data } = await api.put<GeneralResponse>(url, formData)
+        if (data.type === 'success') {
+            return data.message
+        }
+    } catch (error) {
+        handleApiError(error);
+    }
+}
+
+export async function changeStatusType(typeId: string) {
+    try {
+        const url = `/types/${typeId}/status`
+        const { data } = await api.patch<GeneralResponse>(url)
         if (data.type === 'success') {
             return data.message
         }

@@ -7,8 +7,8 @@ import { toast } from 'sonner';
 import { Button } from '@/ui/Button';
 import { InputText } from '@/ui/fields/InputText';
 import { SelectOption } from '@/ui/fields/SelectOption';
-import { listAllCategories } from '../../api/CategoryAPI';
-import { listAllTypes } from '../../api/TypeAPI';
+import { listAllActiveCategories } from '../../api/CategoryAPI';
+import { listAllActiveTypes } from '../../api/TypeAPI';
 import { ArrowUpCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { TextMessage } from '@/components/TextMessage';
 import { EntityFormLayout } from '@/layout/entity/EntityFormLayout';
@@ -65,7 +65,8 @@ export const EditProductModal = ({ data, productId, modelId, closeModal }: Props
             if (modelId) {
                 queryClient.invalidateQueries({ queryKey: ["model", modelId] })
             }
-            console.log("ID de modelo: " + modelId)
+            // console.log("ID de modelo: " + modelId)
+
             toast.success(data)
             // navigate("/products")
             closeModal(false)
@@ -80,12 +81,12 @@ export const EditProductModal = ({ data, productId, modelId, closeModal }: Props
         mutate(data)
     }
     const { data: categoriesData, isLoading: categoriesLoading } = useQuery({
-        queryKey: ['list-categories'],
-        queryFn: listAllCategories
+        queryKey: ['categories', 'active'],
+        queryFn: listAllActiveCategories
     })
     const { data: typesData, isLoading: typesLoading } = useQuery({
-        queryKey: ['list-types'],
-        queryFn: listAllTypes
+        queryKey: ['types', 'active'],
+        queryFn: listAllActiveTypes
     })
 
     const categories = categoriesData?.map((category: CategoryItem) => ({

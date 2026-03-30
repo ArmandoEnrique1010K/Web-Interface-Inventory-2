@@ -11,6 +11,7 @@ import { useState } from 'react'
 import { Button } from '@/ui/Button'
 import { Modal } from '@/components/Modal'
 import { LoaderCategory } from '../../components/category/LoaderCategory'
+import { StatusCategoryButton } from '../../components/category/StatusCategoryButton';
 
 export const ListCategoryPage = () => {
 
@@ -38,7 +39,7 @@ export const ListCategoryPage = () => {
                 }></EntityListLayout.Header>
             <EntityListLayout.Content>
                 <TableContainer
-                    headers={['ID', 'Nombre', 'Editar']}
+                    headers={['ID', 'Nombre', 'Editar', 'Estado']}
                     isError={isError}
                     isEmpty={!data?.length
                     }
@@ -61,6 +62,12 @@ export const ListCategoryPage = () => {
                                         showTextOnMobile
                                     />
                                 } isCenter />
+                                <BaseTableCell isCenter data={
+                                    <StatusCategoryButton
+                                        categoryId={category.id.toString()}
+                                        text={category.status ? 'Activo' : 'Inactivo'}
+                                    />
+                                }></BaseTableCell>
                             </TableRowContainer>
                         ))
 

@@ -56,7 +56,6 @@ export const LoginForm = () => {
         }
     })
 
-    // TODO: SEGUIR EN EL OTRO FORMULARIO
     return (
         <AuthFormLayout>
             <AuthFormLayout.Header title="Inicio de sesión">

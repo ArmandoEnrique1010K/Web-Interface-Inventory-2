@@ -3,7 +3,7 @@ import type { DeliveryOrderCommentForm, DeliveryOrderForm } from "../types";
 import type { DataPageResponse, DataResponse, GeneralResponse } from "@/types/index";
 import { handleApiError } from "@/utils/handleApiError";
 
-export async function registerDeliveryOrder(formData: DeliveryOrderForm) {
+export async function registerDeliveryOrder({ formData }: { formData: DeliveryOrderForm }) {
     try {
         const url = `/delivery-orders`
         const { data } = await api.post<GeneralResponse>(url, formData)

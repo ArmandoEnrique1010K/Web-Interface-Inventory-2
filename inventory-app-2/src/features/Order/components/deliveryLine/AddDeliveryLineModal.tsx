@@ -58,8 +58,6 @@ export const AddDeliveryLineModal = ({ setAddDeliveryLineModalOpen, deliveryOrde
     const { mutate } = useMutation({
         mutationFn: registerDeliveryOrder,
         onError: (error: GeneralError) => {
-            console.log(error)
-            // Error de campo
             if (error.type === 'FIELD_ERROR') {
                 Object.entries(error.fields).forEach(([field, message]) => {
                     setError(field as keyof DeliveryLineFormFields, {
@@ -234,7 +232,7 @@ export const AddDeliveryLineModal = ({ setAddDeliveryLineModalOpen, deliveryOrde
                         />
                         <div className="min-h-6">
                             <p className="text-red-700 text-sm">
-                                {selectedRegionId === '0' && initialValues.locationId === null ? 'Seleccione una región' : ''}
+                                {selectedRegionId === '' && initialValues.locationId === null ? 'Seleccione una región' : ''}
                             </p>
                         </div>
                     </div>
@@ -253,7 +251,7 @@ export const AddDeliveryLineModal = ({ setAddDeliveryLineModalOpen, deliveryOrde
                         />
                         <div className="min-h-6">
                             <p className="text-red-700 text-sm">
-                                {selectedSubregionId === '0' && initialValues.locationId === null ? 'Seleccione una subregión' : ''}
+                                {selectedSubregionId === '' && initialValues.locationId === null ? 'Seleccione una subregión' : ''}
                             </p>
                         </div>
                     </div>

@@ -26,6 +26,16 @@ export async function listAllCategories(): Promise<CategoryItem[]> {
     }
 }
 
+export async function listAllActiveCategories(): Promise<CategoryItem[]> {
+    try {
+        const url = `/categories/active`
+        const { data } = await api.get<DataResponse>(url)
+        return data.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+}
+
 export async function getCategory(id: string): Promise<CategoryItem> {
     try {
         const url = `/categories/${id}`
@@ -45,6 +55,18 @@ export async function updateCategory({ categoryId, formData }: UpdateCategoryPay
     try {
         const url = `/categories/${categoryId}`
         const { data } = await api.put<GeneralResponse>(url, formData)
+        if (data.type === 'success') {
+            return data.message
+        }
+    } catch (error) {
+        handleApiError(error);
+    }
+}
+
+export async function changeStatusCategory(categoryId: string) {
+    try {
+        const url = `/categories/${categoryId}/status`
+        const { data } = await api.patch<GeneralResponse>(url)
         if (data.type === 'success') {
             return data.message
         }

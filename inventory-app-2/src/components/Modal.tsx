@@ -47,7 +47,7 @@ bg-white shadow-lg
 `}
                 >
                     {
-                        title && <Dialog.Title className="text-4xl font-semibold pb-4 mr-12">{title}</Dialog.Title>
+                        title && <Dialog.Title className="text-4xl font-semibold pb-6 mr-12">{title}</Dialog.Title>
                     }
                     {
                         <Dialog.Description className='hidden'>Descripcion</Dialog.Description>

@@ -8,6 +8,7 @@ type ProductCreatePayload = {
     file?: File
 }
 
+// El formato de datos que se enviaran cambia cuando se quiere subir una imagen
 export async function registerProduct({ data, file }: ProductCreatePayload) {
 
     const formData = new FormData()
@@ -28,9 +29,11 @@ export async function registerProduct({ data, file }: ProductCreatePayload) {
     try {
         const url = `/products`
         const { data } = await api.post<GeneralResponse>(url, formData)
+        // Solamente si se tiene una respuesta valida, se toma el mensaje devuelto
         if (data.type === 'success') {
             return data.message
         }
+        return ""
     } catch (error: unknown) {
         handleApiError(error);
     }

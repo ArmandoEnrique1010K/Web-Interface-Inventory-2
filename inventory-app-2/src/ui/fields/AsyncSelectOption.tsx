@@ -47,7 +47,8 @@ export function AsyncSelectField<T extends FieldValues>({
         if (!inputValue || disabled) return [];
 
         try {
-            console.log(await loadOptions(inputValue));
+            // Imprimir todas las opciones que se pasan aqui
+            // console.log(await loadOptions(inputValue));
             return await loadOptions(inputValue);
         } catch {
             return [];

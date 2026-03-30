@@ -168,7 +168,7 @@ export const ListDeliveryLineByDeliveryOrder = () => {
     })
 
     const modelsInDeliveryOrder = modelsByDeliveryOrderData?.map((model: ModelDeliveryOrderItem) => ({
-        value: model.id,
+        value: model.modelId, // OBS: DEBE SER EL ID DEL MODELO NO EL ID DE LA RELACION
         label: `${model.productName + " " + model.modelName}`
     }))
 

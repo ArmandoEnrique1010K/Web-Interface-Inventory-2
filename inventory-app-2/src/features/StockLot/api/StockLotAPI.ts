@@ -3,7 +3,7 @@ import type { DataPageResponse, DataResponse, GeneralResponse } from "@/types/in
 import { handleApiError } from "@/utils/handleApiError";
 import type { StockLotAdjustmentForm, StockLotReceiveForm, StockLotTransferForm } from "../types";
 
-export async function registerStockLot(formData: StockLotReceiveForm) {
+export async function registerStockLot({ formData }: { formData: StockLotReceiveForm }) {
     try {
         const url = `/stock-lots`
         const { data } = await api.post<GeneralResponse>(url, formData)
