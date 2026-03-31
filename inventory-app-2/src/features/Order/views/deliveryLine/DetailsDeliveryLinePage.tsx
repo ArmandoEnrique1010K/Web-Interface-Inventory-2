@@ -15,6 +15,7 @@ import { getStockLotsByDeliveryLine } from "../../api/StockLotsDeliveryLineAPI";
 import { TableContainer } from "@/components/TableContainer";
 import { TableRowContainer } from "@/components/TableRowContainer";
 import { BaseTableCell } from "@/components/BaseTableCell";
+import { LostDeliveryLineModal } from "../../components/deliveryLine/LostDeliveryLineModal";
 
 export const DetailsDeliveryLinePage = () => {
 
@@ -28,6 +29,8 @@ export const DetailsDeliveryLinePage = () => {
     })
 
     const [editModalOpen, setEditModalOpen] = useState(false);
+    const [lostModalOpen, setLostModalOpen] = useState(false);
+
     const [allocateStockModalOpen, setAllocateStockModalOpen] = useState(false);
 
     // Obtener las cantidades tomadas
@@ -122,6 +125,9 @@ export const DetailsDeliveryLinePage = () => {
                             <PanelContainer.Detail label="Nombre del producto">
                                 {data.productName}
                             </PanelContainer.Detail>
+                            <PanelContainer.Detail label="ID de modelo">
+                                {data.modelId}
+                            </PanelContainer.Detail>
                             <PanelContainer.Detail label="Nombre del modelo">
                                 {data.modelName}
                             </PanelContainer.Detail>
@@ -165,8 +171,8 @@ export const DetailsDeliveryLinePage = () => {
                         </PanelContainer>
                     </EntityDetailsLayout.Grid>
 
-                    <PanelContainer.DetailsGrid>
-                        <PanelContainer subtitle="Operaciones">
+                    <PanelContainer subtitle="Operaciones">
+                        <PanelContainer.DetailsGrid>
                             <PanelContainer.Detail label="Distribuir">
                                 {
                                     <Button
@@ -181,9 +187,23 @@ export const DetailsDeliveryLinePage = () => {
                                     />
                                 }
                             </PanelContainer.Detail>
+                            <PanelContainer.Detail label="Quitar">
+                                {
+                                    <Button
+                                        type='button'
+                                        size='small'
+                                        text='Quitar / eliminar'
+                                        color='red-outline'
+                                        onClick={() => {
+                                            setLostModalOpen(true)
+                                        }}
+                                        showTextOnMobile
+                                    />
+                                }
+                            </PanelContainer.Detail>
 
-                        </PanelContainer>
-                    </PanelContainer.DetailsGrid>
+                        </PanelContainer.DetailsGrid>
+                    </PanelContainer>
 
 
 
@@ -204,8 +224,31 @@ export const DetailsDeliveryLinePage = () => {
                     locked
                 >
                     <AllocateStockDeliveryLineModal
-                        setAllocateStockModalOpen={setAllocateStockModalOpen} deliveryLineId={deliveryLineId} deliveryOrderId={deliveryOrderId!} modelId={data.modelId} />
+                        setAllocateStockModalOpen={setAllocateStockModalOpen}
+                        deliveryLineId={deliveryLineId}
+                        deliveryOrderId={deliveryOrderId!}
+                        modelId={data.modelId}
+                    />
 
+                </Modal>
+            }
+
+            {
+                lostModalOpen && deliveryLineId && <Modal
+                    isOpen={lostModalOpen}
+                    onClose={() => {
+                        setLostModalOpen(false)
+                    }}
+                    size="lg"
+                    title={`Quitar cantidad de la linea #${deliveryLineId}`}
+                    locked
+                >
+                    <LostDeliveryLineModal
+                        setLostModalOpen={setLostModalOpen}
+                        deliveryLineId={deliveryLineId}
+                        deliveryOrderId={deliveryOrderId!}
+
+                    />
                 </Modal>
             }
 
