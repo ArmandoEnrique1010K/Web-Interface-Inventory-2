@@ -38,7 +38,7 @@ export const SelectOptionFilter = ({ name, label, options, onChange, textInNullO
                 </option>}
 
                 {
-                    options.map((option) => (
+                    options?.map((option) => (
                         <option key={option.value} value={option.value}>
                             {option.label}
                         </option>

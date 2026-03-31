@@ -16,6 +16,9 @@ import { TableContainer } from "@/components/TableContainer";
 import { TableRowContainer } from "@/components/TableRowContainer";
 import { BaseTableCell } from "@/components/BaseTableCell";
 import { LostDeliveryLineModal } from "../../components/deliveryLine/LostDeliveryLineModal";
+import { ReturnDeliveryLineModal } from "../../components/deliveryLine/ReturnDeliveryLineModal";
+import { ButtonLink } from "@/ui/ButtonLink";
+import { SendDeliveryLineButton } from "../../components/deliveryLine/SendDeliveryLineButton";
 
 export const DetailsDeliveryLinePage = () => {
 
@@ -30,6 +33,7 @@ export const DetailsDeliveryLinePage = () => {
 
     const [editModalOpen, setEditModalOpen] = useState(false);
     const [lostModalOpen, setLostModalOpen] = useState(false);
+    const [returnModalOpen, setReturnModalOpen] = useState(false);
 
     const [allocateStockModalOpen, setAllocateStockModalOpen] = useState(false);
 
@@ -70,16 +74,25 @@ export const DetailsDeliveryLinePage = () => {
             <EntityDetailsLayout.Header
                 title={`Linea de entrega #${deliveryLineId}`}
                 actions={
-                    <Button
-                        type="button"
-                        size="large"
-                        text="Editar"
-                        color="blue"
-                        onClick={() => {
-                            setEditModalOpen(true)
-                        }}
-                        showTextOnMobile
-                    />
+                    <>
+                        <Button
+                            type="button"
+                            size="large"
+                            text="Editar linea"
+                            color="blue"
+                            onClick={() => {
+                                setEditModalOpen(true)
+                            }}
+                            showTextOnMobile
+                        />
+                        <ButtonLink
+                            size={"large"}
+                            text={"Volver a orden"}
+                            to={`/orders/${deliveryOrderId}`}
+                            color={"gray"}
+                            showTextOnMobile
+                        />
+                    </>
                 }
                 textDetails={
                     <div className="text-right">
@@ -201,6 +214,27 @@ export const DetailsDeliveryLinePage = () => {
                                     />
                                 }
                             </PanelContainer.Detail>
+                            <PanelContainer.Detail label="Devolver">
+                                {
+                                    <Button
+                                        type='button'
+                                        size='small'
+                                        text='Devolver'
+                                        color='blue-outline'
+                                        onClick={() => {
+                                            setReturnModalOpen(true)
+                                        }}
+                                        showTextOnMobile
+                                    />
+                                }
+                            </PanelContainer.Detail>
+                            <PanelContainer.Detail label="Entregar">
+                                <SendDeliveryLineButton
+                                    deliveryLineId={deliveryLineId!}
+                                    deliveryOrderId={deliveryOrderId!}
+                                    deliveryLineStatus={data.lineStatus}
+                                />
+                            </PanelContainer.Detail>
 
                         </PanelContainer.DetailsGrid>
                     </PanelContainer>
@@ -252,12 +286,30 @@ export const DetailsDeliveryLinePage = () => {
                 </Modal>
             }
 
+            {
+                returnModalOpen && deliveryLineId && <Modal
+                    isOpen={returnModalOpen}
+                    onClose={() => {
+                        setReturnModalOpen(false)
+                    }}
+                    size="lg"
+                    title={`Devolver cantidad de la linea #${deliveryLineId}`}
+                    locked
+                >
+                    <ReturnDeliveryLineModal
+                        setReturnModalOpen={setReturnModalOpen}
+                        deliveryLineId={deliveryLineId}
+                        deliveryOrderId={deliveryOrderId!}
+
+                    />
+                </Modal>
+            }
 
             {/* DETALLA DE QUE LOTE DE ENTREGA SE HA TOMADO PARA COMPLETAR LA LINEA DE ENTREGA */}
             <EntityDetailsLayout.Content columns={1}>
                 <EntityDetailsLayout.Column>
                     <TableContainer
-                        title="Cantidades tomadas de los lotes de stock"
+                        title="Historial de las cantidades tomadas de los lotes de stock"
                         headers={['ID', 'Cantidad', 'Fecha', 'Código de lote de stock']}
                         isError={stockLotDeliveryLineError}
                         isEmpty={!content.length}
