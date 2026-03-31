@@ -1,15 +1,15 @@
 import { api } from "@/lib/axiosConfig";
-import type { DeliveryLineForm, LineStatusEnum } from "../types";
-import type { DataPageResponse, GeneralResponse } from "@/types/index";
+import type { DeliveryLineAllocateForm, DeliveryLineAlterForm, DeliveryLineForm, DeliveryLineUpdateForm, LineStatusEnum } from "../types";
+import type { DataPageResponse, DataResponse, GeneralResponse } from "@/types/index";
 import { handleApiError } from "@/utils/handleApiError";
 
 
-export type RegisterDeliveryOrderPayload = {
+export type RegisterDeliveryLinePayload = {
     deliveryOrderId: string,
     formData: DeliveryLineForm
 }
 
-export async function registerDeliveryOrder({ deliveryOrderId, formData }: RegisterDeliveryOrderPayload) {
+export async function registerDeliveryLine({ deliveryOrderId, formData }: RegisterDeliveryLinePayload) {
     try {
         const url = `/delivery-lines/delivery-order/${deliveryOrderId}`
         const { data } = await api.post<GeneralResponse>(url, formData)
@@ -40,6 +40,124 @@ export async function listAllDeliveryLinesByDeliveryOrder(deliveryOrderId: strin
         const url = `/delivery-lines/delivery-order/${deliveryOrderId}`
         const { data } = await api.get<DataPageResponse>(url, { params: params })
         return data.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+}
+
+
+export async function getDeliveryLine(id: string) {
+    try {
+        const url = `/delivery-lines/${id}`
+        const { data } = await api.get<DataResponse>(url)
+        return data.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+}
+
+
+export type UpdateDeliveryLinePayload = {
+    deliveryLineId: string,
+    formData: DeliveryLineUpdateForm
+}
+
+export async function updateDeliveryLine({ deliveryLineId, formData }: UpdateDeliveryLinePayload) {
+    try {
+        const url = `/delivery-lines/${deliveryLineId}`
+        const { data } = await api.put<GeneralResponse>(url, formData)
+        if (data.type === 'success') {
+            return data.message
+        }
+    } catch (error) {
+        handleApiError(error);
+    }
+}
+
+
+export async function cancelDeliveryLine(id: string) {
+    try {
+        const url = `/delivery-lines/${id}/cancel`
+        const { data } = await api.patch<GeneralResponse>(url)
+        if (data.type === 'success') {
+            return data.message
+        }
+    } catch (error) {
+        handleApiError(error);
+    }
+}
+
+export async function sendDeliveryLine(id: string) {
+    try {
+        const url = `/delivery-lines/${id}/deliver`
+        const { data } = await api.patch<GeneralResponse>(url)
+        if (data.type === 'success') {
+            return data.message
+        }
+    } catch (error) {
+        handleApiError(error);
+    }
+}
+
+export async function missingDeliveryLine(id: string) {
+    try {
+        const url = `/delivery-lines/${id}/missing`
+        const { data } = await api.patch<GeneralResponse>(url)
+        if (data.type === 'success') {
+            return data.message
+        }
+    } catch (error) {
+        handleApiError(error);
+    }
+}
+
+
+export type LostDeliveryLinePayload = {
+    deliveryLineId: string,
+    formData: DeliveryLineAlterForm
+}
+
+export async function lostDeliveryLine({ deliveryLineId, formData }: LostDeliveryLinePayload) {
+    try {
+        const url = `/delivery-lines/${deliveryLineId}/lost`
+        const { data } = await api.put<GeneralResponse>(url, formData)
+        if (data.type === 'success') {
+            return data.message
+        }
+    } catch (error) {
+        handleApiError(error);
+    }
+}
+
+export type ReturnDeliveryLinePayload = {
+    deliveryLineId: string,
+    formData: DeliveryLineAlterForm
+}
+
+export async function returnDeliveryLine({ deliveryLineId, formData }: ReturnDeliveryLinePayload) {
+    try {
+        const url = `/delivery-lines/${deliveryLineId}/return`
+        const { data } = await api.put<GeneralResponse>(url, formData)
+        if (data.type === 'success') {
+            return data.message
+        }
+    } catch (error) {
+        handleApiError(error);
+    }
+}
+
+export type AllocateStockInDeliveryLinePayload = {
+    deliveryLineId: string,
+    formData: DeliveryLineAllocateForm
+}
+
+export async function allocateStockInDeliveryLine({ deliveryLineId, formData }: AllocateStockInDeliveryLinePayload) {
+    try {
+        const url = `/delivery-lines/${deliveryLineId}/allocate-stock`
+        const { data } = await api.put<GeneralResponse>(url, formData)
+        if (data.type === 'success') {
+            return data.message
+        }
     } catch (error) {
         handleApiError(error);
     }

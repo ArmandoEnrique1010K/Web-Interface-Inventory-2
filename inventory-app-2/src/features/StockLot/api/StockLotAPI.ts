@@ -49,8 +49,20 @@ export async function listAllStockLotsByModelAndExcludeOne(idStockLot: string, i
     } catch (error) {
         handleApiError(error);
     }
-
 }
+
+
+export async function listAllStockLotsActiveByModel(idModel: string) {
+    try {
+        const url = `/stock-lots/model/${idModel}`
+        const { data } = await api.get<DataResponse>(url)
+        return data.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+}
+
+
 
 export async function getStockLot(id: string) {
     try {

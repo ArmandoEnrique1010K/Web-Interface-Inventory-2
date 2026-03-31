@@ -2,7 +2,7 @@ import { EntityListLayout } from '@/layout/entity/EntityListLayout'
 import { Button } from '@/ui/Button'
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react'
-import { useParams, useSearchParams } from 'react-router-dom';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { listAllDeliveryLinesByDeliveryOrder } from '../../api/DeliveryLineAPI';
 import { FiltersFormContainer } from '@/components/FiltersFormContainer';
 import { TableContainer } from '@/components/TableContainer';
@@ -478,7 +478,12 @@ export const ListDeliveryLineByDeliveryOrder = () => {
                             content?.map((deliveryLine: DeliveryLineItem) => {
                                 return <TableRowContainer key={deliveryLine.id}>
                                     <BaseTableCell data={deliveryLine.id} />
-                                    <BaseTableCell data={deliveryLine.modelproductName} />
+                                    <BaseTableCell data={<>
+                                        {/* TODO: SOLUCION TEMPORAL, ¿QUE DEBERIA MOSTRAR AQUI? */}
+                                        <Link to={`/orders/${deliveryOrderId}/line/${deliveryLine.id}`}>
+                                            {deliveryLine.modelproductName}
+                                        </Link>
+                                    </>} />
                                     <BaseTableCell data={deliveryLine.locationName} />
                                     <BaseTableCell data={
                                         <div>

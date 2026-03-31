@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import type { ModelDeliveryOrderItem } from '../../types'
 import { useForm, useWatch } from 'react-hook-form'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { registerDeliveryOrder } from '../../api/DeliveryLineAPI'
+import { registerDeliveryLine } from '../../api/DeliveryLineAPI'
 import { toast } from 'sonner'
 import type { GeneralError } from '@/types/index'
 import { EntityFormLayout } from '@/layout/entity/EntityFormLayout'
@@ -56,7 +56,7 @@ export const AddDeliveryLineModal = ({ setAddDeliveryLineModalOpen, deliveryOrde
 
 
     const { mutate } = useMutation({
-        mutationFn: registerDeliveryOrder,
+        mutationFn: registerDeliveryLine,
         onError: (error: GeneralError) => {
             if (error.type === 'FIELD_ERROR') {
                 Object.entries(error.fields).forEach(([field, message]) => {
@@ -80,6 +80,7 @@ export const AddDeliveryLineModal = ({ setAddDeliveryLineModalOpen, deliveryOrde
             toast.success(data)
             setAddDeliveryLineModalOpen(false);
             queryClient.invalidateQueries({ queryKey: ["deliveryOrder", deliveryOrderId] })
+            queryClient.invalidateQueries({ queryKey: ["deliveryLines", 'deliveryOrder', deliveryOrderId!,] })
         }
     })
 

@@ -42,6 +42,7 @@ import { NewDeliveryOrderPage } from '@/features/Order/views/deliveryOrder/NewDe
 import { DetailsDeliveryOrderPage } from '@/features/Order/views/deliveryOrder/DetailsDeliveryOrderPage'
 import { ListPendingDeliveryOrderPage } from '@/features/Order/views/deliveryOrder/ListPendingDeliveryOrderPage'
 import { ListDeliveryOrderByCurrentUserPage } from '@/features/Order/views/deliveryOrder/ListDeliveryOrderByCurrentUserPage'
+import { DetailsDeliveryLinePage } from '@/features/Order/views/deliveryLine/DetailsDeliveryLinePage'
 
 const productItems: MenuItem[] = [
     {
@@ -232,11 +233,15 @@ export const GeneralRouter = () => {
                         }>
                             <Route index element={<ListDeliveryOrderPage />} />
                             <Route path=":id" element={<DetailsDeliveryOrderPage />} />
+                            <Route path=':deliveryOrderId/line/:deliveryLineId' element={<DetailsDeliveryLinePage />} />
 
                             <Route path="pending" element={<ListPendingDeliveryOrderPage />} />
                             <Route path="pending/:id" element={<DetailsDeliveryOrderPage />} />
 
 
+
+
+                            {/* TODO: AQUI DEBE TOMAR EL ENDPOINT QUE SE ENCARGA DE MOSTRAR UNA ORDEN POR CLIENTE */}
                             <Route path="my-orders" element={<ListDeliveryOrderByCurrentUserPage />} />
                             <Route path="my-orders/:id" element={<DetailsDeliveryOrderPage />} />
 
