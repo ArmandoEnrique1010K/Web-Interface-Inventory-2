@@ -233,17 +233,21 @@ export const GeneralRouter = () => {
                         }>
                             <Route index element={<ListDeliveryOrderPage />} />
                             <Route path=":id" element={<DetailsDeliveryOrderPage />} />
+
+
                             <Route path=':deliveryOrderId/line/:deliveryLineId' element={<DetailsDeliveryLinePage />} />
 
                             <Route path="pending" element={<ListPendingDeliveryOrderPage />} />
-                            <Route path="pending/:id" element={<DetailsDeliveryOrderPage />} />
+                            <Route path="pending/:id" element={<DetailsDeliveryOrderPage from="pending" />} />
+                            <Route path="pending/:deliveryOrderId/line/:deliveryLineId" element={<DetailsDeliveryLinePage from="pending" />} />
 
 
 
 
                             {/* TODO: AQUI DEBE TOMAR EL ENDPOINT QUE SE ENCARGA DE MOSTRAR UNA ORDEN POR CLIENTE */}
                             <Route path="my-orders" element={<ListDeliveryOrderByCurrentUserPage />} />
-                            <Route path="my-orders/:id" element={<DetailsDeliveryOrderPage />} />
+                            <Route path="my-orders/:id" element={<DetailsDeliveryOrderPage from='my-orders' />} />
+                            <Route path="my-orders/:deliveryOrderId/line/:deliveryLineId" element={<DetailsDeliveryLinePage from="my-orders" />} />
 
 
 

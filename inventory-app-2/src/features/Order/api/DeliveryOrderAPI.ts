@@ -74,11 +74,19 @@ export async function getDeliveryOrderForClient(id: string) {
     }
 }
 
-// TODO: VERIFICAR ESTE ENDPOINT
-export async function changeLimitDateDeliveryOrder(id: string, params: { limitDate: string }) {
+// Se pasa la fecha limite como un queryParam a la API REST
+export async function changeLimitDateDeliveryOrder(
+    id: string,
+    params: { limitDate: string | null }
+) {
     try {
         const url = `/delivery-orders/${id}`
-        const { data } = await api.patch<GeneralResponse>(url, { params })
+        const { data } = await api.patch<GeneralResponse>(
+            url,
+            null, // No hay body
+            { params }
+        )
+
         if (data.type === 'success') {
             return data.message
         }

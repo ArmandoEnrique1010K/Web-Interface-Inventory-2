@@ -186,6 +186,8 @@ export const AllocateStockDeliveryLineModal = ({ deliveryLineId, deliveryOrderId
                 </EntityFormLayout.Actions>
 
             </EntityFormLayout.Form>
+
+
         </EntityFormLayout>
     )
 }

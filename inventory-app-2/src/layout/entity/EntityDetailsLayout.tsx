@@ -31,7 +31,7 @@ EntityDetailsLayout.Header = ({ title, textDetails, actions }: HeaderProps) => {
                             <div className="flex-5">
                                 <Title>{title}</Title>
                             </div>
-                            <div className="flex-4 pb-6 sm:pb-0">
+                            <div className="flex-4 pb-6">
                                 {textDetails && (
                                     <div className="text-xs">{textDetails}</div>
                                 )}

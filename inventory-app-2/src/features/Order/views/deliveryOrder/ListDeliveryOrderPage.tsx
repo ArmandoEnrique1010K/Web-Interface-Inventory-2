@@ -65,15 +65,18 @@ export const ListDeliveryOrderPage = () => {
             <EntityListLayout.Header
                 title="Ordenes de entrega"
                 actions={
-                    <ButtonLink
-                        icon={<PlusCircleIcon />}
-                        size="large"
-                        text="Nueva orden"
-                        to="/orders/new"
-                        color="blue"
-                        showIconOnMobile={false}
-                        showTextOnMobile
-                    />
+                    <>
+                        <ButtonLink
+                            icon={<PlusCircleIcon />}
+                            size="large"
+                            text="Nueva orden"
+                            to="/orders/new"
+                            color="blue"
+                            showIconOnMobile={false}
+                            showTextOnMobile
+                        />
+                    </>
+
                 }
             ></EntityListLayout.Header>
             <EntityListLayout.Content>

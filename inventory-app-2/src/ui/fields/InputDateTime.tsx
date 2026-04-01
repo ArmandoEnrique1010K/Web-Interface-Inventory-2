@@ -72,6 +72,7 @@ export function InputDateTime<T extends FieldValues>({
                             minutePlaceholder="mm"
                             secondPlaceholder="ss"
 
+                            disableClock
                             // Oculta los iconos
                             calendarIcon={null}
                             clearIcon={null}

@@ -8,7 +8,7 @@ import { FiltersFormContainer } from '@/components/FiltersFormContainer';
 import { TableContainer } from '@/components/TableContainer';
 import { Paginator } from '@/components/Paginator';
 import { SearchCounter } from '@/components/SearchCounter';
-import type { DeliveryLineItem, ModelDeliveryOrderItem } from '../../types';
+import type { DeliveryLineItem, ModelDeliveryOrderItem, OrderStatusEnum } from '../../types';
 import { TableRowContainer } from '@/components/TableRowContainer';
 import { BaseTableCell } from '@/components/BaseTableCell';
 import { Modal } from '@/components/Modal';
@@ -20,8 +20,14 @@ import { listAllSubregionsByRegionId } from '@/features/Location/api/SubregionAP
 import { listAllModelsByDeliveryOrder } from '../../api/ModelDeliveryOrderAPI';
 import type { RegionItem, SubregionItem } from '@/features/Location/types';
 import { AddDeliveryLineModal } from '../deliveryLine/AddDeliveryLineModal';
+import { PlusCircleIcon } from '@heroicons/react/24/outline';
 
-export const ListDeliveryLineByDeliveryOrder = () => {
+type Props = {
+    from?: 'pending' | 'my-orders'
+    deliveryOrderStatus: OrderStatusEnum
+}
+
+export const ListDeliveryLineByDeliveryOrder = ({ from, deliveryOrderStatus }: Props) => {
 
     const [addDeliveryLineModalOpen, setAddDeliveryLineModalOpen] = useState(false);
 
@@ -225,35 +231,52 @@ export const ListDeliveryLineByDeliveryOrder = () => {
 
         return params;
     };
+    const getRoutePath = (deliveryLineId: number) => {
+        if (from === 'pending') {
+            return `/orders/pending/${deliveryOrderId}/line/${deliveryLineId}`
+        }
+
+        if (from === 'my-orders') {
+            return `/orders/my-orders/${deliveryOrderId}/line/${deliveryLineId}`
+        }
+        return `/orders/${deliveryOrderId}/line/${deliveryLineId}`
+    }
 
 
     return (
         <>
             <EntityListLayout isCompact>
                 <EntityListLayout.Header actions={
-                    <>
-                        <Button
-                            type={"submit"}
-                            color={"blue"}
-                            text="Nueva linea"
-                            onClick={() => setAddDeliveryLineModalOpen(true)}
-                        >
-                        </Button>
-                        {addDeliveryLineModalOpen && <Modal
-                            isOpen={addDeliveryLineModalOpen}
-                            onClose={() => {
-                                setAddDeliveryLineModalOpen(false)
-                            }}
-                            size='lg'
-                            title={`Agregar nueva linea de entrega a la orden de entrega #${deliveryOrderId}`}
-                            locked
-                        >
-                            <AddDeliveryLineModal
-                                setAddDeliveryLineModalOpen={setAddDeliveryLineModalOpen}
-                                deliveryOrderId={deliveryOrderId!.toString()}
-                            />
-                        </Modal>}
-                    </>
+                    (from !== 'pending' && from !== 'my-orders') &&
+                    ['ORDER_CANCELED', 'ORDER_DELIVERED'].includes(deliveryOrderStatus) ||
+                    (
+                        <>
+                            <Button
+                                type={"submit"}
+                                color={"blue"}
+                                text="Nueva linea"
+                                icon={<PlusCircleIcon />}
+                                onClick={() => setAddDeliveryLineModalOpen(true)}
+                                showTextOnMobile
+                            >
+                            </Button>
+                            {addDeliveryLineModalOpen && <Modal
+                                isOpen={addDeliveryLineModalOpen}
+                                onClose={() => {
+                                    setAddDeliveryLineModalOpen(false)
+                                }}
+                                size='lg'
+                                title={`Agregar nueva linea de entrega a la orden de entrega #${deliveryOrderId}`}
+                                locked
+                            >
+                                <AddDeliveryLineModal
+                                    setAddDeliveryLineModalOpen={setAddDeliveryLineModalOpen}
+                                    deliveryOrderId={deliveryOrderId!.toString()}
+                                />
+                            </Modal>}
+
+                        </>
+                    )
                 }>
                 </EntityListLayout.Header>
                 <EntityListLayout.Content>
@@ -480,7 +503,7 @@ export const ListDeliveryLineByDeliveryOrder = () => {
                                     <BaseTableCell data={deliveryLine.id} />
                                     <BaseTableCell data={<>
                                         {/* TODO: SOLUCION TEMPORAL, ¿QUE DEBERIA MOSTRAR AQUI? */}
-                                        <Link to={`/orders/${deliveryOrderId}/line/${deliveryLine.id}`}>
+                                        <Link to={getRoutePath(deliveryLine.id)}>
                                             {deliveryLine.modelproductName}
                                         </Link>
                                     </>} />

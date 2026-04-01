@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Link, useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { getDeliveryLine } from "../../api/DeliveryLineAPI";
 import type { DeliveryLineDetailsItem } from "../../types";
 import { EntityDetailsLayout } from "@/layout/entity/EntityDetailsLayout";
@@ -7,7 +7,7 @@ import { PanelContainer } from "@/components/containers/PanelContainer";
 import { handleFormatDateTimeWithoutT } from '../../../../utils/handleFormatDateTime';
 import { handleFormatDateTimeText } from "@/utils/handleFormatDateTimeText";
 import { Button } from "@/ui/Button";
-import { useState, } from "react";
+import { useEffect, useState, } from "react";
 import { Modal } from "@/components/Modal";
 import { EditDeliveryLineModal } from "../../components/deliveryLine/EditDeliveryLineModal";
 import { AllocateStockDeliveryLineModal } from "../../components/deliveryLine/AllocateStockDeliveryLineModal";
@@ -19,10 +19,17 @@ import { LostDeliveryLineModal } from "../../components/deliveryLine/LostDeliver
 import { ReturnDeliveryLineModal } from "../../components/deliveryLine/ReturnDeliveryLineModal";
 import { ButtonLink } from "@/ui/ButtonLink";
 import { SendDeliveryLineButton } from "../../components/deliveryLine/SendDeliveryLineButton";
+import { CancelDeliveryLineButton } from "../../components/deliveryLine/CancelDeliveryLineButton";
+import { MissingDeliveryLineButton } from "../../components/deliveryLine/MissingDeliveryLineButton";
 
-export const DetailsDeliveryLinePage = () => {
+type Props = {
+    from?: 'pending' | 'my-orders'
+}
+
+export const DetailsDeliveryLinePage = ({ from }: Props) => {
 
     const { deliveryLineId, deliveryOrderId } = useParams();
+    const navigate = useNavigate();
 
     const { data, isLoading } = useQuery<DeliveryLineDetailsItem>({
         queryKey: ['deliveryLine', deliveryLineId ? +deliveryLineId : 0],
@@ -46,27 +53,54 @@ export const DetailsDeliveryLinePage = () => {
     })
     const content = stockLotsByDeliveryLineData || []
 
+    const buildStartRoutePath = () => {
+        if (from === 'pending') {
+            return `/orders/pending/${deliveryOrderId}`
+        }
+
+        if (from === 'my-orders') {
+            return `/orders/my-orders/${deliveryOrderId}`
+        }
+        return `/orders/${deliveryOrderId}`
+    }
+
+
+    // Nunca navegues cuando se renderiza el componente
+    useEffect(() => {
+        if (stockLotDeliveryLineError) {
+            navigate(buildStartRoutePath())
+        }
+    }, [stockLotDeliveryLineError])
+
+    useEffect(() => {
+        if (!data && !isLoading) {
+            navigate(buildStartRoutePath())
+        }
+    }, [data, isLoading])
 
     if (isLoading) {
         return <div>Cargando...</div>
     }
 
     if (!data) {
-        // TODO: MEJORAR ESTE MENSAJE DE ERROR
-        return (
-            <div className="text-center p-8">
-                <h2 className="text-xl font-semibold text-red-600 mb-2">
-                    Error de Validación
-                </h2>
-                <p className="text-gray-600 mb-4">
-                    La linea de entrega #{deliveryLineId} no pertenece a la orden de entrega #{deliveryOrderId}.
-                </p>
-                <Link to={'/'}>
-                    IR A INICIO
-                </Link>
-            </div>
+        return (<div>Error no controlado</div>)
 
-        )
+
+        // TODO: MEJORAR ESTE MENSAJE DE ERROR
+        // return (
+        //     <div className="text-center p-8">
+        //         <h2 className="text-xl font-semibold text-red-600 mb-2">
+        //             Error de Validación
+        //         </h2>
+        //         <p className="text-gray-600 mb-4">
+        //             La linea de entrega #{deliveryLineId} no pertenece a la orden de entrega #{deliveryOrderId}.
+        //         </p>
+        //         <Link to={'/'}>
+        //             IR A INICIO
+        //         </Link>
+        //     </div>
+
+        // )
     }
 
     return (
@@ -88,7 +122,7 @@ export const DetailsDeliveryLinePage = () => {
                         <ButtonLink
                             size={"large"}
                             text={"Volver a orden"}
-                            to={`/orders/${deliveryOrderId}`}
+                            to={buildStartRoutePath()}
                             color={"gray"}
                             showTextOnMobile
                         />
@@ -184,60 +218,80 @@ export const DetailsDeliveryLinePage = () => {
                         </PanelContainer>
                     </EntityDetailsLayout.Grid>
 
-                    <PanelContainer subtitle="Operaciones">
-                        <PanelContainer.DetailsGrid>
-                            <PanelContainer.Detail label="Distribuir">
-                                {
-                                    <Button
-                                        type='button'
-                                        size='small'
-                                        text='Distribuir'
-                                        color='green-outline'
-                                        onClick={() => {
-                                            setAllocateStockModalOpen(true)
-                                        }}
-                                        showTextOnMobile
-                                    />
-                                }
-                            </PanelContainer.Detail>
-                            <PanelContainer.Detail label="Quitar">
-                                {
-                                    <Button
-                                        type='button'
-                                        size='small'
-                                        text='Quitar / eliminar'
-                                        color='red-outline'
-                                        onClick={() => {
-                                            setLostModalOpen(true)
-                                        }}
-                                        showTextOnMobile
-                                    />
-                                }
-                            </PanelContainer.Detail>
-                            <PanelContainer.Detail label="Devolver">
-                                {
-                                    <Button
-                                        type='button'
-                                        size='small'
-                                        text='Devolver'
-                                        color='blue-outline'
-                                        onClick={() => {
-                                            setReturnModalOpen(true)
-                                        }}
-                                        showTextOnMobile
-                                    />
-                                }
-                            </PanelContainer.Detail>
-                            <PanelContainer.Detail label="Entregar">
-                                <SendDeliveryLineButton
-                                    deliveryLineId={deliveryLineId!}
-                                    deliveryOrderId={deliveryOrderId!}
-                                    deliveryLineStatus={data.lineStatus}
-                                />
-                            </PanelContainer.Detail>
+                    {
+                        // TODO: SERA POSIBLE TRASLADAR LAS VENTANAS MODALES A OTRO COMPONENTE DE TAL MANERA QUE EL NUEVO COMPONENTE REPRESENTE EL BOTON PARA ABRIR LA VENTANA MODAL?
+                        from !== 'my-orders' && (
+                            <PanelContainer subtitle="Operaciones">
+                                <PanelContainer.DetailsGrid>
+                                    <PanelContainer.Detail label="Distribuir">
+                                        {
+                                            <Button
+                                                type='button'
+                                                size='small'
+                                                text='Distribuir'
+                                                color='green-outline'
+                                                onClick={() => {
+                                                    setAllocateStockModalOpen(true)
+                                                }}
+                                                showTextOnMobile
+                                            />
+                                        }
+                                    </PanelContainer.Detail>
+                                    <PanelContainer.Detail label="Quitar">
+                                        {
+                                            <Button
+                                                type='button'
+                                                size='small'
+                                                text='Quitar / eliminar'
+                                                color='red-outline'
+                                                onClick={() => {
+                                                    setLostModalOpen(true)
+                                                }}
+                                                showTextOnMobile
+                                            />
+                                        }
+                                    </PanelContainer.Detail>
+                                    <PanelContainer.Detail label="Devolver">
+                                        {
+                                            <Button
+                                                type='button'
+                                                size='small'
+                                                text='Devolver'
+                                                color='blue-outline'
+                                                onClick={() => {
+                                                    setReturnModalOpen(true)
+                                                }}
+                                                showTextOnMobile
+                                            />
+                                        }
+                                    </PanelContainer.Detail>
+                                    <PanelContainer.Detail label="Entregar">
+                                        <SendDeliveryLineButton
+                                            deliveryLineId={deliveryLineId!}
+                                            deliveryOrderId={deliveryOrderId!}
+                                            deliveryLineStatus={data.lineStatus}
+                                        />
+                                    </PanelContainer.Detail>
+                                    <PanelContainer.Detail label="Eliminar">
+                                        <CancelDeliveryLineButton
+                                            deliveryLineId={deliveryLineId!}
+                                            deliveryOrderId={deliveryOrderId!}
+                                            deliveryLineStatus={data.lineStatus}
+                                        />
+                                    </PanelContainer.Detail>
+                                    <PanelContainer.Detail label="Reportar perdida">
+                                        <MissingDeliveryLineButton
+                                            deliveryLineId={deliveryLineId!}
+                                            deliveryOrderId={deliveryOrderId!}
+                                            deliveryLineStatus={data.lineStatus}
+                                        />
+                                    </PanelContainer.Detail>
 
-                        </PanelContainer.DetailsGrid>
-                    </PanelContainer>
+                                </PanelContainer.DetailsGrid>
+                            </PanelContainer>
+
+                        )
+                    }
 
 
 
@@ -304,31 +358,35 @@ export const DetailsDeliveryLinePage = () => {
                     />
                 </Modal>
             }
-
             {/* DETALLA DE QUE LOTE DE ENTREGA SE HA TOMADO PARA COMPLETAR LA LINEA DE ENTREGA */}
-            <EntityDetailsLayout.Content columns={1}>
-                <EntityDetailsLayout.Column>
-                    <TableContainer
-                        title="Historial de las cantidades tomadas de los lotes de stock"
-                        headers={['ID', 'Cantidad', 'Fecha', 'Código de lote de stock']}
-                        isError={stockLotDeliveryLineError}
-                        isEmpty={!content.length}
-                    >
-                        {
-                            content?.map((stockLot) => {
-                                return <TableRowContainer key={stockLot.id}>
-                                    <BaseTableCell data={stockLot.id} />
-                                    <BaseTableCell data={stockLot.quantityUsed} />
-                                    <BaseTableCell data={handleFormatDateTimeWithoutT(new Date(stockLot.createdAt))} />
-                                    <BaseTableCell data={stockLot.stockLotBatch} />
 
-                                </TableRowContainer>
-                            })
-                        }
+            {
+                from !== 'my-orders' && (
+                    <EntityDetailsLayout.Content columns={1}>
+                        <EntityDetailsLayout.Column>
+                            <TableContainer
+                                title="Historial de las cantidades tomadas de los lotes de stock"
+                                headers={['ID', 'Cantidad', 'Fecha', 'Código de lote de stock']}
+                                isError={stockLotDeliveryLineError}
+                                isEmpty={!content.length}
+                            >
+                                {
+                                    content?.map((stockLot) => {
+                                        return <TableRowContainer key={stockLot.id}>
+                                            <BaseTableCell data={stockLot.id} />
+                                            <BaseTableCell data={stockLot.quantityUsed} />
+                                            <BaseTableCell data={handleFormatDateTimeWithoutT(new Date(stockLot.createdAt))} />
+                                            <BaseTableCell data={stockLot.stockLotBatch} />
 
-                    </TableContainer>
-                </EntityDetailsLayout.Column>
-            </EntityDetailsLayout.Content>
+                                        </TableRowContainer>
+                                    })
+                                }
+
+                            </TableContainer>
+                        </EntityDetailsLayout.Column>
+                    </EntityDetailsLayout.Content>
+                )
+            }
 
         </EntityDetailsLayout >
     )

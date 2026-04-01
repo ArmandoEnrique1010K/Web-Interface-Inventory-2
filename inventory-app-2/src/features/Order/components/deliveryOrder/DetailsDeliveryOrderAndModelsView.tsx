@@ -10,8 +10,15 @@ import type { DeliveryOrderDetailsItem, ModelDeliveryOrderItem } from "../../typ
 import { listAllModelsByDeliveryOrder } from "../../api/ModelDeliveryOrderAPI"
 import { NewModelDeliveryOrderModal } from "./NewModelDeliveryOrderModal"
 import { Modal } from "@/components/Modal"
+import { ChangeLimitDateModal } from "./ChangeLimitDateModal"
+import { SendDeliveryOrderButton } from "./SendDeliveryOrderButton"
+import { CancelDeliveryOrderModal } from "./CancelDeliveryOrderModal"
 
-export const DetailsDeliveryOrderAndModelsView = () => {
+type Props = {
+    from?: 'pending' | 'my-orders'
+}
+
+export const DetailsDeliveryOrderAndModelsView = ({ from }: Props) => {
     const hasInitialized = useRef(false);
 
 
@@ -112,8 +119,12 @@ export const DetailsDeliveryOrderAndModelsView = () => {
     //     return <div>Cargando...</div>
     // }
 
+    const [changeLimitDateModal, setChangeLimitDateModalOpen] = useState(false);
+
+    const [cancelModalOpen, setCancelModalOpen] = useState(false);
+
     if (!deliveryOrderData) {
-        return <div>Orden de entrega no encontrada o desactivada</div>
+        return <div>Orden de entrega no encontrada o desactivada en DetailsDeliveryOrderAndModelsView</div>
     }
 
 
@@ -140,11 +151,41 @@ export const DetailsDeliveryOrderAndModelsView = () => {
                                 )}
                             </PanelContainer.Detail>
                             <PanelContainer.Detail label="Fecha limite prioritaria">
-                                {deliveryOrderData.priorityDate ? deliveryOrderData.priorityDate : "No hay prioridad"}
+                                {deliveryOrderData.priorityDate ?
+                                    (
+                                        <span>{handleFormatDateTimeText(new Date(deliveryOrderData.priorityDate)).date} {handleFormatDateTimeText(new Date(deliveryOrderData.priorityDate)).hour}</span>
+                                    ) : (
+                                        <span>No hay prioridad</span>
+                                    )}
                             </PanelContainer.Detail>
                             <PanelContainer.Detail label="Estado">
                                 {deliveryOrderData.orderStatus}
                             </PanelContainer.Detail>
+                            <PanelContainer.Detail label="Cambiar la fecha limite">
+                                <Button
+                                    size="small"
+                                    text="Cambiar fecha"
+                                    color="blue-outline"
+                                    type="button"
+                                    showTextOnMobile
+                                    onClick={() => setChangeLimitDateModalOpen(true)}
+                                />
+
+                                {
+                                    changeLimitDateModal && deliveryOrderId && <Modal
+                                        isOpen={changeLimitDateModal}
+                                        onClose={() => {
+                                            setChangeLimitDateModalOpen(false)
+                                        }}
+                                        size="lg"
+                                        title={`Cambiar la fecha limite de la orden de entrega #${deliveryOrderId}`}
+                                        locked
+                                    >
+                                        <ChangeLimitDateModal deliveryOrderId={deliveryOrderId} setChangeLimitDateModalOpen={setChangeLimitDateModalOpen} />
+                                    </Modal>
+                                }
+                            </PanelContainer.Detail>
+
                         </PanelContainer.DetailsGrid>
                     </PanelContainer>
 
@@ -239,9 +280,6 @@ export const DetailsDeliveryOrderAndModelsView = () => {
                                         currentModelId={selectedModel?.id}
                                     />
                                 </Modal>
-
-
-
                             }
 
                         </PanelContainer.Actions>
@@ -278,6 +316,40 @@ export const DetailsDeliveryOrderAndModelsView = () => {
 
 
                     </PanelContainer>
+
+                    {
+                        from === 'my-orders' || (
+                            <PanelContainer subtitle="Operaciones">
+                                <PanelContainer.DetailsGrid>
+                                    <PanelContainer.Detail label="Entregar">
+                                        <SendDeliveryOrderButton deliveryOrderId={deliveryOrderId!} />
+                                    </PanelContainer.Detail>
+                                    <PanelContainer.Detail label="Cancelar">
+                                        <Button type={"button"} color={"red-outline"} size="small" showTextOnMobile text="Cancelar" onClick={() => setCancelModalOpen(true)} />
+
+                                        {
+                                            cancelModalOpen && deliveryOrderId && <Modal
+                                                isOpen={cancelModalOpen}
+                                                onClose={() => {
+                                                    setCancelModalOpen(false)
+                                                }
+                                                }
+                                                size='lg'
+                                                title={`Añada un comentario antes de cancelar la orden #${deliveryOrderId}`}
+                                                locked
+                                            >
+                                                <CancelDeliveryOrderModal
+                                                    setCancelModalOpen={setCancelModalOpen}
+                                                    deliveryOrderId={deliveryOrderId}
+                                                />
+                                            </Modal>
+
+                                        }
+                                    </PanelContainer.Detail>
+                                </PanelContainer.DetailsGrid>
+                            </PanelContainer>
+                        )
+                    }
                 </EntityDetailsLayout.Column>
 
             </EntityDetailsLayout.Content>

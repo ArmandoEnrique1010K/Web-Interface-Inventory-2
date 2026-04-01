@@ -36,6 +36,9 @@ export const InputDateTimeFilter = ({ name, label, value, onChange }: Props) => 
                 secondPlaceholder="ss"
                 // Oculta los iconos
                 calendarIcon={null}
+
+                // Oculta el reloj
+                disableClock
             />
         </div>
     )

@@ -93,6 +93,8 @@ export type DeliveryOrderDetailsItem = Pick<DeliveryOrder, "id" | "batch" | "lim
 export type DeliveryOrderClientItem = Pick<DeliveryOrder, "id" | "batch" | "limitDate" | "priorityDate" | "orderStatus">
 export type DeliveryOrderClientDetailsItem = Pick<DeliveryOrder, "id" | "batch" | "limitDate" | "userClientFullname" | "orderStatus">
 
+export type DeliveryOrderChangeLimitDateForm = Pick<DeliveryOrder, "limitDate">;
+
 
 // ModelDeliveryOrder
 export type ModelDeliveryOrderItem = ModelDeliveryOrder;
@@ -108,3 +110,4 @@ export type DeliveryLineDetailsItem = Pick<DeliveryLine, "id" | "requiredQuantit
 export type StockLotDeliveryLineItem = StockLotDeliveryLine
 
 export type LineStatusEnum = "LINE_MISSING" | "LINE_READY" | "LINE_PENDING" | "LINE_DELIVERED" | "LINE_CANCELED" | "LINE_EXCEEDED"
+export type OrderStatusEnum = "ORDER_READY" | "ORDER_PENDING" | "ORDER_DELIVERED" | "ORDER_CANCELED" | "ORDER_PARTIALLY_DELIVERED"

@@ -3,8 +3,6 @@ import { useState } from "react"
 import { useSearchParams, Link } from 'react-router-dom';
 import { listAllDeliveryOrdersByClient } from "../../api/DeliveryOrderAPI"
 import { EntityListLayout } from "@/layout/entity/EntityListLayout"
-import { ButtonLink } from "@/ui/ButtonLink"
-import { PlusCircleIcon } from "@heroicons/react/24/outline"
 import { FiltersFormContainer } from "@/components/FiltersFormContainer"
 import { InputTextFilter } from "@/ui/filters/InputTextFilter"
 import { TableContainer } from "@/components/TableContainer"
@@ -62,17 +60,6 @@ export const ListDeliveryOrderByCurrentUserPage = () => {
         <EntityListLayout>
             <EntityListLayout.Header
                 title="Mis ordenes de entrega"
-                actions={
-                    <ButtonLink
-                        icon={<PlusCircleIcon />}
-                        size="large"
-                        text="Nueva orden"
-                        to="/orders/new"
-                        color="blue"
-                        showIconOnMobile={false}
-                        showTextOnMobile
-                    />
-                }
             ></EntityListLayout.Header>
             <EntityListLayout.Content>
                 <FiltersFormContainer onSubmit={
