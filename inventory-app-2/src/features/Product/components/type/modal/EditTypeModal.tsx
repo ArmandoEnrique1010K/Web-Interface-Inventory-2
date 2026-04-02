@@ -1,23 +1,23 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { CategoryForm, TypeForm } from "../../types";
+import type { CategoryForm, TypeForm } from "../../../types";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import type { GeneralError } from "types";
 import { Button } from "@/ui/Button";
 import { InputText } from "@/ui/fields/InputText";
-import { updateType } from "../../api/TypeAPI";
+import { updateType } from "../../../api/TypeAPI";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 
 type Props = {
-    data: CategoryForm;
-    typeId: string;
+    data: TypeForm;
+    typeId: number;
     setModalOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export const EditTypeModal = ({ data, typeId, setModalOpen }: Props) => {
 
-    const { register, handleSubmit, setError, formState: { errors } } = useForm<TypeForm>({
+    const { register, handleSubmit, setError, formState: { errors } } = useForm({
         defaultValues: {
             name: data.name
         }
@@ -27,23 +27,23 @@ export const EditTypeModal = ({ data, typeId, setModalOpen }: Props) => {
 
     const { mutate } = useMutation({
         mutationFn: updateType,
-        onError: (error: GeneralError) => {
-            // Error de campo
-            if (error.type === 'FIELD_ERROR') {
-                Object.entries(error.fields).forEach(([field, message]) => {
+        retry: false,
+        onError: (error: unknown) => {
+            const e = error as GeneralError
+            if (e.type === 'FIELD_ERROR' && e.fields) {
+                Object.entries(e.fields).forEach(([field, message]) => {
                     setError(field as keyof CategoryForm, {
                         type: 'server',
-                        message: message as string,
+                        message,
                     })
                 })
 
-                toast.error(error.message)
+                toast.error(e.message)
                 return
-            }
 
-            // Error general
-            if (error.type === 'GENERAL_ERROR') {
-                toast.error(error.message)
+            }
+            if (e.type === 'GENERAL_ERROR') {
+                toast.error(e.message)
                 return
             }
         },
@@ -85,6 +85,7 @@ export const EditTypeModal = ({ data, typeId, setModalOpen }: Props) => {
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile
+                        applyMinWidth
                     />
                     <Button
                         icon={<XCircleIcon />}
@@ -96,6 +97,7 @@ export const EditTypeModal = ({ data, typeId, setModalOpen }: Props) => {
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile
+                        applyMinWidth
                     />
 
                 </EntityFormLayout.Actions>

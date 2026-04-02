@@ -1,75 +1,75 @@
-import type { DataResponse, GeneralResponse } from "@/types/index";
-import type { TypeForm, TypeItem } from "../types";
+import type { DataResponse } from "@/types/index";
+import { messageResponseSchema, typeDataResponseSchema, typeListDataResponseSchema, type TypeForm } from "../types";
 import { api } from "@/lib/axiosConfig";
 import { handleApiError } from "@/utils/handleApiError";
 
-export async function registerType(formData: TypeForm): Promise<string | void> {
+export async function registerType(formData: TypeForm) {
     try {
         const url = `/types`
-        const { data } = await api.post<GeneralResponse>(url, formData)
-        if (data.type === 'success') {
-            return data.message
-        }
+        const { data } = await api.post(url, formData)
+        const parsed = messageResponseSchema.parse(data);
+        return parsed.message
     } catch (error: unknown) {
         handleApiError(error);
     }
 }
 
-export async function listAllTypes(): Promise<TypeItem[]> {
+export async function listAllTypes() {
     try {
         const url = `/types`
         const { data } = await api.get<DataResponse>(url)
-        return data.data;
+        const parsed = typeListDataResponseSchema.parse(data);
+        return parsed.data
     } catch (error) {
         handleApiError(error);
     }
 }
 
-export async function listAllActiveTypes(): Promise<TypeItem[]> {
+export async function listAllActiveTypes() {
     try {
         const url = `/types/active`
         const { data } = await api.get<DataResponse>(url)
-        return data.data;
+        const parsed = typeListDataResponseSchema.parse(data);
+        return parsed.data
     } catch (error) {
         handleApiError(error);
     }
 }
 
 
-export async function getType(id: string): Promise<TypeItem> {
+export async function getType(id: number) {
     try {
         const url = `/types/${id}`
         const { data } = await api.get<DataResponse>(url)
-        return data.data;
+        const parsed = typeDataResponseSchema.parse(data);
+        return parsed.data
     } catch (error) {
         handleApiError(error);
     }
 }
 
 type UpdateTypePayload = {
-    typeId: string;
+    typeId: number;
     formData: TypeForm;
 }
 
-export async function updateType({ typeId, formData }: UpdateTypePayload): Promise<string | void> {
+export async function updateType({ typeId, formData }: UpdateTypePayload) {
     try {
         const url = `/types/${typeId}`
-        const { data } = await api.put<GeneralResponse>(url, formData)
-        if (data.type === 'success') {
-            return data.message
-        }
+        const { data } = await api.put(url, formData)
+        const parsed = messageResponseSchema.parse(data);
+        return parsed.message
     } catch (error) {
         handleApiError(error);
     }
 }
 
-export async function changeStatusType(typeId: string) {
+export async function changeStatusType(typeId: number) {
     try {
         const url = `/types/${typeId}/status`
-        const { data } = await api.patch<GeneralResponse>(url)
-        if (data.type === 'success') {
-            return data.message
-        }
+        const { data } = await api.patch(url)
+        const parsed = messageResponseSchema.parse(data);
+        return parsed.message
     } catch (error) {
         handleApiError(error);
     }

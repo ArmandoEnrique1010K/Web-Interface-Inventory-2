@@ -5,12 +5,18 @@ import type { GeneralError } from '@/types/index';
 import { toast } from 'sonner';
 import { Button } from '@/ui/Button';
 
-export const StatusCategoryButton = ({ categoryId, text }: { categoryId: string, text: string }) => {
+type Props = {
+    categoryId: number,
+    status: boolean
+}
+
+export const StatusCategoryButton = ({ categoryId, status }: Props) => {
     const { handleSubmit } = useForm();
     const queryClient = useQueryClient();
 
     const { mutate } = useMutation({
         mutationFn: () => changeStatusCategory(categoryId),
+        retry: false,
         onError: (error: unknown) => {
             const e = error as GeneralError
             if (e.type === 'GENERAL_ERROR') {
@@ -27,10 +33,10 @@ export const StatusCategoryButton = ({ categoryId, text }: { categoryId: string,
     return (
         <form onSubmit={handleSubmit(() => mutate())} >
             <Button
-                text={text}
+                text={status ? 'Activo' : 'Inactivo'}
                 type="submit"
                 size={'small'}
-                color={text === 'Activo' ? 'green-outline' : 'red-outline'}
+                color={status ? 'green-outline' : 'red-outline'}
                 showIconOnMobile={false}
                 showTextOnMobile={true}
                 isLargeOnMobile={false}

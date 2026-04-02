@@ -5,32 +5,38 @@ import { toast } from 'sonner';
 import { changeStatusType } from '../../api/TypeAPI';
 import { Button } from '@/ui/Button';
 
-export const StatusTypeButton = ({ typeId, text }: { typeId: string, text: string }) => {
+type Props = {
+    typeId: number,
+    status: boolean
+}
+
+export const StatusTypeButton = ({ typeId, status }: Props) => {
     const { handleSubmit } = useForm();
     const queryClient = useQueryClient();
 
     const { mutate } = useMutation({
         mutationFn: () => changeStatusType(typeId),
-        onError: (error: GeneralError) => {
-            if (error.type === 'GENERAL_ERROR') {
-                toast.error(error.message)
+        retry: false,
+        onError: (error: unknown) => {
+            const e = error as GeneralError
+            if (e.type === 'GENERAL_ERROR') {
+                toast.error(e.message)
                 return
             }
         },
-        onSuccess: async (data) => {
-            toast.success(data)
+        onSuccess: (data) => {
             queryClient.invalidateQueries({ queryKey: ["types"] })
+            toast.success(data)
         }
     })
-
 
     return (
         <form onSubmit={handleSubmit(() => mutate())} >
             <Button
-                text={text}
+                text={status ? 'Activo' : 'Inactivo'}
                 type="submit"
                 size={'small'}
-                color={text === 'Activo' ? 'green-outline' : 'red-outline'}
+                color={status ? 'green-outline' : 'red-outline'}
                 showIconOnMobile={false}
                 showTextOnMobile={true}
                 isLargeOnMobile={false}

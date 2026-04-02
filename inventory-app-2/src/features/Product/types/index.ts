@@ -1,6 +1,7 @@
-import { createResponseSchema } from "@/types/index"
+import { createDataResponseSchema, createListDataResponseSchema, createMessageResponseSchema } from "@/types/index"
 import { z } from "zod"
 
+// Se definen esquemas por cada tipo de dato que devuelve la API REST, a excepcion de un solo mensaje como respuesta
 export const categorySchema = z.object({
     id: z.number(),
     name: z.string(),
@@ -67,15 +68,12 @@ export const typeSchema = z.object({
     status: z.boolean()
 })
 
+// SE UTILIZA UN SCHEMA POR CADA TIPO DE DATO QUE DEVUELE LA API REST?
+export const categoryListResponseSchema = createListDataResponseSchema(categorySchema);
+export const categoryDataResponseSchema = createDataResponseSchema(categorySchema);
 
-export const categoryListResponseSchema = createResponseSchema(z.array(categorySchema));
-export const categoryResponseSchema = createResponseSchema(categorySchema);
-
-export type CategoryResponse =
-    z.infer<typeof categoryResponseSchema>
-
-export type CategoryListResponse =
-    z.infer<typeof categoryListResponseSchema>
+export const typeListDataResponseSchema = createListDataResponseSchema(typeSchema);
+export const typeDataResponseSchema = createDataResponseSchema(typeSchema);
 
 
 
@@ -88,8 +86,8 @@ type Type = z.infer<typeof typeSchema>
 
 
 
-
 export type CategoryForm = Pick<Category, "name">;
+
 export type CategoryItem = Category;
 
 

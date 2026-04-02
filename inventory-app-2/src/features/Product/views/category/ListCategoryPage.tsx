@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
 import { listAllCategories } from '../../api/CategoryAPI'
-import { type CategoryItem } from '../../types'
 import { TableContainer } from '@/components/TableContainer'
 import { TableRowContainer } from '@/components/TableRowContainer'
 import { BaseTableCell } from '@/components/BaseTableCell'
@@ -13,8 +12,9 @@ import { EditCategoryButton } from '../../components/category/EditCategoryButton
 export const ListCategoryPage = () => {
 
     const { data, isError } = useQuery({
+        queryFn: listAllCategories,
+        retry: 1,
         queryKey: ['categories'],
-        queryFn: listAllCategories
     })
 
     return (
@@ -35,11 +35,10 @@ export const ListCategoryPage = () => {
                 <TableContainer
                     headers={['ID', 'Nombre', 'Editar', 'Estado']}
                     isError={isError}
-                    isEmpty={!data?.length
-                    }
+                    isEmpty={!data?.length}
                 >
                     {
-                        data?.map((category: CategoryItem) => (
+                        data?.map((category) => (
                             <TableRowContainer key={category.id}>
                                 <BaseTableCell data={category.id} />
                                 <BaseTableCell data={category.name} />
@@ -48,15 +47,13 @@ export const ListCategoryPage = () => {
                                 } />
                                 <BaseTableCell isCenter data={
                                     <StatusCategoryButton
-                                        categoryId={category.id.toString()}
-                                        text={category.status ? 'Activo' : 'Inactivo'}
+                                        categoryId={category.id}
+                                        status={category.status}
                                     />
                                 }></BaseTableCell>
                             </TableRowContainer>
                         ))
-
                     }
-
                 </TableContainer >
             </EntityListLayout.Content>
         </EntityListLayout>

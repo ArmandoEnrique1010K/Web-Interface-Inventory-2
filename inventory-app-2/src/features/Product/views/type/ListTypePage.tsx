@@ -7,25 +7,19 @@ import { listAllTypes } from '../../api/TypeAPI'
 import { ButtonLink } from '@/ui/ButtonLink'
 import { PlusCircleIcon } from '@heroicons/react/24/outline'
 import { EntityListLayout } from '@/layout/entity/EntityListLayout'
-import { useState } from 'react'
-import { Button } from '@/ui/Button'
-import { Modal } from '@/components/Modal'
-import { LoaderType } from '../../components/type/LoaderType'
 import { StatusTypeButton } from '../../components/type/StatusTypeButton'
+import { EditTypeButton } from '../../components/type/EditTypeButton'
 
 export const ListTypePage = () => {
 
-    const [showEditModal, setShowEditModal] = useState(false);
-    const [selectedType, setSelectedType] = useState('');
-
     const { data, isError } = useQuery({
+        queryFn: listAllTypes,
+        retry: 1,
         queryKey: ['types'],
-        queryFn: listAllTypes
     })
 
     return (
         <EntityListLayout>
-
             <EntityListLayout.Header title='Tipos'
                 actions={
                     <ButtonLink
@@ -50,50 +44,17 @@ export const ListTypePage = () => {
                                 <BaseTableCell data={type.id} />
                                 <BaseTableCell data={type.name} />
                                 <BaseTableCell isCenter data={
-                                    <Button
-                                        type='button'
-                                        size="small"
-                                        text="Editar"
-                                        color="blue"
-                                        onClick={() => {
-                                            setShowEditModal(true)
-                                            setSelectedType(type.id.toString())
-                                        }}
-                                        showTextOnMobile
-                                    />
+                                    <EditTypeButton typeId={type.id} />
                                 } />
                                 <BaseTableCell isCenter data={
                                     <StatusTypeButton
-                                        typeId={type.id.toString()}
-                                        text={type.status ? 'Activo' : 'Inactivo'}
+                                        typeId={type.id}
+                                        status={type.status}
                                     />
                                 }></BaseTableCell>
-
-
                             </TableRowContainer>
                         ))
                     }
-                    {
-                        // Solamente debe renderizar la ventana modal cuando haya un producto seleccionado, de lo contrario no funcionara
-                        showEditModal && selectedType && <Modal
-                            isOpen={showEditModal}
-                            onClose={() => {
-                                setShowEditModal(false)
-                                setSelectedType('')
-                            }}
-                            size='lg'
-                            title={`Editar tipo #${selectedType}`}
-                            locked
-                        >
-                            <LoaderType
-                                typeId={selectedType}
-                                setModalOpen={setShowEditModal}
-                            />
-                        </Modal>
-
-                    }
-
-
                 </TableContainer>
             </EntityListLayout.Content>
         </EntityListLayout>

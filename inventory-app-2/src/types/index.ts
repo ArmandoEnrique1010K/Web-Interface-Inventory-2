@@ -1,7 +1,7 @@
 import { z } from "zod"
 
 // SCHEMA GENERICO CON UN <T>
-export const createResponseSchema = <T extends z.ZodType>(schema: T) =>
+export const createDataResponseSchema = <T extends z.ZodType>(schema: T) =>
     z.object({
         type: z.enum(['success', 'error']),
         status: z.number(),
@@ -11,7 +11,13 @@ export const createResponseSchema = <T extends z.ZodType>(schema: T) =>
     })
 
 // Schema específico para datos no tipados (manteniendo compatibilidad)
-export const dataSchema = createResponseSchema(z.any())
+export const dataSchema = createDataResponseSchema(z.any())
+
+export const createMessageResponseSchema = () => z.object({
+    type: z.enum(['success', 'error']),
+    status: z.number(),
+    message: z.string(), // obligatorio
+})
 
 
 // Una pagina como respuesta
@@ -30,7 +36,8 @@ export const createListSchema = <T extends z.ZodType>(schema: T) => z.array(
     schema
 )
 
-
+export const createListDataResponseSchema = <T extends z.ZodType>(schema: T) =>
+    createDataResponseSchema(createListSchema(schema))
 
 
 // // Un solo dato como respuesta
@@ -39,6 +46,7 @@ export const createListSchema = <T extends z.ZodType>(schema: T) => z.array(
 // )
 
 
+export const messageResponseSchema = createMessageResponseSchema();
 
 
 

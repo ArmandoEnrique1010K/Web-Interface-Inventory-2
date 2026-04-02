@@ -1,5 +1,5 @@
 import { api } from "@/lib/axiosConfig"
-import { categoryListResponseSchema, categoryResponseSchema, type CategoryForm } from "../types"
+import { categoryDataResponseSchema, categoryListResponseSchema, messageResponseSchema, type CategoryForm } from "../types"
 import type { GeneralResponse } from "types"
 import { handleApiError } from "@/utils/handleApiError"
 
@@ -8,7 +8,7 @@ export async function registerCategory(formData: CategoryForm) {
     try {
         const url = `/categories`
         const { data } = await api.post(url, formData)
-        const parsed = categoryResponseSchema.parse(data);
+        const parsed = messageResponseSchema.parse(data);
         return parsed.message
     } catch (error: unknown) {
         handleApiError(error);
@@ -41,7 +41,7 @@ export async function getCategory(id: number) {
     try {
         const url = `/categories/${id}`
         const { data } = await api.get(url)
-        const parsed = categoryResponseSchema.parse(data);
+        const parsed = categoryDataResponseSchema.parse(data);
         return parsed.data;
     } catch (error) {
         handleApiError(error);
@@ -57,18 +57,18 @@ export async function updateCategory({ categoryId, formData }: UpdateCategoryPay
     try {
         const url = `/categories/${categoryId}`
         const { data } = await api.put(url, formData)
-        const parsed = categoryResponseSchema.parse(data);
+        const parsed = messageResponseSchema.parse(data);
         return parsed.message;
     } catch (error) {
         handleApiError(error);
     }
 }
 
-export async function changeStatusCategory(categoryId: string) {
+export async function changeStatusCategory(categoryId: number) {
     try {
         const url = `/categories/${categoryId}/status`
         const { data } = await api.patch<GeneralResponse>(url)
-        const parsed = categoryResponseSchema.parse(data);
+        const parsed = messageResponseSchema.parse(data);
         return parsed.message;
     } catch (error) {
         handleApiError(error);

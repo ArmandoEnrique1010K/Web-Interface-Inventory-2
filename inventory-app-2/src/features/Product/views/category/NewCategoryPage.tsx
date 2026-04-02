@@ -24,6 +24,7 @@ export const NewCategoryPage = () => {
 
     const { mutate } = useMutation({
         mutationFn: registerCategory,
+        retry: false,
         onError: (error: unknown) => {
             const e = error as GeneralError
             if (e.type === 'FIELD_ERROR' && e.fields) {
@@ -63,7 +64,8 @@ export const NewCategoryPage = () => {
                         functionEnabled={register('name')} />
                 </EntityFormLayout.Inputs>
                 <EntityFormLayout.Actions>
-                    <Button icon={<ArrowUpCircleIcon />}
+                    <Button
+                        icon={<ArrowUpCircleIcon />}
                         size="large"
                         text='Añadir'
                         type="submit"
@@ -73,7 +75,12 @@ export const NewCategoryPage = () => {
                         isLargeOnMobile
                         applyMinWidth
                     />
-                    <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to="/products/categories"
+                    <ButtonLink
+                        icon={<XCircleIcon />}
+                        size="large"
+                        text="Cancelar"
+                        color="gray"
+                        to="/products/categories"
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile

@@ -13,36 +13,35 @@ import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 
 export const NewTypePage = () => {
 
-    const initialValues: TypeForm = {
+    const initialValues = {
         name: '',
     }
 
-    const { register, handleSubmit, setError, formState: { errors } } = useForm<TypeForm>({
+    const { register, handleSubmit, setError, formState: { errors } } = useForm({
         defaultValues: initialValues
     })
 
     const navigate = useNavigate();
 
-
     const { mutate } = useMutation({
         mutationFn: registerType,
+        retry: false,
         onError: (error: GeneralError) => {
-            // Error de campo
-            if (error.type === 'FIELD_ERROR') {
-                Object.entries(error.fields).forEach(([field, message]) => {
+            const e = error as GeneralError
+            if (e.type === 'FIELD_ERROR' && e.fields) {
+                Object.entries(e.fields).forEach(([field, message]) => {
                     setError(field as keyof TypeForm, {
                         type: 'server',
-                        message: message as string,
+                        message,
                     })
                 })
 
-                toast.error(error.message)
+                toast.error(e.message)
                 return
-            }
 
-            // Error general
-            if (error.type === 'GENERAL_ERROR') {
-                toast.error(error.message)
+            }
+            if (e.type === 'GENERAL_ERROR') {
+                toast.error(e.message)
                 return
             }
         },
@@ -64,11 +63,30 @@ export const NewTypePage = () => {
                         type="text"
                         errorMessage={errors.name}
                         functionEnabled={register('name')} />
-
                 </EntityFormLayout.Inputs>
                 <EntityFormLayout.Actions>
-                    <Button icon={<ArrowUpCircleIcon />} size="large" text="Añadir" type="submit" color="green" />
-                    <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to="/products/types" />
+                    <Button
+                        icon={<ArrowUpCircleIcon />}
+                        size="large"
+                        text="Añadir"
+                        type="submit"
+                        color="green"
+                        showIconOnMobile={false}
+                        showTextOnMobile
+                        isLargeOnMobile
+                        applyMinWidth
+                    />
+                    <ButtonLink
+                        icon={<XCircleIcon />}
+                        size="large"
+                        text="Cancelar"
+                        color="gray"
+                        to="/products/types"
+                        showIconOnMobile={false}
+                        showTextOnMobile
+                        isLargeOnMobile
+                        applyMinWidth
+                    />
                 </EntityFormLayout.Actions>
             </EntityFormLayout.Form>
         </EntityFormLayout>

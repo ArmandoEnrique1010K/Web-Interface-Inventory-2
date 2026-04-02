@@ -27,6 +27,7 @@ export const EditCategoryModal = ({ data, categoryId, setModalOpen }: Props) => 
 
     const { mutate } = useMutation({
         mutationFn: updateCategory,
+        retry: false,
         onError: (error: unknown) => {
             const e = error as GeneralError
             if (e.type === 'FIELD_ERROR' && e.fields) {
