@@ -7,18 +7,12 @@ import { BaseTableCell } from '@/components/BaseTableCell'
 import { ButtonLink } from '@/ui/ButtonLink'
 import { PlusCircleIcon } from '@heroicons/react/24/outline'
 import { EntityListLayout } from '@/layout/entity/EntityListLayout'
-import { useState } from 'react'
-import { Button } from '@/ui/Button'
-import { Modal } from '@/components/Modal'
-import { LoaderCategory } from '../../components/category/LoaderCategory'
 import { StatusCategoryButton } from '../../components/category/StatusCategoryButton';
+import { EditCategoryButton } from '../../components/category/EditCategoryButton'
 
 export const ListCategoryPage = () => {
 
-    const [showEditModal, setShowEditModal] = useState(false);
-    const [selectedCategory, setSelectedCategory] = useState('');
-
-    const { data, isError } = useQuery<CategoryItem[]>({  // Cambiar a CategoryItem[]
+    const { data, isError } = useQuery({
         queryKey: ['categories'],
         queryFn: listAllCategories
     })
@@ -49,19 +43,9 @@ export const ListCategoryPage = () => {
                             <TableRowContainer key={category.id}>
                                 <BaseTableCell data={category.id} />
                                 <BaseTableCell data={category.name} />
-                                <BaseTableCell data={
-                                    <Button
-                                        type='button'
-                                        size="small"
-                                        text="Editar"
-                                        color="blue"
-                                        onClick={() => {
-                                            setShowEditModal(true)
-                                            setSelectedCategory(category.id.toString())
-                                        }}
-                                        showTextOnMobile
-                                    />
-                                } isCenter />
+                                <BaseTableCell isCenter data={
+                                    <EditCategoryButton categoryId={category.id} />
+                                } />
                                 <BaseTableCell isCenter data={
                                     <StatusCategoryButton
                                         categoryId={category.id.toString()}
@@ -70,25 +54,6 @@ export const ListCategoryPage = () => {
                                 }></BaseTableCell>
                             </TableRowContainer>
                         ))
-
-                    }
-                    {
-                        // Solamente debe renderizar la ventana modal cuando haya un producto seleccionado, de lo contrario no funcionara
-                        showEditModal && selectedCategory && <Modal
-                            isOpen={showEditModal}
-                            onClose={() => {
-                                setShowEditModal(false)
-                                setSelectedCategory('')
-                            }}
-                            size='lg'
-                            title={`Editar categoria #${selectedCategory}`}
-                            locked
-                        >
-                            <LoaderCategory
-                                categoryId={selectedCategory}
-                                setModalOpen={setShowEditModal}
-                            />
-                        </Modal>
 
                     }
 

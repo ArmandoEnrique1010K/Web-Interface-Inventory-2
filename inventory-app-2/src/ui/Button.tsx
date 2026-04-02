@@ -13,6 +13,7 @@ type Props = {
     showTextOnMobile?: boolean
     showIconOnMobile?: boolean
     isLargeOnMobile?: boolean
+    applyMinWidth?: boolean
 }
 
 export const Button = ({
@@ -28,9 +29,10 @@ export const Button = ({
     showTextOnMobile = false,
     showIconOnMobile = true,
     isLargeOnMobile = false,
+    applyMinWidth = false
 }: Props) => {
     const baseStyles = `
-        inline-flex items-center justify-center ${isLargeOnMobile && 'w-full sm:w-max'}
+        inline-flex items-center justify-center 
         font-medium
         select-none
         whitespace-nowrap
@@ -43,11 +45,14 @@ export const Button = ({
 
     const sizeStyles =
         size === 'small'
-            ? 'text-sm px-3 py-2 rounded-md'
-            : 'text-lg px-4 py-2 rounded-lg'
+            ? 'text-sm px-4 py-2 rounded-md'
+            : `text-lg py-2 rounded-lg ${applyMinWidth ? 'px-8 sm:min-w-[240px]' : 'px-6'}`
 
-    const widthStyles = isLarge ? 'w-full' : ''
-
+    const widthStyles = isLarge
+        ? 'w-full'
+        : isLargeOnMobile
+            ? 'w-full sm:w-max'
+            : ''
 
     return (
         <button

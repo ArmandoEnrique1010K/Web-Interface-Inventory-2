@@ -1,3 +1,4 @@
+import { createResponseSchema } from "@/types/index"
 import { z } from "zod"
 
 export const categorySchema = z.object({
@@ -66,19 +67,39 @@ export const typeSchema = z.object({
     status: z.boolean()
 })
 
+
+export const categoryListResponseSchema = createResponseSchema(z.array(categorySchema));
+export const categoryResponseSchema = createResponseSchema(categorySchema);
+
+export type CategoryResponse =
+    z.infer<typeof categoryResponseSchema>
+
+export type CategoryListResponse =
+    z.infer<typeof categoryListResponseSchema>
+
+
+
+
 type Category = z.infer<typeof categorySchema>
 type Model = z.infer<typeof modelSchema>
 type Product = z.infer<typeof productSchema>
 type Type = z.infer<typeof typeSchema>
 
+
+
+
+
 export type CategoryForm = Pick<Category, "name">;
+export type CategoryItem = Category;
+
+
+
 export type ModelInProductForm = Pick<Model, 'name' | 'entryDate' | 'caducityDate'>;
 export type ProductCreateForm = Pick<Product, 'name' | 'length' | 'width' | 'height' | 'modelName' |
     'modelEntryDate' | 'modelCaducityDate' | 'categoryId' | 'typeId'>;
 export type ProductUpdateForm = Pick<Product, "name" | "length" | "width" | "height" | "categoryId" | "typeId">;
 export type TypeForm = Pick<Type, "name">;
 
-export type CategoryItem = Category;
 export type ModelItem = Pick<Model, "id" | "name" | "imageUrl" | "entryDate" | "caducityDate" | "totalQuantityAvailable" |
     "totalQuantityReceived" | "totalQuantityDelivered" | "status" | "productId" | "productName" | "typeName" | "categoryName">
 export type ModelDetailsItem = Pick<Model,

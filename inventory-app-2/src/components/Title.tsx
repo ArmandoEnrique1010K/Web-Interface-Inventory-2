@@ -3,6 +3,6 @@ type Props = {
 }
 export const Title = ({ children }: Props) => {
     return (
-        <h1 className='text-4xl font-bold mb-6'>{children}</h1>
+        <h1 className='text-4xl font-bold sm:mb-6 mb-4'>{children}</h1>
     )
 }

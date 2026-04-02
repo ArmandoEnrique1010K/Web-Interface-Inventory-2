@@ -8,7 +8,7 @@ import { FiltersFormContainer } from '@/components/FiltersFormContainer';
 import { TableContainer } from '@/components/TableContainer';
 import { Paginator } from '@/components/Paginator';
 import { SearchCounter } from '@/components/SearchCounter';
-import type { DeliveryLineItem, ModelDeliveryOrderItem, OrderStatusEnum } from '../../types';
+import type { DeliveryLineItem, LineStatusOptions, ModelDeliveryOrderItem, OrderStatusEnum } from '../../types';
 import { TableRowContainer } from '@/components/TableRowContainer';
 import { BaseTableCell } from '@/components/BaseTableCell';
 import { Modal } from '@/components/Modal';
@@ -180,7 +180,7 @@ export const ListDeliveryLineByDeliveryOrder = ({ from, deliveryOrderStatus }: P
 
 
 
-    const statusOptions = [
+    const statusOptions: LineStatusOptions = [
         { value: 'LINE_MISSING', label: 'Perdido' },
         { value: 'LINE_READY', label: 'Listo' },
         { value: 'LINE_PENDING', label: 'Pendiente' },

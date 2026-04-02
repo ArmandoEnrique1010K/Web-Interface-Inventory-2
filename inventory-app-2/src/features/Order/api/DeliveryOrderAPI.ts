@@ -1,5 +1,5 @@
 import { api } from "@/lib/axiosConfig";
-import type { DeliveryOrderCommentForm, DeliveryOrderForm } from "../types";
+import type { DeliveryOrderCommentForm, DeliveryOrderForm, OrderStatusEnum } from "../types";
 import type { DataPageResponse, DataResponse, GeneralResponse } from "@/types/index";
 import { handleApiError } from "@/utils/handleApiError";
 
@@ -21,7 +21,7 @@ export type DeliveryOrderQueryParams = {
     startDate?: string;
     endDate?: string;
     userClientName?: string;
-    status?: 'ORDER_READY' | 'ORDER_PENDING' | 'ORDER_DELIVERED' | 'ORDER_CANCELED' | '';
+    status?: OrderStatusEnum;
 }
 
 export async function listAllDeliveryOrders(params: DeliveryOrderQueryParams) {

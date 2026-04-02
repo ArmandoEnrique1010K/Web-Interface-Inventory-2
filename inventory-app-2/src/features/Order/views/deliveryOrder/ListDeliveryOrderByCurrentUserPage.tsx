@@ -6,7 +6,7 @@ import { EntityListLayout } from "@/layout/entity/EntityListLayout"
 import { FiltersFormContainer } from "@/components/FiltersFormContainer"
 import { InputTextFilter } from "@/ui/filters/InputTextFilter"
 import { TableContainer } from "@/components/TableContainer"
-import type { DeliveryOrderItem } from "../../types"
+import type { DeliveryOrderItem, OrderStatusEnum } from "../../types"
 import { SearchCounter } from "@/components/SearchCounter"
 import { Paginator } from "@/components/Paginator"
 import { TableRowContainer } from "@/components/TableRowContainer"
@@ -42,7 +42,7 @@ export const ListDeliveryOrderByCurrentUserPage = () => {
             batch: batch,
             startDate: startDate,
             endDate: endDate,
-            status: status as 'ORDER_READY' | 'ORDER_PENDING' | 'ORDER_DELIVERED' | 'ORDER_CANCELED' | ''
+            status: status as OrderStatusEnum
         }),
     })
 

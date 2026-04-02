@@ -1,29 +1,30 @@
 import { useQuery } from "@tanstack/react-query";
 import { getCategory } from "../../api/CategoryAPI";
 import { TextMessage } from "@/components/TextMessage";
-import { EditCategoryModal } from "./EditCategoryModal";
+import { EditCategoryModal } from "./modal/EditCategoryModal";
+import { BlueLoader } from "@/components/BlueLoader/BlueLoader";
 
 type Props = {
-    categoryId: string,
+    categoryId: number,
     setModalOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 export const LoaderCategory = ({ categoryId, setModalOpen }: Props) => {
-    // const params = useParams();
-    // const categoryId = params.id!;
-
     const { data, isLoading, isError } = useQuery({
         queryKey: ['category', categoryId],
         queryFn: () => getCategory(categoryId),
-        retry: false,
+        retry: 1, // reintentar el llamado 1 vez más, si falla
     })
 
-
     if (isLoading) {
-        return <TextMessage text='Cargando...' align='left' color='black' />
+        return <BlueLoader />
     }
 
     if (isError) {
-        return <TextMessage text='Ha ocurrido un error' align='left' color='red' />
+        return <TextMessage
+            text='Ha ocurrido un error'
+            align='center'
+            color='red'
+        />
     }
 
     if (data) return (

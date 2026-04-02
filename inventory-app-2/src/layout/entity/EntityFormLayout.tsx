@@ -8,7 +8,7 @@ type Props = {
 
 export const EntityFormLayout = ({ children, isCompact }: Props) => {
     return (
-        <div className={`${isCompact ? '' : 'p-6'}`}>
+        <div className={` ${isCompact ? '' : 'p-4 sm:p-6'}`}>
             {children}
         </div>
     )
@@ -83,7 +83,7 @@ type ActionsProps = {
 
 EntityFormLayout.Actions = ({ children, isCompact }: ActionsProps) => {
     return (
-        <div className={`flex flex-row gap-2 justify-center ${isCompact ? 'pt-4' : 'pt-6'}`}>
+        <div className={`flex flex-row gap-6 justify-center  ${isCompact ? 'pt-4' : 'sm:pt-6 pt-4'} min-w-full`}>
             {children}
         </div>
 

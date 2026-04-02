@@ -109,5 +109,10 @@ export type DeliveryLineItem = Pick<DeliveryLine, "id" | "requiredQuantity" | "d
 export type DeliveryLineDetailsItem = Pick<DeliveryLine, "id" | "requiredQuantity" | "deliveredQuantity" | "pendingQuantity" | "limitDate" | "updatedAt" | "lineStatus" | "userUpdaterFullname" | "locationId" | "locationName" | "regionId" | "regionName" | "modelId" | "modelName" | "modelImageUrl" | "productId" | "productName" | "categoryId" | "categoryName" | "typeId" | "typeName" | "deliveryOrderId" | "deliveryOrderBatch" | "deliveryOrderLimitDate">
 export type StockLotDeliveryLineItem = StockLotDeliveryLine
 
-export type LineStatusEnum = "LINE_MISSING" | "LINE_READY" | "LINE_PENDING" | "LINE_DELIVERED" | "LINE_CANCELED" | "LINE_EXCEEDED"
-export type OrderStatusEnum = "ORDER_READY" | "ORDER_PENDING" | "ORDER_DELIVERED" | "ORDER_CANCELED" | "ORDER_PARTIALLY_DELIVERED"
+export type LineStatusEnum = "LINE_MISSING" | "LINE_READY" | "LINE_PENDING" | "LINE_DELIVERED" | "LINE_CANCELED" | "LINE_EXCEEDED" | ""
+export type OrderStatusEnum = "ORDER_READY" | "ORDER_PENDING" | "ORDER_DELIVERED" | "ORDER_CANCELED" | "ORDER_PARTIALLY_DELIVERED" | ""
+
+export type LineStatusOptions = {
+    value: LineStatusEnum,
+    label: string,
+}[]

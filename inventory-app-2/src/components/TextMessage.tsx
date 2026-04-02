@@ -19,7 +19,7 @@ export const TextMessage = ({ text, align, color }: Props) => {
     const handleColor = () => {
         switch (color) {
             case 'red':
-                return 'text-red-700'
+                return 'text-red-600'
             case 'black':
                 return 'text-black'
         }

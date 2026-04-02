@@ -12,39 +12,38 @@ import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 
 export const NewCategoryPage = () => {
-
-    const initialValues: CategoryForm = {
+    const initialValues = {
         name: '',
     }
 
-    const { register, handleSubmit, setError, formState: { errors } } = useForm<CategoryForm>({
+    const { register, handleSubmit, setError, formState: { errors } } = useForm({
         defaultValues: initialValues
     })
 
     const navigate = useNavigate();
 
-
     const { mutate } = useMutation({
         mutationFn: registerCategory,
-        onError: (error: GeneralError) => {
-            if (error.type === 'FIELD_ERROR') {
-                Object.entries(error.fields).forEach(([field, message]) => {
+        onError: (error: unknown) => {
+            const e = error as GeneralError
+            if (e.type === 'FIELD_ERROR' && e.fields) {
+                Object.entries(e.fields).forEach(([field, message]) => {
                     setError(field as keyof CategoryForm, {
                         type: 'server',
-                        message: message as string,
+                        message,
                     })
                 })
 
-                toast.error(error.message)
+                toast.error(e.message)
                 return
-            }
 
-            if (error.type === 'GENERAL_ERROR') {
-                toast.error(error.message)
+            }
+            if (e.type === 'GENERAL_ERROR') {
+                toast.error(e.message)
                 return
             }
         },
-        onSuccess: async (data) => {
+        onSuccess: (data) => {
             toast.success(data)
             navigate('/products/categories')
         }
@@ -53,7 +52,7 @@ export const NewCategoryPage = () => {
     return (
         <EntityFormLayout>
             <EntityFormLayout.Header title="Añadir nueva categoria"></EntityFormLayout.Header>
-            <EntityFormLayout.Form onSubmit={handleSubmit((data) => mutate(data))}>
+            <EntityFormLayout.Form onSubmit={handleSubmit((data) => mutate(data))} styled>
                 <EntityFormLayout.Inputs>
                     <InputText
                         id="name"
@@ -72,11 +71,13 @@ export const NewCategoryPage = () => {
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile
+                        applyMinWidth
                     />
                     <ButtonLink icon={<XCircleIcon />} size="large" text="Cancelar" color="gray" to="/products/categories"
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile
+                        applyMinWidth
                     />
                 </EntityFormLayout.Actions>
             </EntityFormLayout.Form>

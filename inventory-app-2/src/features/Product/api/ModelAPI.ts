@@ -1,5 +1,5 @@
 import { api } from "@/lib/axiosConfig";
-import type { DataPageResponse, DataResponse, GeneralResponse } from "@/types/index";
+import type { DataResponse, GeneralResponse } from "@/types/index";
 import { handleApiError } from "@/utils/handleApiError";
 import type { ModelInProductForm, ModelItem, ModelSearchFirstTenItems } from "../types";
 
@@ -59,10 +59,10 @@ export type ModelQueryParams = {
 }
 
 // TODO: CONTINUAR AQUI CON LA ASIGNACION DE PROMESAS DEVUELTAS POR LA FUNCIÓN
-export async function listAllModels(params: ModelQueryParams) {
+export async function listAllModels(params: ModelQueryParams): Promise<DataResponse<ModelItem[]>> {
     try {
         const url = `/models`
-        const { data } = await api.get<DataPageResponse>(url, { params: params })
+        const { data } = await api.get<DataResponse>(url, { params: params })
         return data.data;
     } catch (error) {
         handleApiError(error);
@@ -94,7 +94,7 @@ export type ModelSearchQueryParams = {
 export async function listActiveModelsByName(params: ModelSearchQueryParams) {
     try {
         const url = `/models/search`
-        const { data } = await api.get<DataPageResponse>(url, { params: params })
+        const { data } = await api.get<DataResponse>(url, { params: params })
         return data.data;
     } catch (error) {
         handleApiError(error);

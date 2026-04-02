@@ -11,15 +11,16 @@ export const StatusCategoryButton = ({ categoryId, text }: { categoryId: string,
 
     const { mutate } = useMutation({
         mutationFn: () => changeStatusCategory(categoryId),
-        onError: (error: GeneralError) => {
-            if (error.type === 'GENERAL_ERROR') {
-                toast.error(error.message)
+        onError: (error: unknown) => {
+            const e = error as GeneralError
+            if (e.type === 'GENERAL_ERROR') {
+                toast.error(e.message)
                 return
             }
         },
-        onSuccess: async (data) => {
-            toast.success(data)
+        onSuccess: (data) => {
             queryClient.invalidateQueries({ queryKey: ["categories"] })
+            toast.success(data)
         }
     })
 
