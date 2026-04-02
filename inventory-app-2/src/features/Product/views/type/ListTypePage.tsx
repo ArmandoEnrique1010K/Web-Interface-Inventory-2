@@ -1,29 +1,28 @@
-import { useQuery } from '@tanstack/react-query'
-import type { TypeItem } from '../../types'
-import { TableContainer } from '@/components/TableContainer'
-import { TableRowContainer } from '@/components/TableRowContainer'
-import { BaseTableCell } from '@/components/BaseTableCell'
-import { listAllTypes } from '../../api/TypeAPI'
-import { ButtonLink } from '@/ui/ButtonLink'
-import { PlusCircleIcon } from '@heroicons/react/24/outline'
-import { EntityListLayout } from '@/layout/entity/EntityListLayout'
-import { StatusTypeButton } from '../../components/type/StatusTypeButton'
-import { EditTypeButton } from '../../components/type/EditTypeButton'
+import { useQuery } from "@tanstack/react-query";
+import { TableContainer } from "@/components/TableContainer";
+import { TableRowContainer } from "@/components/TableRowContainer";
+import { BaseTableCell } from "@/components/BaseTableCell";
+import { listAllTypes } from "../../api/TypeAPI";
+import { ButtonLink } from "@/ui/ButtonLink";
+import { PlusCircleIcon } from "@heroicons/react/24/outline";
+import { EntityListLayout } from "@/layout/entity/EntityListLayout";
+import { StatusTypeButton } from "../../components/type/StatusTypeButton";
+import { EditTypeButton } from "../../components/type/EditTypeButton";
 
 export const ListTypePage = () => {
-
     const { data, isError } = useQuery({
         queryFn: listAllTypes,
         retry: 1,
-        queryKey: ['types'],
-    })
+        queryKey: ["types"],
+    });
 
     return (
         <EntityListLayout>
-            <EntityListLayout.Header title='Tipos'
+            <EntityListLayout.Header
+                title="Tipos"
                 actions={
                     <ButtonLink
-                        icon={< PlusCircleIcon />}
+                        icon={<PlusCircleIcon />}
                         size="large"
                         text="Nuevo tipo"
                         to="/products/types/new"
@@ -31,32 +30,35 @@ export const ListTypePage = () => {
                         showIconOnMobile={false}
                         showTextOnMobile
                     />
-                }></EntityListLayout.Header>
+                }
+            ></EntityListLayout.Header>
             <EntityListLayout.Content>
                 <TableContainer
-                    headers={['ID', 'Nombre', 'Editar', 'Estado']}
+                    headers={["ID", "Nombre", "Editar", "Estado"]}
                     isError={isError}
                     isEmpty={!data?.length}
                 >
-                    {
-                        data?.map((type: TypeItem) => (
-                            <TableRowContainer key={type.id}>
-                                <BaseTableCell data={type.id} />
-                                <BaseTableCell data={type.name} />
-                                <BaseTableCell isCenter data={
-                                    <EditTypeButton typeId={type.id} />
-                                } />
-                                <BaseTableCell isCenter data={
+                    {data?.map((type) => (
+                        <TableRowContainer key={type.id}>
+                            <BaseTableCell data={type.id} />
+                            <BaseTableCell data={type.name} />
+                            <BaseTableCell
+                                isCenter
+                                data={<EditTypeButton typeId={type.id} />}
+                            />
+                            <BaseTableCell
+                                isCenter
+                                data={
                                     <StatusTypeButton
                                         typeId={type.id}
                                         status={type.status}
                                     />
-                                }></BaseTableCell>
-                            </TableRowContainer>
-                        ))
-                    }
+                                }
+                            ></BaseTableCell>
+                        </TableRowContainer>
+                    ))}
                 </TableContainer>
             </EntityListLayout.Content>
         </EntityListLayout>
-    )
-}
+    );
+};

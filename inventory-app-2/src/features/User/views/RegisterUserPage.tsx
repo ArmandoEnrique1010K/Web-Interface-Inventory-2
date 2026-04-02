@@ -1,83 +1,90 @@
-import { useForm, type UseFormRegisterReturn } from "react-hook-form"
-import type { UserRegisterForm } from "../types"
-import { useNavigate } from "react-router-dom"
-import { useMutation } from "@tanstack/react-query"
-import { registerUser } from "../api/UserAPI"
-import type { GeneralError } from "@/types/index"
-import { toast } from "sonner"
-import { InputText } from "@/ui/fields/InputText"
-import { Button } from "@/ui/Button"
-import { ButtonLink } from "@/ui/ButtonLink"
-import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline"
-import { InputPassword } from "@/ui/fields/InputPassword"
-import { EntityFormLayout } from "@/layout/entity/EntityFormLayout"
-import { SelectCheckboxGroup } from "@/ui/fields/SelectCheckboxGroup"
+import { useForm, type UseFormRegisterReturn } from "react-hook-form";
+import type { UserRegisterForm } from "../types";
+import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { registerUser } from "../api/UserAPI";
+import type { GeneralError } from "@/types/index";
+import { toast } from "sonner";
+import { InputText } from "@/ui/fields/InputText";
+import { Button } from "@/ui/Button";
+import { ButtonLink } from "@/ui/ButtonLink";
+import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
+import { InputPassword } from "@/ui/fields/InputPassword";
+import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
+import { SelectCheckboxGroup } from "@/ui/fields/SelectCheckboxGroup";
 
 export const RegisterUserPage = () => {
-
     const initialValues: UserRegisterForm = {
-        firstname: '',
-        lastname: '',
-        email: '',
-        dni: '',
-        password: '',
+        firstname: "",
+        lastname: "",
+        email: "",
+        dni: "",
+        password: "",
         operator: false,
         secretary: false,
-        admin: false
-    }
+        admin: false,
+    };
 
-    const { register, handleSubmit, setError, formState: { errors } } = useForm<UserRegisterForm>({
-        defaultValues: initialValues
-    })
+    const {
+        register,
+        handleSubmit,
+        setError,
+        formState: { errors },
+    } = useForm<UserRegisterForm>({
+        defaultValues: initialValues,
+    });
     const navigate = useNavigate();
 
     const { mutate } = useMutation({
         mutationFn: registerUser,
-        onError: (error: GeneralError) => {
-            if (error.type === 'FIELD_ERROR') {
-                Object.entries(error.fields).forEach(([field, message]) => {
+        retry: false,
+        onError: (error: unknown) => {
+            const e = error as GeneralError;
+            if (e.type === "FIELD_ERROR" && e.fields) {
+                Object.entries(e.fields).forEach(([field, message]) => {
                     setError(field as keyof UserRegisterForm, {
-                        type: 'server',
+                        type: "server",
                         message: message as string,
-                    })
-                })
+                    });
+                });
 
-                toast.error(error.message)
-                return
+                toast.error(e.message);
+                return;
             }
 
-            if (error.type === 'GENERAL_ERROR') {
-                toast.error(error.message)
-                return
+            if (e.type === "GENERAL_ERROR") {
+                toast.error(e.message);
+                return;
             }
         },
         onSuccess: async (data) => {
-            toast.success(data)
-            navigate('/users')
-        }
-    })
+            toast.success(data);
+            navigate("/users");
+        },
+    });
 
-
-    const rolesGroup: { name: string, action: UseFormRegisterReturn }[] = [
+    const rolesGroup: { name: string; action: UseFormRegisterReturn }[] = [
         {
-            name: 'Operador',
-            action: register('operator')
+            name: "Operador",
+            action: register("operator"),
         },
         {
-            name: 'Secretario',
-            action: register('secretary')
+            name: "Secretario",
+            action: register("secretary"),
         },
         {
-            name: 'Administrador',
-            action: register('admin')
-        }
-    ]
-
+            name: "Administrador",
+            action: register("admin"),
+        },
+    ];
 
     return (
         <EntityFormLayout>
             <EntityFormLayout.Header title="Registrar nuevo usuario"></EntityFormLayout.Header>
-            <EntityFormLayout.Form styled onSubmit={handleSubmit((data) => mutate(data))}>
+            <EntityFormLayout.Form
+                styled
+                onSubmit={handleSubmit((data) => mutate(data))}
+            >
                 <EntityFormLayout.Inputs>
                     <InputText
                         id="firstname"
@@ -85,21 +92,24 @@ export const RegisterUserPage = () => {
                         placeholder="Nombres del usuario"
                         type="text"
                         errorMessage={errors.firstname}
-                        functionEnabled={register('firstname')} />
+                        functionEnabled={register("firstname")}
+                    />
                     <InputText
                         id="lastname"
                         label="Apellidos"
                         placeholder="Apellidos del usuario"
                         type="text"
                         errorMessage={errors.lastname}
-                        functionEnabled={register('lastname')} />
+                        functionEnabled={register("lastname")}
+                    />
                     <InputText
                         id="email"
                         label="Email"
                         placeholder="Correo del usuario"
                         type="text"
                         errorMessage={errors.email}
-                        functionEnabled={register('email')} />
+                        functionEnabled={register("email")}
+                    />
                     <InputText
                         id="dni"
                         label="DNI"
@@ -107,7 +117,7 @@ export const RegisterUserPage = () => {
                         type="number"
                         max={8}
                         errorMessage={errors.dni}
-                        functionEnabled={register('dni')}
+                        functionEnabled={register("dni")}
                     />
 
                     <InputPassword
@@ -115,8 +125,8 @@ export const RegisterUserPage = () => {
                         label="Contraseña"
                         placeholder="Contraseña"
                         errorMessage={errors.password}
-                        functionEnabled={register('password')} />
-
+                        functionEnabled={register("password")}
+                    />
 
                     <SelectCheckboxGroup group={rolesGroup} label="Roles" />
 
@@ -151,19 +161,18 @@ export const RegisterUserPage = () => {
                         </label>
 
                     </div> */}
-
                 </EntityFormLayout.Inputs>
                 <EntityFormLayout.Actions>
                     <Button
                         icon={<ArrowUpCircleIcon />}
                         size="large"
-                        text='Registrar'
+                        text="Registrar"
                         type="submit"
                         color="green"
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile
-
+                        applyMinWidth
                     />
                     <ButtonLink
                         icon={<XCircleIcon />}
@@ -174,10 +183,10 @@ export const RegisterUserPage = () => {
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile
+                        applyMinWidth
                     />
-
                 </EntityFormLayout.Actions>
             </EntityFormLayout.Form>
         </EntityFormLayout>
-    )
-}
+    );
+};

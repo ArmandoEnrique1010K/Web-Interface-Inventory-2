@@ -1,111 +1,107 @@
-import { useQuery } from "@tanstack/react-query"
-import { getProduct } from "../../api/ProductAPI"
-import { useLocation, useParams } from "react-router-dom"
-import type { ProductItem } from "../../types"
-import { listAllModelsByProductId } from "../../api/ModelAPI"
-import { generateSizes } from "@/utils/generateSizes"
-import { Button } from "@/ui/Button"
-import { useSearchParams } from "react-router-dom"
-import type { ModelItem } from '../../types/index';
-import { useEffect, useState } from "react"
-import { PanelContainer } from "@/components/containers/PanelContainer"
-import { TableContainer } from "@/components/TableContainer"
-import { TableRowContainer } from "@/components/TableRowContainer"
-import { BaseTableCell } from "@/components/BaseTableCell"
-import { SummaryPanelContainer } from "@/components/SummaryPanelContainer"
-import { EntityDetailsLayout } from "@/layout/entity/EntityDetailsLayout"
-import { StatusProductButton } from "../../components/product/StatusProductButton"
-import { QRModal } from "../../components/QRModal"
-import { StatusModelButton } from "../../components/model/StatusModelButton"
-import { Modal } from "@/components/Modal"
-import { NewModelProductModal } from "../../components/product/NewModelProductModal"
-import { LoaderProduct } from "../../components/product/LoaderProduct"
-import { LoaderModel } from "../../components/model/LoaderModel"
+import { useQuery } from "@tanstack/react-query";
+import { getProduct } from "../../api/ProductAPI";
+import { useLocation, useParams } from "react-router-dom";
+import { listAllModelsByProductId } from "../../api/ModelAPI";
+import { generateSizes } from "@/utils/generateSizes";
+import { Button } from "@/ui/Button";
+import { useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { PanelContainer } from "@/components/containers/PanelContainer";
+import { TableContainer } from "@/components/TableContainer";
+import { TableRowContainer } from "@/components/TableRowContainer";
+import { BaseTableCell } from "@/components/BaseTableCell";
+import { SummaryPanelContainer } from "@/components/SummaryPanelContainer";
+import { EntityDetailsLayout } from "@/layout/entity/EntityDetailsLayout";
+import { StatusProductButton } from "../../components/product/StatusProductButton";
+import { QRModal } from "../../components/QRModal";
+import { StatusModelButton } from "../../components/model/StatusModelButton";
+import { LoadingView } from "@/views/LoadingView";
+import { Error } from "@/views/Error";
+import { AddModelButton } from "../../components/product/AddModelButton";
+import { EditProductButton } from "../../components/product/EditProductButton";
+import { EditModelButton } from "../../components/model/EditModelButton";
 
 export const DetailsProductPage = () => {
-    const [searchParams, setSearchParams] = useSearchParams()
-    const modelIdParam = searchParams.get("modelId")
+    const [searchParams, setSearchParams] = useSearchParams();
+    const modelIdParam = searchParams.get("modelId");
 
-    const [addModelModalOpen, setAddModelModalOpen] = useState(false);
-    const [editCurrentModelModalOpen, setEditCurrentModelModalOpen] = useState(false);
-
-    const [isQRModalOpen, setIsQRModalOpen] = useState(false)
+    const [isQRModalOpen, setIsQRModalOpen] = useState(false);
     const handleOpenQR = () => {
-        setIsQRModalOpen(true)
-    }
+        setIsQRModalOpen(true);
+    };
 
     const location = useLocation();
     const path = location.pathname;
     const queryParams = location.search;
 
+    const { id: productIdStr } = useParams();
+    const productId = +productIdStr!; // convertir a numero
 
-    const [editModalOpen, setEditModalOpen] = useState(false);
+    const {
+        data: productData,
+        isLoading: isLoadingProduct,
+        isError: isErrorProduct,
+    } = useQuery({
+        queryKey: ["product", productId],
+        queryFn: () => getProduct(+productId!),
+        enabled: !!productId,
+        retry: 1,
+    });
 
-    const { id: productId } = useParams()
-    const { data: productData, isLoading: isProductLoading } = useQuery<ProductItem>({
-        queryKey: ['product', productId],
-        queryFn: () => getProduct(productId!),
-        // Si el id existe, ejecuta la función getProduct, de lo contrario no lo va a ejecutar
-        enabled: !!productId
-    })
-
-    const { data: modelsData = [], isLoading: isModelsLoading, isError: isModelsError } = useQuery({
-        queryKey: ['models', 'product', productId],
+    const {
+        data: modelsData = [],
+        isLoading: isLoadingModels,
+        isError: isErrorModels,
+    } = useQuery({
+        queryKey: ["models", "product", productId],
         queryFn: () => listAllModelsByProductId(productId!),
-        enabled: !!productId
-    })
+        enabled: !!productId,
+        retry: 1,
+    });
 
     // ¿Qué pasa si ponen manualmente ? modelId = 999 ?
     //     No pasa nada.
     // findIndex devolverá "-1" y simplemente veran el primer modelo
-
-    const selectedIndex = modelsData.findIndex(
-        (model: ModelItem) => model.id === Number(modelIdParam)
-    )
+    const selectedIndex = modelsData?.findIndex(
+        (model: { id: number }) => model.id === Number(modelIdParam),
+    );
 
     // Por defecto va a seleccionar el primer modelo del producto
     useEffect(() => {
         if (selectedIndex === -1 && modelsData.length > 0) {
-            const lastModel = modelsData[modelsData.length - 1]
-            setSearchParams({ modelId: String(lastModel.id) })
+            const lastModel = modelsData[modelsData.length - 1];
+            setSearchParams({ modelId: String(lastModel.id) });
         }
-    }, [selectedIndex, modelsData, setSearchParams])
+    }, [selectedIndex, modelsData, setSearchParams]);
 
+    const idModel = selectedIndex >= 0 ? selectedIndex : 0;
 
-    const idModel = selectedIndex >= 0 ? selectedIndex : 0
-    const selectedModel = modelsData[idModel]
+    const selectedModel = modelsData[idModel];
 
-
-    const hasNext = idModel > 0
-    const hasPrevious = idModel < modelsData.length - 1
-    const displayIndex = modelsData.length - idModel
+    const hasNext = idModel > 0;
+    const hasPrevious = idModel < modelsData.length - 1;
+    const displayIndex = modelsData.length - idModel;
 
     const handleNext = () => {
-
         if (idModel > 0) {
-            const prevModel = modelsData[idModel - 1]
-            setSearchParams({ modelId: String(prevModel.id) })
+            const prevModel = modelsData[idModel - 1];
+            setSearchParams({ modelId: String(prevModel.id) });
         }
-
-    }
+    };
 
     const handlePrevious = () => {
         if (idModel < modelsData.length - 1) {
-            const nextModel = modelsData[idModel + 1]
-            setSearchParams({ modelId: String(nextModel.id) })
-
-
+            const nextModel = modelsData[idModel + 1];
+            setSearchParams({ modelId: String(nextModel.id) });
         }
+    };
 
+    if (isLoadingProduct || isLoadingModels) {
+        return <LoadingView />;
     }
 
-
-    if (isProductLoading || isModelsLoading) {
-        return <div>Cargando...</div>
-    }
-
-    if (!productData) {
-        return <div>Producto no encontrado o desactivado</div>
+    if (!productData || isErrorModels || isErrorProduct) {
+        return <Error />;
     }
 
     return (
@@ -115,7 +111,6 @@ export const DetailsProductPage = () => {
             ></EntityDetailsLayout.Header>
 
             <EntityDetailsLayout.Content>
-
                 <EntityDetailsLayout.Column>
                     <PanelContainer subtitle="Características del producto">
                         <PanelContainer.DetailsGrid>
@@ -143,35 +138,11 @@ export const DetailsProductPage = () => {
                         />
 
                         <PanelContainer.DetailsGrid>
-                            <PanelContainer.Detail label="Editar producto">
-                                <Button
-                                    size="small"
-                                    text="Editar"
-                                    color="blue"
-                                    type="button"
-                                    showTextOnMobile
-                                    onClick={() => {
-                                        setEditModalOpen(true)
-                                    }}
-                                />
-                                {
-                                    editModalOpen && productId && <Modal
-                                        isOpen={editModalOpen}
-                                        onClose={() => {
-                                            setEditModalOpen(false)
-                                        }
-                                        }
-                                        size='lg'
-                                        title={`Editar el producto #${productId}`}
-                                        locked
-                                    >
-
-                                        <LoaderProduct modelId={idModel} productId={productId.toString()} closeModal={setEditModalOpen} />
-                                    </Modal>
-                                }
-
-
-                            </PanelContainer.Detail>
+                            {productData.status && (
+                                <PanelContainer.Detail label="Editar producto">
+                                    <EditProductButton productId={productId} />
+                                </PanelContainer.Detail>
+                            )}
 
                             <PanelContainer.Detail label="Estado del producto">
                                 <StatusProductButton
@@ -179,17 +150,13 @@ export const DetailsProductPage = () => {
                                     productId={productId!}
                                     isActive={productData.status}
                                 />
-
                             </PanelContainer.Detail>
-
                         </PanelContainer.DetailsGrid>
                     </PanelContainer>
                 </EntityDetailsLayout.Column>
 
                 <EntityDetailsLayout.Column>
-                    <PanelContainer
-                        subtitle={"Modelo seleccionado"}>
-
+                    <PanelContainer subtitle={"Modelo seleccionado"}>
                         <PanelContainer.Actions>
                             <Button
                                 text="◄"
@@ -220,32 +187,7 @@ export const DetailsProductPage = () => {
                                 showTextOnMobile
                             />
 
-                            <Button
-                                type="button"
-                                size="small"
-                                color="green"
-                                text="Añadir"
-                                showTextOnMobile={true}
-                                isLargeOnMobile={false}
-                                onClick={() => {
-                                    setAddModelModalOpen(true)
-                                }}
-                            />
-                            {
-                                addModelModalOpen && productId && <Modal
-                                    isOpen={addModelModalOpen}
-                                    onClose={() => {
-                                        setAddModelModalOpen(false)
-                                    }
-                                    }
-                                    size='lg'
-                                    title={`Añadir nuevo modelo al producto #${productId}`}
-                                    locked
-                                >
-                                    <NewModelProductModal setAddModelModalOpen={setAddModelModalOpen} productId={productId} />
-                                </Modal>
-
-                            }
+                            <AddModelButton productId={productId} />
                         </PanelContainer.Actions>
 
                         <PanelContainer.DetailsGrid>
@@ -286,80 +228,69 @@ export const DetailsProductPage = () => {
                                 <QRModal
                                     isOpen={isQRModalOpen}
                                     onClose={() => setIsQRModalOpen(false)}
-                                    url={import.meta.env.VITE_FRONTEND_DOMAIN + path + queryParams}
+                                    url={
+                                        import.meta.env.VITE_FRONTEND_DOMAIN +
+                                        path +
+                                        queryParams
+                                    }
                                     title={`Código QR del producto ${productData?.name}, ${selectedModel?.name}`}
                                 />
                             </PanelContainer.Detail>
 
-
                             {selectedModel.status && (
                                 <PanelContainer.Detail label="Editar modelo">
-                                    <Button
-                                        text="Editar"
-                                        type="button"
-                                        color="blue"
-                                        size="small"
-                                        onClick={() => setEditCurrentModelModalOpen(true)}
+                                    <EditModelButton
+                                        modelId={selectedModel.id}
                                     />
-
-
-                                    {
-                                        editCurrentModelModalOpen && productId && <Modal
-                                            isOpen={editCurrentModelModalOpen}
-                                            onClose={() => {
-                                                setEditCurrentModelModalOpen(false)
-                                            }
-                                            }
-                                            size='lg'
-                                            title={`Editar modelo #${selectedModel.id}`}
-                                            locked
-                                        >
-                                            <LoaderModel modelId={selectedModel.id} setEditCurrentModelModalOpen={setEditCurrentModelModalOpen} />
-                                        </Modal>
-
-                                    }
-
                                 </PanelContainer.Detail>
                             )}
 
-                            <PanelContainer.Detail label="Estado del modelo" isButton>
+                            <PanelContainer.Detail
+                                label="Estado del modelo"
+                                isButton
+                            >
                                 <StatusModelButton
-                                    modelId={selectedModel.id.toString()}
+                                    modelId={selectedModel.id}
                                     productId={productId!}
-                                    value={selectedModel.status ? 'Activo' : 'Inactivo'}
-                                    size={"small"} />
+                                    value={
+                                        selectedModel.status
+                                            ? "Activo"
+                                            : "Inactivo"
+                                    }
+                                    size={"small"}
+                                />
                             </PanelContainer.Detail>
-
-
                         </PanelContainer.DetailsGrid>
-
                     </PanelContainer>
                 </EntityDetailsLayout.Column>
-
             </EntityDetailsLayout.Content>
 
             <EntityDetailsLayout.Summary>
                 <SummaryPanelContainer>
                     <TableContainer
                         title="Resumen de modelos"
-                        headers={['ID', 'Nombre', 'Fecha de entrada', 'Total disponible']}
-                        isError={isModelsError}
+                        headers={[
+                            "ID",
+                            "Nombre",
+                            "Fecha de entrada",
+                            "Total disponible",
+                        ]}
+                        isError={isErrorModels}
                         isEmpty={!modelsData?.length}
                     >
-                        {modelsData?.map((model: ModelItem) => (
+                        {modelsData?.map((model) => (
                             <TableRowContainer key={model.id}>
                                 <BaseTableCell data={model.id} />
                                 <BaseTableCell data={model.name} />
                                 <BaseTableCell data={model.entryDate} />
-                                <BaseTableCell data={model.totalQuantityAvailable} />
+                                <BaseTableCell
+                                    data={model.totalQuantityAvailable}
+                                />
                             </TableRowContainer>
                         ))}
-
-
                     </TableContainer>
                 </SummaryPanelContainer>
             </EntityDetailsLayout.Summary>
-
         </EntityDetailsLayout>
-    )
-}
+    );
+};

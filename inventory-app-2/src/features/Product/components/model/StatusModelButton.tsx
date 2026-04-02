@@ -1,13 +1,25 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import type { GeneralError } from "@/types/index"
-import { toast } from "sonner"
-import { Button } from "@/ui/Button"
-import { useForm } from "react-hook-form"
-import { XMarkIcon } from "@heroicons/react/24/outline"
-import { changeStatusModel } from "../../api/ModelAPI"
-import { useNavigate } from "react-router-dom"
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import type { GeneralError } from "@/types/index";
+import { toast } from "sonner";
+import { Button } from "@/ui/Button";
+import { useForm } from "react-hook-form";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import { changeStatusModel } from "../../api/ModelAPI";
+import { useNavigate } from "react-router-dom";
 
-export const StatusModelButton = ({ from, modelId, productId, value, size }: { from?: string, modelId: string, productId: string, value: string, size: 'small' | 'large' }) => {
+export const StatusModelButton = ({
+    from,
+    modelId,
+    productId,
+    value,
+    size,
+}: {
+    from?: string;
+    modelId: number;
+    productId: number;
+    value: string;
+    size: "small" | "large";
+}) => {
     const { handleSubmit } = useForm();
     const queryClient = useQueryClient();
 
@@ -15,39 +27,42 @@ export const StatusModelButton = ({ from, modelId, productId, value, size }: { f
 
     const { mutate } = useMutation({
         mutationFn: () => changeStatusModel(modelId),
-        onError: (error: GeneralError) => {
-            // Error general
-            if (error.type === 'GENERAL_ERROR') {
-                toast.error(error.message)
-                return
+        retry: false,
+        onError: (error: unknown) => {
+            const e = error as GeneralError;
+            if (e.type === "GENERAL_ERROR") {
+                toast.error(e.message);
+                return;
             }
         },
+
         onSuccess: async (data) => {
-            toast.success(data)
-            queryClient.invalidateQueries({ queryKey: ['product', productId] })
-            queryClient.invalidateQueries({ queryKey: ['models', 'product', productId] })
-            queryClient.invalidateQueries({ queryKey: ['models'] })
-            queryClient.invalidateQueries({ queryKey: ['model', modelId ? +modelId : 0] })
+            toast.success(data);
+            queryClient.invalidateQueries({ queryKey: ["product", productId] });
+            queryClient.invalidateQueries({
+                queryKey: ["models", "product", productId],
+            });
+            queryClient.invalidateQueries({ queryKey: ["models"] });
+            queryClient.invalidateQueries({
+                queryKey: ["model", modelId ? +modelId : 0],
+            });
 
-            if (from === 'model-details') {
-                navigate('/products/models')
+            if (from === "model-details") {
+                navigate("/products/models");
             }
-
-
-        }
-    })
+        },
+    });
 
     return (
-        <form onSubmit={handleSubmit(() => mutate())} >
+        <form onSubmit={handleSubmit(() => mutate())}>
             <Button
-                icon={size === 'large' && <XMarkIcon />}
+                icon={size === "large" && <XMarkIcon />}
                 text={value}
                 type="submit"
                 size={size}
-                color={value === 'Activo' ? 'green-outline' : 'red-outline'}
+                color={value === "Activo" ? "green-outline" : "red-outline"}
                 showTextOnMobile
             />
         </form>
-    )
-}
-
+    );
+};

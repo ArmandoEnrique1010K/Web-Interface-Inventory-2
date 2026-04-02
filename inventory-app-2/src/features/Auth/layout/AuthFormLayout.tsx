@@ -1,72 +1,77 @@
-import { Button } from "@/ui/Button"
-import type React from "react"
-import { Link } from "react-router-dom"
+import { Button } from "@/ui/Button";
+import type React from "react";
+import { Link } from "react-router-dom";
 
 type Props = {
-    children: React.ReactNode
-}
+    children: React.ReactNode;
+};
 
 export const AuthFormLayout = ({ children }: Props) => {
-    return (
-        <div className="flex flex-col w-full">
-            {children}
-        </div>
-    )
-}
+    return <div className="flex flex-col w-full">{children}</div>;
+};
 
 type HeaderProps = {
-    title: string,
-    helpText?: string
-}
+    title: string;
+    helpText?: string;
+};
 
 AuthFormLayout.Header = ({ title, helpText }: HeaderProps) => {
     return (
         <>
-            <h1 className="sm:text-4xl text-2xl font-bold text-slate-900 text-center sm:mb-6 mb-4">{title}</h1>
+            <h1 className="sm:text-4xl text-2xl font-bold text-slate-900 text-center sm:mb-6 mb-4">
+                {title}
+            </h1>
 
             {helpText && (
-                <p className='text-sm text-slate-600 mb-4 text-center'>
+                <p className="text-sm text-slate-600 mb-4 text-center">
                     {helpText}
                 </p>
-            )
-            }
-
+            )}
         </>
-    )
-}
+    );
+};
 
 type FormProps = {
-    isPending: boolean,
-    buttonText?: string,
-    children: React.ReactNode
-    onSubmit: React.SubmitEventHandler<HTMLFormElement>,
-}
+    isPending: boolean;
+    buttonText?: string;
+    children: React.ReactNode;
+    onSubmit: React.SubmitEventHandler<HTMLFormElement>;
+};
 
-AuthFormLayout.Form = ({ isPending, buttonText, children, onSubmit }: FormProps) => {
+AuthFormLayout.Form = ({
+    isPending,
+    buttonText,
+    children,
+    onSubmit,
+}: FormProps) => {
     return (
-        <form onSubmit={onSubmit} className="w-full space-y-4 mt-2" autoComplete="off" noValidate>
+        <form
+            onSubmit={onSubmit}
+            className="w-full space-y-4 mt-2"
+            autoComplete="off"
+            noValidate
+        >
             {children}
 
             <Button
                 size="large"
-                text={isPending ? 'Espere...' : buttonText ?? 'Enviar'}
+                text={isPending ? "Espere..." : (buttonText ?? "Enviar")}
                 type="submit"
-                color='green'
+                color="green"
                 isLarge={true}
                 aditionalStyles="mt-2"
                 disabled={isPending}
                 showTextOnMobile
             />
         </form>
-
-    )
-}
+    );
+};
 
 type LinkProps = {
-    text: string,
-    to: string,
-    linkText: string,
-}
+    text: string;
+    to: string;
+    linkText: string;
+};
 
 AuthFormLayout.Link = ({ text, to, linkText }: LinkProps) => {
     return (
@@ -79,6 +84,5 @@ AuthFormLayout.Link = ({ text, to, linkText }: LinkProps) => {
                 </Link>
             </div>
         </>
-
-    )
-}
+    );
+};

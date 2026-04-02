@@ -1,29 +1,36 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import type { DeliveryOrderCommentForm } from "../../types"
-import { useForm } from "react-hook-form"
-import type { GeneralError } from "@/types/index"
-import { toast } from "sonner"
-import { cancelDeliveryOrder } from "../../api/DeliveryOrderAPI"
-import { EntityFormLayout } from "@/layout/entity/EntityFormLayout"
-import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline"
-import { Button } from "@/ui/Button"
-import { InputText } from "@/ui/fields/InputText"
-import { useNavigate } from "react-router-dom"
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import type { DeliveryOrderCommentForm } from "../../types";
+import { useForm } from "react-hook-form";
+import type { GeneralError } from "@/types/index";
+import { toast } from "sonner";
+import { cancelDeliveryOrder } from "../../api/DeliveryOrderAPI";
+import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
+import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
+import { Button } from "@/ui/Button";
+import { InputText } from "@/ui/fields/InputText";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
-    setCancelModalOpen: React.Dispatch<React.SetStateAction<boolean>>,
-    deliveryOrderId: string,
-}
+    setCancelModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    deliveryOrderId: string;
+};
 
-export const CancelDeliveryOrderModal = ({ deliveryOrderId, setCancelModalOpen }: Props) => {
-
+export const CancelDeliveryOrderModal = ({
+    deliveryOrderId,
+    setCancelModalOpen,
+}: Props) => {
     const initialValues: DeliveryOrderCommentForm = {
-        movementComment: ''
-    }
+        movementComment: "",
+    };
 
-    const { register, handleSubmit, setError, formState: { errors } } = useForm<DeliveryOrderCommentForm>({
-        defaultValues: initialValues
-    })
+    const {
+        register,
+        handleSubmit,
+        setError,
+        formState: { errors },
+    } = useForm<DeliveryOrderCommentForm>({
+        defaultValues: initialValues,
+    });
 
     const queryClient = useQueryClient();
     const navigate = useNavigate();
@@ -31,41 +38,42 @@ export const CancelDeliveryOrderModal = ({ deliveryOrderId, setCancelModalOpen }
     // Mutacion para guardar los cambios
     const { mutate } = useMutation({
         mutationFn: cancelDeliveryOrder,
-        onError: (error: GeneralError) => {
-            // Error de campo
-            if (error.type === 'FIELD_ERROR') {
-                Object.entries(error.fields).forEach(([field, message]) => {
+        retry: false,
+        onError: (error: unknown) => {
+            const e = error as GeneralError;
+            if (e.type === "FIELD_ERROR" && e.fields) {
+                Object.entries(e.fields).forEach(([field, message]) => {
                     setError(field as keyof DeliveryOrderCommentForm, {
-                        type: 'server',
-                        message: message as string,
-                    })
-                })
+                        type: "server",
+                        message: message,
+                    });
+                });
 
-                toast.error(error.message)
-                return
+                toast.error(e.message);
+                return;
             }
 
-            // Error general
-            if (error.type === 'GENERAL_ERROR') {
-                toast.error(error.message)
-                return
+            if (e.type === "GENERAL_ERROR") {
+                toast.error(e.message);
+                return;
             }
         },
         onSuccess: (data) => {
-            queryClient.removeQueries({ queryKey: ["deliveryOrder", deliveryOrderId] })
-            toast.success(data)
-            setCancelModalOpen(false)
-            navigate(`/orders`)
-
-        }
-    })
+            queryClient.removeQueries({
+                queryKey: ["deliveryOrder", deliveryOrderId],
+            });
+            toast.success(data);
+            setCancelModalOpen(false);
+            navigate(`/orders`);
+        },
+    });
     const handleForm = (formData: DeliveryOrderCommentForm) => {
         const data = {
             formData,
-            deliveryOrderId
-        }
-        mutate(data)
-    }
+            deliveryOrderId,
+        };
+        mutate(data);
+    };
 
     return (
         <EntityFormLayout isCompact>
@@ -80,7 +88,7 @@ export const CancelDeliveryOrderModal = ({ deliveryOrderId, setCancelModalOpen }
                         type="text"
                         placeholder="Escriba un comentario"
                         errorMessage={errors.movementComment}
-                        functionEnabled={register('movementComment')}
+                        functionEnabled={register("movementComment")}
                     />
                 </EntityFormLayout.Inputs>
                 <EntityFormLayout.Actions>
@@ -93,9 +101,10 @@ export const CancelDeliveryOrderModal = ({ deliveryOrderId, setCancelModalOpen }
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile
+                        applyMinWidth
                     />
                     <Button
-                        type='button'
+                        type="button"
                         icon={<XCircleIcon />}
                         size="large"
                         text="No cancelar"
@@ -104,11 +113,10 @@ export const CancelDeliveryOrderModal = ({ deliveryOrderId, setCancelModalOpen }
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile
+                        applyMinWidth
                     />
                 </EntityFormLayout.Actions>
-
             </EntityFormLayout.Form>
-
         </EntityFormLayout>
-    )
-}
+    );
+};

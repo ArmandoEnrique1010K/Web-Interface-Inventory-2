@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import type { CategoryItem, ProductCreateForm, TypeItem } from "../../types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import type { GeneralError } from "@/types/index";
 import { registerProduct } from "../../api/ProductAPI";
@@ -17,97 +16,104 @@ import { useState } from "react";
 import { UploadImage } from "@/ui/fields/UploadImage";
 import { Subtitle } from "@/components/Subtitle";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
+import type { ProductCreateForm } from "../../schemas/requests";
 
 export const NewProductPage = () => {
-    const [file, setFile] = useState<File | null>(null)
-    const [preview, setPreview] = useState<string | null>(null)
+    const [file, setFile] = useState<File | null>(null);
+    const [preview, setPreview] = useState<string | null>(null);
 
-    const initialValues: ProductCreateForm = {
-        name: '',
-        length: '',
-        width: '',
-        height: '',
-        modelName: '',
+    const initialValues = {
+        name: "",
+        length: undefined,
+        width: undefined,
+        height: undefined,
+        modelName: "",
         // SELECCIONA LA FECHA DE HOY EN DIA
         // TODO: EN LA API REST, SI O SI DEBE INTRODUCIR UNA FECHA
-        modelEntryDate: new Date(new Date().setHours(12)).toISOString().split('T')[0],
-        modelCaducityDate: '', //new Date(new Date().setHours(12)).toISOString().split('T')[0],
-        categoryId: '',
-        typeId: '',
-    }
-    const { register, handleSubmit, setError, control, formState: { errors } } = useForm<ProductCreateForm & { file: File }>({
-        defaultValues: initialValues
-    })
+        modelEntryDate: new Date(new Date().setHours(12))
+            .toISOString()
+            .split("T")[0],
+        modelCaducityDate: "", //new Date(new Date().setHours(12)).toISOString().split('T')[0],
+        categoryId: undefined,
+        typeId: undefined,
+    };
 
     const navigate = useNavigate();
 
+    const {
+        register,
+        handleSubmit,
+        setError,
+        control,
+        formState: { errors },
+    } = useForm<ProductCreateForm & { file: File }>({
+        defaultValues: initialValues,
+    });
+
     const { mutate, isPending } = useMutation({
         mutationFn: registerProduct,
-        onError: (error: GeneralError) => {
-            // Error de campo
-            if (error.type === 'FIELD_ERROR') {
-                Object.entries(error.fields).forEach(([field, message]) => {
+        retry: false,
+        onError: (error: unknown) => {
+            const e = error as GeneralError;
+            if (e.type === "FIELD_ERROR" && e.fields) {
+                Object.entries(e.fields).forEach(([field, message]) => {
                     setError(field as keyof ProductCreateForm, {
-                        type: 'server',
-                        message: message as string,
-                    })
-                })
+                        type: "server",
+                        message: message,
+                    });
+                });
 
-                toast.error(error.message)
-                return
+                toast.error(e.message);
+                return;
             }
 
-            // Error general
-            if (error.type === 'GENERAL_ERROR') {
-                toast.error(error.message)
-                return
+            if (e.type === "GENERAL_ERROR") {
+                toast.error(e.message);
+                return;
             }
         },
         onSuccess: async (data) => {
-            toast.success(data)
-            navigate('/products')
-        }
-    })
+            toast.success(data);
+            navigate("/products");
+        },
+    });
 
     // TODO: EN ALGUNA FUTURA ACTUALIZACION SE PUEDE HACER QUE SE MUESTRE UNA NOTIFICACION MIENTRAS SE SUBE LA IMAGEN
     const { data: categoriesData } = useQuery({
-        queryKey: ['categories', 'active'],
-        queryFn: listAllActiveCategories
-    })
+        queryKey: ["categories", "active"],
+        queryFn: listAllActiveCategories,
+    });
     const { data: typesData } = useQuery({
-        queryKey: ['types', 'active'],
-        queryFn: listAllActiveTypes
-    })
+        queryKey: ["types", "active"],
+        queryFn: listAllActiveTypes,
+    });
 
-    const categories = categoriesData?.map((category: CategoryItem) => ({
-        value: category.id.toString(),
-        label: category.name,
-    })) || []
+    const categories =
+        categoriesData?.map((category) => ({
+            value: category.id.toString(),
+            label: category.name,
+        })) || [];
 
-
-    const types = typesData?.map((type: TypeItem) => ({
-        value: type.id.toString(),
-        label: type.name,
-    })) || []
-
+    const types =
+        typesData?.map((type) => ({
+            value: type.id.toString(),
+            label: type.name,
+        })) || [];
 
     return (
         <EntityFormLayout>
-            <EntityFormLayout.Header title="Agregar nuevo producto">
+            <EntityFormLayout.Header title="Agregar nuevo producto"></EntityFormLayout.Header>
 
-            </EntityFormLayout.Header>
-
-            <EntityFormLayout.Form styled onSubmit={
-                handleSubmit((data) => {
-
+            <EntityFormLayout.Form
+                styled
+                onSubmit={handleSubmit((data) => {
                     mutate({
                         data: data,
-                        ...(file && { file })
-                    })
-                })
-            }>
+                        ...(file && { file }),
+                    });
+                })}
+            >
                 <EntityFormLayout.Inputs>
-
                     <div className="pb-2">
                         <Subtitle>Producto</Subtitle>
                     </div>
@@ -117,7 +123,8 @@ export const NewProductPage = () => {
                         placeholder="Nombre del producto"
                         type="text"
                         errorMessage={errors.name}
-                        functionEnabled={register('name')} />
+                        functionEnabled={register("name")}
+                    />
 
                     <InputText
                         id="length"
@@ -125,7 +132,8 @@ export const NewProductPage = () => {
                         placeholder="Medida del largo"
                         type="number"
                         errorMessage={errors.length}
-                        functionEnabled={register('length')} />
+                        functionEnabled={register("length")}
+                    />
 
                     <InputText
                         id="width"
@@ -133,7 +141,8 @@ export const NewProductPage = () => {
                         placeholder="Medida del ancho"
                         type="number"
                         errorMessage={errors.width}
-                        functionEnabled={register('width')} />
+                        functionEnabled={register("width")}
+                    />
 
                     <InputText
                         id="height"
@@ -141,7 +150,8 @@ export const NewProductPage = () => {
                         placeholder="Medida de la altura"
                         type="number"
                         errorMessage={errors.height}
-                        functionEnabled={register('height')} />
+                        functionEnabled={register("height")}
+                    />
 
                     <hr className="my-6 border-slate-200" />
                     <div className="pb-2">
@@ -154,7 +164,8 @@ export const NewProductPage = () => {
                         placeholder="Nombre del modelo"
                         type="text"
                         errorMessage={errors.modelName}
-                        functionEnabled={register('modelName')} />
+                        functionEnabled={register("modelName")}
+                    />
 
                     {/** NOTA: SI NO SUBE UNA FECHA DE ENTRADA, SE ESTABLECERA LA FECHA DE HOY DIA */}
                     <InputDate<ProductCreateForm & { file: File }>
@@ -176,7 +187,7 @@ export const NewProductPage = () => {
                         id="categoryId"
                         label="Categoria"
                         errorMessage={errors.categoryId}
-                        functionEnabled={register('categoryId')}
+                        functionEnabled={register("categoryId")}
                         options={categories}
                         textInNullOption="Seleccione una categoria"
                     />
@@ -185,7 +196,7 @@ export const NewProductPage = () => {
                         id="typeId"
                         label="Tipo"
                         errorMessage={errors.typeId}
-                        functionEnabled={register('typeId')}
+                        functionEnabled={register("typeId")}
                         options={types}
                         textInNullOption="Seleccione un tipo"
                     />
@@ -214,12 +225,13 @@ export const NewProductPage = () => {
                             )} */}
 
                     {/* Componente para cargar la imagen, contiene el boton y la previsualizacion de la imagen */}
-                    <UploadImage id='file' label="Imagen"
-                        register={register('file')}
+                    <UploadImage
+                        id="file"
+                        label="Imagen"
+                        register={register("file")}
                         previewImage={preview}
                         setFile={setFile}
                         setPreview={setPreview}
-
                     />
                 </EntityFormLayout.Inputs>
 
@@ -234,6 +246,7 @@ export const NewProductPage = () => {
                         showTextOnMobile
                         showIconOnMobile={false}
                         isLargeOnMobile
+                        applyMinWidth
                     />
                     <ButtonLink
                         icon={<XCircleIcon />}
@@ -244,12 +257,10 @@ export const NewProductPage = () => {
                         showTextOnMobile
                         showIconOnMobile={false}
                         isLargeOnMobile
+                        applyMinWidth
                     />
                 </EntityFormLayout.Actions>
-
-
             </EntityFormLayout.Form>
         </EntityFormLayout>
-
-    )
-}
+    );
+};

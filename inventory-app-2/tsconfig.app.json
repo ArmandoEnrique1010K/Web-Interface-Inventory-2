@@ -26,20 +26,22 @@
 
     /* Paths */
     // Configuración para acortar las rutas de importación
-    "baseUrl": "src",
+    // "baseUrl": "src",
+    
     "paths": {
-      "@/components/*": ["components/*"],
-      "@/features/*": ["features/*"],
-      "@/layout/*": ["layout/*"],
-      "@/lib/*": ["lib/*"],
-      "@/reducers/*": ["reducers/*"],
-      "@/router/*": ["router/*"],
-      "@/store/*": ["store/*"],
-      "@/thunk/*": ["thunk/*"],
-      "@/types/*": ["types/*"],
-      "@/ui/*": ["ui/*"],
-      "@/utils/*" :["utils/*"],
-      "@/views/*": ["views/*"],
+      "@/*": ["./src/*"]
+      // "@/components/*": ["components/*"],
+      // "@/features/*": ["features/*"],
+      // "@/layout/*": ["layout/*"],
+      // "@/lib/*": ["lib/*"],
+      // "@/reducers/*": ["reducers/*"],
+      // "@/router/*": ["router/*"],
+      // "@/store/*": ["store/*"],
+      // "@/thunk/*": ["thunk/*"],
+      // "@/types/*": ["types/*"],
+      // "@/ui/*": ["ui/*"],
+      // "@/utils/*" :["utils/*"],
+      // "@/views/*": ["views/*"],
     }
   },
   "include": ["src"],

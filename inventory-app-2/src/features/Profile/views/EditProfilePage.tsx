@@ -12,17 +12,21 @@ import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 
 export const EditProfilePage = ({ data }: { data: UserProfilePageForm }) => {
-
     const initialValues: UserProfilePageForm = {
         firstname: data.firstname,
         lastname: data.lastname,
         email: data.email,
-        dni: data.dni
-    }
+        dni: data.dni,
+    };
 
-    const { register, handleSubmit, setError, formState: { errors } } = useForm<UserProfilePageForm>({
-        defaultValues: initialValues
-    })
+    const {
+        register,
+        handleSubmit,
+        setError,
+        formState: { errors },
+    } = useForm<UserProfilePageForm>({
+        defaultValues: initialValues,
+    });
 
     const navigate = useNavigate();
 
@@ -30,43 +34,39 @@ export const EditProfilePage = ({ data }: { data: UserProfilePageForm }) => {
 
     const { mutate } = useMutation({
         mutationFn: updateUserProfilePage,
-        onError: (error: GeneralError) => {
-            // Error de campo
-            if (error.type === 'FIELD_ERROR') {
-                Object.entries(error.fields).forEach(([field, message]) => {
+        retry: false,
+        onError: (error: unknown) => {
+            const e = error as GeneralError;
+            if (e.type === "FIELD_ERROR" && e.fields) {
+                Object.entries(e.fields).forEach(([field, message]) => {
                     setError(field as keyof UserProfilePageForm, {
-                        type: 'server',
-                        message: message as string,
-                    })
-                })
+                        type: "server",
+                        message: message,
+                    });
+                });
 
-                toast.error(error.message)
-                return
+                toast.error(e.message);
+                return;
             }
 
-            // Error general
-            if (error.type === 'GENERAL_ERROR') {
-                toast.error(error.message)
-                return
+            if (e.type === "GENERAL_ERROR") {
+                toast.error(e.message);
+                return;
             }
         },
         onSuccess: async (data) => {
-            queryClient.invalidateQueries({ queryKey: ["profile"] })
-            toast.success(data)
-            navigate('/profile')
-        }
-    })
-
+            queryClient.invalidateQueries({ queryKey: ["profile"] });
+            toast.success(data);
+            navigate("/profile");
+        },
+    });
 
     return (
         <EntityFormLayout>
             <EntityFormLayout.Header title="Actualizar perfil"></EntityFormLayout.Header>
             <EntityFormLayout.Form
                 styled
-                onSubmit={
-                    handleSubmit((data) => mutate(data))
-
-                }
+                onSubmit={handleSubmit((data) => mutate(data))}
             >
                 <EntityFormLayout.Inputs>
                     <InputText
@@ -75,41 +75,45 @@ export const EditProfilePage = ({ data }: { data: UserProfilePageForm }) => {
                         placeholder="Primer y segundo nombre del usuario"
                         type="text"
                         errorMessage={errors.firstname}
-                        functionEnabled={register('firstname')} />
+                        functionEnabled={register("firstname")}
+                    />
                     <InputText
                         id="firstname"
                         label="Apellido"
                         placeholder="Apellido del usuario"
                         type="text"
                         errorMessage={errors.lastname}
-                        functionEnabled={register('lastname')} />
+                        functionEnabled={register("lastname")}
+                    />
                     <InputText
                         id="dni"
                         label="DNI"
                         placeholder="DNI del usuario"
                         type="number"
                         errorMessage={errors.dni}
-                        functionEnabled={register('dni')} />
+                        functionEnabled={register("dni")}
+                    />
                     <InputText
                         id="email"
                         label="Email"
                         placeholder="Email del usuario"
                         type="email"
                         errorMessage={errors.email}
-                        functionEnabled={register('email')} />
-
+                        functionEnabled={register("email")}
+                    />
                 </EntityFormLayout.Inputs>
 
                 <EntityFormLayout.Actions>
                     <Button
                         icon={<ArrowUpCircleIcon />}
                         size="large"
-                        text='Actualizar perfil'
+                        text="Actualizar perfil"
                         type="submit"
                         color="green"
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile
+                        applyMinWidth
                     />
                     <ButtonLink
                         icon={<XCircleIcon />}
@@ -120,9 +124,10 @@ export const EditProfilePage = ({ data }: { data: UserProfilePageForm }) => {
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile
+                        applyMinWidth
                     />
                 </EntityFormLayout.Actions>
             </EntityFormLayout.Form>
         </EntityFormLayout>
-    )
-}
+    );
+};

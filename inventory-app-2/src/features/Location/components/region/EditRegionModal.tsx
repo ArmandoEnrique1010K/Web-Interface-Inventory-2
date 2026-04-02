@@ -1,66 +1,71 @@
-import type { RegionForm } from '../../types';
-import { useForm } from 'react-hook-form';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { updateRegion } from '../../api/RegionAPI';
-import type { GeneralError } from '@/types/index';
-import { toast } from 'sonner';
-import { Button } from '@/ui/Button';
-import { InputText } from '@/ui/fields/InputText';
-import { ArrowUpCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import type { RegionForm } from "../../types";
+import { useForm } from "react-hook-form";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { updateRegion } from "../../api/RegionAPI";
+import type { GeneralError } from "@/types/index";
+import { toast } from "sonner";
+import { Button } from "@/ui/Button";
+import { InputText } from "@/ui/fields/InputText";
+import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 
 type Props = {
     data: RegionForm;
-    showModal: React.Dispatch<React.SetStateAction<boolean>>
+    showModal: React.Dispatch<React.SetStateAction<boolean>>;
     regionId: string;
-}
-
+};
 
 export const EditRegionModal = ({ data, regionId, showModal }: Props) => {
-    const { register, handleSubmit, setError, formState: { errors } } = useForm<RegionForm>({
+    const {
+        register,
+        handleSubmit,
+        setError,
+        formState: { errors },
+    } = useForm<RegionForm>({
         defaultValues: {
-            name: data.name
-        }
-    })
+            name: data.name,
+        },
+    });
 
     const queryClient = useQueryClient();
 
     const { mutate } = useMutation({
         mutationFn: updateRegion,
-        onError: (error: GeneralError) => {
-            if (error.type === 'FIELD_ERROR') {
-                Object.entries(error.fields).forEach(([field, message]) => {
+        retry: false,
+        onError: (error: unknown) => {
+            const e = error as GeneralError;
+            if (e.type === "FIELD_ERROR" && e.fields) {
+                Object.entries(e.fields).forEach(([field, message]) => {
                     setError(field as keyof RegionForm, {
-                        type: 'server',
-                        message: message as string,
-                    })
-                })
+                        type: "server",
+                        message: message,
+                    });
+                });
 
-                toast.error(error.message)
-                return
+                toast.error(e.message);
+                return;
             }
 
-            // Error general
-            if (error.type === 'GENERAL_ERROR') {
-                toast.error(error.message)
-                return
+            if (e.type === "GENERAL_ERROR") {
+                toast.error(e.message);
+                return;
             }
         },
         onSuccess: (data) => {
-            queryClient.invalidateQueries({ queryKey: ["regions"] })
-            queryClient.invalidateQueries({ queryKey: ["region", regionId] })
-            toast.success(data)
-            showModal(false)
-        }
-    })
+            queryClient.invalidateQueries({ queryKey: ["regions"] });
+            queryClient.invalidateQueries({ queryKey: ["region", regionId] });
+            toast.success(data);
+            showModal(false);
+        },
+    });
 
     const handleForm = (formData: RegionForm) => {
         const data = {
             formData,
-            regionId
-        }
-        mutate(data)
-    }
+            regionId,
+        };
+        mutate(data);
+    };
 
     return (
         <EntityFormLayout isCompact>
@@ -72,7 +77,8 @@ export const EditRegionModal = ({ data, regionId, showModal }: Props) => {
                         placeholder="Nombre de la región"
                         type="text"
                         errorMessage={errors.name}
-                        functionEnabled={register('name')} />
+                        functionEnabled={register("name")}
+                    />
                 </EntityFormLayout.Inputs>
                 <EntityFormLayout.Actions isCompact>
                     <Button
@@ -84,20 +90,22 @@ export const EditRegionModal = ({ data, regionId, showModal }: Props) => {
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile
+                        applyMinWidth
                     />
                     <Button
                         icon={<XCircleIcon />}
                         size="large"
                         text="Volver"
-                        type='button'
+                        type="button"
                         color="gray"
                         onClick={() => showModal(false)}
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile
+                        applyMinWidth
                     />
                 </EntityFormLayout.Actions>
             </EntityFormLayout.Form>
         </EntityFormLayout>
-    )
-}
+    );
+};

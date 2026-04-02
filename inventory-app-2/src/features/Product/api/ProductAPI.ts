@@ -1,39 +1,46 @@
 import { api } from "@/lib/axiosConfig";
-import type { ProductCreateForm, ProductUpdateForm } from "../types";
-import type { DataPageResponse, DataResponse, GeneralResponse } from "@/types/index";
 import { handleApiError } from "@/utils/handleApiError";
+import type { ProductCreateForm, ProductUpdateForm } from "../schemas/requests";
+import { responseSchema } from "@/types";
+import {
+    productDetailsResponseSchema,
+    productPageResponseSchema,
+} from "../schemas/responses";
 
 type ProductCreatePayload = {
-    data: ProductCreateForm,
-    file?: File
-}
+    data: ProductCreateForm;
+    file?: File;
+};
 
 // El formato de datos que se enviaran cambia cuando se quiere subir una imagen
 export async function registerProduct({ data, file }: ProductCreatePayload) {
-
-    const formData = new FormData()
-    formData.append("name", data.name)
-    formData.append("length", data.length)
-    formData.append("width", data.width)
-    formData.append("height", data.height)
-    formData.append("modelName", data.modelName)
-    formData.append("modelEntryDate", data.modelEntryDate)
-    formData.append("modelCaducityDate", data.modelCaducityDate)
-    formData.append("categoryId", data.categoryId)
-    formData.append("typeId", data.typeId)
+    const formData = new FormData();
+    formData.append("name", data.name);
+    if (data.length) {
+        formData.append("length", data.length.toString());
+    }
+    if (data.width) {
+        formData.append("width", data.width.toString());
+    }
+    if (data.height) {
+        formData.append("height", data.height.toString());
+    }
+    formData.append("modelName", data.modelName);
+    formData.append("modelEntryDate", data.modelEntryDate);
+    formData.append("modelCaducityDate", data.modelCaducityDate);
+    formData.append("categoryId", data.categoryId.toString());
+    formData.append("typeId", data.typeId.toString());
 
     if (file) {
-        formData.append("file", file)
+        formData.append("file", file);
     }
 
     try {
-        const url = `/products`
-        const { data } = await api.post<GeneralResponse>(url, formData)
-        // Solamente si se tiene una respuesta valida, se toma el mensaje devuelto
-        if (data.type === 'success') {
-            return data.message
-        }
-        return ""
+        const url = `/products`;
+        const { data } = await api.post(url, formData);
+
+        const parsed = responseSchema.parse(data);
+        return parsed.message;
     } catch (error: unknown) {
         handleApiError(error);
     }
@@ -45,52 +52,61 @@ export type ProductQueryParams = {
     status?: boolean;
     categoryId?: string;
     typeId?: string;
-}
+};
 
 export async function listAllProducts(params: ProductQueryParams) {
     try {
-        const url = `/products`
-        const { data } = await api.get<DataPageResponse>(url, { params: params })
-        return data.data;
+        const url = `/products`;
+        const { data } = await api.get(url, {
+            params,
+        });
+        const parsed = productPageResponseSchema.parse(data);
+        console.log(parsed);
+        return parsed.data;
     } catch (error) {
+        console.log(error);
         handleApiError(error);
     }
 }
 
-export async function getProduct(id: string) {
+export async function getProduct(id: number) {
     try {
-        const url = `/products/${id}`
-        const { data } = await api.get<DataResponse>(url)
-        return data.data;
+        const url = `/products/${id}`;
+        const { data } = await api.get(url);
+        const parsed = productDetailsResponseSchema.parse(data);
+        console.log(parsed);
+        return parsed.data;
     } catch (error) {
+        console.log(error);
         handleApiError(error);
     }
 }
 
 type UpdateProductPayload = {
-    productId: string;
+    productId: number;
     formData: ProductUpdateForm;
-}
+};
 
-export async function updateProduct({ productId, formData }: UpdateProductPayload) {
+export async function updateProduct({
+    productId,
+    formData,
+}: UpdateProductPayload) {
     try {
-        const url = `/products/${productId}`
-        const { data } = await api.put<GeneralResponse>(url, formData)
-        if (data.type === 'success') {
-            return data.message
-        }
+        const url = `/products/${productId}`;
+        const { data } = await api.put(url, formData);
+        const parsed = responseSchema.parse(data);
+        return parsed.message;
     } catch (error) {
         handleApiError(error);
     }
 }
 
-export async function changeStatusProduct(productId: string) {
+export async function changeStatusProduct(productId: number) {
     try {
-        const url = `/products/${productId}/status`
-        const { data } = await api.patch<GeneralResponse>(url)
-        if (data.type === 'success') {
-            return data.message
-        }
+        const url = `/products/${productId}/status`;
+        const { data } = await api.patch(url);
+        const parsed = responseSchema.parse(data);
+        return parsed.message;
     } catch (error) {
         handleApiError(error);
     }

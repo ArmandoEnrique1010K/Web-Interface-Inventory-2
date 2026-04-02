@@ -1,67 +1,98 @@
-import { z } from "zod"
+import { z } from "zod";
 
 export const responseSchema = z.object({
-    type: z.enum(['success', 'error']),
+    type: z.enum(["success", "error"]),
     status: z.number(),
     message: z.string(),
     fields: z.optional(z.record(z.string(), z.string())),
-    secretField: z.optional(z.string())
-})
-
-// export const dataSchema = z.object({
-//     data: z.any()
-// })
-
+    secretField: z.optional(z.string()), // TODO: VERIFICAR SI ESTO PUEDE SER ELIMINADO
+});
 
 export const createDataSchema = <T extends z.ZodType>(dataSchema: T) =>
     z.object({
-        data: dataSchema.optional()
-    })
+        type: z.enum(["success", "error"]),
+        status: z.number(),
+        data: dataSchema,
+    });
 
+export const createDataListSchema = <T extends z.ZodType>(dataListSchema: T) =>
+    z.object({
+        type: z.enum(["success", "error"]),
+        status: z.number(),
+        data: z.array(dataListSchema),
+    });
 
-// Schema específico para datos no tipados (manteniendo compatibilidad)
-export const dataSchema = createDataSchema(z.any())
+export const createPageDataListSchema = <T extends z.ZodType>(itemSchema: T) =>
+    z.object({
+        type: z.enum(["success", "error"]),
+        status: z.number(),
+        data: z.object({
+            content: z.array(itemSchema),
+            page: z.number(),
+            size: z.number(),
+            totalElements: z.number(),
+            totalPages: z.number(),
+            first: z.boolean(),
+            last: z.boolean(),
+        }),
+    });
 
+// Se establece un esquema para las respuestas de las peticiones POST, PUT y PATCH
+export const responseMessageSchema = responseSchema.pick({
+    message: true,
+});
 
-export const dataPageSchema = z.object({
-    type: z.enum(['success', 'error']),
-    status: z.number(),
-    data: z.object({
-        content: z.array(z.any()),
-        page: z.number(),
-        size: z.number(),
-        totalElements: z.number(),
-        totalPages: z.number(),
-        first: z.boolean(),
-        last: z.boolean(),
-    })
-})
+export const errorResponseSchema = responseSchema.pick({
+    fields: true,
+    message: true,
+});
 
+// export type GeneralResponse = {
+//     type: "success" | "error";
+//     status: number;
+//     message: string;
+//     fields?: Record<string, string>;
+// };
 
+// export type DataPageResponse<T> = {
+//     type: "success" | "error";
+//     status: number;
+//     data: {
+//         content: T[];
+//         page: number;
+//         size: number;
+//         totalElements: number;
+//         totalPages: number;
+//         first: boolean;
+//         last: boolean;
+//     };
+// };
 
-// export const pageDataSchema ...
+// export type DataListResponse<T> = {
+//     type: "success" | "error";
+//     status: number;
+//     data: T[];
+// };
 
-export type GeneralResponse = z.infer<typeof responseSchema>
-// export type DataResponse = z.infer<typeof dataSchema>
+// export type DataResponse<T> = {
+//     type: "success" | "error";
+//     status: number;
+//     data: T;
+// };
 
-// O si quieres mantener compatibilidad con Zod:
-export type DataResponse<T = unknown> = z.infer<typeof dataSchema> & {
-    data?: T
-}
+// export type PageData<T> = DataPageResponse<T>["data"];
+// export type Data<T> = DataResponse<T>["data"];
+// export type ListData<T> = DataListResponse<T>["data"];
+// export type GeneralData = Pick<GeneralResponse, "fields" | "message">;
 
-
-export type DataPageResponse = z.infer<typeof dataPageSchema>
-
-
-// Tipo de dato de los items del menu en Sidebar
 export type MenuItem = {
     label: string;
     icon: React.ReactNode;
     to: string;
-}
+};
 
 export type GeneralError = {
-    type: string,
-    message: string,
-    fields: Record<string, string>
-}
+    type: string;
+    message: string;
+    fields: Record<string, string>;
+};

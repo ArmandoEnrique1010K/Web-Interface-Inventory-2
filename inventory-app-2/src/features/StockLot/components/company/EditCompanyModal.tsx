@@ -1,72 +1,75 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import type { GeneralError } from "types";
 import { Button } from "@/ui/Button";
 import { InputText } from "@/ui/fields/InputText";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import type { CompanyForm } from "../../types";
 import { updateCompany } from "../../api/CompanyAPI";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
+import type { GeneralError } from "@/types";
 
 type Props = {
     data: CompanyForm;
     companyId: string;
-    showModal: React.Dispatch<React.SetStateAction<boolean>>
-}
+    showModal: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
 export const EditCompanyModal = ({ data, companyId, showModal }: Props) => {
-
-    const { register, handleSubmit, setError, formState: { errors } } = useForm<CompanyForm>({
+    const {
+        register,
+        handleSubmit,
+        setError,
+        formState: { errors },
+    } = useForm<CompanyForm>({
         defaultValues: {
-            name: data.name
-        }
-    })
+            name: data.name,
+        },
+    });
 
     const queryClient = useQueryClient();
 
     const { mutate } = useMutation({
         mutationFn: updateCompany,
-        onError: (error: GeneralError) => {
-            // Error de campo
-            if (error.type === 'FIELD_ERROR') {
-                Object.entries(error.fields).forEach(([field, message]) => {
+        retry: false,
+        onError: (error: unknown) => {
+            const e = error as GeneralError;
+            if (e.type === "FIELD_ERROR" && e.fields) {
+                Object.entries(e.fields).forEach(([field, message]) => {
                     setError(field as keyof CompanyForm, {
-                        type: 'server',
+                        type: "server",
                         message: message as string,
-                    })
-                })
+                    });
+                });
 
-                toast.error(error.message)
-                return
+                toast.error(e.message);
+                return;
             }
 
-            // Error general
-            if (error.type === 'GENERAL_ERROR') {
-                toast.error(error.message)
-                return
+            if (e.type === "GENERAL_ERROR") {
+                toast.error(e.message);
+                return;
             }
         },
         onSuccess: (data) => {
-            queryClient.invalidateQueries({ queryKey: ["companies"] })
-            queryClient.invalidateQueries({ queryKey: ["company", companyId] })
-            toast.success(data)
-            showModal(false)
-        }
-    })
+            queryClient.invalidateQueries({ queryKey: ["companies"] });
+            queryClient.invalidateQueries({ queryKey: ["company", companyId] });
+            toast.success(data);
+            showModal(false);
+        },
+    });
 
     const handleForm = (formData: CompanyForm) => {
         const data = {
             formData,
-            companyId
-        }
-        mutate(data)
-    }
+            companyId,
+        };
+        mutate(data);
+    };
 
     return (
         <EntityFormLayout isCompact>
-            <EntityFormLayout.Form onSubmit={handleSubmit(handleForm)}
-            >
+            <EntityFormLayout.Form onSubmit={handleSubmit(handleForm)}>
                 <EntityFormLayout.Inputs isCompact>
                     <InputText
                         id="name"
@@ -74,7 +77,8 @@ export const EditCompanyModal = ({ data, companyId, showModal }: Props) => {
                         placeholder="Nombre de la empresa"
                         type="text"
                         errorMessage={errors.name}
-                        functionEnabled={register('name')} />
+                        functionEnabled={register("name")}
+                    />
                 </EntityFormLayout.Inputs>
 
                 <EntityFormLayout.Actions isCompact>
@@ -87,21 +91,22 @@ export const EditCompanyModal = ({ data, companyId, showModal }: Props) => {
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile
+                        applyMinWidth
                     />
                     <Button
                         icon={<XCircleIcon />}
                         size="large"
                         text="Volver"
-                        type='button'
+                        type="button"
                         color="gray"
                         onClick={() => showModal(false)}
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile
+                        applyMinWidth
                     />
                 </EntityFormLayout.Actions>
-
             </EntityFormLayout.Form>
-        </EntityFormLayout >
-    )
-}
+        </EntityFormLayout>
+    );
+};

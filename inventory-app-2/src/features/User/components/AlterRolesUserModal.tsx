@@ -10,87 +10,83 @@ import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 import { SelectCheckboxGroup } from "@/ui/fields/SelectCheckboxGroup";
 
 type Props = {
-    data: UserRolesDetails
+    data: UserRolesDetails;
     userId: string;
-    showModal: React.Dispatch<React.SetStateAction<boolean>>
-}
-
+    showModal: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
 export const AlterRolesUserModal = ({ data, userId, showModal }: Props) => {
-
     const { register, handleSubmit, setError } = useForm<RolesForm>({
         defaultValues: {
             operator: data.operator,
             secretary: data.secretary,
-            admin: data.admin
-        }
-    })
+            admin: data.admin,
+        },
+    });
 
     const queryClient = useQueryClient();
 
     const { mutate } = useMutation({
         mutationFn: updateUserRoles,
-        onError: (error: GeneralError) => {
-            if (error.type === 'FIELD_ERROR') {
-                Object.entries(error.fields).forEach(([field, message]) => {
+        retry: false,
+        onError: (error: unknown) => {
+            const e = error as GeneralError;
+            if (e.type === "FIELD_ERROR" && e.fields) {
+                Object.entries(e.fields).forEach(([field, message]) => {
                     setError(field as keyof RolesForm, {
-                        type: 'server',
+                        type: "server",
                         message: message as string,
-                    })
-                })
+                    });
+                });
 
-                toast.error(error.message)
-                return
+                toast.error(e.message);
+                return;
             }
 
-            // Error general
-            if (error.type === 'GENERAL_ERROR') {
-                toast.error(error.message)
-                return
+            if (e.type === "GENERAL_ERROR") {
+                toast.error(e.message);
+                return;
             }
         },
         onSuccess: (data) => {
-            queryClient.invalidateQueries({ queryKey: ["users"] })
-            queryClient.invalidateQueries({ queryKey: ["roles", userId] })
-            toast.success(data)
-            showModal(false)
-        }
-    })
+            queryClient.invalidateQueries({ queryKey: ["users"] });
+            queryClient.invalidateQueries({ queryKey: ["roles", userId] });
+            toast.success(data);
+            showModal(false);
+        },
+    });
     const handleForm = (formData: RolesForm) => {
         const data = {
             formData,
-            userId
-        }
-        mutate(data)
-    }
+            userId,
+        };
+        mutate(data);
+    };
 
-    const rolesGroup: { name: string, action: UseFormRegisterReturn }[] = [
+    const rolesGroup: { name: string; action: UseFormRegisterReturn }[] = [
         {
-            name: 'Operador',
-            action: register('operator')
+            name: "Operador",
+            action: register("operator"),
         },
         {
-            name: 'Secretario',
-            action: register('secretary')
+            name: "Secretario",
+            action: register("secretary"),
         },
         {
-            name: 'Administrador',
-            action: register('admin')
-        }
-    ]
-
+            name: "Administrador",
+            action: register("admin"),
+        },
+    ];
 
     return (
         <EntityFormLayout isCompact>
-            <EntityFormLayout.Header isCompact
+            <EntityFormLayout.Header
+                isCompact
                 helpText="Tenga cuidado al alterar los roles de un usuario, podria acceder a cierta información confidencial, recuerde usted altera los roles bajo su propia responsabilidad. Por defecto los usuarios siempre van a tener el rol de 'Usuario'"
             ></EntityFormLayout.Header>
-            <EntityFormLayout.Form onSubmit={handleSubmit(handleForm)}
-            >
+            <EntityFormLayout.Form onSubmit={handleSubmit(handleForm)}>
                 <EntityFormLayout.Inputs isCompact>
-
                     <SelectCheckboxGroup group={rolesGroup} label="Roles" />
-
                 </EntityFormLayout.Inputs>
                 <EntityFormLayout.Actions isCompact>
                     <Button
@@ -102,6 +98,7 @@ export const AlterRolesUserModal = ({ data, userId, showModal }: Props) => {
                         showIconOnMobile={false}
                         showTextOnMobile={true}
                         isLargeOnMobile={true}
+                        applyMinWidth
                     />
                     <Button
                         type="button"
@@ -113,12 +110,10 @@ export const AlterRolesUserModal = ({ data, userId, showModal }: Props) => {
                         showIconOnMobile={false}
                         showTextOnMobile={true}
                         isLargeOnMobile={true}
-
+                        applyMinWidth
                     />
-
                 </EntityFormLayout.Actions>
             </EntityFormLayout.Form>
-
         </EntityFormLayout>
-    )
-}
+    );
+};

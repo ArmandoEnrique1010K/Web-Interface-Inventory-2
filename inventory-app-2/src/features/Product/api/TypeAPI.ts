@@ -1,14 +1,15 @@
-import type { DataResponse } from "@/types/index";
-import { messageResponseSchema, typeDataResponseSchema, typeListDataResponseSchema, type TypeForm } from "../types";
 import { api } from "@/lib/axiosConfig";
+import { responseSchema } from "@/types";
 import { handleApiError } from "@/utils/handleApiError";
+import type { TypeForm } from "../schemas/requests";
+import { typeDetailsSchema, typeListSchema } from "../schemas/responses";
 
 export async function registerType(formData: TypeForm) {
     try {
-        const url = `/types`
-        const { data } = await api.post(url, formData)
-        const parsed = messageResponseSchema.parse(data);
-        return parsed.message
+        const url = `/types`;
+        const { data } = await api.post(url, formData);
+        const parsed = responseSchema.parse(data);
+        return parsed.message;
     } catch (error: unknown) {
         handleApiError(error);
     }
@@ -16,10 +17,21 @@ export async function registerType(formData: TypeForm) {
 
 export async function listAllTypes() {
     try {
-        const url = `/types`
-        const { data } = await api.get<DataResponse>(url)
-        const parsed = typeListDataResponseSchema.parse(data);
-        return parsed.data
+        const url = `/types`;
+        const { data } = await api.get(url);
+        const parsed = typeListSchema.parse(data);
+        return parsed.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+}
+
+export async function getType(id: number) {
+    try {
+        const url = `/types/${id}`;
+        const { data } = await api.get(url);
+        const parsed = typeDetailsSchema.parse(data);
+        return parsed.data;
     } catch (error) {
         handleApiError(error);
     }
@@ -27,22 +39,10 @@ export async function listAllTypes() {
 
 export async function listAllActiveTypes() {
     try {
-        const url = `/types/active`
-        const { data } = await api.get<DataResponse>(url)
-        const parsed = typeListDataResponseSchema.parse(data);
-        return parsed.data
-    } catch (error) {
-        handleApiError(error);
-    }
-}
-
-
-export async function getType(id: number) {
-    try {
-        const url = `/types/${id}`
-        const { data } = await api.get<DataResponse>(url)
-        const parsed = typeDataResponseSchema.parse(data);
-        return parsed.data
+        const url = `/types/active`;
+        const { data } = await api.get(url);
+        const parsed = typeListSchema.parse(data);
+        return parsed.data;
     } catch (error) {
         handleApiError(error);
     }
@@ -51,14 +51,14 @@ export async function getType(id: number) {
 type UpdateTypePayload = {
     typeId: number;
     formData: TypeForm;
-}
+};
 
 export async function updateType({ typeId, formData }: UpdateTypePayload) {
     try {
-        const url = `/types/${typeId}`
-        const { data } = await api.put(url, formData)
-        const parsed = messageResponseSchema.parse(data);
-        return parsed.message
+        const url = `/types/${typeId}`;
+        const { data } = await api.put(url, formData);
+        const parsed = responseSchema.parse(data);
+        return parsed.message;
     } catch (error) {
         handleApiError(error);
     }
@@ -66,10 +66,10 @@ export async function updateType({ typeId, formData }: UpdateTypePayload) {
 
 export async function changeStatusType(typeId: number) {
     try {
-        const url = `/types/${typeId}/status`
-        const { data } = await api.patch(url)
-        const parsed = messageResponseSchema.parse(data);
-        return parsed.message
+        const url = `/types/${typeId}/status`;
+        const { data } = await api.patch(url);
+        const parsed = responseSchema.parse(data);
+        return parsed.message;
     } catch (error) {
         handleApiError(error);
     }

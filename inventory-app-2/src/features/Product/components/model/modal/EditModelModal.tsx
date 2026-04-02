@@ -1,90 +1,93 @@
-import type { ModelInProductForm, ModelItem } from '../../types';
-import { useForm } from 'react-hook-form';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { updateModel } from '../../api/ModelAPI';
-import type { GeneralError } from '@/types/index';
-import { toast } from 'sonner';
-import { InputText } from '@/ui/fields/InputText';
-import { InputDate } from '@/ui/fields/InputDate';
-import { ArrowUpCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
-import { Button } from '@/ui/Button';
-import { useState } from 'react';
-import { UploadImage } from '@/ui/fields/UploadImage';
-import { EntityFormLayout } from '@/layout/entity/EntityFormLayout';
+import { useForm } from "react-hook-form";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { updateModel } from "../../../api/ModelAPI";
+import type { GeneralError } from "@/types/index";
+import { toast } from "sonner";
+import { InputText } from "@/ui/fields/InputText";
+import { InputDate } from "@/ui/fields/InputDate";
+import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
+import { Button } from "@/ui/Button";
+import { useState } from "react";
+import { UploadImage } from "@/ui/fields/UploadImage";
+import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
+import type { ModelForm } from "../../../schemas/requests";
+import type { ModelItem } from "../../../schemas/items";
 
 type Props = {
     data: ModelItem & { file: File };
     modelId: string;
-    setEditCurrentModelModalOpen: React.Dispatch<React.SetStateAction<boolean>>
-}
+    setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
-export const EditModelModal = ({ data, modelId, setEditCurrentModelModalOpen }: Props) => {
-
-    const { register, handleSubmit, setError, control, formState: { errors } } = useForm<ModelInProductForm & { file: File }>({
+export const EditModelModal = ({ data, modelId, setShowModal }: Props) => {
+    const {
+        register,
+        handleSubmit,
+        setError,
+        control,
+        formState: { errors },
+    } = useForm<ModelForm & { file: File }>({
         defaultValues: {
             name: data.name,
             entryDate: data.entryDate,
-            caducityDate: data.caducityDate
-        }
-    })
+            caducityDate: data.caducityDate,
+        },
+    });
 
-    const [file, setFile] = useState<File | null>(null)
-    const [preview, setPreview] = useState<string | null>(data.imageUrl)
-
-
+    const [file, setFile] = useState<File | null>(null);
+    const [preview, setPreview] = useState<string | null>(data.imageUrl);
 
     const queryClient = useQueryClient();
 
     const { mutate } = useMutation({
         mutationFn: updateModel,
-        onError: (error: GeneralError) => {
-            // Error de campo
-            if (error.type === 'FIELD_ERROR') {
-                Object.entries(error.fields).forEach(([field, message]) => {
-                    setError(field as keyof ModelInProductForm, {
-                        type: 'server',
-                        message: message as string,
-                    })
-                })
+        retry: false,
+        onError: (error: unknown) => {
+            const e = error as GeneralError;
+            if (e.type === "FIELD_ERROR" && e.fields) {
+                Object.entries(e.fields).forEach(([field, message]) => {
+                    setError(field as keyof ModelForm, {
+                        type: "server",
+                        message: message,
+                    });
+                });
 
-                toast.error(error.message)
-                return
+                toast.error(e.message);
+                return;
             }
 
-            // Error general
-            if (error.type === 'GENERAL_ERROR') {
-                toast.error(error.message)
-                return
+            if (e.type === "GENERAL_ERROR") {
+                toast.error(e.message);
+                return;
             }
         },
         onSuccess: (data) => {
-            queryClient.invalidateQueries({ queryKey: ["models"] })
-            queryClient.invalidateQueries({ queryKey: ["model", +modelId] })
-            toast.success(data)
+            queryClient.invalidateQueries({ queryKey: ["models"] });
+            queryClient.invalidateQueries({ queryKey: ["model", +modelId] });
+            toast.success(data);
             // navigate(`/products/${productId}?modelId=${modelId}`)
-            setEditCurrentModelModalOpen(false)
-        }
-    })
+            setShowModal(false);
+        },
+    });
 
-
-    const handleForm = (formData: ModelInProductForm & { file: File }) => {
+    const handleForm = (formData: ModelForm & { file: File }) => {
         const data = {
             data: formData,
-            modelId,
-            ...(file && { file }) // Only include file if it exists
-        }
-        mutate(data)
-    }
-
+            modelId: +modelId,
+            ...(file && { file }), // Only include file if it exists
+        };
+        mutate(data);
+    };
 
     return (
         <EntityFormLayout isCompact>
-            <EntityFormLayout.Form styled={false}
+            <EntityFormLayout.Form
+                styled={false}
                 onSubmit={handleSubmit((data) => {
                     handleForm({
                         ...data,
-                        file: file || data.file
-                    })
+                        file: file || data.file,
+                    });
                 })}
             >
                 <EntityFormLayout.Inputs isCompact>
@@ -94,16 +97,17 @@ export const EditModelModal = ({ data, modelId, setEditCurrentModelModalOpen }: 
                         placeholder="Nombre del modelo"
                         type="text"
                         errorMessage={errors.name}
-                        functionEnabled={register('name')} />
+                        functionEnabled={register("name")}
+                    />
 
-                    <InputDate<ModelInProductForm & { file: File }>
+                    <InputDate<ModelForm & { file: File }>
                         id="entryDate"
                         label="Fecha de entrada"
                         name="entryDate"
                         control={control}
                         errorMessage={errors.entryDate?.message}
                     />
-                    <InputDate<ModelInProductForm & { file: File }>
+                    <InputDate<ModelForm & { file: File }>
                         id="caducityDate"
                         label="Fecha de caducidad"
                         name="caducityDate"
@@ -132,8 +136,10 @@ export const EditModelModal = ({ data, modelId, setEditCurrentModelModalOpen }: 
                                     className="w-40 mt-2 rounded"
                                 />
                             )} */}
-                    <UploadImage id='file' label="Imagen"
-                        register={register('file')}
+                    <UploadImage
+                        id="file"
+                        label="Imagen"
+                        register={register("file")}
                         previewImage={preview}
                         setFile={setFile}
                         setPreview={setPreview}
@@ -149,21 +155,22 @@ export const EditModelModal = ({ data, modelId, setEditCurrentModelModalOpen }: 
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile
+                        applyMinWidth
                     />
                     <Button
-                        type='button'
+                        type="button"
                         icon={<XCircleIcon />}
                         size="large"
                         text="Cancelar"
                         color="gray"
-                        onClick={() => setEditCurrentModelModalOpen(false)}
+                        onClick={() => setShowModal(false)}
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile
+                        applyMinWidth
                     />
-
                 </EntityFormLayout.Actions>
             </EntityFormLayout.Form>
         </EntityFormLayout>
-    )
-}
+    );
+};

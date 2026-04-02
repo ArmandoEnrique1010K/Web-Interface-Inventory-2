@@ -1,75 +1,87 @@
-import React from 'react'
-import type { DeliveryLineAlterForm } from '../../types'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useForm } from 'react-hook-form'
-import { returnDeliveryLine } from '../../api/DeliveryLineAPI'
-import type { GeneralError } from '@/types/index'
-import { toast } from 'sonner'
-import { EntityFormLayout } from '@/layout/entity/EntityFormLayout'
-import { InputText } from '@/ui/fields/InputText'
-import { Button } from '../../../../ui/Button';
-import { ArrowUpCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
-
+import React from "react";
+import type { DeliveryLineAlterForm } from "../../types";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { returnDeliveryLine } from "../../api/DeliveryLineAPI";
+import type { GeneralError } from "@/types/index";
+import { toast } from "sonner";
+import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
+import { InputText } from "@/ui/fields/InputText";
+import { Button } from "../../../../ui/Button";
+import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 
 type Props = {
-    setReturnModalOpen: React.Dispatch<React.SetStateAction<boolean>>,
-    deliveryLineId: string,
-    deliveryOrderId: string
-}
+    setReturnModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    deliveryLineId: string;
+    deliveryOrderId: string;
+};
 
-
-export const ReturnDeliveryLineModal = ({ setReturnModalOpen, deliveryLineId, deliveryOrderId }: Props) => {
-
+export const ReturnDeliveryLineModal = ({
+    setReturnModalOpen,
+    deliveryLineId,
+    deliveryOrderId,
+}: Props) => {
     const initialValues: DeliveryLineAlterForm = {
-        quantity: '',
-        movementComment: ''
-    }
+        quantity: "",
+        movementComment: "",
+    };
 
-    const { register, handleSubmit, setError, formState: { errors } } = useForm<DeliveryLineAlterForm>({
-        defaultValues: initialValues
-    })
+    const {
+        register,
+        handleSubmit,
+        setError,
+        formState: { errors },
+    } = useForm<DeliveryLineAlterForm>({
+        defaultValues: initialValues,
+    });
 
     const queryClient = useQueryClient();
 
     // Mutacion para guardar los cambios
     const { mutate } = useMutation({
         mutationFn: returnDeliveryLine,
-        onError: (error: GeneralError) => {
-            if (error.type === 'FIELD_ERROR') {
-                Object.entries(error.fields).forEach(([field, message]) => {
+        retry: false,
+        onError: (error: unknown) => {
+            const e = error as GeneralError;
+            if (e.type === "FIELD_ERROR" && e.fields) {
+                Object.entries(e.fields).forEach(([field, message]) => {
                     setError(field as keyof DeliveryLineAlterForm, {
-                        type: 'server',
-                        message: message as string,
-                    })
-                })
+                        type: "server",
+                        message: message,
+                    });
+                });
 
-                toast.error(error.message)
-                return
+                toast.error(e.message);
+                return;
             }
 
-            // Error general
-            if (error.type === 'GENERAL_ERROR') {
-                toast.error(error.message)
-                return
+            if (e.type === "GENERAL_ERROR") {
+                toast.error(e.message);
+                return;
             }
         },
         onSuccess: (data) => {
-            queryClient.invalidateQueries({ queryKey: ['deliveryLines', 'deliveryOrder', deliveryOrderId] })
-            queryClient.invalidateQueries({ queryKey: ["deliveryLine", deliveryLineId ? +deliveryLineId : 0] })
+            queryClient.invalidateQueries({
+                queryKey: ["deliveryLines", "deliveryOrder", deliveryOrderId],
+            });
+            queryClient.invalidateQueries({
+                queryKey: [
+                    "deliveryLine",
+                    deliveryLineId ? +deliveryLineId : 0,
+                ],
+            });
 
-
-            toast.success(data)
-            setReturnModalOpen(false)
-        }
-    })
+            toast.success(data);
+            setReturnModalOpen(false);
+        },
+    });
     const handleForm = (formData: DeliveryLineAlterForm) => {
         const data = {
             formData,
-            deliveryLineId
-        }
-        mutate(data)
-    }
-
+            deliveryLineId,
+        };
+        mutate(data);
+    };
 
     return (
         <EntityFormLayout isCompact>
@@ -81,14 +93,16 @@ export const ReturnDeliveryLineModal = ({ setReturnModalOpen, deliveryLineId, de
                         placeholder="Cantidad"
                         type="text"
                         errorMessage={errors.quantity}
-                        functionEnabled={register('quantity')} />
+                        functionEnabled={register("quantity")}
+                    />
                     <InputText
                         id="movementComment"
                         label="Comentario breve"
                         placeholder="Escriba un comentario"
                         type="text"
                         errorMessage={errors.movementComment}
-                        functionEnabled={register('movementComment')} />
+                        functionEnabled={register("movementComment")}
+                    />
                 </EntityFormLayout.Inputs>
                 <EntityFormLayout.Actions>
                     <Button
@@ -100,9 +114,10 @@ export const ReturnDeliveryLineModal = ({ setReturnModalOpen, deliveryLineId, de
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile
+                        applyMinWidth
                     />
                     <Button
-                        type='button'
+                        type="button"
                         icon={<XCircleIcon />}
                         size="large"
                         text="Cancelar"
@@ -111,10 +126,10 @@ export const ReturnDeliveryLineModal = ({ setReturnModalOpen, deliveryLineId, de
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile
+                        applyMinWidth
                     />
                 </EntityFormLayout.Actions>
-
             </EntityFormLayout.Form>
         </EntityFormLayout>
-    )
-}
+    );
+};

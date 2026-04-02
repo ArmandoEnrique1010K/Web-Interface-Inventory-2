@@ -1,50 +1,56 @@
 import { api } from "@/lib/axiosConfig";
-import type { DataPageResponse, DataResponse, GeneralResponse } from "@/types/index";
 import { handleApiError } from "@/utils/handleApiError";
-import type { ModelInProductForm, ModelItem, ModelSearchFirstTenItems } from "../types";
-
+import type { ModelForm } from "../schemas/requests";
+import { responseSchema } from "@/types";
+import {
+    modelDetailsResponseSchema,
+    modelListResponseSchema,
+    modelPageResponseSchema,
+    modelSearchPageListResponseSchema,
+    modelTopTenResponseSchema,
+} from "../schemas/responses";
 
 type RegisterModelInProductPayload = {
-    productId: string;
-    data: ModelInProductForm;
+    productId: number;
+    data: ModelForm;
     file?: File;
-}
+};
 
-
-export async function registerModelInProduct({ productId, data, file }: RegisterModelInProductPayload): Promise<string> {
+export async function registerModelInProduct({
+    productId,
+    data,
+    file,
+}: RegisterModelInProductPayload) {
     // Configuracion para enviar los datos del formulario por separado: los datos y la imagen
-    const formData = new FormData()
-    formData.append("name", data.name)
-    formData.append("entryDate", data.entryDate ?? '')
-    formData.append("caducityDate", data.caducityDate ?? '')
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("entryDate", data.entryDate ?? "");
+    formData.append("caducityDate", data.caducityDate ?? "");
 
     if (file) {
-        formData.append("file", file)
+        formData.append("file", file);
     }
 
     try {
-        const url = `/models/product/${productId}`
-        const { data } = await api.post<GeneralResponse>(url, formData)
-        if (data.type === 'success') {
-            return data.message
-        }
-
-        return ""
+        const url = `/models/product/${productId}`;
+        const { data } = await api.post(url, formData);
+        const parsed = responseSchema.parse(data);
+        return parsed.message;
     } catch (error) {
         handleApiError(error);
     }
 }
 
-export async function listAllModelsByProductId(productId: string): Promise<ModelItem[]> {
+export async function listAllModelsByProductId(productId: number) {
     try {
-        const url = `/models/product/${productId}`
-        const { data } = await api.get<DataResponse>(url)
-        return data.data;
+        const url = `/models/product/${productId}`;
+        const { data } = await api.get(url);
+        const parsed = modelListResponseSchema.parse(data);
+        return parsed.data;
     } catch (error) {
         handleApiError(error);
     }
 }
-
 
 export type ModelQueryParams = {
     page?: number;
@@ -56,13 +62,28 @@ export type ModelQueryParams = {
     status?: boolean;
     categoryId?: string;
     typeId?: string;
-}
+};
 
-export async function listAllModels(params: ModelQueryParams): Promise<DataResponse<ModelItem[]>> {
+export async function listAllModels(params: ModelQueryParams) {
     try {
-        const url = `/models`
-        const { data } = await api.get<DataPageResponse>(url, { params: params })
-        return data.data;
+        const url = `/models`;
+        const { data } = await api.get(url, {
+            params: params,
+        });
+
+        // Al utilizar data.data debe retornar lo siguiente
+        //  data: {
+        //    content: any[];
+        //    page: number;
+        //    size: number;
+        //    totalElements: number;
+        //    totalPages: number;
+        //    first: boolean;
+        //    last: boolean;
+        // }
+
+        const parsed = modelPageResponseSchema.parse(data);
+        return parsed.data;
     } catch (error) {
         handleApiError(error);
     }
@@ -70,86 +91,82 @@ export async function listAllModels(params: ModelQueryParams): Promise<DataRespo
 
 export type ListFirstTenModelsByKeywordParams = {
     keyword: string;
-}
+};
 
-
-export async function listFirstTenModelsByKeyword(params: ListFirstTenModelsByKeywordParams): Promise<ModelSearchFirstTenItems[]> {
+export async function listFirstTenModelsByKeyword(
+    params: ListFirstTenModelsByKeywordParams,
+) {
     try {
-        const url = `/models/search/models`
-        const { data } = await api.get<DataResponse>(url, { params: params })
-        return data.data;
+        const url = `/models/search/models`;
+        const { data } = await api.get(url, { params });
+        const parsed = modelTopTenResponseSchema.parse(data);
+        return parsed.data;
     } catch (error) {
         handleApiError(error);
     }
-
 }
-
 
 export type ModelSearchQueryParams = {
     page?: number;
     keyword?: string;
-}
+};
 
 export async function listActiveModelsByName(params: ModelSearchQueryParams) {
     try {
-        const url = `/models/search`
-        const { data } = await api.get<DataPageResponse>(url, { params: params })
-        return data.data;
+        const url = `/models/search`;
+        const { data } = await api.get(url, {
+            params,
+        });
+        const parsed = modelSearchPageListResponseSchema.parse(data);
+        return parsed.data;
     } catch (error) {
         handleApiError(error);
     }
-
 }
 
-
-export async function getModel(id: string) {
+export async function getModel(id: number) {
     try {
-        const url = `/models/${id}`
-        const { data } = await api.get<DataResponse>(url)
-        return data.data;
+        const url = `/models/${id}`;
+        const { data } = await api.get(url);
+        const parsed = modelDetailsResponseSchema.parse(data);
+        return parsed.data;
     } catch (error) {
         handleApiError(error);
     }
 }
 
 type UpdateModelPayload = {
-    modelId: string;
-    data: ModelInProductForm;
+    modelId: number;
+    data: ModelForm;
     file?: File;
-}
+};
 
 export async function updateModel({ modelId, data, file }: UpdateModelPayload) {
-
-    const formData = new FormData()
-    formData.append("name", data.name)
-    formData.append("entryDate", data.entryDate ?? '')
-    formData.append("caducityDate", data.caducityDate ?? '')
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("entryDate", data.entryDate ?? "");
+    formData.append("caducityDate", data.caducityDate ?? "");
 
     if (file) {
-        formData.append("file", file)
+        formData.append("file", file);
     }
 
     try {
-        const url = `/models/${modelId}`
-        const { data } = await api.put<GeneralResponse>(url, formData)
-        if (data.type === 'success') {
-            return data.message
-        }
+        const url = `/models/${modelId}`;
+        const { data } = await api.put(url, formData);
+        const parsed = responseSchema.parse(data);
+        return parsed.message;
     } catch (error) {
         handleApiError(error);
     }
 }
 
-
-
-
-export async function changeStatusModel(id: string) {
+export async function changeStatusModel(id: number) {
     try {
-        const url = `/models/${id}/status`
-        const { data } = await api.patch<GeneralResponse>(url)
-        if (data.type === 'success') {
-            return data.message
-        }
+        const url = `/models/${id}/status`;
+        const { data } = await api.patch(url);
+        const parsed = responseSchema.parse(data);
+        return parsed.message;
     } catch (error) {
         handleApiError(error);
     }

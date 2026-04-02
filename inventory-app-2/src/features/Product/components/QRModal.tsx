@@ -1,17 +1,17 @@
-import { Modal } from '@/components/Modal'
-import QRCode from 'react-qr-code'
+import { Modal } from "@/components/Modal";
+import QRCode from "react-qr-code";
 
 interface QRModalProps {
-    isOpen: boolean
-    onClose: () => void
-    url: string
-    title: string
+    isOpen: boolean;
+    onClose: () => void;
+    url: string;
+    title: string;
 }
 
 export const QRModal = ({ isOpen, onClose, url, title }: QRModalProps) => {
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="md" title={title} locked>
-            <div className='my-4'>
+            <div className="my-4">
                 Toma captura del QR para compartir el producto
             </div>
             <div className="flex flex-col items-center space-y-4">
@@ -21,5 +21,5 @@ export const QRModal = ({ isOpen, onClose, url, title }: QRModalProps) => {
                 <p className="text-sm text-gray-600 text-center">{url}</p>
             </div>
         </Modal>
-    )
-}
+    );
+};

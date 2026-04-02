@@ -1,35 +1,51 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import type { GeneralError } from "@/types/index"
-import { toast } from "sonner"
-import { Button } from "@/ui/Button"
-import { useForm } from "react-hook-form"
-import { XMarkIcon } from "@heroicons/react/24/outline"
-import { changeStatusUser } from "../api/UserAPI"
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import type { GeneralError } from "@/types/index";
+import { toast } from "sonner";
+import { Button } from "@/ui/Button";
+import { useForm } from "react-hook-form";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import { changeStatusUser } from "../api/UserAPI";
 
-export const StatusUserButton = ({ userId, value, size }: { userId: string, value: string, size: 'small' | 'large' }) => {
+export const StatusUserButton = ({
+    userId,
+    value,
+    size,
+}: {
+    userId: string;
+    value: string;
+    size: "small" | "large";
+}) => {
     const { handleSubmit } = useForm();
     const queryClient = useQueryClient();
 
-
     const { mutate } = useMutation({
         mutationFn: () => changeStatusUser(userId),
-        onError: (error: GeneralError) => {
-            if (error.type === 'GENERAL_ERROR') {
-                toast.error(error.message)
-                return
+        retry: false,
+        onError: (error: unknown) => {
+            const e = error as GeneralError;
+
+            if (e.type === "GENERAL_ERROR") {
+                toast.error(e.message);
+                return;
             }
         },
         onSuccess: async (data) => {
-            toast.success(data)
-            queryClient.invalidateQueries({ queryKey: ['users'] })
-            queryClient.invalidateQueries({ queryKey: ['user', userId] })
-        }
-    })
+            toast.success(data);
+            queryClient.invalidateQueries({ queryKey: ["users"] });
+            queryClient.invalidateQueries({ queryKey: ["user", userId] });
+        },
+    });
 
     return (
         <form onSubmit={handleSubmit(() => mutate())} className="text-center ">
-            <Button icon={size === 'large' && <XMarkIcon />} text={value} type="submit" size={size} color={value === 'Activo' ? 'green-outline' : 'red-outline'} showTextOnMobile />
+            <Button
+                icon={size === "large" && <XMarkIcon />}
+                text={value}
+                type="submit"
+                size={size}
+                color={value === "Activo" ? "green-outline" : "red-outline"}
+                showTextOnMobile
+            />
         </form>
-    )
-}
-
+    );
+};

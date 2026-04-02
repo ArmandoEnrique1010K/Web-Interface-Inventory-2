@@ -12,64 +12,82 @@ import { Button } from "@/ui/Button";
 import { handleFormatDateTimeWithoutT } from "@/utils/handleFormatDateTime";
 
 type Props = {
-    setEditModalOpen: React.Dispatch<React.SetStateAction<boolean>>,
-    deliveryLineId: string,
-    deliveryOrderId: string,
-    limitDate: string,
-    requiredQuantity: string
-}
+    setEditModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    deliveryLineId: string;
+    deliveryOrderId: string;
+    limitDate: string;
+    requiredQuantity: string;
+};
 
-export const EditDeliveryLineModal = ({ setEditModalOpen, deliveryLineId, deliveryOrderId, limitDate, requiredQuantity }: Props) => {
-
+export const EditDeliveryLineModal = ({
+    setEditModalOpen,
+    deliveryLineId,
+    deliveryOrderId,
+    limitDate,
+    requiredQuantity,
+}: Props) => {
     const initialValues: DeliveryLineUpdateForm = {
         requiredQuantity: requiredQuantity,
         limitDate: `${handleFormatDateTimeWithoutT(new Date(limitDate))}`,
-        movementComment: ""
-    }
+        movementComment: "",
+    };
 
-    const { register, handleSubmit, setError, control, formState: { errors } } = useForm<DeliveryLineUpdateForm>({
-        defaultValues: initialValues
-    })
+    const {
+        register,
+        handleSubmit,
+        setError,
+        control,
+        formState: { errors },
+    } = useForm<DeliveryLineUpdateForm>({
+        defaultValues: initialValues,
+    });
 
     const queryClient = useQueryClient();
 
     const { mutate } = useMutation({
         mutationFn: updateDeliveryLine,
-        onError: (error: GeneralError) => {
-            // Error de campo
-            if (error.type === 'FIELD_ERROR') {
-                Object.entries(error.fields).forEach(([field, message]) => {
+        retry: false,
+        onError: (error: unknown) => {
+            const e = error as GeneralError;
+            if (e.type === "FIELD_ERROR" && e.fields) {
+                Object.entries(e.fields).forEach(([field, message]) => {
                     setError(field as keyof DeliveryLineUpdateForm, {
-                        type: 'server',
-                        message: message as string,
-                    })
-                })
+                        type: "server",
+                        message: message,
+                    });
+                });
 
-                toast.error(error.message)
-                return
+                toast.error(e.message);
+                return;
             }
 
-            // Error general
-            if (error.type === 'GENERAL_ERROR') {
-                toast.error(error.message)
-                return
+            if (e.type === "GENERAL_ERROR") {
+                toast.error(e.message);
+                return;
             }
         },
         onSuccess: (data) => {
-            queryClient.invalidateQueries({ queryKey: ['deliveryLines', 'deliveryOrder', deliveryOrderId] })
-            queryClient.invalidateQueries({ queryKey: ["deliveryLine", deliveryLineId ? +deliveryLineId : 0] })
-            toast.success(data)
-            setEditModalOpen(false)
-        }
-    })
+            queryClient.invalidateQueries({
+                queryKey: ["deliveryLines", "deliveryOrder", deliveryOrderId],
+            });
+            queryClient.invalidateQueries({
+                queryKey: [
+                    "deliveryLine",
+                    deliveryLineId ? +deliveryLineId : 0,
+                ],
+            });
+            toast.success(data);
+            setEditModalOpen(false);
+        },
+    });
 
     const handleForm = (formData: DeliveryLineUpdateForm) => {
         const data = {
             formData,
-            deliveryLineId
-        }
-        mutate(data)
-    }
+            deliveryLineId,
+        };
+        mutate(data);
+    };
 
     return (
         <EntityFormLayout isCompact>
@@ -81,7 +99,8 @@ export const EditDeliveryLineModal = ({ setEditModalOpen, deliveryLineId, delive
                         placeholder="Cantidad"
                         type="text"
                         errorMessage={errors.requiredQuantity}
-                        functionEnabled={register('requiredQuantity')} />
+                        functionEnabled={register("requiredQuantity")}
+                    />
                     <InputDateTime<DeliveryLineUpdateForm>
                         id={"limitDate"}
                         label={"Fecha limite"}
@@ -95,8 +114,8 @@ export const EditDeliveryLineModal = ({ setEditModalOpen, deliveryLineId, delive
                         placeholder="Escriba un comentario"
                         type="text"
                         errorMessage={errors.movementComment}
-                        functionEnabled={register('movementComment')} />
-
+                        functionEnabled={register("movementComment")}
+                    />
                 </EntityFormLayout.Inputs>
                 <EntityFormLayout.Actions>
                     <Button
@@ -108,9 +127,10 @@ export const EditDeliveryLineModal = ({ setEditModalOpen, deliveryLineId, delive
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile
+                        applyMinWidth
                     />
                     <Button
-                        type='button'
+                        type="button"
                         icon={<XCircleIcon />}
                         size="large"
                         text="Cancelar"
@@ -119,10 +139,10 @@ export const EditDeliveryLineModal = ({ setEditModalOpen, deliveryLineId, delive
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile
+                        applyMinWidth
                     />
                 </EntityFormLayout.Actions>
-
             </EntityFormLayout.Form>
         </EntityFormLayout>
-    )
-}
+    );
+};

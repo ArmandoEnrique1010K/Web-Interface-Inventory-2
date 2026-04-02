@@ -1,44 +1,40 @@
-import { Modal } from '@/components/Modal';
-import { Button } from '@/ui/Button';
-import { useState } from 'react'
-import { LoaderType } from './LoaderType';
+import { Modal } from "@/components/Modal";
+import { Button } from "@/ui/Button";
+import { useState } from "react";
+import { LoaderType } from "./modal/LoaderType";
 
 type Props = {
-    typeId: number
-}
+    typeId: number;
+};
 
 export const EditTypeButton = ({ typeId }: Props) => {
-
     const [showModal, setShowModal] = useState(false);
 
     return (
         <>
             <Button
-                type='button'
+                type="button"
                 size="small"
                 text="Editar"
                 color="blue"
                 onClick={() => {
-                    setShowModal(true)
+                    setShowModal(true);
                 }}
                 showTextOnMobile
             />
-            {
-                showModal && <Modal
+            {showModal && (
+                <Modal
                     isOpen={showModal}
                     onClose={() => {
-                        setShowModal(false)
+                        setShowModal(false);
                     }}
-                    size='lg'
+                    size="lg"
                     title={`Editar tipo #${typeId}`}
                     locked
                 >
-                    <LoaderType
-                        typeId={typeId}
-                        setModalOpen={setShowModal}
-                    />
+                    <LoaderType typeId={typeId} setShowModal={setShowModal} />
                 </Modal>
-            }
+            )}
         </>
-    )
-}
+    );
+};

@@ -1,44 +1,43 @@
-import { Modal } from '@/components/Modal';
-import { Button } from '@/ui/Button';
-import { useState } from 'react'
-import { LoaderCategory } from './LoaderCategory';
+import { Modal } from "@/components/Modal";
+import { Button } from "@/ui/Button";
+import { useState } from "react";
+import { LoaderCategory } from "./modal/LoaderCategory";
 
 type Props = {
-    categoryId: number
-}
+    categoryId: number;
+};
 
 export const EditCategoryButton = ({ categoryId }: Props) => {
-
     const [showModal, setShowModal] = useState(false);
 
     return (
         <>
             <Button
-                type='button'
+                type="button"
                 size="small"
                 text="Editar"
                 color="blue"
                 onClick={() => {
-                    setShowModal(true)
+                    setShowModal(true);
                 }}
                 showTextOnMobile
             />
-            {
-                showModal && <Modal
+            {showModal && (
+                <Modal
                     isOpen={showModal}
                     onClose={() => {
-                        setShowModal(false)
+                        setShowModal(false);
                     }}
-                    size='lg'
+                    size="lg"
                     title={`Editar categoria #${categoryId}`}
                     locked
                 >
                     <LoaderCategory
                         categoryId={categoryId}
-                        setModalOpen={setShowModal}
+                        setShowModal={setShowModal}
                     />
                 </Modal>
-            }
+            )}
         </>
-    )
-}
+    );
+};

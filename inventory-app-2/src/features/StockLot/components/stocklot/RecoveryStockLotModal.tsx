@@ -10,57 +10,63 @@ import { recoveryStockLot } from "../../api/StockLotAPI";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 
 type Props = {
-    stockLotId: string,
-    showModal: React.Dispatch<React.SetStateAction<boolean>>
-}
+    stockLotId: string;
+    showModal: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
 export const RecoveryStockLotModal = ({ stockLotId, showModal }: Props) => {
-
-    const { register, handleSubmit, setError, formState: { errors } } = useForm<StockLotAdjustmentForm>({
+    const {
+        register,
+        handleSubmit,
+        setError,
+        formState: { errors },
+    } = useForm<StockLotAdjustmentForm>({
         defaultValues: {
-            quantity: '',
-            comment: '',
-        }
-    })
+            quantity: "",
+            comment: "",
+        },
+    });
     const queryClient = useQueryClient();
 
     const { mutate } = useMutation({
         mutationFn: recoveryStockLot,
-        onError: (error: GeneralError) => {
-            // Error de campo
-            if (error.type === 'FIELD_ERROR') {
-                Object.entries(error.fields).forEach(([field, message]) => {
+        retry: false,
+        onError: (error: unknown) => {
+            const e = error as GeneralError;
+            if (e.type === "FIELD_ERROR" && e.fields) {
+                Object.entries(e.fields).forEach(([field, message]) => {
                     setError(field as keyof StockLotAdjustmentForm, {
-                        type: 'server',
+                        type: "server",
                         message: message as string,
-                    })
-                })
+                    });
+                });
 
-                toast.error(error.message)
-                return
+                toast.error(e.message);
+                return;
             }
 
-            // Error general
-            if (error.type === 'GENERAL_ERROR') {
-                toast.error(error.message)
-                return
+            if (e.type === "GENERAL_ERROR") {
+                toast.error(e.message);
+                return;
             }
         },
         onSuccess: (data) => {
-            queryClient.invalidateQueries({ queryKey: ["stocklots"] })
-            queryClient.invalidateQueries({ queryKey: ["stocklot", stockLotId] })
-            toast.success(data)
-            showModal(false)
-        }
-    })
+            queryClient.invalidateQueries({ queryKey: ["stocklots"] });
+            queryClient.invalidateQueries({
+                queryKey: ["stocklot", stockLotId],
+            });
+            toast.success(data);
+            showModal(false);
+        },
+    });
 
     const handleForm = (formData: StockLotAdjustmentForm) => {
         const data = {
             formData,
-            stockLotId
-        }
-        mutate(data)
-    }
+            stockLotId,
+        };
+        mutate(data);
+    };
 
     return (
         <EntityFormLayout isCompact>
@@ -72,7 +78,8 @@ export const RecoveryStockLotModal = ({ stockLotId, showModal }: Props) => {
                         placeholder="Cantidad"
                         type="text"
                         errorMessage={errors.quantity}
-                        functionEnabled={register('quantity')} />
+                        functionEnabled={register("quantity")}
+                    />
 
                     <InputText
                         id="comment"
@@ -80,7 +87,8 @@ export const RecoveryStockLotModal = ({ stockLotId, showModal }: Props) => {
                         placeholder="Comentario..."
                         type="text"
                         errorMessage={errors.comment}
-                        functionEnabled={register('comment')} />
+                        functionEnabled={register("comment")}
+                    />
                 </EntityFormLayout.Inputs>
                 <EntityFormLayout.Actions isCompact>
                     <Button
@@ -92,22 +100,22 @@ export const RecoveryStockLotModal = ({ stockLotId, showModal }: Props) => {
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile
+                        applyMinWidth
                     />
                     <Button
                         icon={<XCircleIcon />}
                         size="large"
                         text="Volver"
                         color="gray"
-                        type='button'
+                        type="button"
                         onClick={() => showModal(false)}
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile
+                        applyMinWidth
                     />
-
                 </EntityFormLayout.Actions>
             </EntityFormLayout.Form>
-
-        </EntityFormLayout >
-    )
-}
+        </EntityFormLayout>
+    );
+};

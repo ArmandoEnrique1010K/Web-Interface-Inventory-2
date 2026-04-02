@@ -12,80 +12,83 @@ import { listAllRegions } from "../../api/RegionAPI";
 import { TextMessage } from "@/components/TextMessage";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 
-
 type Props = {
     data: SubregionForm;
-    showModal: React.Dispatch<React.SetStateAction<boolean>>
+    showModal: React.Dispatch<React.SetStateAction<boolean>>;
     subregionId: string;
-}
+};
 
 export const EditSubregionModal = ({ data, subregionId, showModal }: Props) => {
-
-    const { register, handleSubmit, setError, formState: { errors } } = useForm<SubregionForm>({
+    const {
+        register,
+        handleSubmit,
+        setError,
+        formState: { errors },
+    } = useForm<SubregionForm>({
         defaultValues: {
             name: data.name,
-            regionId: data.regionId
-        }
-    })
+            regionId: data.regionId,
+        },
+    });
 
     const queryClient = useQueryClient();
 
     const { mutate } = useMutation({
         mutationFn: updateSubregion,
-        onError: (error: GeneralError) => {
-            if (error.type === 'FIELD_ERROR') {
-                Object.entries(error.fields).forEach(([field, message]) => {
+        retry: false,
+        onError: (error: unknown) => {
+            const e = error as GeneralError;
+            if (e.type === "FIELD_ERROR" && e.fields) {
+                Object.entries(e.fields).forEach(([field, message]) => {
                     setError(field as keyof SubregionForm, {
-                        type: 'server',
-                        message: message as string,
-                    })
-                })
+                        type: "server",
+                        message: message,
+                    });
+                });
 
-                toast.error(error.message)
-                return
+                toast.error(e.message);
+                return;
             }
 
-            // Error general
-            if (error.type === 'GENERAL_ERROR') {
-                toast.error(error.message)
-                return
+            if (e.type === "GENERAL_ERROR") {
+                toast.error(e.message);
+                return;
             }
         },
         onSuccess: (data) => {
-            queryClient.invalidateQueries({ queryKey: ["subregions"] })
-            queryClient.invalidateQueries({ queryKey: ["subregion", subregionId] })
-            toast.success(data)
-            showModal(false)
-        }
-    })
+            queryClient.invalidateQueries({ queryKey: ["subregions"] });
+            queryClient.invalidateQueries({
+                queryKey: ["subregion", subregionId],
+            });
+            toast.success(data);
+            showModal(false);
+        },
+    });
     const handleForm = (formData: SubregionForm) => {
         const data = {
             formData,
-            subregionId
-        }
-        mutate(data)
-    }
+            subregionId,
+        };
+        mutate(data);
+    };
     const { data: regionData, isLoading: regionLoading } = useQuery({
-        queryKey: ['regions'],
-        queryFn: listAllRegions
-    })
+        queryKey: ["regions"],
+        queryFn: listAllRegions,
+    });
 
-    const regions = regionData?.map((region: RegionItem) => ({
-        value: region.id,
-        label: region.name,
-    })) || []
-
+    const regions =
+        regionData?.map((region: RegionItem) => ({
+            value: region.id,
+            label: region.name,
+        })) || [];
 
     if (regionLoading) {
-        return <TextMessage text="Cargando..." align="left" color="black" />
+        return <TextMessage text="Cargando..." align="left" color="black" />;
     }
-
 
     return (
         <EntityFormLayout isCompact>
-            <EntityFormLayout.Form
-                onSubmit={handleSubmit(handleForm)}
-            >
+            <EntityFormLayout.Form onSubmit={handleSubmit(handleForm)}>
                 <EntityFormLayout.Inputs isCompact>
                     <InputText
                         id="name"
@@ -93,14 +96,14 @@ export const EditSubregionModal = ({ data, subregionId, showModal }: Props) => {
                         placeholder="Nombre de la región"
                         type="text"
                         errorMessage={errors.name}
-                        functionEnabled={register('name')} />
-
+                        functionEnabled={register("name")}
+                    />
 
                     <SelectOption
                         id="regionId"
                         label="Región"
                         errorMessage={errors.regionId}
-                        functionEnabled={register('regionId')}
+                        functionEnabled={register("regionId")}
                         options={regions}
                         textInNullOption="Seleccione un tipo"
                     />
@@ -116,6 +119,7 @@ export const EditSubregionModal = ({ data, subregionId, showModal }: Props) => {
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile
+                        applyMinWidth
                     />
                     <Button
                         type="button"
@@ -127,10 +131,10 @@ export const EditSubregionModal = ({ data, subregionId, showModal }: Props) => {
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile
+                        applyMinWidth
                     />
-
                 </EntityFormLayout.Actions>
             </EntityFormLayout.Form>
         </EntityFormLayout>
-    )
-}
+    );
+};
