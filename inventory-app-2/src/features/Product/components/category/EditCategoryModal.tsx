@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateCategory } from "../../../api/CategoryAPI";
-import type { CategoryForm } from "../../../types";
+import { updateCategory } from "../../api/CategoryAPI";
+import type { CategoryForm } from "../../types";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import type { GeneralError } from "types";
@@ -10,14 +10,14 @@ import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 
 type Props = {
-    data: CategoryForm;
-    categoryId: number;
-    setModalOpen: React.Dispatch<React.SetStateAction<boolean>>
-}
+  data: CategoryForm;
+  categoryId: number;
+  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
 export const EditCategoryModal = ({ data, categoryId, setModalOpen }: Props) => {
 
-    const { register, handleSubmit, setError, formState: { errors } } = useForm({
+    const { register, handleSubmit, setError, formState: { errors } } = useForm<CategoryForm>({
         defaultValues: {
             name: data.name
         }
@@ -32,16 +32,18 @@ export const EditCategoryModal = ({ data, categoryId, setModalOpen }: Props) => 
             const e = error as GeneralError
             if (e.type === 'FIELD_ERROR' && e.fields) {
                 Object.entries(e.fields).forEach(([field, message]) => {
+
                     setError(field as keyof CategoryForm, {
                         type: 'server',
-                        message,
+                        message: message as string,
                     })
                 })
 
                 toast.error(e.message)
                 return
-
             }
+
+            // Error general
             if (e.type === 'GENERAL_ERROR') {
                 toast.error(e.message)
                 return
@@ -51,6 +53,7 @@ export const EditCategoryModal = ({ data, categoryId, setModalOpen }: Props) => 
             queryClient.invalidateQueries({ queryKey: ["categories"] })
             queryClient.invalidateQueries({ queryKey: ["category", categoryId] })
             toast.success(data)
+            // navigate("/products/categories")
             setModalOpen(false)
         }
     })
@@ -85,7 +88,6 @@ export const EditCategoryModal = ({ data, categoryId, setModalOpen }: Props) => 
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile
-                        applyMinWidth
                     />
                     <Button
                         icon={<XCircleIcon />}
@@ -97,7 +99,6 @@ export const EditCategoryModal = ({ data, categoryId, setModalOpen }: Props) => 
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile
-                        applyMinWidth
                     />
                 </EntityFormLayout.Actions>
             </EntityFormLayout.Form>

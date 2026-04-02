@@ -42,9 +42,9 @@ export const ListCategoryPage = () => {
                             <TableRowContainer key={category.id}>
                                 <BaseTableCell data={category.id} />
                                 <BaseTableCell data={category.name} />
-                                <BaseTableCell isCenter data={
-                                    <EditCategoryButton categoryId={category.id} />
-                                } />
+                                <BaseTableCell data={
+                                    <EditCategoryButton categoryId={category.id}/>
+                                } isCenter />
                                 <BaseTableCell isCenter data={
                                     <StatusCategoryButton
                                         categoryId={category.id}

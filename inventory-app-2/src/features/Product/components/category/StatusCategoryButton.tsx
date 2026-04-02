@@ -24,9 +24,9 @@ export const StatusCategoryButton = ({ categoryId, status }: Props) => {
                 return
             }
         },
-        onSuccess: (data) => {
-            queryClient.invalidateQueries({ queryKey: ["categories"] })
+        onSuccess: async (data) => {
             toast.success(data)
+            queryClient.invalidateQueries({ queryKey: ["categories"] })
         }
     })
 

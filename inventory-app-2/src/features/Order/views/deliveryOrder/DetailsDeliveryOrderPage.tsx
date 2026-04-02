@@ -47,7 +47,11 @@ export const DetailsDeliveryOrderPage = ({ from }: Props) => {
     }
 
     if (!deliveryOrderData) {
-        return <div>Orden de entrega no encontrada o desactivada en DeliveryOrderPage</div>
+        return (
+          <div>
+            Orden de entrega no encontrada o desactivada en DeliveryOrderPage
+          </div>
+        );
     }
 
     return (

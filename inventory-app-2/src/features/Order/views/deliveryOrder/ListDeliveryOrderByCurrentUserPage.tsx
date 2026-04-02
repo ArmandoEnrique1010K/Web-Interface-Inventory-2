@@ -34,17 +34,17 @@ export const ListDeliveryOrderByCurrentUserPage = () => {
 
 
     const { data, isError } = useQuery({
+      queryKey: ["deliveryOrders", { batch, startDate, endDate, status, page }],
 
-        queryKey: ['deliveryOrders', { batch, startDate, endDate, status, page }],
-
-        queryFn: () => listAllDeliveryOrdersByClient({
-            page: page,
-            batch: batch,
-            startDate: startDate,
-            endDate: endDate,
-            status: status as OrderStatusEnum
+      queryFn: () =>
+        listAllDeliveryOrdersByClient({
+          page: page,
+          batch: batch,
+          startDate: startDate,
+          endDate: endDate,
+          status: status as OrderStatusEnum,
         }),
-    })
+    });
 
     const content = data?.content || []
 

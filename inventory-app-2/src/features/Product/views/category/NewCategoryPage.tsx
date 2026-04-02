@@ -12,15 +12,17 @@ import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 
 export const NewCategoryPage = () => {
-    const initialValues = {
+
+    const initialValues: CategoryForm = {
         name: '',
     }
 
-    const { register, handleSubmit, setError, formState: { errors } } = useForm({
+    const { register, handleSubmit, setError, formState: { errors } } = useForm<CategoryForm>({
         defaultValues: initialValues
     })
 
     const navigate = useNavigate();
+
 
     const { mutate } = useMutation({
         mutationFn: registerCategory,
@@ -31,14 +33,14 @@ export const NewCategoryPage = () => {
                 Object.entries(e.fields).forEach(([field, message]) => {
                     setError(field as keyof CategoryForm, {
                         type: 'server',
-                        message,
+                        message: message as string,
                     })
                 })
 
                 toast.error(e.message)
                 return
-
             }
+
             if (e.type === 'GENERAL_ERROR') {
                 toast.error(e.message)
                 return
@@ -51,43 +53,47 @@ export const NewCategoryPage = () => {
     })
 
     return (
-        <EntityFormLayout>
-            <EntityFormLayout.Header title="Añadir nueva categoria"></EntityFormLayout.Header>
-            <EntityFormLayout.Form onSubmit={handleSubmit((data) => mutate(data))} styled>
-                <EntityFormLayout.Inputs>
-                    <InputText
-                        id="name"
-                        label="Nombre"
-                        placeholder="Nombre de la categoria"
-                        type="text"
-                        errorMessage={errors.name}
-                        functionEnabled={register('name')} />
-                </EntityFormLayout.Inputs>
-                <EntityFormLayout.Actions>
-                    <Button
-                        icon={<ArrowUpCircleIcon />}
-                        size="large"
-                        text='Añadir'
-                        type="submit"
-                        color="green"
-                        showIconOnMobile={false}
-                        showTextOnMobile
-                        isLargeOnMobile
-                        applyMinWidth
-                    />
-                    <ButtonLink
-                        icon={<XCircleIcon />}
-                        size="large"
-                        text="Cancelar"
-                        color="gray"
-                        to="/products/categories"
-                        showIconOnMobile={false}
-                        showTextOnMobile
-                        isLargeOnMobile
-                        applyMinWidth
-                    />
-                </EntityFormLayout.Actions>
-            </EntityFormLayout.Form>
-        </EntityFormLayout>
-    )
+      <EntityFormLayout>
+        <EntityFormLayout.Header title="Añadir nueva categoria"></EntityFormLayout.Header>
+        <EntityFormLayout.Form
+          styled
+          onSubmit={handleSubmit((data) => mutate(data))}
+        >
+          <EntityFormLayout.Inputs>
+            <InputText
+              id="name"
+              label="Nombre"
+              placeholder="Nombre de la categoria"
+              type="text"
+              errorMessage={errors.name}
+              functionEnabled={register("name")}
+            />
+          </EntityFormLayout.Inputs>
+          <EntityFormLayout.Actions>
+            <Button
+              icon={<ArrowUpCircleIcon />}
+              size="large"
+              text="Añadir"
+              type="submit"
+              color="green"
+              showIconOnMobile={false}
+              showTextOnMobile
+              isLargeOnMobile
+              applyMinWidth
+            />
+            <ButtonLink
+              icon={<XCircleIcon />}
+              size="large"
+              text="Cancelar"
+              color="gray"
+              to="/products/categories"
+              showIconOnMobile={false}
+              showTextOnMobile
+              isLargeOnMobile
+              applyMinWidth
+            />
+          </EntityFormLayout.Actions>
+        </EntityFormLayout.Form>
+      </EntityFormLayout>
+    );
 }

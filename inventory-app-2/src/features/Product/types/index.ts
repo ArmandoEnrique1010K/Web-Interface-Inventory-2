@@ -1,4 +1,3 @@
-import { createDataResponseSchema, createListDataResponseSchema, createMessageResponseSchema } from "@/types/index"
 import { z } from "zod"
 
 // Se definen esquemas por cada tipo de dato que devuelve la API REST, a excepcion de un solo mensaje como respuesta
@@ -68,16 +67,6 @@ export const typeSchema = z.object({
     status: z.boolean()
 })
 
-// SE UTILIZA UN SCHEMA POR CADA TIPO DE DATO QUE DEVUELE LA API REST?
-export const categoryListResponseSchema = createListDataResponseSchema(categorySchema);
-export const categoryDataResponseSchema = createDataResponseSchema(categorySchema);
-
-export const typeListDataResponseSchema = createListDataResponseSchema(typeSchema);
-export const typeDataResponseSchema = createDataResponseSchema(typeSchema);
-
-
-
-
 type Category = z.infer<typeof categorySchema>
 type Model = z.infer<typeof modelSchema>
 type Product = z.infer<typeof productSchema>
@@ -88,7 +77,6 @@ type Type = z.infer<typeof typeSchema>
 
 export type CategoryForm = Pick<Category, "name">;
 
-export type CategoryItem = Category;
 
 
 
@@ -98,6 +86,7 @@ export type ProductCreateForm = Pick<Product, 'name' | 'length' | 'width' | 'hei
 export type ProductUpdateForm = Pick<Product, "name" | "length" | "width" | "height" | "categoryId" | "typeId">;
 export type TypeForm = Pick<Type, "name">;
 
+export type CategoryItem = Category;
 export type ModelItem = Pick<Model, "id" | "name" | "imageUrl" | "entryDate" | "caducityDate" | "totalQuantityAvailable" |
     "totalQuantityReceived" | "totalQuantityDelivered" | "status" | "productId" | "productName" | "typeName" | "categoryName">
 export type ModelDetailsItem = Pick<Model,

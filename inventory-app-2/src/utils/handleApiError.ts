@@ -12,6 +12,5 @@ export function handleApiError(error: unknown): never {
             throw { type: 'GENERAL_ERROR', message: err.message };
         }
     }
-
     throw { type: 'GENERAL_ERROR', message: 'Error inesperado o conexión interrumpida' };
 }

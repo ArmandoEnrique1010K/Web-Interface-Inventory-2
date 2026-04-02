@@ -2,36 +2,35 @@ import { handleApplyStyleColor } from "@/utils/handleApplyStyleColor"
 import { Link } from "react-router-dom"
 
 type Props = {
-    size: 'small' | 'large'
-    text: string
-    to: string
-    color: 'blue' | 'green' | 'gray' | 'red' | 'red-outline'
-    isLarge?: boolean
-    aditionalStyles?: string
-    onClick?: () => void
-    icon?: React.ReactNode
-    showTextOnMobile?: boolean
-    showIconOnMobile?: boolean
-    isLargeOnMobile?: boolean
-    applyMinWidth?: boolean
-}
+  size: "small" | "large";
+  text: string;
+  to: string;
+  color: "blue" | "green" | "gray" | "red" | "red-outline";
+  isLarge?: boolean;
+  aditionalStyles?: string;
+  onClick?: () => void;
+  icon?: React.ReactNode;
+  showTextOnMobile?: boolean;
+  showIconOnMobile?: boolean;
+  isLargeOnMobile?: boolean;
+  applyMinWidth?: boolean;
+};
 
 export const ButtonLink = ({
-    text,
-    aditionalStyles,
-    size,
-    isLarge,
-    to,
-    color,
-    onClick,
-    icon,
-    showTextOnMobile = false,
-    showIconOnMobile = true,
-    isLargeOnMobile = false,
-    applyMinWidth = false
+  text,
+  aditionalStyles,
+  size,
+  isLarge,
+  to,
+  color,
+  onClick,
+  icon,
+  showTextOnMobile = false,
+  showIconOnMobile = true,
+  isLargeOnMobile = false,
+  applyMinWidth = false,
 }: Props) => {
-
-    const baseStyles = `
+  const baseStyles = `
         inline-flex items-center justify-center 
         font-medium
         select-none
@@ -40,51 +39,50 @@ export const ButtonLink = ({
         transition-all duration-200
         focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 gap-2
         active:scale-95
-    `
-    // active añade un estilo cuando el usuario mantiene pulsado el botón
+    `;
+  // active añade un estilo cuando el usuario mantiene pulsado el botón
 
     const sizeStyles =
-        size === 'small'
-            ? 'text-sm px-4 py-2 rounded-md'
-            : `text-lg py-2 rounded-lg ${applyMinWidth ? 'px-8 sm:min-w-[240px]' : 'px-6'}`
+      size === "small"
+        ? "text-sm px-4 py-2 rounded-md"
+        : `text-lg py-2 rounded-lg ${applyMinWidth ? "px-8 sm:min-w-[240px]" : "px-6"}`;
 
     const widthStyles = isLarge
-        ? 'w-full'
-        : isLargeOnMobile
-            ? 'w-full sm:w-max'
-            : ''
+      ? "w-full"
+      : isLargeOnMobile
+        ? "w-full sm:w-max"
+        : "";
 
-
-    return (
-        <Link
-            to={to}
-            onClick={onClick}
-            className={`
+  return (
+    <Link
+      to={to}
+      onClick={onClick}
+      className={`
                 ${baseStyles}
                 ${sizeStyles}
                 ${widthStyles}
                 ${handleApplyStyleColor(color)}
                 ${aditionalStyles}
             `}
-        >
-            {icon && (
-                <span
-                    className={`
+    >
+      {icon && (
+        <span
+          className={`
                         flex items-center justify-center size-8
-                        ${text ? '' : ''}
-                        ${showIconOnMobile ? '' : 'hidden sm:inline'}
+                        ${text ? "" : ""}
+                        ${showIconOnMobile ? "" : "hidden sm:inline"}
                     `}
-                >
-                    {icon}
-                </span>
-            )}
+        >
+          {icon}
+        </span>
+      )}
 
-            {/* TEXTO */}
-            {text && (
-                <span className={showTextOnMobile ? '' : 'hidden sm:inline'}>
-                    {text}
-                </span>
-            )}
-        </Link>
-    )
-}
+      {/* TEXTO */}
+      {text && (
+        <span className={showTextOnMobile ? "" : "hidden sm:inline"}>
+          {text}
+        </span>
+      )}
+    </Link>
+  );
+};

@@ -181,13 +181,13 @@ export const ListDeliveryLineByDeliveryOrder = ({ from, deliveryOrderStatus }: P
 
 
     const statusOptions: LineStatusOptions = [
-        { value: 'LINE_MISSING', label: 'Perdido' },
-        { value: 'LINE_READY', label: 'Listo' },
-        { value: 'LINE_PENDING', label: 'Pendiente' },
-        { value: 'LINE_DELIVERED', label: 'Entregado' },
-        { value: 'LINE_CANCELED', label: 'Eliminado' },
-        { value: 'LINE_EXCEEDED', label: 'Excedido' },
-    ]
+      { value: "LINE_MISSING", label: "Perdido" },
+      { value: "LINE_READY", label: "Listo" },
+      { value: "LINE_PENDING", label: "Pendiente" },
+      { value: "LINE_DELIVERED", label: "Entregado" },
+      { value: "LINE_CANCELED", label: "Eliminado" },
+      { value: "LINE_EXCEEDED", label: "Excedido" },
+    ];
 
     useEffect(() => {
         if (!searchParams.toString() && parsed) {
