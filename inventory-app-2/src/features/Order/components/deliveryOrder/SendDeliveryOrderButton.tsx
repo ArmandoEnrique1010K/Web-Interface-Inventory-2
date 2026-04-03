@@ -23,7 +23,7 @@ export const SendDeliveryOrderButton = ({ deliveryOrderId }: Props) => {
                 return;
             }
         },
-        onSuccess: async (data) => {
+        onSuccess: (data) => {
             queryClient.invalidateQueries({
                 queryKey: ["deliveryOrder", deliveryOrderId],
             });

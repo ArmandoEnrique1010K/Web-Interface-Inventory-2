@@ -29,7 +29,7 @@ export const StatusUserButton = ({
                 return;
             }
         },
-        onSuccess: async (data) => {
+        onSuccess: (data) => {
             toast.success(data);
             queryClient.invalidateQueries({ queryKey: ["users"] });
             queryClient.invalidateQueries({ queryKey: ["user", userId] });

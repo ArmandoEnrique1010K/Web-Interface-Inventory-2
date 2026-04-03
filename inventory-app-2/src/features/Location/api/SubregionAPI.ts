@@ -1,53 +1,59 @@
-import type { DataResponse, GeneralResponse } from "@/types/index";
-import type { SubregionForm } from "../types";
 import { api } from "@/lib/axiosConfig";
 import { handleApiError } from "@/utils/handleApiError";
+import type { SubregionForm } from "../schemas/requests";
+import { responseSchema } from "@/types";
+import {
+    subregionDetailResponseSchema,
+    subregionsListResponseSchema,
+} from "../schemas/responses";
 
 export async function registerSubregion(formData: SubregionForm) {
     try {
-        const url = `/subregions`
-        const { data } = await api.post<GeneralResponse>(url, formData)
-        if (data.type === 'success') {
-            return data.message
-        }
+        const url = `/subregions`;
+        const { data } = await api.post(url, formData);
+        const parsed = responseSchema.parse(data);
+        return parsed.message;
     } catch (error: unknown) {
         handleApiError(error);
     }
 }
 
-
-export async function listAllSubregionsByRegionId(regionId: string) {
+export async function listAllSubregionsByRegionId(regionId: number) {
     try {
-        const url = `/subregions/region/${regionId}`
-        const { data } = await api.get<DataResponse>(url)
-        return data.data;
+        const url = `/subregions/region/${regionId}`;
+        const { data } = await api.get(url);
+        const parsed = subregionsListResponseSchema.parse(data);
+        return parsed.data;
     } catch (error: unknown) {
         handleApiError(error);
     }
 }
 
-export async function getSubregion(id: string) {
+export async function getSubregion(id: number) {
     try {
-        const url = `/subregions/${id}`
-        const { data } = await api.get<DataResponse>(url)
-        return data.data;
+        const url = `/subregions/${id}`;
+        const { data } = await api.get(url);
+        const parsed = subregionDetailResponseSchema.parse(data);
+        return parsed.data;
     } catch (error) {
         handleApiError(error);
     }
 }
 
 type UpdateSubregionPayload = {
-    subregionId: string;
+    subregionId: number;
     formData: SubregionForm;
-}
+};
 
-export async function updateSubregion({ subregionId, formData }: UpdateSubregionPayload) {
+export async function updateSubregion({
+    subregionId,
+    formData,
+}: UpdateSubregionPayload) {
     try {
-        const url = `/subregions/${subregionId}`
-        const { data } = await api.put<GeneralResponse>(url, formData)
-        if (data.type === 'success') {
-            return data.message
-        }
+        const url = `/subregions/${subregionId}`;
+        const { data } = await api.put(url, formData);
+        const parsed = responseSchema.parse(data);
+        return parsed.message;
     } catch (error) {
         handleApiError(error);
     }

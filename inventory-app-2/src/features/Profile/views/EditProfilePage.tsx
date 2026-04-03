@@ -54,7 +54,7 @@ export const EditProfilePage = ({ data }: { data: UserProfilePageForm }) => {
                 return;
             }
         },
-        onSuccess: async (data) => {
+        onSuccess: (data) => {
             queryClient.invalidateQueries({ queryKey: ["profile"] });
             toast.success(data);
             navigate("/profile");

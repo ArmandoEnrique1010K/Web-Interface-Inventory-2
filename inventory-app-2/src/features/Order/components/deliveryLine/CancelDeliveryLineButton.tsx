@@ -31,7 +31,7 @@ export const CancelDeliveryLineButton = ({
                 return;
             }
         },
-        onSuccess: async (data) => {
+        onSuccess: (data) => {
             queryClient.invalidateQueries({
                 queryKey: ["deliveryLines", "deliveryOrder", deliveryOrderId],
             });

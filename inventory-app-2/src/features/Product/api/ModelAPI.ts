@@ -3,11 +3,11 @@ import { handleApiError } from "@/utils/handleApiError";
 import type { ModelForm } from "../schemas/requests";
 import { responseSchema } from "@/types";
 import {
-    modelDetailsResponseSchema,
-    modelListResponseSchema,
-    modelPageResponseSchema,
-    modelSearchPageListResponseSchema,
-    modelTopTenResponseSchema,
+    modelDetailResponseSchema,
+    modelsListResponseSchema,
+    modelsPageResponseSchema,
+    modelsSearchPageListResponseSchema,
+    modelsTopTenResponseSchema,
 } from "../schemas/responses";
 
 type RegisterModelInProductPayload = {
@@ -45,7 +45,7 @@ export async function listAllModelsByProductId(productId: number) {
     try {
         const url = `/models/product/${productId}`;
         const { data } = await api.get(url);
-        const parsed = modelListResponseSchema.parse(data);
+        const parsed = modelsListResponseSchema.parse(data);
         return parsed.data;
     } catch (error) {
         handleApiError(error);
@@ -82,7 +82,7 @@ export async function listAllModels(params: ModelQueryParams) {
         //    last: boolean;
         // }
 
-        const parsed = modelPageResponseSchema.parse(data);
+        const parsed = modelsPageResponseSchema.parse(data);
         return parsed.data;
     } catch (error) {
         handleApiError(error);
@@ -99,7 +99,7 @@ export async function listFirstTenModelsByKeyword(
     try {
         const url = `/models/search/models`;
         const { data } = await api.get(url, { params });
-        const parsed = modelTopTenResponseSchema.parse(data);
+        const parsed = modelsTopTenResponseSchema.parse(data);
         return parsed.data;
     } catch (error) {
         handleApiError(error);
@@ -117,7 +117,7 @@ export async function listActiveModelsByName(params: ModelSearchQueryParams) {
         const { data } = await api.get(url, {
             params,
         });
-        const parsed = modelSearchPageListResponseSchema.parse(data);
+        const parsed = modelsSearchPageListResponseSchema.parse(data);
         return parsed.data;
     } catch (error) {
         handleApiError(error);
@@ -128,7 +128,7 @@ export async function getModel(id: number) {
     try {
         const url = `/models/${id}`;
         const { data } = await api.get(url);
-        const parsed = modelDetailsResponseSchema.parse(data);
+        const parsed = modelDetailResponseSchema.parse(data);
         return parsed.data;
     } catch (error) {
         handleApiError(error);

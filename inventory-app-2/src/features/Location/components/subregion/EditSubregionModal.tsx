@@ -1,4 +1,3 @@
-import type { RegionItem, SubregionForm } from "../../types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import type { GeneralError } from "@/types/index";
@@ -9,22 +8,26 @@ import { Button } from "@/ui/Button";
 import { InputText } from "@/ui/fields/InputText";
 import { SelectOption } from "@/ui/fields/SelectOption";
 import { listAllRegions } from "../../api/RegionAPI";
-import { TextMessage } from "@/components/TextMessage";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
+import type { SubregionForm } from "../../schemas/requests";
 
 type Props = {
     data: SubregionForm;
-    showModal: React.Dispatch<React.SetStateAction<boolean>>;
-    subregionId: string;
+    setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+    subregionId: number;
 };
 
-export const EditSubregionModal = ({ data, subregionId, showModal }: Props) => {
+export const EditSubregionModal = ({
+    data,
+    subregionId,
+    setShowModal,
+}: Props) => {
     const {
         register,
         handleSubmit,
         setError,
         formState: { errors },
-    } = useForm<SubregionForm>({
+    } = useForm({
         defaultValues: {
             name: data.name,
             regionId: data.regionId,
@@ -61,7 +64,7 @@ export const EditSubregionModal = ({ data, subregionId, showModal }: Props) => {
                 queryKey: ["subregion", subregionId],
             });
             toast.success(data);
-            showModal(false);
+            setShowModal(false);
         },
     });
     const handleForm = (formData: SubregionForm) => {
@@ -71,20 +74,16 @@ export const EditSubregionModal = ({ data, subregionId, showModal }: Props) => {
         };
         mutate(data);
     };
-    const { data: regionData, isLoading: regionLoading } = useQuery({
+    const { data: regionData } = useQuery({
         queryKey: ["regions"],
         queryFn: listAllRegions,
     });
 
     const regions =
-        regionData?.map((region: RegionItem) => ({
-            value: region.id,
+        regionData?.map((region) => ({
+            value: region.id.toString(),
             label: region.name,
         })) || [];
-
-    if (regionLoading) {
-        return <TextMessage text="Cargando..." align="left" color="black" />;
-    }
 
     return (
         <EntityFormLayout isCompact>
@@ -127,7 +126,7 @@ export const EditSubregionModal = ({ data, subregionId, showModal }: Props) => {
                         size="large"
                         text="Volver"
                         color="gray"
-                        onClick={() => showModal(false)}
+                        onClick={() => setShowModal(false)}
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile

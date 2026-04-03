@@ -29,7 +29,7 @@ export const SendDeliveryLineButton = ({
                 return;
             }
         },
-        onSuccess: async (data) => {
+        onSuccess: (data) => {
             queryClient.invalidateQueries({
                 queryKey: ["deliveryLines", "deliveryOrder", deliveryOrderId],
             });

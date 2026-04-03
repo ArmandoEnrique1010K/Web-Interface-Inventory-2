@@ -84,7 +84,7 @@ export const AddDeliveryLineModal = ({
                 return;
             }
         },
-        onSuccess: async (data) => {
+        onSuccess: (data) => {
             toast.success(data);
             setAddDeliveryLineModalOpen(false);
             queryClient.invalidateQueries({

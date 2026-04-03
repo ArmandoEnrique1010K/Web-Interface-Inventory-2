@@ -1,4 +1,3 @@
-import type { RegionItem, SubregionForm } from "../../types";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -12,12 +11,15 @@ import { registerSubregion } from "../../api/SubregionAPI";
 import { SelectOption } from "@/ui/fields/SelectOption";
 import { listAllRegions } from "../../api/RegionAPI";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
+import type { SubregionForm } from "../../schemas/requests";
 
 export const NewSubregionPage = () => {
-    const initialValues: SubregionForm = {
+    const initialValues = {
         name: "",
-        regionId: "",
+        regionId: undefined,
     };
+
+    // Asegurarse de que el tipo de 'regionId' en el estado inicial sea 'number | undefined' para evitar errores de tipo al utilizar 'useForm' con 'SubregionForm'.
     const {
         register,
         handleSubmit,
@@ -53,7 +55,7 @@ export const NewSubregionPage = () => {
         },
 
         // Dato: onSucess tiene un segundo parametro que es el objeto que pasastes a la funcion mutate
-        onSuccess: async (data, variables) => {
+        onSuccess: (data, variables) => {
             toast.success(data);
             navigate(`/locations/subregions?regionId=${variables.regionId}`);
         },
@@ -64,8 +66,8 @@ export const NewSubregionPage = () => {
     });
 
     const regions =
-        regionsData?.map((region: RegionItem) => ({
-            value: region.id,
+        regionsData?.map((region) => ({
+            value: region.id.toString(),
             label: region.name,
         })) || [];
 

@@ -40,7 +40,7 @@ export const AddModelDeliveryOrderButton = ({
                 return;
             }
         },
-        onSuccess: async (data) => {
+        onSuccess: (data) => {
             toast.success(data);
             queryClient.invalidateQueries({
                 queryKey: ["models", "deliveryOrder", deliveryOrderId],
@@ -61,7 +61,7 @@ export const AddModelDeliveryOrderButton = ({
                 return;
             }
         },
-        onSuccess: async (data) => {
+        onSuccess: (data) => {
             toast.success(data);
             queryClient.invalidateQueries({
                 queryKey: ["models", "deliveryOrder", deliveryOrderId],

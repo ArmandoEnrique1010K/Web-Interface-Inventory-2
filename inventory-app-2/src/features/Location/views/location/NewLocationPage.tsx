@@ -1,5 +1,4 @@
 import { useForm } from "react-hook-form";
-import type { LocationForm, RegionItem, SubregionItem } from "../../types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { registerLocation } from "../../api/LocationAPI";
 import type { GeneralError } from "@/types/index";
@@ -15,12 +14,13 @@ import { Button } from "@/ui/Button";
 import { ButtonLink } from "@/ui/ButtonLink";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
+import type { LocationForm } from "../../schemas/requests";
 
 export const NewLocationPage = () => {
-    const initialValues: LocationForm = {
+    const initialValues = {
         name: "",
         address: "",
-        subregionId: "",
+        subregionId: undefined,
     };
     const {
         register,
@@ -55,7 +55,7 @@ export const NewLocationPage = () => {
                 return;
             }
         },
-        onSuccess: async (data) => {
+        onSuccess: (data) => {
             toast.success(data);
             navigate("/locations");
         },
@@ -70,24 +70,24 @@ export const NewLocationPage = () => {
 
     const { data: subregionsData } = useQuery({
         queryKey: ["subregions", "region", selectedRegionId],
-        queryFn: () => listAllSubregionsByRegionId(selectedRegionId.toString()),
+        queryFn: () => listAllSubregionsByRegionId(+selectedRegionId),
         enabled: !!selectedRegionId, // solo ejecuta si hay region
     });
 
     const regions =
         regionsData
-            ?.map((region: RegionItem) => ({
-                value: region.id,
+            ?.map((region) => ({
+                value: region.id.toString(),
                 label: region.name,
             }))
             .concat({
-                value: 0,
+                value: "",
                 label: "Seleccione una región",
             }) || [];
 
     const subregions =
-        subregionsData?.map((type: SubregionItem) => ({
-            value: type.id,
+        subregionsData?.map((type) => ({
+            value: type.id.toString(),
             label: type.name,
         })) || [];
 

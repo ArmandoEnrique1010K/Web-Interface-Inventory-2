@@ -3,17 +3,14 @@ import type { GeneralError } from "@/types/index";
 import { toast } from "sonner";
 import { Button } from "@/ui/Button";
 import { useForm } from "react-hook-form";
-import { XMarkIcon } from "@heroicons/react/24/outline";
 import { changeStatusLocation } from "../../api/LocationAPI";
 
 export const StatusLocationButton = ({
     locationId,
-    value,
-    size,
+    locationStatus,
 }: {
-    locationId: string;
-    value: string;
-    size: "small" | "large";
+    locationId: number;
+    locationStatus: boolean;
 }) => {
     const { handleSubmit } = useForm();
     const queryClient = useQueryClient();
@@ -28,7 +25,7 @@ export const StatusLocationButton = ({
                 return;
             }
         },
-        onSuccess: async (data) => {
+        onSuccess: (data) => {
             toast.success(data);
             queryClient.invalidateQueries({
                 queryKey: ["location", locationId],
@@ -40,11 +37,10 @@ export const StatusLocationButton = ({
     return (
         <form onSubmit={handleSubmit(() => mutate())} className="text-center ">
             <Button
-                icon={size === "large" && <XMarkIcon />}
-                text={value}
+                text={locationStatus ? "Activo" : "Inactivo"}
                 type="submit"
-                size={size}
-                color={value === "Activo" ? "green-outline" : "red-outline"}
+                size="small"
+                color={locationStatus ? "green-outline" : "red-outline"}
                 showTextOnMobile
             />
         </form>

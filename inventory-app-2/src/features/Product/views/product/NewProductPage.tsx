@@ -71,7 +71,7 @@ export const NewProductPage = () => {
                 return;
             }
         },
-        onSuccess: async (data) => {
+        onSuccess: (data) => {
             toast.success(data);
             navigate("/products");
         },

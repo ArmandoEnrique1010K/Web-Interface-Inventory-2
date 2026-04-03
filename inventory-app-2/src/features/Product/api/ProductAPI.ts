@@ -3,8 +3,8 @@ import { handleApiError } from "@/utils/handleApiError";
 import type { ProductCreateForm, ProductUpdateForm } from "../schemas/requests";
 import { responseSchema } from "@/types";
 import {
-    productDetailsResponseSchema,
-    productPageResponseSchema,
+    productDetailResponseSchema,
+    productsPageResponseSchema,
 } from "../schemas/responses";
 
 type ProductCreatePayload = {
@@ -60,7 +60,7 @@ export async function listAllProducts(params: ProductQueryParams) {
         const { data } = await api.get(url, {
             params,
         });
-        const parsed = productPageResponseSchema.parse(data);
+        const parsed = productsPageResponseSchema.parse(data);
         console.log(parsed);
         return parsed.data;
     } catch (error) {
@@ -73,7 +73,7 @@ export async function getProduct(id: number) {
     try {
         const url = `/products/${id}`;
         const { data } = await api.get(url);
-        const parsed = productDetailsResponseSchema.parse(data);
+        const parsed = productDetailResponseSchema.parse(data);
         console.log(parsed);
         return parsed.data;
     } catch (error) {

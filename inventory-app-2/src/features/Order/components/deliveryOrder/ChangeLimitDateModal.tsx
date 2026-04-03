@@ -64,7 +64,7 @@ export const ChangeLimitDateModal = ({
                 return;
             }
         },
-        onSuccess: async (data) => {
+        onSuccess: (data) => {
             toast.success(data);
             setChangeLimitDateModalOpen(false);
             queryClient.invalidateQueries({

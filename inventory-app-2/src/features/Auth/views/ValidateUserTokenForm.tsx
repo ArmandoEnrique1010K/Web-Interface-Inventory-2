@@ -57,6 +57,8 @@ export const ValidateUserTokenForm = () => {
                 return;
             }
         },
+
+        // TODO: VERIFICAR SI ES NECESARIO EL USO DE ASYNC
         onSuccess: async (data) => {
             toast.success(data?.data);
             dispatch(updateSecretToken({ secretToken: data!.resetToken }));

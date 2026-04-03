@@ -1,4 +1,3 @@
-import type { RegionForm } from "../../types";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
@@ -10,9 +9,10 @@ import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { ButtonLink } from "@/ui/ButtonLink";
 import { Button } from "@/ui/Button";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
+import type { RegionForm } from "../../schemas/requests";
 
 export const NewRegionPage = () => {
-    const initialValues: RegionForm = {
+    const initialValues = {
         name: "",
     };
     const {
@@ -20,7 +20,7 @@ export const NewRegionPage = () => {
         handleSubmit,
         setError,
         formState: { errors },
-    } = useForm<RegionForm>({
+    } = useForm({
         defaultValues: initialValues,
     });
 
@@ -48,7 +48,7 @@ export const NewRegionPage = () => {
                 return;
             }
         },
-        onSuccess: async (data) => {
+        onSuccess: (data) => {
             toast.success(data);
             navigate("/locations/regions");
         },
@@ -56,7 +56,7 @@ export const NewRegionPage = () => {
 
     return (
         <EntityFormLayout>
-            <EntityFormLayout.Header title="Añadir nueva región"></EntityFormLayout.Header>
+            <EntityFormLayout.Header title="Añadir nueva región" />
             <EntityFormLayout.Form
                 styled
                 onSubmit={handleSubmit((data) => mutate(data))}

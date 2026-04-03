@@ -1,4 +1,3 @@
-import type { RegionForm } from "../../types";
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateRegion } from "../../api/RegionAPI";
@@ -8,20 +7,21 @@ import { Button } from "@/ui/Button";
 import { InputText } from "@/ui/fields/InputText";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
+import type { RegionForm } from "../../schemas/requests";
 
 type Props = {
     data: RegionForm;
-    showModal: React.Dispatch<React.SetStateAction<boolean>>;
-    regionId: string;
+    setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+    regionId: number;
 };
 
-export const EditRegionModal = ({ data, regionId, showModal }: Props) => {
+export const EditRegionModal = ({ data, regionId, setShowModal }: Props) => {
     const {
         register,
         handleSubmit,
         setError,
         formState: { errors },
-    } = useForm<RegionForm>({
+    } = useForm({
         defaultValues: {
             name: data.name,
         },
@@ -55,7 +55,7 @@ export const EditRegionModal = ({ data, regionId, showModal }: Props) => {
             queryClient.invalidateQueries({ queryKey: ["regions"] });
             queryClient.invalidateQueries({ queryKey: ["region", regionId] });
             toast.success(data);
-            showModal(false);
+            setShowModal(false);
         },
     });
 
@@ -98,7 +98,7 @@ export const EditRegionModal = ({ data, regionId, showModal }: Props) => {
                         text="Volver"
                         type="button"
                         color="gray"
-                        onClick={() => showModal(false)}
+                        onClick={() => setShowModal(false)}
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile

@@ -2,30 +2,49 @@ import { useQuery } from "@tanstack/react-query";
 import { TextMessage } from "@/components/TextMessage";
 import { getSubregion } from "../../api/SubregionAPI";
 import { EditSubregionModal } from "./EditSubregionModal";
+import { BlueLoader } from "@/components/BlueLoader/BlueLoader";
 
 type Props = {
-    subregionId: string,
-    showModal: React.Dispatch<React.SetStateAction<boolean>>
-}
+    subregionId: number;
+    setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
-export const LoaderSubregion = ({ subregionId, showModal }: Props) => {
-
+export const LoaderSubregion = ({ subregionId, setShowModal }: Props) => {
     const { data, isLoading, isError } = useQuery({
-        queryKey: ['subregion', subregionId],
+        queryKey: ["subregion", subregionId],
         queryFn: () => getSubregion(subregionId),
         retry: false,
-    })
-
+    });
 
     if (isLoading) {
-        return <TextMessage text='Cargando...' align='left' color='black' />
+        return <BlueLoader />;
     }
 
     if (isError) {
-        return <TextMessage text='Ha ocurrido un error' align='left' color='red' />
+        return (
+            <TextMessage
+                align="center"
+                color="red"
+                text="Ha ocurrido un error"
+            />
+        );
     }
 
-    if (data) return (
-        <EditSubregionModal data={data} subregionId={subregionId} showModal={showModal} />
-    )
-}
+    if (!data) {
+        return (
+            <TextMessage
+                align="center"
+                color="red"
+                text="No se ha encontrado el contenido"
+            />
+        );
+    }
+
+    return (
+        <EditSubregionModal
+            data={data}
+            subregionId={subregionId}
+            setShowModal={setShowModal}
+        />
+    );
+};

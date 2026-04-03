@@ -1,9 +1,3 @@
-import type {
-    LocationForm,
-    LocationItem,
-    RegionItem,
-    SubregionItem,
-} from "../../types";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { updateLocation } from "../../api/LocationAPI";
@@ -18,20 +12,26 @@ import { useState } from "react";
 import { SelectOptionFilter } from "@/ui/filters/SelectOptionFilter";
 import { SelectOption } from "@/ui/fields/SelectOption";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
+import type { LocationForm } from "../../schemas/requests";
+import type { LocationItem } from "../../schemas/items";
 
 type Props = {
     data: LocationItem;
-    showModal: React.Dispatch<React.SetStateAction<boolean>>;
-    locationId: string;
+    setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+    locationId: number;
 };
 
-export const EditLocationModal = ({ data, locationId, showModal }: Props) => {
+export const EditLocationModal = ({
+    data,
+    locationId,
+    setShowModal,
+}: Props) => {
     const {
         register,
         handleSubmit,
         setError,
         formState: { errors },
-    } = useForm<LocationForm>({
+    } = useForm({
         defaultValues: {
             name: data.name,
             address: data.address,
@@ -69,7 +69,7 @@ export const EditLocationModal = ({ data, locationId, showModal }: Props) => {
                 queryKey: ["location", locationId],
             });
             toast.success(data);
-            showModal(false);
+            setShowModal(false);
         },
     });
 
@@ -84,9 +84,7 @@ export const EditLocationModal = ({ data, locationId, showModal }: Props) => {
     // FACIL: SE OBTIENE EL ID DE LA SUBREGIÓN
     // console.log(data.subregionId)
 
-    const [selectedRegionId, setSelectedRegionId] = useState<string>(
-        data.regionId,
-    );
+    const [selectedRegionId, setSelectedRegionId] = useState(data.regionId);
 
     const { data: regionsData /*, isLoading: regionsLoading */ } = useQuery({
         queryKey: ["regions"],
@@ -101,18 +99,18 @@ export const EditLocationModal = ({ data, locationId, showModal }: Props) => {
 
     const regions =
         regionsData
-            ?.map((region: RegionItem) => ({
-                value: region.id,
+            ?.map((region) => ({
+                value: region.id.toString(),
                 label: region.name,
             }))
             .concat({
-                value: 0,
+                value: "",
                 label: "Seleccione una región",
             }) || [];
 
     const subregions =
-        subregionsData?.map((type: SubregionItem) => ({
-            value: type.id,
+        subregionsData?.map((type) => ({
+            value: type.id.toString(),
             label: type.name,
         })) || [];
 
@@ -149,13 +147,13 @@ export const EditLocationModal = ({ data, locationId, showModal }: Props) => {
                             label="Región"
                             options={regions}
                             onChange={(e) =>
-                                setSelectedRegionId(e.target.value)
+                                setSelectedRegionId(+e.target.value)
                             }
-                            value={selectedRegionId!}
+                            value={selectedRegionId!.toString()}
                         />
                         <div className="min-h-6">
                             <p className="text-red-700 text-sm">
-                                {selectedRegionId === "0"
+                                {selectedRegionId === 0
                                     ? "Seleccione una región"
                                     : ""}
                             </p>
@@ -173,7 +171,7 @@ export const EditLocationModal = ({ data, locationId, showModal }: Props) => {
                                 ? "Cargando subregiones..."
                                 : "Seleccione una subregión"
                         }
-                        disabled={selectedRegionId === "0"}
+                        disabled={selectedRegionId === 0}
                     />
 
                     {/* <SelectOption id="subregionId" label='Subregión'
@@ -200,7 +198,7 @@ export const EditLocationModal = ({ data, locationId, showModal }: Props) => {
                         text="Volver"
                         type="button"
                         color="gray"
-                        onClick={() => showModal(false)}
+                        onClick={() => setShowModal(false)}
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile

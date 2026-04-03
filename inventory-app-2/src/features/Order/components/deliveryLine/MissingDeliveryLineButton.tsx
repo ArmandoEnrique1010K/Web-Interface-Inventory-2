@@ -29,7 +29,7 @@ export const MissingDeliveryLineButton = ({
                 return;
             }
         },
-        onSuccess: async (data) => {
+        onSuccess: (data) => {
             queryClient.invalidateQueries({
                 queryKey: ["deliveryLines", "deliveryOrder", deliveryOrderId],
             });

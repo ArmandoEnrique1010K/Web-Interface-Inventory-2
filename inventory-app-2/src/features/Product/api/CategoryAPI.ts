@@ -3,8 +3,8 @@ import { handleApiError } from "@/utils/handleApiError";
 import { responseSchema } from "@/types";
 import type { CategoryForm } from "../schemas/requests";
 import {
-    categoryDetailsSchema,
-    categoryListSchema,
+    categoryDetailResponseSchema,
+    categoriesListResponseSchema,
 } from "../schemas/responses";
 
 // Solamente retorna un mensaje de acierto o de error
@@ -23,7 +23,7 @@ export async function listAllCategories() {
     try {
         const url = `/categories`;
         const { data } = await api.get(url);
-        const parsed = categoryListSchema.parse(data);
+        const parsed = categoriesListResponseSchema.parse(data);
         return parsed.data;
     } catch (error) {
         handleApiError(error);
@@ -34,7 +34,7 @@ export async function listAllActiveCategories() {
     try {
         const url = `/categories/active`;
         const { data } = await api.get(url);
-        const parsed = categoryListSchema.parse(data);
+        const parsed = categoriesListResponseSchema.parse(data);
         return parsed.data;
     } catch (error) {
         handleApiError(error);
@@ -45,7 +45,7 @@ export async function getCategory(id: number) {
     try {
         const url = `/categories/${id}`;
         const { data } = await api.get(url);
-        const parsed = categoryDetailsSchema.parse(data);
+        const parsed = categoryDetailResponseSchema.parse(data);
         return parsed.data;
     } catch (error) {
         handleApiError(error);

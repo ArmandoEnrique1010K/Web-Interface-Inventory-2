@@ -16,39 +16,41 @@ import {
 // SINTAXIS: [entidad] + [forma] + ResponseSchema
 
 // CATEGORIA
-export const categoryListSchema = createDataListSchema(categoryItemSchema);
-export const categoryDetailsSchema = createDataSchema(categoryItemSchema);
+export const categoriesListResponseSchema =
+    createDataListSchema(categoryItemSchema);
+export const categoryDetailResponseSchema =
+    createDataSchema(categoryItemSchema);
 
 // TIPO
-export const typeListSchema = createDataListSchema(typeItemSchema);
-export const typeDetailsSchema = createDataSchema(typeItemSchema);
+export const typesListResponseSchema = createDataListSchema(typeItemSchema);
+export const typeDetailResponseSchema = createDataSchema(typeItemSchema);
 
 // MODELO
 
 // LISTA SIMPLE
-export const modelListResponseSchema =
+export const modelsListResponseSchema =
     createDataListSchema(modelListItemSchema);
 
 // PAGINADO
-export const modelPageResponseSchema =
+export const modelsPageResponseSchema =
     createPageDataListSchema(modelListItemSchema);
 
 // SEARCH (aunque sea paginado en backend, aquí es otra forma de dato)
-export const modelSearchPageListResponseSchema = createDataListSchema(
+export const modelsSearchPageListResponseSchema = createDataListSchema(
     modelListSearchItemSchema,
 );
 
 // TOP 10
-export const modelTopTenResponseSchema = createDataListSchema(
+export const modelsTopTenResponseSchema = createDataListSchema(
     modelListSearchFirstTenItemSchema,
 );
 
 // DETALLE
-export const modelDetailsResponseSchema = createDataSchema(
+export const modelDetailResponseSchema = createDataSchema(
     modelDetailsItemSchema,
 );
 
 // PRODUCTO
-export const productPageResponseSchema =
+export const productsPageResponseSchema =
     createPageDataListSchema(productItemSchema);
-export const productDetailsResponseSchema = createDataSchema(productItemSchema);
+export const productDetailResponseSchema = createDataSchema(productItemSchema);

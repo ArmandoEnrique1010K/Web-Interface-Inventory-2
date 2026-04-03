@@ -36,7 +36,7 @@ export const StatusModelButton = ({
             }
         },
 
-        onSuccess: async (data) => {
+        onSuccess: (data) => {
             toast.success(data);
             queryClient.invalidateQueries({ queryKey: ["product", productId] });
             queryClient.invalidateQueries({

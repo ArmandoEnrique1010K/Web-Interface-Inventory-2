@@ -64,7 +64,7 @@ export const NewModelProductModal = ({ setShowModal, productId }: Props) => {
                 return;
             }
         },
-        onSuccess: async (data) => {
+        onSuccess: (data) => {
             toast.success(data);
             setShowModal(false);
             queryClient.invalidateQueries({ queryKey: ["products"] });

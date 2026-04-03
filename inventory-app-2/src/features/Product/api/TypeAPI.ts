@@ -2,7 +2,10 @@ import { api } from "@/lib/axiosConfig";
 import { responseSchema } from "@/types";
 import { handleApiError } from "@/utils/handleApiError";
 import type { TypeForm } from "../schemas/requests";
-import { typeDetailsSchema, typeListSchema } from "../schemas/responses";
+import {
+    typeDetailResponseSchema,
+    typesListResponseSchema,
+} from "../schemas/responses";
 
 export async function registerType(formData: TypeForm) {
     try {
@@ -19,7 +22,7 @@ export async function listAllTypes() {
     try {
         const url = `/types`;
         const { data } = await api.get(url);
-        const parsed = typeListSchema.parse(data);
+        const parsed = typesListResponseSchema.parse(data);
         return parsed.data;
     } catch (error) {
         handleApiError(error);
@@ -30,7 +33,7 @@ export async function getType(id: number) {
     try {
         const url = `/types/${id}`;
         const { data } = await api.get(url);
-        const parsed = typeDetailsSchema.parse(data);
+        const parsed = typeDetailResponseSchema.parse(data);
         return parsed.data;
     } catch (error) {
         handleApiError(error);
@@ -41,7 +44,7 @@ export async function listAllActiveTypes() {
     try {
         const url = `/types/active`;
         const { data } = await api.get(url);
-        const parsed = typeListSchema.parse(data);
+        const parsed = typesListResponseSchema.parse(data);
         return parsed.data;
     } catch (error) {
         handleApiError(error);
