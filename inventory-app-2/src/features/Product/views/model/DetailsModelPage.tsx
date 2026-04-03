@@ -1,9 +1,6 @@
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { getModel } from "../../api/ModelAPI";
 import { useQuery } from "@tanstack/react-query";
-import { Button } from "@/ui/Button";
-import { useState } from "react";
-import { QRModal } from "../../components/QRModal";
 import { StatusProductButton } from "../../components/product/StatusProductButton";
 import { StatusModelButton } from "../../components/model/StatusModelButton";
 import { EntityDetailsLayout } from "@/layout/entity/EntityDetailsLayout";
@@ -12,12 +9,12 @@ import { LoadingView } from "@/views/LoadingView";
 import { Error } from "@/views/Error";
 import { EditModelButton } from "../../components/model/EditModelButton";
 import { EditProductButton } from "../../components/product/EditProductButton";
+import { QRButton } from "../../components/QRButton";
 
 export const DetailsModelPage = () => {
-    const { modelId: modelIdStr, productId: productIdStr } = useParams();
+    const { modelId: modelIdStr } = useParams();
 
     const modelId = +modelIdStr!; // convertir a numero
-    const productId = +productIdStr!; // convertir a numero
 
     const { data, isError, isLoading } = useQuery({
         queryKey: ["model", modelId],
@@ -26,17 +23,20 @@ export const DetailsModelPage = () => {
         enabled: !!modelId,
         retry: 1,
     });
-    const [isQRModalOpen, setIsQRModalOpen] = useState(false);
-    const handleOpenQR = () => {
-        setIsQRModalOpen(true);
-    };
+
+    const location = useLocation();
+    const path = location.pathname;
 
     if (isLoading) {
         return <LoadingView />;
     }
 
-    if (isError || !data) {
-        return <Error />;
+    if (isError) {
+        return <Error type="500" />;
+    }
+
+    if (!data) {
+        return <Error type="404" />;
     }
 
     return (
@@ -68,22 +68,20 @@ export const DetailsModelPage = () => {
                         />
 
                         <PanelContainer.DetailsGrid>
-                            <PanelContainer.Detail label="Editar modelo">
-                                <EditModelButton modelId={modelId} />
-                            </PanelContainer.Detail>
-                            {/* <StatusModelButton 
-                            from='model-details' 
-                            modelId={modelId!} size="large" productId={productId!} value={data!.status ? 'Desactivar modelo' : 'Activar modelo'} /> */}
-
                             <PanelContainer.Detail label="Estado del modelo">
                                 <StatusModelButton
                                     from="product-details"
                                     modelId={modelId!}
                                     size="small"
-                                    productId={productId!}
+                                    productId={data.productId}
                                     value={data.status ? "Activo" : "Inactivo"}
                                 />
                             </PanelContainer.Detail>
+                            {data.status && (
+                                <PanelContainer.Detail label="Editar modelo">
+                                    <EditModelButton modelId={modelId} />
+                                </PanelContainer.Detail>
+                            )}
                         </PanelContainer.DetailsGrid>
                     </PanelContainer>
                 </EntityDetailsLayout.Column>
@@ -91,7 +89,7 @@ export const DetailsModelPage = () => {
                     <PanelContainer subtitle={"Pertenece al producto"}>
                         <PanelContainer.DetailsGrid>
                             <PanelContainer.Detail label="ID">
-                                {data.id}
+                                {data.productId}
                             </PanelContainer.Detail>
                             <PanelContainer.Detail label="Nombre">
                                 {data.productName}
@@ -118,22 +116,10 @@ export const DetailsModelPage = () => {
                                 {data.typeName}
                             </PanelContainer.Detail>
                             <PanelContainer.Detail label="Codigo QR">
-                                <Button
-                                    text="Obtener QR"
-                                    type="button"
-                                    color="blue"
-                                    size="small"
-                                    onClick={handleOpenQR}
-                                />
-
-                                <QRModal
-                                    isOpen={isQRModalOpen}
-                                    onClose={() => setIsQRModalOpen(false)}
-                                    url={
-                                        import.meta.env.VITE_FRONTEND_DOMAIN +
-                                        `/product/${data.productId}/model/${data.id}`
-                                    }
-                                    title={`Código QR del producto ${data.productName}, ${data.name}`}
+                                <QRButton
+                                    modelName={data.name}
+                                    productName={data.productName}
+                                    path={path}
                                 />
                             </PanelContainer.Detail>
 
@@ -143,13 +129,15 @@ export const DetailsModelPage = () => {
                             >
                                 <StatusProductButton
                                     isActive={data.productStatus}
-                                    productId={productId!}
+                                    productId={data.productId}
                                     size={"small"}
                                 />
                             </PanelContainer.Detail>
-                            {data.status && (
+                            {data.productStatus && (
                                 <PanelContainer.Detail label="Editar producto">
-                                    <EditProductButton productId={productId} />
+                                    <EditProductButton
+                                        productId={data.productId}
+                                    />
                                 </PanelContainer.Detail>
                             )}
                         </PanelContainer.DetailsGrid>

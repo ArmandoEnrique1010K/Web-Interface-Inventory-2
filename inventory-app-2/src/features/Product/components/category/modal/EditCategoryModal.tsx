@@ -35,7 +35,7 @@ export const EditCategoryModal = ({
 
     const queryClient = useQueryClient();
 
-    const { mutate } = useMutation({
+    const { mutate, isPending } = useMutation({
         mutationFn: updateCategory,
         retry: false,
         onError: (error: unknown) => {
@@ -95,6 +95,7 @@ export const EditCategoryModal = ({
                         text="Editar"
                         type="submit"
                         color="green"
+                        disabled={isPending}
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile

@@ -27,7 +27,7 @@ export const NewCategoryPage = () => {
 
     const navigate = useNavigate();
 
-    const { mutate } = useMutation({
+    const { mutate, isPending } = useMutation({
         mutationFn: registerCategory,
         retry: false,
         onError: (error: unknown) => {
@@ -82,6 +82,7 @@ export const NewCategoryPage = () => {
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile
+                        disabled={isPending}
                         applyMinWidth
                     />
                     <ButtonLink

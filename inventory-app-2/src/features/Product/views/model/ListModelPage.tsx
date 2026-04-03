@@ -4,7 +4,7 @@ import { TableRowContainer } from "@/components/TableRowContainer";
 import { BaseTableCell } from "@/components/BaseTableCell";
 import { listAllCategories } from "../../api/CategoryAPI";
 import { listAllTypes } from "../../api/TypeAPI";
-import { Link, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useState } from "react";
 import { Paginator } from "../../../../components/Paginator";
 import { useMediaQuery } from "react-responsive";
@@ -17,6 +17,7 @@ import { InputDateFilter } from "@/ui/filters/InputDateFilter";
 import { StatusModelButton } from "../../components/model/StatusModelButton";
 import { EntityListLayout } from "@/layout/entity/EntityListLayout";
 import { EditModelButton } from "../../components/model/EditModelButton";
+import { LinkText } from "@/components/LinkText";
 
 export const ListModelPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -335,11 +336,13 @@ export const ListModelPage = () => {
                                 <BaseTableCell
                                     data={
                                         <div className="flex flex-col gap-1">
-                                            <Link
-                                                to={`/products/${model.productId}/models/${model.id}`}
-                                                className="hover:text-blue-900"
+                                            <LinkText
+                                                to={`/products/models/${model.id}`}
                                             >
-                                                <div>{model.name}</div>
+                                                {model.name}
+                                            </LinkText>
+
+                                            <div>
                                                 <div className="text-sm text-gray-500">
                                                     {model.productName}
                                                 </div>
@@ -347,7 +350,7 @@ export const ListModelPage = () => {
                                                     {model.categoryName} -{" "}
                                                     {model.typeName}
                                                 </div>
-                                            </Link>
+                                            </div>
                                         </div>
                                     }
                                 />
@@ -369,6 +372,7 @@ export const ListModelPage = () => {
                                 />
 
                                 <BaseTableCell
+                                    isCenter
                                     data={
                                         <StatusModelButton
                                             size="small"

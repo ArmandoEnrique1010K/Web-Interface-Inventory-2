@@ -78,9 +78,7 @@ export const Sidebar = () => {
 
     const { mutate } = useMutation({
         mutationFn: logout,
-
-        // TODO: AQUI NO DEBERIA PASAR NINGUN ERROR
-
+        retry: false,
         onError: (error: unknown) => {
             const e = error as GeneralError;
 
@@ -89,7 +87,6 @@ export const Sidebar = () => {
                 return;
             }
         },
-
         onSuccess: (data) => {
             // Redirigir al usuario a la página de login
             toast.success(data);

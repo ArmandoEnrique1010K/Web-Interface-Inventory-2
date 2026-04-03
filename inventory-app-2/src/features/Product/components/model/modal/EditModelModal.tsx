@@ -39,7 +39,7 @@ export const EditModelModal = ({ data, modelId, setShowModal }: Props) => {
 
     const queryClient = useQueryClient();
 
-    const { mutate } = useMutation({
+    const { mutate, isPending } = useMutation({
         mutationFn: updateModel,
         retry: false,
         onError: (error: unknown) => {
@@ -152,6 +152,7 @@ export const EditModelModal = ({ data, modelId, setShowModal }: Props) => {
                         text="Editar modelo"
                         type="submit"
                         color="green"
+                        disabled={isPending}
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile

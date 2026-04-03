@@ -30,13 +30,22 @@ export const LoaderProduct = ({ productId, setShowModal, modelId }: Props) => {
         );
     }
 
-    if (data)
+    if (!data) {
         return (
-            <EditProductModal
-                data={data}
-                productId={productId}
-                modelId={modelId}
-                setShowModal={setShowModal}
+            <TextMessage
+                align="center"
+                color="red"
+                text="No se ha encontrado el contenido"
             />
         );
+    }
+
+    return (
+        <EditProductModal
+            data={data}
+            productId={productId}
+            modelId={modelId}
+            setShowModal={setShowModal}
+        />
+    );
 };

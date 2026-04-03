@@ -29,7 +29,6 @@ export const NewProductPage = () => {
         height: undefined,
         modelName: "",
         // SELECCIONA LA FECHA DE HOY EN DIA
-        // TODO: EN LA API REST, SI O SI DEBE INTRODUCIR UNA FECHA
         modelEntryDate: new Date(new Date().setHours(12))
             .toISOString()
             .split("T")[0],
@@ -83,6 +82,7 @@ export const NewProductPage = () => {
         queryKey: ["categories", "active"],
         queryFn: listAllActiveCategories,
     });
+
     const { data: typesData } = useQuery({
         queryKey: ["types", "active"],
         queryFn: listAllActiveTypes,

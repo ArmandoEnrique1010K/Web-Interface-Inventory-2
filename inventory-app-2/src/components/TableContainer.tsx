@@ -45,11 +45,11 @@ export const TableContainer = ({
                 />
             )}
 
-            {!isLoading && isEmpty && !isError && (
+            {!isLoading && !isError && isEmpty && (
                 <TextMessage text="No hay datos" align="center" color="red" />
             )}
 
-            {!isError && !isEmpty && (
+            {!isLoading && !isError && !isEmpty && (
                 <>
                     {title && (
                         <div className="pb-4">

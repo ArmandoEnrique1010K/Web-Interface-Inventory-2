@@ -201,7 +201,7 @@ export const GeneralRouter = () => {
                             <Route path="models" element={<ListModelPage />} />
                             {/* :productId es el ID del producto que corresponde al modelo */}
                             <Route
-                                path=":productId/models/:modelId"
+                                path="models/:modelId"
                                 element={<DetailsModelPage />}
                             />
 
@@ -296,7 +296,6 @@ export const GeneralRouter = () => {
                             />
                         </Route>
 
-                        {/* TODO: CONTINUAR AQUI */}
                         {/* RELACIONADO A ORDENES */}
 
                         <Route

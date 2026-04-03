@@ -5,7 +5,7 @@ import { TableRowContainer } from "@/components/TableRowContainer";
 import { BaseTableCell } from "@/components/BaseTableCell";
 import { listAllCategories } from "../../api/CategoryAPI";
 import { listAllTypes } from "../../api/TypeAPI";
-import { Link, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useState } from "react";
 import { Paginator } from "../../../../components/Paginator";
 import { useMediaQuery } from "react-responsive";
@@ -20,6 +20,7 @@ import { EntityListLayout } from "@/layout/entity/EntityListLayout";
 import { StatusProductButton } from "../../components/product/StatusProductButton";
 import { type ProductItem } from "../../schemas/items";
 import { EditProductButton } from "../../components/product/EditProductButton";
+import { LinkText } from "@/components/LinkText";
 export const ListProductPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const page = Number(searchParams.get("page") ?? 0);
@@ -259,13 +260,12 @@ export const ListProductPage = () => {
                                 <BaseTableCell
                                     data={
                                         <div className="flex flex-col gap-1">
-                                            {/* TODO: EL ENLACE SE PODRIA AÑADIR EN OTRA PARTE O SE PUEDE HACER MÁS RESALTADO COMO EN EL NOMBRE DEL PRODUCTO*/}
-                                            <Link
+                                            <LinkText
                                                 to={`/products/${product.id}`}
-                                                className="hover:text-blue-500 hover:underline"
                                             >
                                                 {product.name}
-                                            </Link>
+                                            </LinkText>
+
                                             <p className="text-xs">
                                                 {product.quantityModels === 1
                                                     ? "1 modelo"

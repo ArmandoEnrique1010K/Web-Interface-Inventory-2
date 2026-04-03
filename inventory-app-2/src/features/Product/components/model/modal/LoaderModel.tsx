@@ -31,12 +31,21 @@ export const LoaderModel = ({ modelId, setShowModal }: Props) => {
         );
     }
 
-    if (data)
+    if (!data) {
         return (
-            <EditModelModal
-                data={data as ModelItem & { file: File }}
-                modelId={modelId.toString()}
-                setShowModal={setShowModal}
+            <TextMessage
+                align="center"
+                color="red"
+                text="No se ha encontrado el contenido"
             />
         );
+    }
+
+    return (
+        <EditModelModal
+            data={data as ModelItem & { file: File }}
+            modelId={modelId.toString()}
+            setShowModal={setShowModal}
+        />
+    );
 };

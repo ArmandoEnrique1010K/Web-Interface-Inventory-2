@@ -5,7 +5,7 @@ import { listAllModelsByProductId } from "../../api/ModelAPI";
 import { generateSizes } from "@/utils/generateSizes";
 import { Button } from "@/ui/Button";
 import { useSearchParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { PanelContainer } from "@/components/containers/PanelContainer";
 import { TableContainer } from "@/components/TableContainer";
 import { TableRowContainer } from "@/components/TableRowContainer";
@@ -13,22 +13,17 @@ import { BaseTableCell } from "@/components/BaseTableCell";
 import { SummaryPanelContainer } from "@/components/SummaryPanelContainer";
 import { EntityDetailsLayout } from "@/layout/entity/EntityDetailsLayout";
 import { StatusProductButton } from "../../components/product/StatusProductButton";
-import { QRModal } from "../../components/QRModal";
 import { StatusModelButton } from "../../components/model/StatusModelButton";
 import { LoadingView } from "@/views/LoadingView";
 import { Error } from "@/views/Error";
 import { AddModelButton } from "../../components/product/AddModelButton";
 import { EditProductButton } from "../../components/product/EditProductButton";
 import { EditModelButton } from "../../components/model/EditModelButton";
+import { QRButton } from "../../components/QRButton";
 
 export const DetailsProductPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const modelIdParam = searchParams.get("modelId");
-
-    const [isQRModalOpen, setIsQRModalOpen] = useState(false);
-    const handleOpenQR = () => {
-        setIsQRModalOpen(true);
-    };
 
     const location = useLocation();
     const path = location.pathname;
@@ -70,7 +65,11 @@ export const DetailsProductPage = () => {
     useEffect(() => {
         if (selectedIndex === -1 && modelsData.length > 0) {
             const lastModel = modelsData[modelsData.length - 1];
-            setSearchParams({ modelId: String(lastModel.id) });
+            setSearchParams(
+                { modelId: String(lastModel.id) },
+                { replace: true }, // NO AÑADE UNA NUEVA ENTRADA AL HISTORIA
+                // EVITA ROMPER EL BOTON DE ATRAS
+            );
         }
     }, [selectedIndex, modelsData, setSearchParams]);
 
@@ -100,8 +99,12 @@ export const DetailsProductPage = () => {
         return <LoadingView />;
     }
 
-    if (!productData || isErrorModels || isErrorProduct) {
-        return <Error />;
+    if (isErrorModels || isErrorProduct) {
+        return <Error type="500" />;
+    }
+
+    if (!productData || !modelsData) {
+        return <Error type="404" />;
     }
 
     return (
@@ -131,11 +134,13 @@ export const DetailsProductPage = () => {
                             </PanelContainer.Detail>
                         </PanelContainer.DetailsGrid>
 
-                        <PanelContainer.Image
-                            url={selectedModel.imageUrl}
-                            name={selectedModel.name}
-                            legend={`${productData.name}, ${selectedModel.name}`}
-                        />
+                        {selectedModel && (
+                            <PanelContainer.Image
+                                url={selectedModel.imageUrl}
+                                name={selectedModel.name}
+                                legend={`${productData.name}, ${selectedModel.name}`}
+                            />
+                        )}
 
                         <PanelContainer.DetailsGrid>
                             {productData.status && (
@@ -217,23 +222,11 @@ export const DetailsProductPage = () => {
                                 {selectedModel.totalQuantityDelivered}
                             </PanelContainer.Detail>
                             <PanelContainer.Detail label="Codigo QR">
-                                <Button
-                                    text="Obtener QR"
-                                    type="button"
-                                    color="blue"
-                                    size="small"
-                                    onClick={handleOpenQR}
-                                />
-
-                                <QRModal
-                                    isOpen={isQRModalOpen}
-                                    onClose={() => setIsQRModalOpen(false)}
-                                    url={
-                                        import.meta.env.VITE_FRONTEND_DOMAIN +
-                                        path +
-                                        queryParams
-                                    }
-                                    title={`Código QR del producto ${productData?.name}, ${selectedModel?.name}`}
+                                <QRButton
+                                    modelName={selectedModel.name}
+                                    productName={productData.name}
+                                    path={path}
+                                    queryParams={queryParams}
                                 />
                             </PanelContainer.Detail>
 

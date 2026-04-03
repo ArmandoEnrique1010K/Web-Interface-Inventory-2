@@ -20,6 +20,7 @@ export const LoaderCategory = ({ categoryId, setShowModal }: Props) => {
         return <BlueLoader />;
     }
 
+    // FALLO EN LA API REST
     if (isError) {
         return (
             <TextMessage
@@ -30,13 +31,22 @@ export const LoaderCategory = ({ categoryId, setShowModal }: Props) => {
         );
     }
 
-    if (data) {
+    // AUSENCIA DE DATOS
+    if (!data) {
         return (
-            <EditCategoryModal
-                data={data}
-                categoryId={categoryId}
-                setShowModal={setShowModal}
+            <TextMessage
+                align="center"
+                color="red"
+                text="No se ha encontrado el contenido"
             />
         );
     }
+
+    return (
+        <EditCategoryModal
+            data={data}
+            categoryId={categoryId}
+            setShowModal={setShowModal}
+        />
+    );
 };

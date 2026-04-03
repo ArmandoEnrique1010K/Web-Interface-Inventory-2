@@ -31,7 +31,7 @@ export const EditTypeModal = ({ data, typeId, setShowModal }: Props) => {
 
     const queryClient = useQueryClient();
 
-    const { mutate } = useMutation({
+    const { mutate, isPending } = useMutation({
         mutationFn: updateType,
         retry: false,
         onError: (error: unknown) => {
@@ -93,6 +93,7 @@ export const EditTypeModal = ({ data, typeId, setShowModal }: Props) => {
                         showTextOnMobile
                         isLargeOnMobile
                         applyMinWidth
+                        disabled={isPending}
                     />
                     <Button
                         icon={<XCircleIcon />}

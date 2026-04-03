@@ -11,7 +11,6 @@ type Props = {
 export const NavbarContainer = ({ menuItems, children, keyword }: Props) => {
     const location = useLocation();
 
-    // TODO: ESTA FUNCIÓN SE PODRIA TRASLADAR A LA CARPETA UTILS EN UNA FUTURA ACTUALIZACIÓN
     const styleToCurrentPath = (to: string) => {
         const path = location.pathname;
 
@@ -20,6 +19,8 @@ export const NavbarContainer = ({ menuItems, children, keyword }: Props) => {
             if (
                 path === `/${keyword}` ||
                 path.startsWith(`/${keyword}/new`) ||
+                // Representa cualquier ruta que empiece por /${keyword}/ y sigue de un número entero
+                // Ej: /products/123, /products/456, etc.
                 path.match(new RegExp(`^/${keyword}/\\d+`)) ||
                 path.match(new RegExp(`^/${keyword}/edit/\\d+`))
             ) {

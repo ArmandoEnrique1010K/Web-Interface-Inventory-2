@@ -46,7 +46,7 @@ export const EditProductModal = ({
 
     const queryClient = useQueryClient();
 
-    const { mutate } = useMutation({
+    const { mutate, isPending } = useMutation({
         mutationFn: updateProduct,
         retry: false,
         onError: (error: unknown) => {
@@ -185,6 +185,7 @@ export const EditProductModal = ({
                             text="Editar"
                             type="submit"
                             color="green"
+                            disabled={isPending}
                             showIconOnMobile={false}
                             showTextOnMobile={true}
                             isLargeOnMobile={true}

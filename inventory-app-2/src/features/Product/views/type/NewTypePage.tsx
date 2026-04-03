@@ -27,7 +27,7 @@ export const NewTypePage = () => {
 
     const navigate = useNavigate();
 
-    const { mutate } = useMutation({
+    const { mutate, isPending } = useMutation({
         mutationFn: registerType,
         retry: false,
         onError: (error: unknown) => {
@@ -82,6 +82,7 @@ export const NewTypePage = () => {
                         showTextOnMobile
                         isLargeOnMobile
                         applyMinWidth
+                        disabled={isPending}
                     />
                     <ButtonLink
                         icon={<XCircleIcon />}
