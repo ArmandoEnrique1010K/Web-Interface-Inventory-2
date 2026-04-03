@@ -1,15 +1,23 @@
 import { api } from "@/lib/axiosConfig";
-import type { DataPageResponse, DataResponse, GeneralResponse } from "@/types/index";
 import { handleApiError } from "@/utils/handleApiError";
-import type { StockLotAdjustmentForm, StockLotReceiveForm, StockLotTransferForm } from "../types";
+import type {
+    StockLotAdjustmentForm,
+    StockLotReceiveForm,
+    StockLotTransferForm,
+} from "../schemas/requests";
+import { responseSchema } from "@/types";
+import {
+    stockLotDetailResponseSchema,
+    stockLotListResponseSchema,
+    stockLotPageListResponseSchema,
+} from "../schemas/responses";
 
-export async function registerStockLot({ formData }: { formData: StockLotReceiveForm }) {
+export async function registerStockLot(formData: StockLotReceiveForm) {
     try {
-        const url = `/stock-lots`
-        const { data } = await api.post<GeneralResponse>(url, formData)
-        if (data.type === 'success') {
-            return data.message
-        }
+        const url = `/stock-lots`;
+        const { data } = await api.post(url, formData);
+        const parsed = responseSchema.parse(data);
+        return parsed.message;
     } catch (error: unknown) {
         handleApiError(error);
     }
@@ -28,106 +36,119 @@ export type StockLotQueryParams = {
     categoryId?: string;
     typeId?: string;
     modelId?: string;
-}
+};
 
 export async function listAllStockLots(params: StockLotQueryParams) {
     try {
-        const url = `/stock-lots`
-        const { data } = await api.get<DataPageResponse>(url, { params: params })
-        return data.data;
+        const url = `/stock-lots`;
+        const { data } = await api.get(url, {
+            params,
+        });
+        const parsed = stockLotPageListResponseSchema.parse(data);
+        return parsed.data;
     } catch (error) {
         handleApiError(error);
     }
 }
 
-
-export async function listAllStockLotsByModelAndExcludeOne(idStockLot: string, idCompany: string, idModel: string) {
+export async function listAllStockLotsByModelAndExcludeOne(
+    idStockLot: number,
+    idCompany: number,
+    idModel: number,
+) {
     try {
-        const url = `/stock-lots/exclude/${idStockLot}/company/${idCompany}/model/${idModel}`
-        const { data } = await api.get<DataResponse>(url)
-        return data.data;
+        const url = `/stock-lots/exclude/${idStockLot}/company/${idCompany}/model/${idModel}`;
+        const { data } = await api.get(url);
+        const parsed = stockLotListResponseSchema.parse(data);
+        return parsed.data;
     } catch (error) {
         handleApiError(error);
     }
 }
 
-
-export async function listAllStockLotsActiveByModel(idModel: string) {
+export async function listAllStockLotsActiveByModel(idModel: number) {
     try {
-        const url = `/stock-lots/model/${idModel}`
-        const { data } = await api.get<DataResponse>(url)
-        return data.data;
+        const url = `/stock-lots/model/${idModel}`;
+        const { data } = await api.get(url);
+        const parsed = stockLotListResponseSchema.parse(data);
+        return parsed.data;
     } catch (error) {
         handleApiError(error);
     }
 }
 
-
-
-export async function getStockLot(id: string) {
+export async function getStockLot(id: number) {
     try {
-        const url = `/stock-lots/${id}`
-        const { data } = await api.get<DataResponse>(url)
-        return data.data;
+        const url = `/stock-lots/${id}`;
+        const { data } = await api.get(url);
+        const parsed = stockLotDetailResponseSchema.parse(data);
+        return parsed.data;
     } catch (error) {
         handleApiError(error);
     }
 }
 
 type ChangeQuantityStockLotPayload = {
-    stockLotId: string;
+    stockLotId: number;
     formData: StockLotAdjustmentForm;
-}
+};
 
-export async function increaseStockLot({ stockLotId, formData }: ChangeQuantityStockLotPayload) {
+export async function increaseStockLot({
+    stockLotId,
+    formData,
+}: ChangeQuantityStockLotPayload) {
     try {
-        const url = `/stock-lots/${stockLotId}/increase`
-        const { data } = await api.put<GeneralResponse>(url, formData)
-        if (data.type === 'success') {
-            return data.message
-        }
+        const url = `/stock-lots/${stockLotId}/increase`;
+        const { data } = await api.put(url, formData);
+        const parsed = responseSchema.parse(data);
+        return parsed.message;
     } catch (error) {
         handleApiError(error);
     }
 }
 
-
-export async function decreaseStockLot({ stockLotId, formData }: ChangeQuantityStockLotPayload) {
+export async function decreaseStockLot({
+    stockLotId,
+    formData,
+}: ChangeQuantityStockLotPayload) {
     try {
-        const url = `/stock-lots/${stockLotId}/decrease`
-        const { data } = await api.put<GeneralResponse>(url, formData)
-        if (data.type === 'success') {
-            return data.message
-        }
+        const url = `/stock-lots/${stockLotId}/decrease`;
+        const { data } = await api.put(url, formData);
+        const parsed = responseSchema.parse(data);
+        return parsed.message;
     } catch (error) {
         handleApiError(error);
     }
 }
 
-export async function recoveryStockLot({ stockLotId, formData }: ChangeQuantityStockLotPayload) {
+export async function recoveryStockLot({
+    stockLotId,
+    formData,
+}: ChangeQuantityStockLotPayload) {
     try {
-        const url = `/stock-lots/${stockLotId}/recovery`
-        const { data } = await api.put<GeneralResponse>(url, formData)
-        if (data.type === 'success') {
-            return data.message
-        }
+        const url = `/stock-lots/${stockLotId}/recovery`;
+        const { data } = await api.put(url, formData);
+        const parsed = responseSchema.parse(data);
+        return parsed.message;
     } catch (error) {
         handleApiError(error);
     }
 }
 
 type TransferQuantityInStockLotsPayload = {
-    stockLotEmitterId: string;
+    stockLotEmitterId: number;
     formData: StockLotTransferForm;
-}
+};
 
-export async function transferStockLot({ stockLotEmitterId, formData }: TransferQuantityInStockLotsPayload) {
+export async function transferStockLot({
+    stockLotEmitterId,
+    formData,
+}: TransferQuantityInStockLotsPayload) {
     try {
-        const url = `/stock-lots/${stockLotEmitterId}/transfer`
-        const { data } = await api.put<GeneralResponse>(url, formData)
-        if (data.type === 'success') {
-            return data.message
-        }
+        const url = `/stock-lots/${stockLotEmitterId}/transfer`;
+        const { data } = await api.put(url, formData);
+        const parsed = responseSchema.parse(data);
+        return parsed.message;
     } catch (error) {
         handleApiError(error);
     }

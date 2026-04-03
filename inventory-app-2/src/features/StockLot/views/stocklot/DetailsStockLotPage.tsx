@@ -1,41 +1,37 @@
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom"
+import { useParams } from "react-router-dom";
 import { getStockLot } from "../../api/StockLotAPI";
-import type { StockLotDetailsItem } from "../../types";
 import { handleFormatDateTime } from "@/utils/handleFormatDateTime";
 import { EntityDetailsLayout } from "@/layout/entity/EntityDetailsLayout";
-import { useState } from "react";
-import { Button } from "@/ui/Button";
-import { Modal } from "@/components/Modal";
-import { IncreaseStockLotModal } from "../../components/stocklot/IncreaseStockLotModal";
-import { DecreaseStockLotModal } from "../../components/stocklot/DecreaseStockLotModal";
-import { RecoveryStockLotModal } from "../../components/stocklot/RecoveryStockLotModal";
-import { LoaderTransferStockLot } from "../../components/stocklot/LoaderTransferStockLot";
 import { PanelContainer } from "@/components/containers/PanelContainer";
+import { LoadingView } from "@/views/LoadingView";
+import { Error } from "@/views/Error";
+import { IncreaseStockLotButton } from "../../components/stocklot/IncreaseStockLotButton";
+import { DecreaseStockLotButton } from "../../components/stocklot/DecreaseStockLotButton";
+import { RecoveryStockLotButton } from "../../components/stocklot/RecoveryStockLotButton";
+import { TransferStockLotButton } from "../../components/stocklot/TransferStockLotButton";
 
 export const DetailsStockLotPage = () => {
+    const { id: stockLotIdstr } = useParams();
+    const stockLotId = +stockLotIdstr!;
 
-    const { id: stockLotId } = useParams();
-
-    const { data, isLoading } = useQuery<StockLotDetailsItem>({
-        queryKey: ['stocklot', stockLotId],
+    const { data, isLoading, isError } = useQuery({
+        queryKey: ["stocklot", stockLotId],
         queryFn: () => getStockLot(stockLotId!),
-        enabled: !!stockLotId
-    })
-
-    const [increaseModalOpen, setIncreaseModalOpen] = useState(false);
-    const [decreaseModalOpen, setDecreaseModalOpen] = useState(false);
-    const [recoveryModalOpen, setRecoveryModalOpen] = useState(false);
-    const [transferModalOpen, setTransferModalOpen] = useState(false);
+        enabled: !!stockLotId,
+    });
 
     if (isLoading) {
-        return <div>Cargando...</div>
+        return <LoadingView />;
+    }
+
+    if (isError) {
+        return <Error type="500" />;
     }
 
     if (!data) {
-        return <div>Lote de stock no encontrado o desactivado</div>
+        return <Error type="404" />;
     }
-
 
     return (
         <EntityDetailsLayout>
@@ -60,7 +56,9 @@ export const DetailsStockLotPage = () => {
                                 {handleFormatDateTime(new Date(data.updatedAt))}
                             </PanelContainer.Detail>
                             <PanelContainer.Detail label="Creado por">
-                                {data.temporary === true ? 'el sistema' : 'un usuario'}
+                                {data.temporary === true
+                                    ? "el sistema"
+                                    : "un usuario"}
                             </PanelContainer.Detail>
                         </PanelContainer.DetailsGrid>
                         <PanelContainer.Image
@@ -68,13 +66,11 @@ export const DetailsStockLotPage = () => {
                             name={data.modelName}
                             legend={`${data.productName}, ${data.modelName}`}
                         />
-
                     </PanelContainer>
                 </EntityDetailsLayout.Column>
                 <EntityDetailsLayout.Column>
                     <EntityDetailsLayout.Grid>
-                        <PanelContainer
-                            subtitle={"Modelo seleccionado"}>
+                        <PanelContainer subtitle={"Modelo seleccionado"}>
                             <PanelContainer.DetailsGrid>
                                 <PanelContainer.Detail label="ID de producto">
                                     {data.productId}
@@ -101,10 +97,7 @@ export const DetailsStockLotPage = () => {
                         </PanelContainer>
                     </EntityDetailsLayout.Grid>
                     <EntityDetailsLayout.Grid>
-
-
-                        <PanelContainer
-                            subtitle="Cantidades">
+                        <PanelContainer subtitle="Cantidades">
                             <PanelContainer.DetailsGrid>
                                 <PanelContainer.Detail label="Cantidad recibida">
                                     {data.quantityReceived}
@@ -121,155 +114,38 @@ export const DetailsStockLotPage = () => {
                                 <PanelContainer.Detail label="Cantidad recuperada">
                                     {data.quantityRecovered}
                                 </PanelContainer.Detail>
-
                             </PanelContainer.DetailsGrid>
-
                         </PanelContainer>
-
-
                     </EntityDetailsLayout.Grid>
                     <EntityDetailsLayout.Grid>
-                        <PanelContainer
-                            subtitle={"Operaciones"}>
+                        {/* PENDIENTE EL MANEJO DEL CAMPO ZEROSTOCKLOT */}
+                        <PanelContainer subtitle={"Operaciones"}>
                             <PanelContainer.DetailsGrid>
                                 <PanelContainer.Detail label="Agregar">
-                                    {
-                                        <Button
-                                            type='button'
-                                            size='small'
-                                            text='Agregar'
-                                            color='green-outline'
-                                            onClick={() => {
-                                                setIncreaseModalOpen(true)
-                                            }}
-                                            showTextOnMobile
-                                        />
-
-                                    }
+                                    <IncreaseStockLotButton
+                                        stockLotId={data.id}
+                                    />
                                 </PanelContainer.Detail>
                                 <PanelContainer.Detail label="Quitar">
-                                    {
-                                        <Button
-                                            type='button'
-                                            size='small'
-                                            text='Quitar'
-                                            color='red-outline'
-                                            onClick={() => {
-                                                setDecreaseModalOpen(true)
-                                            }}
-                                            showTextOnMobile
-                                        />
-                                    }
+                                    <DecreaseStockLotButton
+                                        stockLotId={data.id}
+                                    />
                                 </PanelContainer.Detail>
                                 <PanelContainer.Detail label="Recuperar">
-                                    {
-                                        <Button
-                                            type='button'
-                                            size='small'
-                                            text='Recuperar'
-                                            color='blue-outline'
-                                            onClick={() => {
-                                                setRecoveryModalOpen(true)
-                                            }}
-                                            showTextOnMobile
-                                        />
-                                    }
+                                    <RecoveryStockLotButton
+                                        stockLotId={data.id}
+                                    />
                                 </PanelContainer.Detail>
                                 <PanelContainer.Detail label="Transferir">
-                                    {
-                                        <Button
-                                            type='button'
-                                            size='small'
-                                            text='Transferir'
-                                            color='blue-outline'
-                                            onClick={() => {
-                                                setTransferModalOpen(true)
-                                            }}
-                                            showTextOnMobile
-                                        />
-
-                                    }
+                                    <TransferStockLotButton
+                                        stockLotId={data.id}
+                                    />
                                 </PanelContainer.Detail>
                             </PanelContainer.DetailsGrid>
                         </PanelContainer>
-
                     </EntityDetailsLayout.Grid>
-
                 </EntityDetailsLayout.Column>
-
-
-
             </EntityDetailsLayout.Content>
-            {
-                increaseModalOpen && stockLotId && <Modal
-                    isOpen={increaseModalOpen}
-                    onClose={() => {
-                        setIncreaseModalOpen(false)
-                    }
-                    }
-                    size='lg'
-                    title={`Agregar cantidad al lote de stock #${stockLotId}`}
-                    locked
-                >
-                    <IncreaseStockLotModal stockLotId={stockLotId} showModal={setIncreaseModalOpen} />
-                </Modal>
-            }
-            {
-                decreaseModalOpen && stockLotId && <Modal
-                    isOpen={decreaseModalOpen}
-                    onClose={() => {
-                        setDecreaseModalOpen(false)
-                    }
-                    }
-                    size='lg'
-                    title={`Disminuir cantidad al lote de stock #${stockLotId}`}
-                    locked
-                >
-                    <DecreaseStockLotModal stockLotId={stockLotId} showModal={setDecreaseModalOpen} />
-                </Modal>
-            }
-            {
-                recoveryModalOpen && stockLotId && <Modal
-                    isOpen={recoveryModalOpen}
-                    onClose={() => {
-                        setRecoveryModalOpen(false)
-                    }
-                    }
-                    size='lg'
-                    title={`Recuperar cantidad del lote de stock #${stockLotId}`}
-                    locked
-                >
-                    <RecoveryStockLotModal stockLotId={stockLotId} showModal={setRecoveryModalOpen} />
-                </Modal>
-            }
-            {
-                transferModalOpen && stockLotId && <Modal
-                    isOpen={transferModalOpen}
-                    onClose={() => {
-                        setTransferModalOpen(false)
-                    }
-                    }
-                    size='lg'
-                    title={`Transferir cantidad desde el lote de stock #${stockLotId}`}
-                    locked
-                >
-                    <LoaderTransferStockLot stockLotId={stockLotId} showModal={setTransferModalOpen} />
-                </Modal>
-            }
-
         </EntityDetailsLayout>
-        //     title={data.batch}
-        //     buttons={
-        //         <>
-        //             <ButtonLink icon={<PlusCircleIcon />} size='large' text='Agregar' to={`/stocklots/${stockLotId}/increase`} color='green' />
-        //             <ButtonLink icon={<MinusCircleIcon />} size='large' text='Disminuir' to={`/stocklots/${stockLotId}/decrease`} color='red' />
-        //             <ButtonLink icon={<SquaresPlusIcon />} size='large' text='Recuperar' to={`/stocklots/${stockLotId}/recovery`} color='blue' />
-        //             <ButtonLink icon={<ArrowPathIcon />} size='large' text='Transferir' to={`/stocklots/${stockLotId}/transfer`} color='blue' />
-
-        //         </>
-        //     }
-        // >
-
-
-    )
-}
+    );
+};

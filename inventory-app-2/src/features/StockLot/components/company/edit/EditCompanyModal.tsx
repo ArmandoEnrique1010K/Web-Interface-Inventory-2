@@ -4,14 +4,14 @@ import { toast } from "sonner";
 import { Button } from "@/ui/Button";
 import { InputText } from "@/ui/fields/InputText";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
-import type { CompanyForm } from "../../types";
-import { updateCompany } from "../../api/CompanyAPI";
+import { updateCompany } from "../../../api/CompanyAPI";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 import type { GeneralError } from "@/types";
+import type { CompanyForm } from "@/features/StockLot/schemas/requests";
 
 type Props = {
     data: CompanyForm;
-    companyId: string;
+    companyId: number;
     showModal: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
@@ -21,7 +21,7 @@ export const EditCompanyModal = ({ data, companyId, showModal }: Props) => {
         handleSubmit,
         setError,
         formState: { errors },
-    } = useForm<CompanyForm>({
+    } = useForm({
         defaultValues: {
             name: data.name,
         },

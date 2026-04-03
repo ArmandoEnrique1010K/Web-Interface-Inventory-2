@@ -6,13 +6,13 @@ import { InputText } from "@/ui/fields/InputText";
 import { Button } from "@/ui/Button";
 import { ButtonLink } from "@/ui/ButtonLink";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
-import type { CompanyForm } from "../../types";
 import { registerCompany } from "../../api/CompanyAPI";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 import type { GeneralError } from "@/types";
+import type { CompanyForm } from "../../schemas/requests";
 
 export const NewCompanyPage = () => {
-    const initialValues: CompanyForm = {
+    const initialValues = {
         name: "",
     };
 
@@ -21,7 +21,7 @@ export const NewCompanyPage = () => {
         handleSubmit,
         setError,
         formState: { errors },
-    } = useForm<CompanyForm>({
+    } = useForm({
         defaultValues: initialValues,
     });
 
@@ -36,7 +36,7 @@ export const NewCompanyPage = () => {
                 Object.entries(e.fields).forEach(([field, message]) => {
                     setError(field as keyof CompanyForm, {
                         type: "server",
-                        message: message as string,
+                        message: message,
                     });
                 });
 

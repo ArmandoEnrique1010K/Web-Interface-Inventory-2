@@ -3,26 +3,27 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
     listAllStockLotsByModelAndExcludeOne,
     transferStockLot,
-} from "../../api/StockLotAPI";
+} from "../../../api/StockLotAPI";
 import type { GeneralError } from "@/types/index";
 import { toast } from "sonner";
 import { Button } from "@/ui/Button";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { InputText } from "@/ui/fields/InputText";
-import type { StockLotDetailsItem, StockLotTransferForm } from "../../types";
 import { SelectOption } from "@/ui/fields/SelectOption";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
+import type { StockLotTransferForm } from "@/features/StockLot/schemas/requests";
+import type { StockLotDetailItem } from "@/features/StockLot/schemas/items";
 
 type Props = {
-    data: StockLotDetailsItem;
-    stockLotEmitterId: string;
-    showModal: React.Dispatch<React.SetStateAction<boolean>>;
+    data: StockLotDetailItem;
+    stockLotEmitterId: number;
+    setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const TransferStockLotModal = ({
     data,
     stockLotEmitterId,
-    showModal,
+    setShowModal,
 }: Props) => {
     const {
         register,
@@ -31,9 +32,9 @@ export const TransferStockLotModal = ({
         formState: { errors },
     } = useForm<StockLotTransferForm>({
         defaultValues: {
-            quantity: "",
+            quantity: undefined,
             comment: "",
-            stockLotReceiverId: "",
+            stockLotReceiverId: undefined,
         },
     });
     const queryClient = useQueryClient();
@@ -66,7 +67,7 @@ export const TransferStockLotModal = ({
                 queryKey: ["stocklot", stockLotEmitterId],
             });
             toast.success(data);
-            showModal(false);
+            setShowModal(false);
         },
     });
 
@@ -89,8 +90,8 @@ export const TransferStockLotModal = ({
             ),
     });
     const stockLotsByModelAndCompany =
-        stockLotsData?.map((stockLot: StockLotDetailsItem) => ({
-            value: stockLot.id,
+        stockLotsData?.map((stockLot) => ({
+            value: stockLot.id.toString(),
             label: stockLot.batch,
         })) || [];
 
@@ -154,7 +155,7 @@ export const TransferStockLotModal = ({
                         text="Volver"
                         color="gray"
                         type="button"
-                        onClick={() => showModal(false)}
+                        onClick={() => setShowModal(false)}
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile

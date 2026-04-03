@@ -1,20 +1,20 @@
 import { useForm } from "react-hook-form";
-import type { StockLotAdjustmentForm } from "../../types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { GeneralError } from "@/types/index";
 import { toast } from "sonner";
 import { Button } from "@/ui/Button";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { InputText } from "@/ui/fields/InputText";
-import { recoveryStockLot } from "../../api/StockLotAPI";
+import { recoveryStockLot } from "../../../api/StockLotAPI";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
+import type { StockLotAdjustmentForm } from "@/features/StockLot/schemas/requests";
 
 type Props = {
-    stockLotId: string;
-    showModal: React.Dispatch<React.SetStateAction<boolean>>;
+    stockLotId: number;
+    setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export const RecoveryStockLotModal = ({ stockLotId, showModal }: Props) => {
+export const RecoveryStockLotModal = ({ stockLotId, setShowModal }: Props) => {
     const {
         register,
         handleSubmit,
@@ -22,7 +22,7 @@ export const RecoveryStockLotModal = ({ stockLotId, showModal }: Props) => {
         formState: { errors },
     } = useForm<StockLotAdjustmentForm>({
         defaultValues: {
-            quantity: "",
+            quantity: undefined,
             comment: "",
         },
     });
@@ -56,7 +56,7 @@ export const RecoveryStockLotModal = ({ stockLotId, showModal }: Props) => {
                 queryKey: ["stocklot", stockLotId],
             });
             toast.success(data);
-            showModal(false);
+            setShowModal(false);
         },
     });
 
@@ -108,7 +108,7 @@ export const RecoveryStockLotModal = ({ stockLotId, showModal }: Props) => {
                         text="Volver"
                         color="gray"
                         type="button"
-                        onClick={() => showModal(false)}
+                        onClick={() => setShowModal(false)}
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile

@@ -1,5 +1,4 @@
 import { useForm } from "react-hook-form";
-import type { CompanyItem } from "../../types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { registerStockLot } from "../../api/StockLotAPI";
 import type { GeneralError } from "@/types/index";
@@ -16,18 +15,18 @@ import { AsyncSelectField, type Option } from "@/ui/fields/AsyncSelectOption";
 import { listFirstTenModelsByKeyword } from "@/features/Product/api/ModelAPI";
 
 type StockLotFields = {
-    quantity: string;
+    quantity: number | undefined;
     comment: string;
     modelId: Option | null;
-    companyId: string;
+    companyId: number | undefined;
 };
 
 export const NewStockLotPage = () => {
     const initialValues: StockLotFields = {
-        quantity: "",
+        quantity: undefined,
         comment: "",
         modelId: null,
-        companyId: "",
+        companyId: undefined,
     };
 
     const {
@@ -75,8 +74,8 @@ export const NewStockLotPage = () => {
         queryFn: listAllCompanies,
     });
     const companies =
-        companiesData?.map((company: CompanyItem) => ({
-            value: company.id,
+        companiesData?.map((company) => ({
+            value: company.id.toString(),
             label: company.name,
         })) || [];
 
@@ -85,13 +84,27 @@ export const NewStockLotPage = () => {
             <EntityFormLayout.Header title="Registrar nuevo lote de stock"></EntityFormLayout.Header>
             <EntityFormLayout.Form
                 styled
-                onSubmit={handleSubmit((data) =>
-                    mutate({
-                        formData: {
-                            ...data,
-                            modelId: data.modelId?.value.toString() || "",
-                        },
-                    }),
+                onSubmit={handleSubmit(
+                    (data) => {
+                        mutate({
+                            quantity: data.quantity!,
+                            comment: data.comment,
+                            modelId: Number(data.modelId?.value),
+                            // modelId:
+                            //     data.modelId === null
+                            //         ? // Cambiar el tipo de modelId a una union de Number y Null,
+                            //           // para que sea posible que sea null, y en ese caso no tengamos que
+                            //           // hacer el cast a Number
+                            //           Number(data.modelId?.value)
+                            //         : Number(data.modelId?.value),
+                            companyId: data.companyId!,
+                        });
+                    },
+
+                    // mutate({
+                    //     ...data,
+                    //     modelId: +data.modelId?.value,
+                    // }),
                 )}
             >
                 <EntityFormLayout.Inputs>
@@ -100,7 +113,7 @@ export const NewStockLotPage = () => {
                         id="quantity"
                         label="Cantidad"
                         placeholder="Cantidad o unidades"
-                        type="text"
+                        type="number"
                         errorMessage={errors.quantity}
                         functionEnabled={register("quantity")}
                     />
@@ -112,7 +125,6 @@ export const NewStockLotPage = () => {
                         errorMessage={errors.comment}
                         functionEnabled={register("comment")}
                     />
-
                     <SelectOption
                         id="companyId"
                         label="Empresa importadora"
@@ -121,9 +133,9 @@ export const NewStockLotPage = () => {
                         options={companies}
                         textInNullOption="Seleccione una empresa importadora"
                     />
-
+                    {/* //* SOLAMENTE SE ENVIA EL ID DEL MODELO */}
                     <AsyncSelectField<StockLotFields>
-                        label="ID del modelo"
+                        label="Nombre del producto y modelo"
                         name="modelId"
                         control={control}
                         errorMessage={errors.modelId?.message}

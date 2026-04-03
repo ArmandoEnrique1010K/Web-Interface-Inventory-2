@@ -1,20 +1,20 @@
 import { useForm } from "react-hook-form";
-import type { StockLotAdjustmentForm } from "../../types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { increaseStockLot } from "../../../api/StockLotAPI";
 import type { GeneralError } from "@/types/index";
 import { toast } from "sonner";
 import { Button } from "@/ui/Button";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { InputText } from "@/ui/fields/InputText";
-import { decreaseStockLot } from "../../api/StockLotAPI";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
+import type { StockLotAdjustmentForm } from "../../../schemas/requests";
 
 type Props = {
-    stockLotId: string;
-    showModal: React.Dispatch<React.SetStateAction<boolean>>;
+    stockLotId: number;
+    setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export const DecreaseStockLotModal = ({ stockLotId, showModal }: Props) => {
+export const IncreaseStockLotModal = ({ stockLotId, setShowModal }: Props) => {
     const {
         register,
         handleSubmit,
@@ -22,14 +22,14 @@ export const DecreaseStockLotModal = ({ stockLotId, showModal }: Props) => {
         formState: { errors },
     } = useForm<StockLotAdjustmentForm>({
         defaultValues: {
-            quantity: "",
+            quantity: undefined,
             comment: "",
         },
     });
     const queryClient = useQueryClient();
 
     const { mutate } = useMutation({
-        mutationFn: decreaseStockLot,
+        mutationFn: increaseStockLot,
         retry: false,
         onError: (error: unknown) => {
             const e = error as GeneralError;
@@ -50,13 +50,14 @@ export const DecreaseStockLotModal = ({ stockLotId, showModal }: Props) => {
                 return;
             }
         },
+
         onSuccess: (data) => {
             queryClient.invalidateQueries({ queryKey: ["stocklots"] });
             queryClient.invalidateQueries({
                 queryKey: ["stocklot", stockLotId],
             });
             toast.success(data);
-            showModal(false);
+            setShowModal(false);
         },
     });
 
@@ -74,7 +75,7 @@ export const DecreaseStockLotModal = ({ stockLotId, showModal }: Props) => {
                 <EntityFormLayout.Inputs isCompact>
                     <InputText
                         id="quantity"
-                        label="Unidades a disminuir"
+                        label="Unidades a incrementar"
                         placeholder="Cantidad"
                         type="text"
                         errorMessage={errors.quantity}
@@ -94,7 +95,7 @@ export const DecreaseStockLotModal = ({ stockLotId, showModal }: Props) => {
                     <Button
                         icon={<ArrowUpCircleIcon />}
                         size="large"
-                        text="Disminuir"
+                        text="Agregar"
                         type="submit"
                         color="green"
                         showIconOnMobile={false}
@@ -108,7 +109,7 @@ export const DecreaseStockLotModal = ({ stockLotId, showModal }: Props) => {
                         text="Volver"
                         color="gray"
                         type="button"
-                        onClick={() => showModal(false)}
+                        onClick={() => setShowModal(false)}
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile
