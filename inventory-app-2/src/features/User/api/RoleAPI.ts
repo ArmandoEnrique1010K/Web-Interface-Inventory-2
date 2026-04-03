@@ -1,14 +1,14 @@
 import { api } from "@/lib/axiosConfig";
-import type { DataResponse } from "@/types/index";
-import { handleApiError } from "@/utils/handleApiError";
+import { throwApiErrorMessage } from "@/utils/throwApiErrorMessage";
+import { rolesListResponseSchema } from "../schemas/response";
 
 export async function listAllRoles() {
     try {
-        const url = `/roles`
-        const { data } = await api.get<DataResponse>(url)
-        return data.data;
+        const url = `/roles`;
+        const { data } = await api.get(url);
+        const parsed = rolesListResponseSchema.parse(data);
+        return parsed.data;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
-

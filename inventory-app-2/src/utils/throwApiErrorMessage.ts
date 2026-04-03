@@ -1,7 +1,7 @@
 import { errorResponseSchema } from "@/types";
 import { isAxiosError } from "axios";
 
-export function handleApiError(error: unknown): never {
+export function throwApiErrorMessage(error: unknown): never {
     if (isAxiosError(error) && error.response?.data) {
         const parsed = errorResponseSchema.safeParse(error.response.data);
 

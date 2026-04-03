@@ -1,5 +1,5 @@
 import { api } from "@/lib/axiosConfig";
-import { handleApiError } from "@/utils/handleApiError";
+import { throwApiErrorMessage } from "@/utils/throwApiErrorMessage";
 import type { ModelForm } from "../schemas/requests";
 import { responseSchema } from "@/types";
 import {
@@ -37,7 +37,7 @@ export async function registerModelInProduct({
         const parsed = responseSchema.parse(data);
         return parsed.message;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -48,7 +48,7 @@ export async function listAllModelsByProductId(productId: number) {
         const parsed = modelsListResponseSchema.parse(data);
         return parsed.data;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -85,7 +85,7 @@ export async function listAllModels(params: ModelQueryParams) {
         const parsed = modelsPageResponseSchema.parse(data);
         return parsed.data;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -102,7 +102,7 @@ export async function listFirstTenModelsByKeyword(
         const parsed = modelsTopTenResponseSchema.parse(data);
         return parsed.data;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -120,7 +120,7 @@ export async function listActiveModelsByName(params: ModelSearchQueryParams) {
         const parsed = modelsSearchPageListResponseSchema.parse(data);
         return parsed.data;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -131,7 +131,7 @@ export async function getModel(id: number) {
         const parsed = modelDetailResponseSchema.parse(data);
         return parsed.data;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -157,7 +157,7 @@ export async function updateModel({ modelId, data, file }: UpdateModelPayload) {
         const parsed = responseSchema.parse(data);
         return parsed.message;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -168,6 +168,6 @@ export async function changeStatusModel(id: number) {
         const parsed = responseSchema.parse(data);
         return parsed.message;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }

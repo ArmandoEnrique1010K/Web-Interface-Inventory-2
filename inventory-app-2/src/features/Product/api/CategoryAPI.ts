@@ -1,5 +1,5 @@
 import { api } from "@/lib/axiosConfig";
-import { handleApiError } from "@/utils/handleApiError";
+import { throwApiErrorMessage } from "@/utils/throwApiErrorMessage";
 import { responseSchema } from "@/types";
 import type { CategoryForm } from "../schemas/requests";
 import {
@@ -15,7 +15,7 @@ export async function registerCategory(formData: CategoryForm) {
         const parsed = responseSchema.parse(data);
         return parsed.message;
     } catch (error: unknown) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -26,7 +26,7 @@ export async function listAllCategories() {
         const parsed = categoriesListResponseSchema.parse(data);
         return parsed.data;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -37,7 +37,7 @@ export async function listAllActiveCategories() {
         const parsed = categoriesListResponseSchema.parse(data);
         return parsed.data;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -48,7 +48,7 @@ export async function getCategory(id: number) {
         const parsed = categoryDetailResponseSchema.parse(data);
         return parsed.data;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -67,7 +67,7 @@ export async function updateCategory({
         const parsed = responseSchema.parse(data);
         return parsed.message;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -78,6 +78,6 @@ export async function changeStatusCategory(categoryId: number) {
         const parsed = responseSchema.parse(data);
         return parsed.message;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }

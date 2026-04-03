@@ -1,5 +1,5 @@
 import { api } from "@/lib/axiosConfig";
-import { handleApiError } from "@/utils/handleApiError";
+import { throwApiErrorMessage } from "@/utils/throwApiErrorMessage";
 import type { LocationForm } from "../schemas/requests";
 import { responseSchema } from "@/types";
 import {
@@ -15,7 +15,7 @@ export async function registerLocation(formData: LocationForm) {
         const parsed = responseSchema.parse(data);
         return parsed.message;
     } catch (error: unknown) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -34,7 +34,7 @@ export async function listAllLocations(params: LocationQueryParams) {
         const parsed = locationsListResponseSchema.parse(data);
         return parsed.data;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -53,7 +53,7 @@ export async function listFirstTenLocationsByKeyword(
         const parsed = locationsTopTenResponseSchema.parse(data);
         return parsed.data;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -64,7 +64,7 @@ export async function getLocation(id: number) {
         const parsed = locationDetailResponseSchema.parse(data);
         return parsed.data;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -83,7 +83,7 @@ export async function updateLocation({
         const parsed = responseSchema.parse(data);
         return parsed.message;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -94,6 +94,6 @@ export async function changeStatusLocation(locationId: number) {
         const parsed = responseSchema.parse(data);
         return parsed.message;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }

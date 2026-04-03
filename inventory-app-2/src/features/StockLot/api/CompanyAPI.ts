@@ -1,5 +1,5 @@
 import { api } from "@/lib/axiosConfig";
-import { handleApiError } from "@/utils/handleApiError";
+import { throwApiErrorMessage } from "@/utils/throwApiErrorMessage";
 import type { CompanyForm } from "../schemas/requests";
 import { responseSchema } from "@/types";
 import {
@@ -14,7 +14,7 @@ export async function registerCompany(formData: CompanyForm) {
         const parsed = responseSchema.parse(data);
         return parsed.message;
     } catch (error: unknown) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -25,7 +25,7 @@ export async function listAllCompanies() {
         const parsed = companiesListResponseSchema.parse(data);
         return parsed.data;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -36,7 +36,7 @@ export async function getCompany(id: number) {
         const parsed = companyDetailResponseSchema.parse(data);
         return parsed.data;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -55,6 +55,6 @@ export async function updateCompany({
         const parsed = responseSchema.parse(data);
         return parsed.message;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }

@@ -1,6 +1,6 @@
 import { api } from "@/lib/axiosConfig";
 import type { DataPageResponse, DataResponse } from "@/types/index";
-import { handleApiError } from "@/utils/handleApiError";
+import { throwApiErrorMessage } from "@/utils/throwApiErrorMessage";
 
 export type LocationQueryParams = {
     page?: number;
@@ -14,25 +14,27 @@ export type LocationQueryParams = {
     keyword?: string; // Nombre de producto o modelo
     modelId?: string;
     userId?: string; // Id de usuario
-    stockLotReceiverId?: string // Lote de stock receptor
-}
+    stockLotReceiverId?: string; // Lote de stock receptor
+};
 
 export async function listAllMovements(params: LocationQueryParams) {
     try {
-        const url = `/movements`
-        const { data } = await api.get<DataPageResponse>(url, { params: params })
+        const url = `/movements`;
+        const { data } = await api.get<DataPageResponse>(url, {
+            params: params,
+        });
         return data.data;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
 export async function getMovement(id: string) {
     try {
-        const url = `/movements/${id}`
-        const { data } = await api.get<DataResponse>(url)
+        const url = `/movements/${id}`;
+        const { data } = await api.get<DataResponse>(url);
         return data.data;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }

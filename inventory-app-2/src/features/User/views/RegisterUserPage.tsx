@@ -1,5 +1,4 @@
 import { useForm, type UseFormRegisterReturn } from "react-hook-form";
-import type { UserRegisterForm } from "../types";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { registerUser } from "../api/UserAPI";
@@ -12,13 +11,14 @@ import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { InputPassword } from "@/ui/fields/InputPassword";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 import { SelectCheckboxGroup } from "@/ui/fields/SelectCheckboxGroup";
+import type { UserRegisterForm } from "../schemas/requests";
 
 export const RegisterUserPage = () => {
-    const initialValues: UserRegisterForm = {
+    const initialValues = {
         firstname: "",
         lastname: "",
         email: "",
-        dni: "",
+        dni: undefined,
         password: "",
         operator: false,
         secretary: false,
@@ -129,38 +129,6 @@ export const RegisterUserPage = () => {
                     />
 
                     <SelectCheckboxGroup group={rolesGroup} label="Roles" />
-
-                    {/* <label className="text-base font-bold">Roles</label>
-
-                    <div className="flex flex-col gap-3 pt-2">
-                        <label className="flex items-center gap-2">
-                            <input
-                                type="checkbox"
-                                {...register("operator")}
-                                className="w-4 h-4"
-                            />
-                            Operador
-                        </label>
-
-                        <label className="flex items-center gap-2">
-                            <input
-                                type="checkbox"
-                                {...register("secretary")}
-                                className="w-4 h-4"
-                            />
-                            Secretario
-                        </label>
-
-                        <label className="flex items-center gap-2">
-                            <input
-                                type="checkbox"
-                                {...register("admin")}
-                                className="w-4 h-4"
-                            />
-                            Administrador
-                        </label>
-
-                    </div> */}
                 </EntityFormLayout.Inputs>
                 <EntityFormLayout.Actions>
                     <Button

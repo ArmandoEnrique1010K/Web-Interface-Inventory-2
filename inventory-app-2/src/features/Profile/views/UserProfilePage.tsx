@@ -1,22 +1,27 @@
-import { useQuery } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query";
 import { getUserProfilePage } from "../api/ProfileAPI";
 import { EntityDetailsLayout } from "@/layout/entity/EntityDetailsLayout";
 import { PanelContainer } from "@/components/containers/PanelContainer";
-import type { UserDetailsItem } from "@/features/User/types";
 import { handleApplyRoleStyle } from "@/utils/handleApplyRoleStyle";
 import { ButtonLink } from "@/ui/ButtonLink";
 import { UserIcon } from "@heroicons/react/24/outline";
-
+import { LoadingView } from "@/views/LoadingView";
+import { Error } from "@/views/Error";
 
 export const UserProfilePage = () => {
-    const { data, isLoading } = useQuery<UserDetailsItem>({
-        queryKey: ['profile'],
-        queryFn: getUserProfilePage
-    })
-
+    const { data, isError, isLoading } = useQuery({
+        queryKey: ["profile"],
+        queryFn: getUserProfilePage,
+    });
 
     if (isLoading) {
-        return <h1>Cargando...</h1>
+        return <LoadingView />;
+    }
+    if (isError) {
+        return <Error type="500" />;
+    }
+    if (!data) {
+        return <Error type="404" />;
     }
 
     return (
@@ -24,19 +29,15 @@ export const UserProfilePage = () => {
             <EntityDetailsLayout.Header
                 title={"Perfil del usuario"}
                 actions={
-                    <>
-                        <ButtonLink
-                            icon={<UserIcon />}
-                            to={'/profile/update'}
-                            size={"large"}
-                            text={"Actualizar Perfil"}
-                            color={"blue"}
-                            showIconOnMobile={false}
-                            showTextOnMobile
-
-                        />
-
-                    </>
+                    <ButtonLink
+                        icon={<UserIcon />}
+                        to={"/profile/update"}
+                        size={"large"}
+                        text={"Actualizar Perfil"}
+                        color={"blue"}
+                        showIconOnMobile={false}
+                        showTextOnMobile
+                    />
                 }
             ></EntityDetailsLayout.Header>
 
@@ -44,42 +45,41 @@ export const UserProfilePage = () => {
                 <EntityDetailsLayout.Column>
                     <PanelContainer>
                         <PanelContainer.DetailsGrid>
-                            {
-                                data && (
-                                    <>
-                                        <PanelContainer.Detail label="Nombres">
-                                            {data.firstname}
-                                        </PanelContainer.Detail>
-                                        <PanelContainer.Detail label="Apellidos">
-                                            {data.lastname}
-                                        </PanelContainer.Detail>
-                                        <PanelContainer.Detail label="DNI">
-                                            {data.dni}
-                                        </PanelContainer.Detail>
-                                        <PanelContainer.Detail label="Correo">
-                                            {/** El correo del usuario puede ser muy largo, es por ello que se acorta */}
-                                            <span className="truncate block">{data.email}</span>
-                                        </PanelContainer.Detail>
-                                        <PanelContainer.Detail label="Roles">
-                                            <span className="flex flex-wrap gap-2 text-sm">
-                                                {
-                                                    data.roles.map(role => (
-                                                        <span key={role} className={`px-3 py-1 rounded-4xl ${handleApplyRoleStyle(role as 'Usuario' | 'Operador' | 'Secretario' | 'Administrador')}`}>{role}</span>
-                                                    ))
-                                                }
-                                            </span>
-                                        </PanelContainer.Detail>
-
-                                    </>
-                                )
-                            }
-
+                            {data && (
+                                <>
+                                    <PanelContainer.Detail label="Nombres">
+                                        {data.firstname}
+                                    </PanelContainer.Detail>
+                                    <PanelContainer.Detail label="Apellidos">
+                                        {data.lastname}
+                                    </PanelContainer.Detail>
+                                    <PanelContainer.Detail label="DNI">
+                                        {data.dni}
+                                    </PanelContainer.Detail>
+                                    <PanelContainer.Detail label="Correo">
+                                        {/** El correo del usuario puede ser muy largo, es por ello que se acorta */}
+                                        <span className="truncate block">
+                                            {data.email}
+                                        </span>
+                                    </PanelContainer.Detail>
+                                    <PanelContainer.Detail label="Roles">
+                                        <span className="flex flex-wrap gap-2 text-sm">
+                                            {data.roles.map((role) => (
+                                                <span
+                                                    key={role}
+                                                    className={`px-3 py-1 rounded-4xl ${handleApplyRoleStyle(role)}`}
+                                                >
+                                                    {role}
+                                                </span>
+                                            ))}
+                                        </span>
+                                    </PanelContainer.Detail>
+                                </>
+                            )}
                         </PanelContainer.DetailsGrid>
-
                     </PanelContainer>
                 </EntityDetailsLayout.Column>
             </EntityDetailsLayout.Content>
         </EntityDetailsLayout>
-
-    )
-}
+    );
+};

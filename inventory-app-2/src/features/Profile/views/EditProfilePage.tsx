@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import type { UserProfilePageForm } from "../types";
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { GeneralError } from "@/types/index";
@@ -10,9 +9,10 @@ import { ButtonLink } from "@/ui/ButtonLink";
 import { updateUserProfilePage } from "../api/ProfileAPI";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
+import type { ProfileForm } from "../schemas/request";
 
-export const EditProfilePage = ({ data }: { data: UserProfilePageForm }) => {
-    const initialValues: UserProfilePageForm = {
+export const EditProfilePage = ({ data }: { data: ProfileForm }) => {
+    const initialValues = {
         firstname: data.firstname,
         lastname: data.lastname,
         email: data.email,
@@ -24,7 +24,7 @@ export const EditProfilePage = ({ data }: { data: UserProfilePageForm }) => {
         handleSubmit,
         setError,
         formState: { errors },
-    } = useForm<UserProfilePageForm>({
+    } = useForm<ProfileForm>({
         defaultValues: initialValues,
     });
 
@@ -39,7 +39,7 @@ export const EditProfilePage = ({ data }: { data: UserProfilePageForm }) => {
             const e = error as GeneralError;
             if (e.type === "FIELD_ERROR" && e.fields) {
                 Object.entries(e.fields).forEach(([field, message]) => {
-                    setError(field as keyof UserProfilePageForm, {
+                    setError(field as keyof ProfileForm, {
                         type: "server",
                         message: message,
                     });

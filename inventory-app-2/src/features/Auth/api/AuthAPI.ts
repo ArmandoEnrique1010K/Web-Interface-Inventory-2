@@ -1,5 +1,5 @@
 import { api } from "@/lib/axiosConfig";
-import { handleApiError } from "@/utils/handleApiError";
+import { throwApiErrorMessage } from "@/utils/throwApiErrorMessage";
 import type {
     AuthForgotUserPasswordForm,
     AuthLoginForm,
@@ -15,7 +15,7 @@ export async function login(formData: AuthLoginForm) {
         const parsed = responseSchema.parse(data);
         return parsed.message;
     } catch (error: unknown) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -29,7 +29,7 @@ export async function forgotUserPassword(formData: AuthForgotUserPasswordForm) {
             requestId: parsed.secretField,
         };
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -46,7 +46,7 @@ export async function validateUserToken(payload: {
             resetToken: parsed.secretField,
         };
     } catch (error: unknown) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -61,7 +61,7 @@ export async function updateUserPassword(payload: {
         const parsed = responseSchema.parse(data);
         return parsed.message;
     } catch (error: unknown) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -72,7 +72,7 @@ export async function logout() {
         const parsed = responseSchema.parse(data);
         return parsed.message;
     } catch (error: unknown) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -86,6 +86,6 @@ export async function currentSession() {
             return data;
         }
     } catch (error: unknown) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }

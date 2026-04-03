@@ -1,5 +1,5 @@
 import { api } from "@/lib/axiosConfig";
-import { handleApiError } from "@/utils/handleApiError";
+import { throwApiErrorMessage } from "@/utils/throwApiErrorMessage";
 import type { ProductCreateForm, ProductUpdateForm } from "../schemas/requests";
 import { responseSchema } from "@/types";
 import {
@@ -42,7 +42,7 @@ export async function registerProduct({ data, file }: ProductCreatePayload) {
         const parsed = responseSchema.parse(data);
         return parsed.message;
     } catch (error: unknown) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -65,7 +65,7 @@ export async function listAllProducts(params: ProductQueryParams) {
         return parsed.data;
     } catch (error) {
         console.log(error);
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -78,7 +78,7 @@ export async function getProduct(id: number) {
         return parsed.data;
     } catch (error) {
         console.log(error);
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -97,7 +97,7 @@ export async function updateProduct({
         const parsed = responseSchema.parse(data);
         return parsed.message;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -108,6 +108,6 @@ export async function changeStatusProduct(productId: number) {
         const parsed = responseSchema.parse(data);
         return parsed.message;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }

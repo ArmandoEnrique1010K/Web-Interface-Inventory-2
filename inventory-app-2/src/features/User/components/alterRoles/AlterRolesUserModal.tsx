@@ -1,21 +1,22 @@
-import type { RolesForm, UserRolesDetails } from "../types";
 import { useForm, type UseFormRegisterReturn } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateUserRoles } from "../api/UserAPI";
+import { updateUserRoles } from "../../api/UserAPI";
 import type { GeneralError } from "@/types/index";
 import { toast } from "sonner";
 import { Button } from "@/ui/Button";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 import { SelectCheckboxGroup } from "@/ui/fields/SelectCheckboxGroup";
+import type { RolesForm } from "../../schemas/requests";
+import type { UserRolesDetails } from "../../schemas/items";
 
 type Props = {
     data: UserRolesDetails;
-    userId: string;
-    showModal: React.Dispatch<React.SetStateAction<boolean>>;
+    userId: number;
+    setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export const AlterRolesUserModal = ({ data, userId, showModal }: Props) => {
+export const AlterRolesUserModal = ({ data, userId, setShowModal }: Props) => {
     const { register, handleSubmit, setError } = useForm<RolesForm>({
         defaultValues: {
             operator: data.operator,
@@ -35,7 +36,7 @@ export const AlterRolesUserModal = ({ data, userId, showModal }: Props) => {
                 Object.entries(e.fields).forEach(([field, message]) => {
                     setError(field as keyof RolesForm, {
                         type: "server",
-                        message: message as string,
+                        message: message,
                     });
                 });
 
@@ -52,7 +53,7 @@ export const AlterRolesUserModal = ({ data, userId, showModal }: Props) => {
             queryClient.invalidateQueries({ queryKey: ["users"] });
             queryClient.invalidateQueries({ queryKey: ["roles", userId] });
             toast.success(data);
-            showModal(false);
+            setShowModal(false);
         },
     });
     const handleForm = (formData: RolesForm) => {
@@ -106,7 +107,7 @@ export const AlterRolesUserModal = ({ data, userId, showModal }: Props) => {
                         size="large"
                         text="Volver"
                         color="gray"
-                        onClick={() => showModal(false)}
+                        onClick={() => setShowModal(false)}
                         showIconOnMobile={false}
                         showTextOnMobile={true}
                         isLargeOnMobile={true}

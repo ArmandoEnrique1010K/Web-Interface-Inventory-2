@@ -1,14 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
+import { getUserRoles } from "../../api/UserAPI";
 import { TextMessage } from "@/components/TextMessage";
-import { EditProfilePage } from "../views/EditProfilePage";
-import { getUserProfilePage } from "../api/ProfileAPI";
+import { AlterRolesUserModal } from "./AlterRolesUserModal";
 import { BlueLoader } from "@/components/BlueLoader/BlueLoader";
 
-export const LoaderProfile = () => {
+type Props = {
+    userId: number;
+    setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export const LoaderUser = ({ userId, setShowModal }: Props) => {
     const { data, isLoading, isError } = useQuery({
-        queryKey: ["profile"],
-        queryFn: () => getUserProfilePage(),
-        retry: false,
+        queryKey: ["roles", userId],
+        queryFn: () => getUserRoles(userId),
+        retry: 1,
     });
 
     if (isLoading) {
@@ -35,5 +40,11 @@ export const LoaderProfile = () => {
         );
     }
 
-    return <EditProfilePage data={data} />;
+    return (
+        <AlterRolesUserModal
+            data={data}
+            userId={userId}
+            setShowModal={setShowModal}
+        />
+    );
 };

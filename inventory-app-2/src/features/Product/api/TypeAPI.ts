@@ -1,6 +1,6 @@
 import { api } from "@/lib/axiosConfig";
 import { responseSchema } from "@/types";
-import { handleApiError } from "@/utils/handleApiError";
+import { throwApiErrorMessage } from "@/utils/throwApiErrorMessage";
 import type { TypeForm } from "../schemas/requests";
 import {
     typeDetailResponseSchema,
@@ -14,7 +14,7 @@ export async function registerType(formData: TypeForm) {
         const parsed = responseSchema.parse(data);
         return parsed.message;
     } catch (error: unknown) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -25,7 +25,7 @@ export async function listAllTypes() {
         const parsed = typesListResponseSchema.parse(data);
         return parsed.data;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -36,7 +36,7 @@ export async function getType(id: number) {
         const parsed = typeDetailResponseSchema.parse(data);
         return parsed.data;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -47,7 +47,7 @@ export async function listAllActiveTypes() {
         const parsed = typesListResponseSchema.parse(data);
         return parsed.data;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -63,7 +63,7 @@ export async function updateType({ typeId, formData }: UpdateTypePayload) {
         const parsed = responseSchema.parse(data);
         return parsed.message;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -74,6 +74,6 @@ export async function changeStatusType(typeId: number) {
         const parsed = responseSchema.parse(data);
         return parsed.message;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }

@@ -1,95 +1,99 @@
-
 import { api } from "@/lib/axiosConfig";
-import type { DataResponse, GeneralResponse } from "types";
-import type { RolesForm, UserRegisterForm } from "../types";
-import { handleApiError } from "@/utils/handleApiError";
-
+import { responseSchema } from "@/types";
+import { throwApiErrorMessage } from "@/utils/throwApiErrorMessage";
+import {
+    userRolesDetailResponseSchema,
+    usersPageListResponseSchema,
+} from "../schemas/response";
+import type { RolesForm, UserRegisterForm } from "../schemas/requests";
 
 export const registerUser = async (formData: UserRegisterForm) => {
     try {
-        const url = `/users/register`
-        const { data } = await api.post<GeneralResponse>(url, formData)
-
-        if (data.type === 'success') {
-            return data.message
-        }
+        const url = `/users/register`;
+        const { data } = await api.post(url, formData);
+        const parsed = responseSchema.parse(data);
+        return parsed.message;
     } catch (error) {
-        handleApiError(error)
+        throwApiErrorMessage(error);
     }
-}
+};
 
 // LISTAR TODOS LOS USUARIOS
 // QueryParams: page, name, idRoles
 
 export type ListAllUsersQueryParams = {
-    page?: number
-    name?: string
-    idRoles?: number[]
-}
+    page?: number;
+    name?: string;
+    idRoles?: number[];
+};
 
 export const listAllUsers = async (params: ListAllUsersQueryParams) => {
     try {
-        const url = `/users`
-        const { data } = await api.get<DataResponse>(url, { params: params })
+        const url = `/users`;
+        const { data } = await api.get(url, { params: params });
 
-        return data.data
+        const parsed = usersPageListResponseSchema.parse(data);
+        return parsed.data;
     } catch (error) {
-        handleApiError(error)
+        throwApiErrorMessage(error);
     }
-}
+};
 
 export type ListFirstTenUsersByKeywordQueryParams = {
-    name: string
-}
+    name: string;
+};
 
-export const listFirstTenUsersByKeyword = async (params: ListFirstTenUsersByKeywordQueryParams) => {
+export const listFirstTenUsersByKeyword = async (
+    params: ListFirstTenUsersByKeywordQueryParams,
+) => {
     try {
-        const url = `/users/role/user`
-        const { data } = await api.get<DataResponse>(url, { params: params })
-        return data.data
+        const url = `/users/role/user`;
+        const { data } = await api.get(url, { params });
+        const parsed = usersPageListResponseSchema.parse(data);
+        return parsed.data;
     } catch (error) {
-        handleApiError(error)
+        throwApiErrorMessage(error);
     }
-}
+};
 
 type UpdateUserRolesPayload = {
-    userId: string;
-    formData: RolesForm
-}
+    userId: number;
+    formData: RolesForm;
+};
 
-
-export const getUserRoles = async (id: string) => {
+export const getUserRoles = async (id: number) => {
     try {
-        const url = `/users/${id}/roles`
-        const { data } = await api.get<DataResponse>(url)
-        return data.data
+        const url = `/users/${id}/roles`;
+        const { data } = await api.get(url);
+        const parsed = userRolesDetailResponseSchema.parse(data);
+        return parsed.data;
     } catch (error) {
-        handleApiError(error)
+        throwApiErrorMessage(error);
     }
+};
 
-}
-
-export const updateUserRoles = async ({ userId, formData }: UpdateUserRolesPayload) => {
+export const updateUserRoles = async ({
+    userId,
+    formData,
+}: UpdateUserRolesPayload) => {
     try {
-        const url = `/users/${userId}/roles`
-        const { data } = await api.put<GeneralResponse>(url, formData)
+        const url = `/users/${userId}/roles`;
+        const { data } = await api.put(url, formData);
 
-        if (data.type === 'success') {
-            return data.message
-        }
+        const parsed = responseSchema.parse(data);
+        return parsed.message;
     } catch (error) {
-        handleApiError(error)
+        throwApiErrorMessage(error);
     }
-}
+};
 
-export async function changeStatusUser(userId: string) {
+export async function changeStatusUser(userId: number) {
     try {
-        const url = `/users/${userId}/status`
-        const { data } = await api.patch<GeneralResponse>(url)
-        if (data.type === 'success') {
-            return data.message
-        }
+        const url = `/users/${userId}/status`;
+        const { data } = await api.patch(url);
+        const parsed = responseSchema.parse(data);
+        return parsed.message;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }

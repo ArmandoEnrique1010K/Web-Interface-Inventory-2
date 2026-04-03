@@ -3,17 +3,14 @@ import type { GeneralError } from "@/types/index";
 import { toast } from "sonner";
 import { Button } from "@/ui/Button";
 import { useForm } from "react-hook-form";
-import { XMarkIcon } from "@heroicons/react/24/outline";
 import { changeStatusUser } from "../api/UserAPI";
 
 export const StatusUserButton = ({
     userId,
-    value,
-    size,
+    userStatus,
 }: {
-    userId: string;
-    value: string;
-    size: "small" | "large";
+    userId: number;
+    userStatus: boolean;
 }) => {
     const { handleSubmit } = useForm();
     const queryClient = useQueryClient();
@@ -39,11 +36,10 @@ export const StatusUserButton = ({
     return (
         <form onSubmit={handleSubmit(() => mutate())} className="text-center ">
             <Button
-                icon={size === "large" && <XMarkIcon />}
-                text={value}
+                text={userStatus ? "Concedido" : "Bloqueado"}
                 type="submit"
-                size={size}
-                color={value === "Activo" ? "green-outline" : "red-outline"}
+                size={"small"}
+                color={userStatus ? "green-outline" : "red-outline"}
                 showTextOnMobile
             />
         </form>

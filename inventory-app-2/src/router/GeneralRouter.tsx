@@ -31,7 +31,7 @@ import {
 import { NewCategoryPage } from "@/features/Product/views/category/NewCategoryPage";
 import { ListCategoryPage } from "@/features/Product/views/category/ListCategoryPage";
 import { NavbarContainer } from "@/components/NavbarContainer";
-import { CreditsDetails } from "@/features/Credits/components/CreditsDetails";
+import { CreditsPage } from "@/features/Credits/views/CreditsPage";
 import { LoaderProfile } from "@/features/Profile/components/LoaderProfile";
 import { ListModelPage } from "@/features/Product/views/model/ListModelPage";
 import { ListCompanyPage } from "@/features/StockLot/views/company/ListCompanyPage";
@@ -368,7 +368,7 @@ export const GeneralRouter = () => {
 
                         {/* RELACIONADO A CREDITS */}
                         <Route path="credits" element={<Outlet />}>
-                            <Route index element={<CreditsDetails />} />
+                            <Route index element={<CreditsPage />} />
                         </Route>
 
                         {/* CUALQUIER OTRA RUTA REDIRIGIRA AL LOGIN O AL DASHBOARD (SI HA INICIADO SESION) */}

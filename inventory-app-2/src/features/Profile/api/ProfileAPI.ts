@@ -1,34 +1,27 @@
 // OBTENER PERFIL DEL USUARIO
 import { api } from "@/lib/axiosConfig";
-import type { DataResponse, GeneralResponse } from "@/types/index";
 import type { UserProfilePageForm } from "../types";
-import { handleApiError } from "@/utils/handleApiError";
+import { throwApiErrorMessage } from "@/utils/throwApiErrorMessage";
+import { userProfileResponseSchema } from "../schemas/response";
+import { responseSchema } from "@/types";
 
 export const getUserProfilePage = async () => {
     try {
-        const url = `/users/profile`
-        const { data } = await api.get<DataResponse>(url, {
-            withCredentials: true
-        })
-
-        return data.data
-
+        const url = `/profile`;
+        const { data } = await api.get(url);
+        const parsed = userProfileResponseSchema.parse(data);
+        return parsed.data;
     } catch (error) {
-        handleApiError(error)
+        throwApiErrorMessage(error);
     }
-}
+};
 export const updateUserProfilePage = async (formData: UserProfilePageForm) => {
     try {
-        const url = `/users/profile`
-        const { data } = await api.put<GeneralResponse>(url, formData, {
-            withCredentials: true
-        })
-
-        if (data.type === 'success') {
-            return data.message
-        }
-
+        const url = `/profile`;
+        const { data } = await api.put(url, formData);
+        const parsed = responseSchema.parse(data);
+        return parsed.message;
     } catch (error) {
-        handleApiError(error)
+        throwApiErrorMessage(error);
     }
-}
+};

@@ -1,5 +1,5 @@
 import { api } from "@/lib/axiosConfig";
-import { handleApiError } from "@/utils/handleApiError";
+import { throwApiErrorMessage } from "@/utils/throwApiErrorMessage";
 import type {
     StockLotAdjustmentForm,
     StockLotReceiveForm,
@@ -19,7 +19,7 @@ export async function registerStockLot(formData: StockLotReceiveForm) {
         const parsed = responseSchema.parse(data);
         return parsed.message;
     } catch (error: unknown) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -47,7 +47,7 @@ export async function listAllStockLots(params: StockLotQueryParams) {
         const parsed = stockLotPageListResponseSchema.parse(data);
         return parsed.data;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -62,7 +62,7 @@ export async function listAllStockLotsByModelAndExcludeOne(
         const parsed = stockLotListResponseSchema.parse(data);
         return parsed.data;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -73,7 +73,7 @@ export async function listAllStockLotsActiveByModel(idModel: number) {
         const parsed = stockLotListResponseSchema.parse(data);
         return parsed.data;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -84,7 +84,7 @@ export async function getStockLot(id: number) {
         const parsed = stockLotDetailResponseSchema.parse(data);
         return parsed.data;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -103,7 +103,7 @@ export async function increaseStockLot({
         const parsed = responseSchema.parse(data);
         return parsed.message;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -117,7 +117,7 @@ export async function decreaseStockLot({
         const parsed = responseSchema.parse(data);
         return parsed.message;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -131,7 +131,7 @@ export async function recoveryStockLot({
         const parsed = responseSchema.parse(data);
         return parsed.message;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
 
@@ -150,6 +150,6 @@ export async function transferStockLot({
         const parsed = responseSchema.parse(data);
         return parsed.message;
     } catch (error) {
-        handleApiError(error);
+        throwApiErrorMessage(error);
     }
 }
