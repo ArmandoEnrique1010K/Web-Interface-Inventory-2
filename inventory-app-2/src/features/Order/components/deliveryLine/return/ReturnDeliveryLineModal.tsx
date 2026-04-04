@@ -1,28 +1,28 @@
 import React from "react";
-import type { DeliveryLineAlterForm } from "../../types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { returnDeliveryLine } from "../../api/DeliveryLineAPI";
+import { returnDeliveryLine } from "../../../api/DeliveryLineAPI";
 import type { GeneralError } from "@/types/index";
 import { toast } from "sonner";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 import { InputText } from "@/ui/fields/InputText";
-import { Button } from "../../../../ui/Button";
+import { Button } from "../../../../../ui/Button";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
+import type { DeliveryLineAlterForm } from "../../../schemas/requests";
 
 type Props = {
-    setReturnModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    deliveryLineId: string;
-    deliveryOrderId: string;
+    setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+    deliveryLineId: number;
+    deliveryOrderId: number;
 };
 
 export const ReturnDeliveryLineModal = ({
-    setReturnModalOpen,
+    setShowModal,
     deliveryLineId,
     deliveryOrderId,
 }: Props) => {
-    const initialValues: DeliveryLineAlterForm = {
-        quantity: "",
+    const initialValues = {
+        quantity: undefined,
         movementComment: "",
     };
 
@@ -72,7 +72,7 @@ export const ReturnDeliveryLineModal = ({
             });
 
             toast.success(data);
-            setReturnModalOpen(false);
+            setShowModal(false);
         },
     });
     const handleForm = (formData: DeliveryLineAlterForm) => {
@@ -122,7 +122,7 @@ export const ReturnDeliveryLineModal = ({
                         size="large"
                         text="Cancelar"
                         color="gray"
-                        onClick={() => setReturnModalOpen(false)}
+                        onClick={() => setShowModal(false)}
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile

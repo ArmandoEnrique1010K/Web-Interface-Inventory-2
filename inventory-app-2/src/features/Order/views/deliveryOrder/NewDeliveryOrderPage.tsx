@@ -70,11 +70,8 @@ export const NewDeliveryOrderPage = () => {
                     // mutate(data)
 
                     mutate({
-                        formData: {
-                            ...data,
-                            userIdClient:
-                                data.userIdClient?.value.toString() || "",
-                        },
+                        ...data,
+                        userIdClient: +data.userIdClient!.value,
                     });
                 })}
             >
@@ -124,12 +121,10 @@ export const NewDeliveryOrderPage = () => {
                             const data = await listFirstTenUsersByKeyword({
                                 name: inputValue,
                             });
-                            return data.map(
-                                (user: { id: number; fullName: string }) => ({
-                                    value: user.id,
-                                    label: user.fullName,
-                                }),
-                            );
+                            return data.map((user) => ({
+                                value: user.id,
+                                label: user.fullName,
+                            }));
                         }}
                     />
                 </EntityFormLayout.Inputs>

@@ -4,6 +4,7 @@ import { throwApiErrorMessage } from "@/utils/throwApiErrorMessage";
 import {
     userRolesDetailResponseSchema,
     usersPageListResponseSchema,
+    usersTopTenResponseSchema,
 } from "../schemas/response";
 import type { RolesForm, UserRegisterForm } from "../schemas/requests";
 
@@ -49,7 +50,7 @@ export const listFirstTenUsersByKeyword = async (
     try {
         const url = `/users/role/user`;
         const { data } = await api.get(url, { params });
-        const parsed = usersPageListResponseSchema.parse(data);
+        const parsed = usersTopTenResponseSchema.parse(data);
         return parsed.data;
     } catch (error) {
         throwApiErrorMessage(error);

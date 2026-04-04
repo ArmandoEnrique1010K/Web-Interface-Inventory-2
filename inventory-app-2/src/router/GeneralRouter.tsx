@@ -326,15 +326,11 @@ export const GeneralRouter = () => {
                             />
                             <Route
                                 path="pending/:id"
-                                element={
-                                    <DetailsDeliveryOrderPage from="pending" />
-                                }
+                                element={<DetailsDeliveryOrderPage />}
                             />
                             <Route
                                 path="pending/:deliveryOrderId/line/:deliveryLineId"
-                                element={
-                                    <DetailsDeliveryLinePage from="pending" />
-                                }
+                                element={<DetailsDeliveryLinePage />}
                             />
 
                             {/* TODO: AQUI DEBE TOMAR EL ENDPOINT QUE SE ENCARGA DE MOSTRAR UNA ORDEN POR CLIENTE */}
@@ -344,15 +340,11 @@ export const GeneralRouter = () => {
                             />
                             <Route
                                 path="my-orders/:id"
-                                element={
-                                    <DetailsDeliveryOrderPage from="my-orders" />
-                                }
+                                element={<DetailsDeliveryOrderPage />}
                             />
                             <Route
                                 path="my-orders/:deliveryOrderId/line/:deliveryLineId"
-                                element={
-                                    <DetailsDeliveryLinePage from="my-orders" />
-                                }
+                                element={<DetailsDeliveryLinePage />}
                             />
 
                             <Route

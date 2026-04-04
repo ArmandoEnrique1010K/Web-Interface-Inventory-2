@@ -1,20 +1,20 @@
 import { api } from "@/lib/axiosConfig";
+import { throwApiErrorMessage } from "@/utils/throwApiErrorMessage";
 import type {
     DeliveryLineAllocateForm,
     DeliveryLineAlterForm,
     DeliveryLineForm,
     DeliveryLineUpdateForm,
-    LineStatusEnum,
-} from "../types";
-import type {
-    DataPageResponse,
-    DataResponse,
-    GeneralResponse,
-} from "@/types/index";
-import { throwApiErrorMessage } from "@/utils/throwApiErrorMessage";
+} from "../schemas/requests";
+import { responseSchema } from "@/types";
+import type { DeliveryLineItem } from "../schemas/items";
+import {
+    deliveryLineDetailResponseSchema,
+    deliveryLinesPageListResponseSchema,
+} from "../schemas/responses";
 
 export type RegisterDeliveryLinePayload = {
-    deliveryOrderId: string;
+    deliveryOrderId: number;
     formData: DeliveryLineForm;
 };
 
@@ -24,10 +24,9 @@ export async function registerDeliveryLine({
 }: RegisterDeliveryLinePayload) {
     try {
         const url = `/delivery-lines/delivery-order/${deliveryOrderId}`;
-        const { data } = await api.post<GeneralResponse>(url, formData);
-        if (data.type === "success") {
-            return data.message;
-        }
+        const { data } = await api.post(url, formData);
+        const parsed = responseSchema.parse(data);
+        return parsed.message;
     } catch (error: unknown) {
         throwApiErrorMessage(error);
     }
@@ -39,7 +38,7 @@ export type DeliveryLinesByDeliveryOrderParams = {
     maxRequiredQuantity?: string;
     minLimitDate?: string;
     maxLimitDate?: string;
-    lineStatus?: LineStatusEnum;
+    lineStatus?: DeliveryLineItem["lineStatus"];
     location?: string;
     subregionId?: string;
     regionId?: string;
@@ -47,32 +46,34 @@ export type DeliveryLinesByDeliveryOrderParams = {
 };
 
 export async function listAllDeliveryLinesByDeliveryOrder(
-    deliveryOrderId: string,
+    deliveryOrderId: number,
     params: DeliveryLinesByDeliveryOrderParams,
 ) {
     try {
         const url = `/delivery-lines/delivery-order/${deliveryOrderId}`;
-        const { data } = await api.get<DataPageResponse>(url, {
-            params: params,
+        const { data } = await api.get(url, {
+            params,
         });
-        return data.data;
+        const parsed = deliveryLinesPageListResponseSchema.parse(data);
+        return parsed.data;
     } catch (error) {
         throwApiErrorMessage(error);
     }
 }
 
-export async function getDeliveryLine(id: string) {
+export async function getDeliveryLine(id: number) {
     try {
         const url = `/delivery-lines/${id}`;
-        const { data } = await api.get<DataResponse>(url);
-        return data.data;
+        const { data } = await api.get(url);
+        const parsed = deliveryLineDetailResponseSchema.parse(data);
+        return parsed.data;
     } catch (error) {
         throwApiErrorMessage(error);
     }
 }
 
 export type UpdateDeliveryLinePayload = {
-    deliveryLineId: string;
+    deliveryLineId: number;
     formData: DeliveryLineUpdateForm;
 };
 
@@ -82,53 +83,49 @@ export async function updateDeliveryLine({
 }: UpdateDeliveryLinePayload) {
     try {
         const url = `/delivery-lines/${deliveryLineId}`;
-        const { data } = await api.put<GeneralResponse>(url, formData);
-        if (data.type === "success") {
-            return data.message;
-        }
+        const { data } = await api.put(url, formData);
+        const parsed = responseSchema.parse(data);
+        return parsed.message;
     } catch (error) {
         throwApiErrorMessage(error);
     }
 }
 
-export async function cancelDeliveryLine(id: string) {
+export async function cancelDeliveryLine(id: number) {
     try {
         const url = `/delivery-lines/${id}/cancel`;
-        const { data } = await api.patch<GeneralResponse>(url);
-        if (data.type === "success") {
-            return data.message;
-        }
+        const { data } = await api.patch(url);
+        const parsed = responseSchema.parse(data);
+        return parsed.message;
     } catch (error) {
         throwApiErrorMessage(error);
     }
 }
 
-export async function sendDeliveryLine(id: string) {
+export async function sendDeliveryLine(id: number) {
     try {
         const url = `/delivery-lines/${id}/deliver`;
-        const { data } = await api.patch<GeneralResponse>(url);
-        if (data.type === "success") {
-            return data.message;
-        }
+        const { data } = await api.patch(url);
+        const parsed = responseSchema.parse(data);
+        return parsed.message;
     } catch (error) {
         throwApiErrorMessage(error);
     }
 }
 
-export async function missingDeliveryLine(id: string) {
+export async function missingDeliveryLine(id: number) {
     try {
         const url = `/delivery-lines/${id}/missing`;
-        const { data } = await api.patch<GeneralResponse>(url);
-        if (data.type === "success") {
-            return data.message;
-        }
+        const { data } = await api.patch(url);
+        const parsed = responseSchema.parse(data);
+        return parsed.message;
     } catch (error) {
         throwApiErrorMessage(error);
     }
 }
 
 export type LostDeliveryLinePayload = {
-    deliveryLineId: string;
+    deliveryLineId: number;
     formData: DeliveryLineAlterForm;
 };
 
@@ -138,17 +135,16 @@ export async function lostDeliveryLine({
 }: LostDeliveryLinePayload) {
     try {
         const url = `/delivery-lines/${deliveryLineId}/lost`;
-        const { data } = await api.put<GeneralResponse>(url, formData);
-        if (data.type === "success") {
-            return data.message;
-        }
+        const { data } = await api.put(url, formData);
+        const parsed = responseSchema.parse(data);
+        return parsed.message;
     } catch (error) {
         throwApiErrorMessage(error);
     }
 }
 
 export type ReturnDeliveryLinePayload = {
-    deliveryLineId: string;
+    deliveryLineId: number;
     formData: DeliveryLineAlterForm;
 };
 
@@ -158,17 +154,16 @@ export async function returnDeliveryLine({
 }: ReturnDeliveryLinePayload) {
     try {
         const url = `/delivery-lines/${deliveryLineId}/return`;
-        const { data } = await api.put<GeneralResponse>(url, formData);
-        if (data.type === "success") {
-            return data.message;
-        }
+        const { data } = await api.put(url, formData);
+        const parsed = responseSchema.parse(data);
+        return parsed.message;
     } catch (error) {
         throwApiErrorMessage(error);
     }
 }
 
 export type AllocateStockInDeliveryLinePayload = {
-    deliveryLineId: string;
+    deliveryLineId: number;
     formData: DeliveryLineAllocateForm;
 };
 
@@ -178,10 +173,9 @@ export async function allocateStockInDeliveryLine({
 }: AllocateStockInDeliveryLinePayload) {
     try {
         const url = `/delivery-lines/${deliveryLineId}/allocate-stock`;
-        const { data } = await api.put<GeneralResponse>(url, formData);
-        if (data.type === "success") {
-            return data.message;
-        }
+        const { data } = await api.put(url, formData);
+        const parsed = responseSchema.parse(data);
+        return parsed.message;
     } catch (error) {
         throwApiErrorMessage(error);
     }

@@ -36,7 +36,7 @@ export const modelsPageResponseSchema =
     createPageDataListSchema(modelListItemSchema);
 
 // SEARCH (aunque sea paginado en backend, aquí es otra forma de dato)
-export const modelsSearchPageListResponseSchema = createDataListSchema(
+export const modelsSearchPageListResponseSchema = createPageDataListSchema(
     modelListSearchItemSchema,
 );
 

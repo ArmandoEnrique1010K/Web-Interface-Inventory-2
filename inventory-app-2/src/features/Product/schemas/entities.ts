@@ -65,3 +65,4 @@ export const productSchema = z.object({
     typeId: z.number(),
     typeName: z.string(),
 });
+

@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { Button } from "@/ui/Button";
 
 type Props = {
-    deliveryOrderId: string;
+    deliveryOrderId: number;
 };
 
 export const SendDeliveryOrderButton = ({ deliveryOrderId }: Props) => {

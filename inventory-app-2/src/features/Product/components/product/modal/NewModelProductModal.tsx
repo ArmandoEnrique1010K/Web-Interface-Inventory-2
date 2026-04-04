@@ -18,7 +18,6 @@ type Props = {
 };
 
 export const NewModelProductModal = ({ setShowModal, productId }: Props) => {
-    // const { id } = useParams();
     const [file, setFile] = useState<File | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
     const initialValues: ModelForm = {

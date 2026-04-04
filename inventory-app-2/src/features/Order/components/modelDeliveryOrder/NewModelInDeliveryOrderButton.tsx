@@ -7,16 +7,16 @@ import {
 import type { GeneralError } from "@/types/index";
 import { toast } from "sonner";
 import { Button } from "@/ui/Button";
-import type { ModelDeliveryOrderItem } from "../../types";
+import type { ModelDeliveryOrderItem } from "../../schemas/items";
 
 type Props = {
-    modelId: string;
-    deliveryOrderId: string;
+    modelId: number;
+    deliveryOrderId: number;
     existingModels: ModelDeliveryOrderItem[]; // Nuevo prop
     modelDeliveryOrderId?: number;
 };
 
-export const AddModelDeliveryOrderButton = ({
+export const NewModelInDeliveryOrderButton = ({
     modelId,
     deliveryOrderId,
     existingModels,
@@ -50,9 +50,7 @@ export const AddModelDeliveryOrderButton = ({
 
     const { mutate: mutateInactive } = useMutation({
         mutationFn: () =>
-            inactiveRelationModelToDeliveryOrder(
-                modelDeliveryOrderId!.toString(),
-            ),
+            inactiveRelationModelToDeliveryOrder(modelDeliveryOrderId!),
         retry: false,
         onError: (error: unknown) => {
             const e = error as GeneralError;

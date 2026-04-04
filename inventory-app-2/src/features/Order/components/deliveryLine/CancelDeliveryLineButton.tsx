@@ -7,15 +7,13 @@ import { Button } from "@/ui/Button";
 import { useNavigate } from "react-router-dom";
 
 type Props = {
-    deliveryLineId: string;
-    deliveryOrderId: string;
-    deliveryLineStatus: string;
+    deliveryLineId: number;
+    deliveryOrderId: number;
 };
 
 export const CancelDeliveryLineButton = ({
     deliveryLineId,
     deliveryOrderId,
-    deliveryLineStatus,
 }: Props) => {
     const { handleSubmit } = useForm();
     const queryClient = useQueryClient();

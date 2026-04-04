@@ -1,7 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { DeliveryLineAllocateForm } from "../../types";
-import { useForm, useWatch, type FieldError } from "react-hook-form";
-import { allocateStockInDeliveryLine } from "../../api/DeliveryLineAPI";
+import { allocateStockInDeliveryLine } from "../../../api/DeliveryLineAPI";
 import type { GeneralError } from "@/types/index";
 import { toast } from "sonner";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
@@ -9,22 +7,24 @@ import { InputText } from "@/ui/fields/InputText";
 import { Button } from "@/ui/Button";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { listAllStockLotsActiveByModel } from "@/features/StockLot/api/StockLotAPI";
-import type { StockLotSameProductItem } from "@/features/StockLot/types";
 import { CheckboxGroup } from "@/ui/fields/CheckboxGroup";
 import { useEffect } from "react";
+import type { DeliveryLineAllocateForm } from "../../../schemas/requests";
+import type { StockLotSameProductItem } from "@/features/StockLot/schemas/items";
+import { useForm, useWatch, type FieldError } from "react-hook-form";
 
 type Props = {
-    setAllocateStockModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    deliveryLineId: string;
-    deliveryOrderId: string;
-    modelId: string;
+    setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+    deliveryLineId: number;
+    deliveryOrderId: number;
+    modelId: number;
 };
 
-export const AllocateStockDeliveryLineModal = ({
+export const AllocateDeliveryLineModal = ({
     deliveryLineId,
     deliveryOrderId,
     modelId,
-    setAllocateStockModalOpen,
+    setShowModal,
 }: Props) => {
     // LIMPIEZA + CONTROL
     const storedModelId = sessionStorage.getItem("currentModelId");
@@ -35,13 +35,13 @@ export const AllocateStockDeliveryLineModal = ({
         sessionStorage.removeItem("stockLotsSelected");
     }
 
-    sessionStorage.setItem("currentModelId", modelId);
+    sessionStorage.setItem("currentModelId", modelId.toString());
 
     // HIDRATACIÓN
     const storedStockLots = sessionStorage.getItem("stockLotsSelected");
 
-    const initialValues: DeliveryLineAllocateForm = {
-        quantity: "",
+    const initialValues = {
+        quantity: undefined,
         stockLotsIds: storedStockLots ? JSON.parse(storedStockLots) : [], // Numero de IDs de los lotes de stock
     };
 
@@ -114,7 +114,7 @@ export const AllocateStockDeliveryLineModal = ({
             });
 
             toast.success(data);
-            setAllocateStockModalOpen(false);
+            setShowModal(false);
         },
     });
     const handleForm = (formData: DeliveryLineAllocateForm) => {
@@ -194,7 +194,7 @@ export const AllocateStockDeliveryLineModal = ({
                         size="large"
                         text="Cancelar"
                         color="gray"
-                        onClick={() => setAllocateStockModalOpen(false)}
+                        onClick={() => setShowModal(false)}
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile

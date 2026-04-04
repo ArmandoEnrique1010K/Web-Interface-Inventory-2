@@ -18,11 +18,9 @@ export const userItemSchema = userSchema.pick({
 
 export const userByKeywordItemSchema = userSchema.pick({
     id: true,
-    firstname: true,
-    lastname: true,
+    fullName: true,
+    email: true,
     dni: true,
-    roles: true,
-    status: true,
 });
 
 export const userRolesDetailsSchema = roleSchema.pick({

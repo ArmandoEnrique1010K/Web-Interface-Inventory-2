@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from "react";
-import type { ModelDeliveryOrderItem } from "../../types";
 import { useForm, useWatch } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { registerDeliveryLine } from "../../api/DeliveryLineAPI";
+import { registerDeliveryLine } from "../../../api/DeliveryLineAPI";
 import { toast } from "sonner";
 import type { GeneralError } from "@/types/index";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 import { InputText } from "@/ui/fields/InputText";
 import { InputDateTime } from "@/ui/fields/InputDateTime";
-import { listAllModelsByDeliveryOrder } from "../../api/ModelDeliveryOrderAPI";
+import { listAllModelsByDeliveryOrder } from "../../../api/ModelDeliveryOrderAPI";
 import { SelectOption } from "@/ui/fields/SelectOption";
 import { listAllRegions } from "@/features/Location/api/RegionAPI";
 import { listAllSubregionsByRegionId } from "@/features/Location/api/SubregionAPI";
-import type { RegionItem, SubregionItem } from "@/features/Location/types";
 import { SelectOptionFilter } from "@/ui/filters/SelectOptionFilter";
 import { AsyncSelectField, type Option } from "@/ui/fields/AsyncSelectOption";
 import { listFirstTenLocationsByKeyword } from "@/features/Location/api/LocationAPI";
@@ -20,30 +18,30 @@ import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { Button } from "@/ui/Button";
 
 type Props = {
-    setAddDeliveryLineModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    deliveryOrderId: string;
+    setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+    deliveryOrderId: number;
 };
 
 type DeliveryLineFormFields = {
-    requiredQuantity: string;
+    requiredQuantity: number;
     limitDate: string;
-    modelId: string;
+    modelId: number;
     locationId: Option | null;
 };
 // NOTA: LOS CAMPOS LIMITDATE, MODELID, REGIONID Y SUBREGIONID MANTIENEN EL VALOR SELECCIONADO EN EL SESSIONSTORAGE PARA SEGUIR GUARDANDO LINEAS DE ENTREGA
 // CADA CAMBIO HECHO EN ESOS CAMPOS, SE VA A GUARDAR EN EL SESSIONSTORAGE
 export const AddDeliveryLineModal = ({
-    setAddDeliveryLineModalOpen,
+    setShowModal,
     deliveryOrderId,
 }: Props) => {
     // KEY para almacenar los valores rellenados por el usuario del formulario
     const STORAGE_KEY = "deliveryLineDraft";
 
-    const initialValues: DeliveryLineFormFields = {
+    const initialValues = {
         locationId: null,
-        requiredQuantity: "",
+        requiredQuantity: undefined,
         limitDate: "",
-        modelId: "",
+        modelId: undefined,
     };
 
     const saved = sessionStorage.getItem(STORAGE_KEY);
@@ -86,7 +84,7 @@ export const AddDeliveryLineModal = ({
         },
         onSuccess: (data) => {
             toast.success(data);
-            setAddDeliveryLineModalOpen(false);
+            setShowModal(false);
             queryClient.invalidateQueries({
                 queryKey: ["deliveryOrder", deliveryOrderId],
             });
@@ -104,12 +102,11 @@ export const AddDeliveryLineModal = ({
         enabled: !!deliveryOrderId,
     });
 
-    const modelsByDeliveryOrder = modelsDeliveryOrderData?.map(
-        (model: ModelDeliveryOrderItem) => ({
-            value: model.modelId, // OJO, debe ser modelId, porque si fuera id, toma el id de la relación modelo-orden de entrega
+    const modelsByDeliveryOrder =
+        modelsDeliveryOrderData?.map((model) => ({
+            value: model.modelId.toString(), // OJO, debe ser modelId, porque si fuera id, toma el id de la relación modelo-orden de entrega
             label: model.productName + " " + model.modelName,
-        }),
-    );
+        })) || [];
 
     // Initialize state with saved values or defaults
     const getInitialRegionId = () => {
@@ -148,23 +145,23 @@ export const AddDeliveryLineModal = ({
 
     const regions =
         regionsData
-            ?.map((region: RegionItem) => ({
-                value: region.id,
+            ?.map((region) => ({
+                value: region.id.toString(),
                 label: region.name,
             }))
             .concat({
-                value: 0,
+                value: "",
                 label: "Seleccione una región",
             }) || [];
 
     const subregions =
         subregionsData
-            ?.map((type: SubregionItem) => ({
-                value: type.id,
+            ?.map((type) => ({
+                value: type.id.toString(),
                 label: type.name,
             }))
             .concat({
-                value: 0,
+                value: "",
                 label: "Seleccione una subregión",
             }) || [];
 
@@ -210,7 +207,7 @@ export const AddDeliveryLineModal = ({
                         formData: {
                             ...data,
                             // IMPORTANTE, SE HA ESTABLECIDO EL TIPADO DE LOS CAMPOS POR SEPARADO Y EL TIPADO DE LOS DATOS QUE ESPERA LA API POR SEPARADO
-                            locationId: data.locationId?.value.toString() || "",
+                            locationId: +data.locationId!.value, //TODO: SOLUCION TEMPORAL
                         },
                     });
                 })}
@@ -327,7 +324,7 @@ export const AddDeliveryLineModal = ({
                         size="large"
                         text="Cancelar"
                         color="gray"
-                        onClick={() => setAddDeliveryLineModalOpen(false)}
+                        onClick={() => setShowModal(false)}
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile

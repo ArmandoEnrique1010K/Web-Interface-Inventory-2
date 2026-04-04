@@ -87,3 +87,4 @@ export const productItemSchema = productSchema.pick({
 
 export type ProductItem = z.infer<typeof productItemSchema>;
 export type ModelItem = z.infer<typeof modelDetailsItemSchema>;
+export type ModelSearchItem = z.infer<typeof modelListSearchItemSchema>;

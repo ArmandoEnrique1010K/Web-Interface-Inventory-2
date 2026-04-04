@@ -1,55 +1,49 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { DeliveryOrderChangeLimitDateForm } from "../../types";
 import { useForm } from "react-hook-form";
-import { changeLimitDateDeliveryOrder } from "../../api/DeliveryOrderAPI";
 import type { GeneralError } from "@/types/index";
 import { toast } from "sonner";
+import { cancelDeliveryOrder } from "../../../api/DeliveryOrderAPI";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
-import { InputDateTime } from "@/ui/fields/InputDateTime";
-import { Button } from "@/ui/Button";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
-import { handleFormatDateTime } from "@/utils/handleFormatDateTime";
+import { Button } from "@/ui/Button";
+import { InputText } from "@/ui/fields/InputText";
+import { useNavigate } from "react-router-dom";
+import type { DeliveryOrderCommentForm } from "../../../schemas/requests";
 
 type Props = {
-    setChangeLimitDateModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    deliveryOrderId: string;
+    setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+    deliveryOrderId: number;
 };
 
-export const ChangeLimitDateModal = ({
-    setChangeLimitDateModalOpen,
+export const CancelDeliveryOrderModal = ({
     deliveryOrderId,
+    setShowModal,
 }: Props) => {
-    const initialValues: DeliveryOrderChangeLimitDateForm = {
-        limitDate: "",
+    const initialValues = {
+        movementComment: "",
     };
 
     const {
+        register,
         handleSubmit,
         setError,
-        control,
         formState: { errors },
-    } = useForm<DeliveryOrderChangeLimitDateForm>({
+    } = useForm<DeliveryOrderCommentForm>({
         defaultValues: initialValues,
     });
-    const queryClient = useQueryClient();
-    const { mutate } = useMutation({
-        mutationFn: (data: DeliveryOrderChangeLimitDateForm) => {
-            if (!data.limitDate) {
-                return changeLimitDateDeliveryOrder(deliveryOrderId, {
-                    limitDate: "",
-                });
-            }
 
-            return changeLimitDateDeliveryOrder(deliveryOrderId, {
-                limitDate: handleFormatDateTime(new Date(data.limitDate)),
-            });
-        },
+    const queryClient = useQueryClient();
+    const navigate = useNavigate();
+
+    // Mutacion para guardar los cambios
+    const { mutate } = useMutation({
+        mutationFn: cancelDeliveryOrder,
         retry: false,
         onError: (error: unknown) => {
             const e = error as GeneralError;
             if (e.type === "FIELD_ERROR" && e.fields) {
                 Object.entries(e.fields).forEach(([field, message]) => {
-                    setError(field as keyof DeliveryOrderChangeLimitDateForm, {
+                    setError(field as keyof DeliveryOrderCommentForm, {
                         type: "server",
                         message: message,
                     });
@@ -65,36 +59,43 @@ export const ChangeLimitDateModal = ({
             }
         },
         onSuccess: (data) => {
-            toast.success(data);
-            setChangeLimitDateModalOpen(false);
-            queryClient.invalidateQueries({
+            queryClient.removeQueries({
                 queryKey: ["deliveryOrder", deliveryOrderId],
             });
+            toast.success(data);
+            setShowModal(false);
+            navigate(`/orders`);
         },
     });
+    const handleForm = (formData: DeliveryOrderCommentForm) => {
+        const data = {
+            formData,
+            deliveryOrderId,
+        };
+        mutate(data);
+    };
 
     return (
         <EntityFormLayout isCompact>
             <EntityFormLayout.Form
                 styled={false}
-                onSubmit={handleSubmit((data) => {
-                    mutate(data);
-                })}
+                onSubmit={handleSubmit(handleForm)}
             >
                 <EntityFormLayout.Inputs isCompact>
-                    <InputDateTime<DeliveryOrderChangeLimitDateForm>
-                        id="limitDate"
-                        label="Nueva fecha limite de entrega"
-                        name={"limitDate"}
-                        control={control}
-                        errorMessage={errors.limitDate?.message}
+                    <InputText
+                        id="movementComment"
+                        label="Comentario"
+                        type="text"
+                        placeholder="Escriba un comentario"
+                        errorMessage={errors.movementComment}
+                        functionEnabled={register("movementComment")}
                     />
                 </EntityFormLayout.Inputs>
                 <EntityFormLayout.Actions>
                     <Button
                         icon={<ArrowUpCircleIcon />}
                         size="large"
-                        text="Cambiar"
+                        text="Cancelar orden"
                         type="submit"
                         color="green"
                         showIconOnMobile={false}
@@ -106,9 +107,9 @@ export const ChangeLimitDateModal = ({
                         type="button"
                         icon={<XCircleIcon />}
                         size="large"
-                        text="Cancelar"
+                        text="No cancelar"
                         color="gray"
-                        onClick={() => setChangeLimitDateModalOpen(false)}
+                        onClick={() => setShowModal(false)}
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile

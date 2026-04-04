@@ -5,30 +5,30 @@ import { SearchCounter } from "@/components/SearchCounter";
 import { TableContainer } from "@/components/TableContainer";
 import { TableRowContainer } from "@/components/TableRowContainer";
 import { listActiveModelsByName } from "@/features/Product/api/ModelAPI";
-import type { ModelSearchItem } from "@/features/Product/types";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 import { EntityListLayout } from "@/layout/entity/EntityListLayout";
 import { InputTextFilter } from "@/ui/filters/InputTextFilter";
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import type { SetURLSearchParams } from "react-router-dom";
-import { AddModelDeliveryOrderButton } from "./AddModelDeliveryOrderButton";
+import { NewModelInDeliveryOrderButton } from "../NewModelInDeliveryOrderButton";
 import { Button } from "@/ui/Button";
 import { XCircleIcon } from "@heroicons/react/24/outline";
-import type { ModelDeliveryOrderItem } from "../../types";
+import type { ModelDeliveryOrderItem } from "../../../schemas/items";
+import type { ModelSearchItem } from "@/features/Product/schemas/items";
 
 type Props = {
     setAddModelDeliveryOrderModalOpen: React.Dispatch<
         React.SetStateAction<boolean>
     >;
-    deliveryOrderId: string;
+    deliveryOrderId: number;
     searchParams: URLSearchParams;
     setSearchParams: SetURLSearchParams;
     existingModels: ModelDeliveryOrderItem[]; // Nuevo prop
-    currentModelId: string;
+    currentModelId: number;
 };
 
-export const NewModelDeliveryOrderModal = ({
+export const NewModelInDeliveryOrderModal = ({
     deliveryOrderId,
     setAddModelDeliveryOrderModalOpen,
     searchParams,
@@ -78,7 +78,10 @@ export const NewModelDeliveryOrderModal = ({
                             e.preventDefault();
                             const params = new URLSearchParams();
                             if (currentModelId)
-                                params.set("modelId", currentModelId);
+                                params.set(
+                                    "modelId",
+                                    currentModelId.toString(),
+                                );
                             if (form.keyword)
                                 params.set("keyword", form.keyword);
                             setSearchParams(params);
@@ -135,7 +138,7 @@ export const NewModelDeliveryOrderModal = ({
                                             if (currentModelId)
                                                 params.set(
                                                     "modelId",
-                                                    currentModelId,
+                                                    currentModelId.toString(),
                                                 );
                                             if (form.keyword)
                                                 params.set(
@@ -150,7 +153,7 @@ export const NewModelDeliveryOrderModal = ({
                                 ) : null
                             }
                         >
-                            {content?.map((model: ModelSearchItem) => {
+                            {content?.map((model) => {
                                 // Buscar la relación existente para este modelo
                                 const existingRelation = existingModels.find(
                                     (existingModel) =>
@@ -174,8 +177,8 @@ export const NewModelDeliveryOrderModal = ({
                                         <BaseTableCell
                                             isCenter
                                             data={
-                                                <AddModelDeliveryOrderButton
-                                                    modelId={model.id.toString()}
+                                                <NewModelInDeliveryOrderButton
+                                                    modelId={model.id}
                                                     deliveryOrderId={
                                                         deliveryOrderId
                                                     }

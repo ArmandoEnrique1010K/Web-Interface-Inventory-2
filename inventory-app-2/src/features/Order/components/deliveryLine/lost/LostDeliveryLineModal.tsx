@@ -1,34 +1,28 @@
+import React from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { DeliveryLineUpdateForm } from "../../types";
 import { useForm } from "react-hook-form";
-import { updateDeliveryLine } from "../../api/DeliveryLineAPI";
+import { lostDeliveryLine } from "../../../api/DeliveryLineAPI";
 import type { GeneralError } from "@/types/index";
 import { toast } from "sonner";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 import { InputText } from "@/ui/fields/InputText";
-import { InputDateTime } from "@/ui/fields/InputDateTime";
-import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { Button } from "@/ui/Button";
-import { handleFormatDateTimeWithoutT } from "@/utils/handleFormatDateTime";
+import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
+import type { DeliveryLineAlterForm } from "../../../schemas/requests";
 
 type Props = {
-    setEditModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    deliveryLineId: string;
-    deliveryOrderId: string;
-    limitDate: string;
-    requiredQuantity: string;
+    setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+    deliveryLineId: number;
+    deliveryOrderId: number;
 };
 
-export const EditDeliveryLineModal = ({
-    setEditModalOpen,
+export const LostDeliveryLineModal = ({
     deliveryLineId,
+    setShowModal,
     deliveryOrderId,
-    limitDate,
-    requiredQuantity,
 }: Props) => {
-    const initialValues: DeliveryLineUpdateForm = {
-        requiredQuantity: requiredQuantity,
-        limitDate: `${handleFormatDateTimeWithoutT(new Date(limitDate))}`,
+    const initialValues = {
+        quantity: undefined,
         movementComment: "",
     };
 
@@ -36,22 +30,22 @@ export const EditDeliveryLineModal = ({
         register,
         handleSubmit,
         setError,
-        control,
         formState: { errors },
-    } = useForm<DeliveryLineUpdateForm>({
+    } = useForm<DeliveryLineAlterForm>({
         defaultValues: initialValues,
     });
 
     const queryClient = useQueryClient();
 
+    // Mutacion para guardar los cambios
     const { mutate } = useMutation({
-        mutationFn: updateDeliveryLine,
+        mutationFn: lostDeliveryLine,
         retry: false,
         onError: (error: unknown) => {
             const e = error as GeneralError;
             if (e.type === "FIELD_ERROR" && e.fields) {
                 Object.entries(e.fields).forEach(([field, message]) => {
-                    setError(field as keyof DeliveryLineUpdateForm, {
+                    setError(field as keyof DeliveryLineAlterForm, {
                         type: "server",
                         message: message,
                     });
@@ -76,12 +70,12 @@ export const EditDeliveryLineModal = ({
                     deliveryLineId ? +deliveryLineId : 0,
                 ],
             });
+
             toast.success(data);
-            setEditModalOpen(false);
+            setShowModal(false);
         },
     });
-
-    const handleForm = (formData: DeliveryLineUpdateForm) => {
+    const handleForm = (formData: DeliveryLineAlterForm) => {
         const data = {
             formData,
             deliveryLineId,
@@ -94,23 +88,16 @@ export const EditDeliveryLineModal = ({
             <EntityFormLayout.Form onSubmit={handleSubmit(handleForm)}>
                 <EntityFormLayout.Inputs isCompact>
                     <InputText
-                        id="requiredQuantity"
-                        label="Cantidad requerida"
+                        id="quantity"
+                        label="Cantidad a eliminar"
                         placeholder="Cantidad"
                         type="text"
-                        errorMessage={errors.requiredQuantity}
-                        functionEnabled={register("requiredQuantity")}
-                    />
-                    <InputDateTime<DeliveryLineUpdateForm>
-                        id={"limitDate"}
-                        label={"Fecha limite"}
-                        name={"limitDate"}
-                        control={control}
-                        errorMessage={errors.limitDate?.message}
+                        errorMessage={errors.quantity}
+                        functionEnabled={register("quantity")}
                     />
                     <InputText
                         id="movementComment"
-                        label="Comentario"
+                        label="Comentario breve"
                         placeholder="Escriba un comentario"
                         type="text"
                         errorMessage={errors.movementComment}
@@ -121,7 +108,7 @@ export const EditDeliveryLineModal = ({
                     <Button
                         icon={<ArrowUpCircleIcon />}
                         size="large"
-                        text="Agregar"
+                        text="Eliminar"
                         type="submit"
                         color="green"
                         showIconOnMobile={false}
@@ -135,7 +122,7 @@ export const EditDeliveryLineModal = ({
                         size="large"
                         text="Cancelar"
                         color="gray"
-                        onClick={() => setEditModalOpen(false)}
+                        onClick={() => setShowModal(false)}
                         showIconOnMobile={false}
                         showTextOnMobile
                         isLargeOnMobile

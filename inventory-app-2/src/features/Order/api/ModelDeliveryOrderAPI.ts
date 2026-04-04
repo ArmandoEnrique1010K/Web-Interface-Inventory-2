@@ -1,41 +1,41 @@
 import { api } from "@/lib/axiosConfig";
-import type { DataResponse, GeneralResponse } from "@/types/index";
+import { responseSchema } from "@/types";
 import { throwApiErrorMessage } from "@/utils/throwApiErrorMessage";
+import { modelsToDeliveryOrderListResponseSchema } from "../schemas/responses";
 
 export async function registerRelationModelToDeliveryOrder(
-    modelId: string,
-    deliveryOrderId: string,
+    modelId: number,
+    deliveryOrderId: number,
 ) {
     try {
         const url = `/models-delivery-orders/model/${modelId}/deliveryOrder/${deliveryOrderId}`;
-        const { data } = await api.post<GeneralResponse>(url);
-        if (data.type === "success") {
-            return data.message;
-        }
+        const { data } = await api.post(url);
+        const parsed = responseSchema.parse(data);
+        return parsed.message;
     } catch (error: unknown) {
         throwApiErrorMessage(error);
     }
 }
 
-export async function listAllModelsByDeliveryOrder(deliveryOrderId: string) {
+export async function listAllModelsByDeliveryOrder(deliveryOrderId: number) {
     try {
         const url = `/models-delivery-orders/models/deliveryOrder/${deliveryOrderId}`;
-        const { data } = await api.get<DataResponse>(url);
-        return data.data;
+        const { data } = await api.get(url);
+        const parsed = modelsToDeliveryOrderListResponseSchema.parse(data);
+        return parsed.data;
     } catch (error: unknown) {
         throwApiErrorMessage(error);
     }
 }
 
 export async function inactiveRelationModelToDeliveryOrder(
-    modelDeliveryOrderId: string,
+    modelDeliveryOrderId: number,
 ) {
     try {
         const url = `/models-delivery-orders/${modelDeliveryOrderId}`;
-        const { data } = await api.patch<GeneralResponse>(url);
-        if (data.type === "success") {
-            return data.message;
-        }
+        const { data } = await api.patch(url);
+        const parsed = responseSchema.parse(data);
+        return parsed.message;
     } catch (error: unknown) {
         throwApiErrorMessage(error);
     }

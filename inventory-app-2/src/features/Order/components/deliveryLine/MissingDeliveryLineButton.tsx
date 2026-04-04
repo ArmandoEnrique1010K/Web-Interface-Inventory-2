@@ -6,15 +6,13 @@ import type { GeneralError } from "@/types/index";
 import { Button } from "@/ui/Button";
 
 type Props = {
-    deliveryLineId: string;
-    deliveryOrderId: string;
-    deliveryLineStatus: string;
+    deliveryLineId: number;
+    deliveryOrderId: number;
 };
 
 export const MissingDeliveryLineButton = ({
     deliveryLineId,
     deliveryOrderId,
-    deliveryLineStatus,
 }: Props) => {
     const { handleSubmit } = useForm();
     const queryClient = useQueryClient();

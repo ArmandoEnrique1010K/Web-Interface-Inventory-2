@@ -21,7 +21,8 @@ export const StatusProductButton = ({
     isActive,
 }: Props) => {
     const [confirmationModal, setConfirmationModal] = useState(false);
-    const { modelId } = useParams();
+    const { modelId: modelIdStr } = useParams();
+    const modelId = +modelIdStr!;
 
     const navigate = useNavigate();
     const queryClient = useQueryClient();
@@ -48,7 +49,7 @@ export const StatusProductButton = ({
             // OPCIONALMENTE SI HAY UN modelId en la URL actual, lo debe invalidar
             if (modelId) {
                 queryClient.invalidateQueries({
-                    queryKey: ["model", modelId ? +modelId : 0],
+                    queryKey: ["model", modelId],
                 });
             }
 
