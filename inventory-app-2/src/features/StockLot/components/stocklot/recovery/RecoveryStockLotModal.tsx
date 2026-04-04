@@ -76,7 +76,7 @@ export const RecoveryStockLotModal = ({ stockLotId, setShowModal }: Props) => {
                         id="quantity"
                         label="Unidades a recuperar"
                         placeholder="Cantidad"
-                        type="text"
+                        type="number"
                         errorMessage={errors.quantity}
                         functionEnabled={register("quantity")}
                     />

@@ -1,6 +1,10 @@
 import { api } from "@/lib/axiosConfig";
-import type { DataPageResponse, DataResponse } from "@/types/index";
 import { throwApiErrorMessage } from "@/utils/throwApiErrorMessage";
+import type { MovementItem } from "../schemas/items";
+import {
+    movementDetailResponseSchema,
+    movementsPageListResponseSchema,
+} from "../schemas/responses";
 
 export type LocationQueryParams = {
     page?: number;
@@ -8,7 +12,7 @@ export type LocationQueryParams = {
     maxQuantity?: string;
     minCreatedAt?: string;
     maxCreatedAt?: string;
-    movementType?: string;
+    movementType?: MovementItem["movementType"];
     deliveryLineId?: string;
     username?: string; // Nombre de usuario
     keyword?: string; // Nombre de producto o modelo
@@ -20,10 +24,11 @@ export type LocationQueryParams = {
 export async function listAllMovements(params: LocationQueryParams) {
     try {
         const url = `/movements`;
-        const { data } = await api.get<DataPageResponse>(url, {
+        const { data } = await api.get(url, {
             params: params,
         });
-        return data.data;
+        const parsed = movementsPageListResponseSchema.parse(data);
+        return parsed.data;
     } catch (error) {
         throwApiErrorMessage(error);
     }
@@ -32,8 +37,9 @@ export async function listAllMovements(params: LocationQueryParams) {
 export async function getMovement(id: string) {
     try {
         const url = `/movements/${id}`;
-        const { data } = await api.get<DataResponse>(url);
-        return data.data;
+        const { data } = await api.get(url);
+        const parsed = movementDetailResponseSchema.parse(data);
+        return parsed.data;
     } catch (error) {
         throwApiErrorMessage(error);
     }

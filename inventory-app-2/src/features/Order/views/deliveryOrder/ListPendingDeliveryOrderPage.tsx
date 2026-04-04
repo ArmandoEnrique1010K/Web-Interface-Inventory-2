@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { listAllPendingDeliveryOrders } from "../../api/DeliveryOrderAPI";
 import { EntityListLayout } from "@/layout/entity/EntityListLayout";
@@ -12,7 +12,6 @@ import { TableRowContainer } from "@/components/TableRowContainer";
 import { BaseTableCell } from "@/components/BaseTableCell";
 import { InputDateTimeFilter } from "@/ui/filters/InputDateTimeFilter";
 import { handleFormatDateTimeText } from "@/utils/handleFormatDateTimeText";
-import { deliveryOrderStatusOptions } from "../../data/deliveryOrderStatusOptions";
 import { DeliveryOrderStatus } from "../../components/deliveryOrder/DeliveryOrderStatus";
 
 export const ListPendingDeliveryOrderPage = () => {
@@ -47,8 +46,6 @@ export const ListPendingDeliveryOrderPage = () => {
     });
 
     const content = data?.content || [];
-
-    const statusOptions = useMemo(() => deliveryOrderStatusOptions, []);
 
     return (
         <EntityListLayout>
@@ -224,13 +221,6 @@ export const ListPendingDeliveryOrderPage = () => {
                                         <DeliveryOrderStatus
                                             deliveryOrderStatus={
                                                 order.orderStatus
-                                            }
-                                            label={
-                                                statusOptions.find(
-                                                    (status) =>
-                                                        status.value ===
-                                                        order.orderStatus,
-                                                )?.label
                                             }
                                         />
                                     }

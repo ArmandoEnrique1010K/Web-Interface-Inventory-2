@@ -1,0 +1,111 @@
+import {
+    ArrowsRightLeftIcon,
+    ArrowUturnLeftIcon,
+    MinusCircleIcon,
+    PencilSquareIcon,
+    PlusCircleIcon,
+    ReceiptRefundIcon,
+    ScaleIcon,
+    TruckIcon,
+    WrenchIcon,
+    Cog8ToothIcon,
+    XCircleIcon,
+    DocumentMinusIcon,
+    UserMinusIcon,
+    PaperAirplaneIcon,
+    ClockIcon,
+} from "@heroicons/react/24/outline";
+import type { MovementTypeOptions } from "../schemas/items";
+
+export const movementTypeOptions: MovementTypeOptions[] = [
+    {
+        value: "MOVEMENT_STOCK_RECEIVE",
+        label: "Recibio lote de stock",
+        icon: <TruckIcon className="size-6" />,
+        color: "bg-green-100 text-green-700",
+    },
+    {
+        value: "MOVEMENT_STOCK_INCREASE",
+        label: "Aumento lote de stock",
+        icon: <PlusCircleIcon className="size-6" />,
+        color: "bg-green-100 text-green-700",
+    },
+    {
+        value: "MOVEMENT_STOCK_DECREASE",
+        label: "Perdio lote de stock",
+        icon: <MinusCircleIcon className="size-6" />,
+        color: "bg-red-100 text-red-700",
+    },
+    {
+        value: "MOVEMENT_STOCK_RECOVERY",
+        label: "Recupero lote de stock",
+        icon: <WrenchIcon className="size-6" />,
+        color: "bg-green-100 text-green-700",
+    },
+    {
+        value: "MOVEMENT_STOCK_TRANSFER",
+        label: "Transfirio lote de stock",
+        icon: <ArrowsRightLeftIcon className="size-6" />,
+        color: "bg-gray-100 text-gray-700",
+    },
+    {
+        value: "MOVEMENT_STOCK_REFUND",
+        label: "Devolvio lote de stock",
+        icon: <ReceiptRefundIcon className="size-6" />,
+        color: "bg-blue-100 text-blue-700",
+    },
+    {
+        value: "MOVEMENT_LINE_ALLOCATE",
+        label: "Preparo linea de entrega",
+        icon: <PencilSquareIcon className="size-6" />,
+        color: "bg-green-100 text-green-700",
+    },
+    {
+        value: "MOVEMENT_LINE_ALTER",
+        label: "Altero linea de entrega",
+        icon: <Cog8ToothIcon className="size-6" />,
+        color: "bg-blue-100 text-blue-700",
+    },
+    {
+        value: "MOVEMENT_LINE_CHANGE",
+        label: "Desbalanceo linea de entrega",
+        icon: <ScaleIcon className="size-6" />,
+        color: "bg-blue-100 text-blue-700",
+    },
+    {
+        value: "MOVEMENT_LINE_RETURN",
+        label: "Devolvio linea de entrega",
+        icon: <ArrowUturnLeftIcon className="size-6" />,
+        color: "bg-blue-100 text-blue-700",
+    },
+    {
+        value: "MOVEMENT_LINE_CANCELED",
+        label: "Elimino linea de entrega",
+        icon: <XCircleIcon className="size-6" />,
+        color: "bg-red-100 text-red-700",
+    },
+    {
+        value: "MOVEMENT_LINE_LOST",
+        label: "Desconto linea de entrega",
+        icon: <DocumentMinusIcon className="size-6" />,
+        color: "bg-red-100 text-red-700",
+    },
+    {
+        value: "MOVEMENT_LINE_MISSING",
+        label: "Perdio linea de entrega",
+        icon: <UserMinusIcon className="size-6" />,
+        color: "bg-gray-100 text-gray-700",
+    },
+    {
+        value: "MOVEMENT_LINE_DELIVERED",
+        label: "Entrego linea de entrega",
+        icon: <PaperAirplaneIcon className="size-6" />,
+        color: "bg-gray-100 text-gray-700",
+    },
+    {
+        value: "MOVEMENT_LINE_SIMULTANEOUS",
+        label: "Simultaneo",
+        icon: <ClockIcon className="size-6" />,
+        color: "bg-gray-100 text-gray-700",
+    },
+];

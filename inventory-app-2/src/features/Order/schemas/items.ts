@@ -121,9 +121,11 @@ export type StockLotDeliveryLineItem = z.infer<
 export type LineStatusOptions = {
     value: DeliveryLineItem["lineStatus"];
     label: string;
+    color?: string;
 }[];
 
 export type OrderStatusOptions = {
     value: DeliveryOrderItem["orderStatus"];
     label: string;
+    color?: string;
 }[];

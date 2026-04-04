@@ -5,7 +5,7 @@ import { EntityDetailsLayout } from "@/layout/entity/EntityDetailsLayout";
 import { PanelContainer } from "@/components/containers/PanelContainer";
 import { handleFormatDateTimeWithoutT } from "../../../../utils/handleFormatDateTime";
 import { handleFormatDateTimeText } from "@/utils/handleFormatDateTimeText";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { getStockLotsByDeliveryLine } from "../../api/StockLotsDeliveryLineAPI";
 import { TableContainer } from "@/components/TableContainer";
 import { TableRowContainer } from "@/components/TableRowContainer";
@@ -19,7 +19,6 @@ import { AllocateDeliveryLineButton } from "../../components/deliveryLine/Alloca
 import { LostDeliveryLineButton } from "../../components/deliveryLine/LostDeliveryLineButton";
 import { ReturnDeliveryLineButton } from "../../components/deliveryLine/ReturnDeliveryLineButton";
 import { EditDeliveryLineButton } from "../../components/deliveryLine/EditDeliveryLineButton";
-import { deliveryLineStatusOptions } from "../../data/deliveryLineStatusOptions";
 import { DeliveryLineStatus } from "../../components/deliveryLine/DeliveryLineStatus";
 
 export const DetailsDeliveryLinePage = () => {
@@ -27,8 +26,6 @@ export const DetailsDeliveryLinePage = () => {
         deliveryLineId: deliveryLineStr,
         deliveryOrderId: deliveryOrderStr,
     } = useParams();
-
-    const statusOptions = useMemo(() => deliveryLineStatusOptions, []);
 
     const deliveryLineId = +deliveryLineStr!;
     const deliveryOrderId = +deliveryOrderStr!;
@@ -200,13 +197,6 @@ export const DetailsDeliveryLinePage = () => {
                                 <PanelContainer.Detail label="Estado">
                                     <DeliveryLineStatus
                                         deliveryLineStatus={data.lineStatus}
-                                        label={
-                                            statusOptions.find(
-                                                (status) =>
-                                                    status.value ===
-                                                    data.lineStatus,
-                                            )?.label
-                                        }
                                     />
                                 </PanelContainer.Detail>
                             </PanelContainer.DetailsGrid>

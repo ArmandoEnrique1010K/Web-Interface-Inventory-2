@@ -370,7 +370,7 @@ export const ListDeliveryLineByDeliveryOrder = ({
                             name="minRequiredQuantity"
                             label="Cantidad minima"
                             placeholder="Cantidad"
-                            type="text"
+                            type="number"
                             value={form.minRequiredQuantity}
                             onChange={(e) =>
                                 setForm((prev) => ({
@@ -383,7 +383,7 @@ export const ListDeliveryLineByDeliveryOrder = ({
                             name="maxRequiredQuantity"
                             label="Cantidad maxima"
                             placeholder="Cantidad"
-                            type="text"
+                            type="number"
                             value={form.maxRequiredQuantity}
                             onChange={(e) =>
                                 setForm((prev) => ({
@@ -584,13 +584,6 @@ export const ListDeliveryLineByDeliveryOrder = ({
                                             <DeliveryLineStatus
                                                 deliveryLineStatus={
                                                     deliveryLine.lineStatus
-                                                }
-                                                label={
-                                                    statusOptions.find(
-                                                        (status) =>
-                                                            status.value ===
-                                                            deliveryLine.lineStatus,
-                                                    )?.label
                                                 }
                                             />
                                         }

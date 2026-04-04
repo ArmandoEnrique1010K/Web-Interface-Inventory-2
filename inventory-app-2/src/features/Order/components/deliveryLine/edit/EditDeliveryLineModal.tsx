@@ -97,7 +97,7 @@ export const EditDeliveryLineModal = ({
                         id="requiredQuantity"
                         label="Cantidad requerida"
                         placeholder="Cantidad"
-                        type="text"
+                        type="number"
                         errorMessage={errors.requiredQuantity}
                         functionEnabled={register("requiredQuantity")}
                     />

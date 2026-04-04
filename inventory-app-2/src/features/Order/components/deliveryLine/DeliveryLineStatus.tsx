@@ -1,24 +1,29 @@
+import { deliveryLineStatusOptions } from "../../data/deliveryLineStatusOptions";
 import type { DeliveryLineItem } from "../../schemas/items";
-import { handleApplyDeliveryLineStatusStyle } from "@/utils/handleApplyDeliveryLineStatusStyle";
 
 type Props = {
     deliveryLineStatus: DeliveryLineItem["lineStatus"];
-    label?: string;
 };
 
-export const DeliveryLineStatus = ({
-    deliveryLineStatus: deliveryOrderStatus,
-    label,
-}: Props) => {
+const deliveryLineMap = Object.fromEntries(
+    deliveryLineStatusOptions.map((item) => [item.value, item]),
+);
+
+export const DeliveryLineStatus = ({ deliveryLineStatus }: Props) => {
+    const deliveryLine = deliveryLineMap[deliveryLineStatus];
+    if (!deliveryLine) {
+        return <span className="text-red-500">Desconocido</span>;
+    }
+
     return (
         <div>
             <span
                 className={`
                     px-3 py-1 rounded-4xl 
-                    ${handleApplyDeliveryLineStatusStyle(deliveryOrderStatus)}
+                    ${deliveryLine.color}
                 `}
             >
-                {label}
+                {deliveryLine.label}
             </span>
         </div>
     );

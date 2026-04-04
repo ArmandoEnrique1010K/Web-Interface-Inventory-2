@@ -113,24 +113,28 @@ export const AddDeliveryLineModal = ({
         const saved = sessionStorage.getItem(STORAGE_KEY);
         if (saved) {
             const parsed = JSON.parse(saved);
-            return parsed.regionId || "0";
+            return parsed.regionId || "";
         }
-        return "0";
+        return "";
     };
 
     const getInitialSubregionId = () => {
         const saved = sessionStorage.getItem(STORAGE_KEY);
         if (saved) {
             const parsed = JSON.parse(saved);
-            return parsed.subregionId || "0";
+            return parsed.subregionId || "";
         }
-        return "0";
+        return "";
     };
+
     const [selectedRegionId, setSelectedRegionId] =
-        useState(getInitialRegionId);
+        useState(getInitialRegionId());
     const [selectedSubregionId, setSelectedSubregionId] = useState(
-        getInitialSubregionId,
+        getInitialSubregionId(),
     );
+
+    console.log(typeof selectedSubregionId);
+    console.log(selectedSubregionId); // ""
 
     const { data: regionsData } = useQuery({
         queryKey: ["regions"],
@@ -155,15 +159,19 @@ export const AddDeliveryLineModal = ({
             }) || [];
 
     const subregions =
-        subregionsData
-            ?.map((type) => ({
-                value: type.id.toString(),
-                label: type.name,
-            }))
-            .concat({
-                value: "",
-                label: "Seleccione una subregión",
-            }) || [];
+        subregionsData?.map((type) => ({
+            value: type.id.toString(),
+            label: type.name,
+        })) || [];
+
+    const subregionsList =
+        subregions.concat({
+            value: "",
+            label: "Seleccione una subregión",
+        }) || [];
+
+    console.log(subregionsData);
+    console.log(subregions);
 
     useEffect(() => {
         const saved = sessionStorage.getItem(STORAGE_KEY);
@@ -206,8 +214,7 @@ export const AddDeliveryLineModal = ({
                         deliveryOrderId: deliveryOrderId,
                         formData: {
                             ...data,
-                            // IMPORTANTE, SE HA ESTABLECIDO EL TIPADO DE LOS CAMPOS POR SEPARADO Y EL TIPADO DE LOS DATOS QUE ESPERA LA API POR SEPARADO
-                            locationId: +data.locationId!.value, //TODO: SOLUCION TEMPORAL
+                            locationId: Number(data.locationId?.value),
                         },
                     });
                 })}
@@ -217,7 +224,7 @@ export const AddDeliveryLineModal = ({
                         id="requiredQuantity"
                         label="Cantidad requerida"
                         placeholder="Cantidad"
-                        type="text"
+                        type="number"
                         errorMessage={errors.requiredQuantity}
                         functionEnabled={register("requiredQuantity")}
                     />
@@ -248,14 +255,14 @@ export const AddDeliveryLineModal = ({
                             options={regions}
                             onChange={(e) => {
                                 setSelectedRegionId(e.target.value);
-                                setSelectedSubregionId("0");
+                                setSelectedSubregionId("");
                             }}
                             value={selectedRegionId}
                         />
                         <div className="min-h-6">
                             <p className="text-red-700 text-sm">
                                 {selectedRegionId === "" &&
-                                initialValues.locationId === null
+                                initialValues.locationId === ""
                                     ? "Seleccione una región"
                                     : ""}
                             </p>
@@ -267,17 +274,17 @@ export const AddDeliveryLineModal = ({
                         <SelectOptionFilter
                             name="subregionId"
                             label="Subregión"
-                            options={subregions}
+                            options={subregionsList}
                             onChange={(e) => {
                                 setSelectedSubregionId(e.target.value);
                             }}
                             value={selectedSubregionId}
-                            disabled={selectedRegionId === "0"}
+                            disabled={selectedRegionId === ""}
                         />
                         <div className="min-h-6">
                             <p className="text-red-700 text-sm">
                                 {selectedSubregionId === "" &&
-                                initialValues.locationId === null
+                                initialValues.locationId === ""
                                     ? "Seleccione una subregión"
                                     : ""}
                             </p>
@@ -290,7 +297,7 @@ export const AddDeliveryLineModal = ({
                         label={"Ubicación"}
                         name={"locationId"}
                         errorMessage={errors.locationId?.message}
-                        disabled={selectedSubregionId === "0"}
+                        disabled={selectedSubregionId === ""}
                         loadOptions={async (inputValue) => {
                             const data = await listFirstTenLocationsByKeyword(
                                 { name: inputValue },

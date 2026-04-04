@@ -279,13 +279,6 @@ export const ListDeliveryOrderPage = () => {
                                             deliveryOrderStatus={
                                                 order.orderStatus
                                             }
-                                            label={
-                                                statusOptions.find(
-                                                    (status) =>
-                                                        status.value ===
-                                                        order.orderStatus,
-                                                )?.label
-                                            }
                                         />
                                     }
                                 />

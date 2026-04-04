@@ -61,10 +61,8 @@ export async function listAllProducts(params: ProductQueryParams) {
             params,
         });
         const parsed = productsPageResponseSchema.parse(data);
-        console.log(parsed);
         return parsed.data;
     } catch (error) {
-        console.log(error);
         throwApiErrorMessage(error);
     }
 }

@@ -108,7 +108,7 @@ export const TransferStockLotModal = ({
                             id="quantity"
                             label="Unidades a transferir"
                             placeholder="Cantidad"
-                            type="text"
+                            type="number"
                             errorMessage={errors.quantity}
                             functionEnabled={register("quantity")}
                         />

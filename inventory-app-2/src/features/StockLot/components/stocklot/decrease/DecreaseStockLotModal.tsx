@@ -76,7 +76,7 @@ export const DecreaseStockLotModal = ({ stockLotId, setShowModal }: Props) => {
                         id="quantity"
                         label="Unidades a disminuir"
                         placeholder="Cantidad"
-                        type="text"
+                        type="number"
                         errorMessage={errors.quantity}
                         functionEnabled={register("quantity")}
                     />

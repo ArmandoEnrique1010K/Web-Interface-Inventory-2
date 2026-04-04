@@ -147,7 +147,7 @@ export const AllocateDeliveryLineModal = ({
                             id="quantity"
                             label="Cantidad enviada"
                             placeholder="Cantidad"
-                            type="text"
+                            type="number"
                             errorMessage={errors.quantity}
                             functionEnabled={register("quantity")}
                         />

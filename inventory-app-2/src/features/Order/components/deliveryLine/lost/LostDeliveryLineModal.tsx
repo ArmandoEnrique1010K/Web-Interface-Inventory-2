@@ -91,7 +91,7 @@ export const LostDeliveryLineModal = ({
                         id="quantity"
                         label="Cantidad a eliminar"
                         placeholder="Cantidad"
-                        type="text"
+                        type="number"
                         errorMessage={errors.quantity}
                         functionEnabled={register("quantity")}
                     />

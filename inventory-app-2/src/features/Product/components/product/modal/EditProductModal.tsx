@@ -75,10 +75,8 @@ export const EditProductModal = ({
             if (modelId) {
                 queryClient.invalidateQueries({ queryKey: ["model", modelId] });
             }
-            // console.log("ID de modelo: " + modelId)
 
             toast.success(data);
-            // navigate("/products")
             setShowModal(false);
         },
     });

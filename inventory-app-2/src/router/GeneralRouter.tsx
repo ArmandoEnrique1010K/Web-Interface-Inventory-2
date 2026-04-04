@@ -45,7 +45,6 @@ import { NewRegionPage } from "@/features/Location/views/region/NewRegionPage";
 import { NewSubregionPage } from "@/features/Location/views/subregion/NewSubregionPage";
 import { ListLocationPage } from "@/features/Location/views/location/ListLocationPage";
 import { NewLocationPage } from "@/features/Location/views/location/NewLocationPage";
-import { MovementList } from "@/features/Movement/components/MovementList";
 import { DetailsProductPage } from "@/features/Product/views/product/DetailsProductPage";
 import { ListProductPage } from "@/features/Product/views/product/ListProductPage";
 import { NewProductPage } from "@/features/Product/views/product/NewProductPage";
@@ -62,6 +61,8 @@ import { ListPendingDeliveryOrderPage } from "@/features/Order/views/deliveryOrd
 import { ListDeliveryOrderByCurrentUserPage } from "@/features/Order/views/deliveryOrder/ListDeliveryOrderByCurrentUserPage";
 import { DetailsDeliveryLinePage } from "@/features/Order/views/deliveryLine/DetailsDeliveryLinePage";
 import type { MenuItem } from "@/types";
+import { ListMovementPage } from "@/features/Movement/views/ListMovementPage";
+import { DetailMovementPage } from "@/features/Movement/views/DetailMovementPage";
 
 const productItems: MenuItem[] = [
     {
@@ -355,7 +356,11 @@ export const GeneralRouter = () => {
 
                         {/* RELACIONADO A MOVEMENT */}
                         <Route path="movements" element={<Outlet />}>
-                            <Route index element={<MovementList />} />
+                            <Route index element={<ListMovementPage />} />
+                            <Route
+                                path=":id"
+                                element={<DetailMovementPage />}
+                            />
                         </Route>
 
                         {/* RELACIONADO A CREDITS */}

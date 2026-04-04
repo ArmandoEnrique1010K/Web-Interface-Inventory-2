@@ -5,7 +5,7 @@ export const responseSchema = z.object({
     status: z.number(),
     message: z.string(),
     fields: z.optional(z.record(z.string(), z.string())),
-    secretField: z.optional(z.string()), // TODO: VERIFICAR SI ESTO PUEDE SER ELIMINADO
+    secretField: z.optional(z.string()),
 });
 
 export const createDataSchema = <T extends z.ZodType>(dataSchema: T) =>

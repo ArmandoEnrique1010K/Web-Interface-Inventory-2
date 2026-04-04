@@ -4,7 +4,7 @@ import { locationSchema, regionSchema, subregionSchema } from "./entities";
 export const regionItemSchema = regionSchema;
 export const subregionItemSchema = subregionSchema;
 export const locationItemSchema = locationSchema;
-export const searchLocationItemSchema = regionSchema.pick({
+export const searchLocationItemSchema = locationSchema.pick({
     id: true,
     name: true,
 });

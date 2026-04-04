@@ -91,7 +91,7 @@ export const ReturnDeliveryLineModal = ({
                         id="quantity"
                         label="Cantidad a retornar"
                         placeholder="Cantidad"
-                        type="text"
+                        type="number"
                         errorMessage={errors.quantity}
                         functionEnabled={register("quantity")}
                     />

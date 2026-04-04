@@ -71,7 +71,7 @@ export const NewDeliveryOrderPage = () => {
 
                     mutate({
                         ...data,
-                        userIdClient: +data.userIdClient!.value,
+                        userIdClient: Number(data.userIdClient?.value),
                     });
                 })}
             >
