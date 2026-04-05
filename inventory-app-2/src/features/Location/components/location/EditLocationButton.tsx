@@ -29,7 +29,7 @@ export const EditLocationButton = ({ locationId }: Props) => {
                         setShowModal(false);
                     }}
                     size="lg"
-                    title={`Editar categoria #${locationId}`}
+                    title={`Editar ubicación #${locationId}`}
                     locked
                 >
                     <LoaderLocation

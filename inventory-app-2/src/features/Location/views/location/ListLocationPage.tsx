@@ -46,7 +46,7 @@ export const ListLocationPage = () => {
         });
     });
 
-    const { data, isError } = useQuery({
+    const { data, isError, isLoading } = useQuery({
         queryKey: ["locations", { name, regionId, subregionId, status, page }],
 
         queryFn: () =>
@@ -196,6 +196,7 @@ export const ListLocationPage = () => {
                     ]}
                     isError={isError}
                     isEmpty={!content?.length}
+                    isLoading={isLoading}
                     itemsCounter={
                         data && (
                             <SearchCounter

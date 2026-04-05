@@ -26,11 +26,6 @@ export const ListMovementPage = () => {
     const movementType = searchParams.get("movementType") ?? "";
     const username = searchParams.get("username") ?? "";
     const keyword = searchParams.get("keyword") ?? "";
-    const deliveryLineId = searchParams.get("deliveryLineId") ?? undefined;
-    const modelId = searchParams.get("modelId") ?? undefined;
-    const userId = searchParams.get("userId") ?? undefined;
-    const stockLotReceiverId =
-        searchParams.get("stockLotReceiverId") ?? undefined;
 
     const [form, setForm] = useState({
         page: page,
@@ -41,13 +36,9 @@ export const ListMovementPage = () => {
         movementType: movementType,
         username: username,
         keyword: keyword,
-        deliveryLineId: deliveryLineId ?? "",
-        modelId: modelId ?? "",
-        userId: userId ?? "",
-        stockLotReceiverId: stockLotReceiverId ?? "",
     });
 
-    const { data, isError } = useQuery({
+    const { data, isError, isLoading } = useQuery({
         queryKey: [
             "movements",
             {
@@ -58,10 +49,6 @@ export const ListMovementPage = () => {
                 movementType,
                 username,
                 keyword,
-                deliveryLineId,
-                modelId,
-                userId,
-                stockLotReceiverId,
                 page,
             },
         ],
@@ -76,14 +63,9 @@ export const ListMovementPage = () => {
                 movementType: movementType as MovementItem["movementType"],
                 username: username,
                 keyword: keyword,
-                deliveryLineId: deliveryLineId,
-                modelId: modelId,
-                userId: userId,
-                stockLotReceiverId: stockLotReceiverId,
             }),
     });
 
-    // TODO: CONTINUAR AQUI LUEGO DE COMPLETAR EL MODULO ORDER
     const content = data?.content || [];
     // console.log(data)
     const movementOptions = useMemo(() => movementTypeOptions, []);
@@ -111,15 +93,6 @@ export const ListMovementPage = () => {
                         if (form.username)
                             params.set("username", form.username);
                         if (form.keyword) params.set("keyword", form.keyword);
-                        if (form.deliveryLineId)
-                            params.set("deliveryLineId", form.deliveryLineId);
-                        if (form.modelId) params.set("modelId", form.modelId);
-                        if (form.userId) params.set("userId", form.userId);
-                        if (form.stockLotReceiverId)
-                            params.set(
-                                "stockLotReceiverId",
-                                form.stockLotReceiverId,
-                            );
 
                         setSearchParams(params);
                     }}
@@ -184,6 +157,12 @@ export const ListMovementPage = () => {
                                 label: movement.label,
                             };
                         })}
+                        onChange={(e) =>
+                            setForm((prev) => ({
+                                ...prev,
+                                movementType: e.target.value,
+                            }))
+                        }
                         textInNullOption="Todos los movimientos"
                         value={form.movementType}
                     />
@@ -235,6 +214,7 @@ export const ListMovementPage = () => {
                         "Usuario",
                         "ID de modelo",
                     ]}
+                    isLoading={isLoading}
                     isError={isError}
                     isEmpty={!content?.length}
                     paginator={
@@ -280,20 +260,6 @@ export const ListMovementPage = () => {
                                         params.set("username", form.username);
                                     if (form.keyword)
                                         params.set("keyword", form.keyword);
-                                    if (form.deliveryLineId)
-                                        params.set(
-                                            "deliveryLineId",
-                                            form.deliveryLineId,
-                                        );
-                                    if (form.modelId)
-                                        params.set("modelId", form.modelId);
-                                    if (form.userId)
-                                        params.set("userId", form.userId);
-                                    if (form.stockLotReceiverId)
-                                        params.set(
-                                            "stockLotReceiverId",
-                                            form.stockLotReceiverId,
-                                        );
 
                                     params.set("page", page.toString());
 
@@ -309,8 +275,10 @@ export const ListMovementPage = () => {
                                 <BaseTableCell data={movement.id} />
 
                                 <BaseTableCell
+                                    isCenter
                                     data={
                                         <MovementType
+                                            type="url"
                                             movementId={movement.id}
                                             movementType={movement.movementType}
                                         />
@@ -336,6 +304,7 @@ export const ListMovementPage = () => {
                                 <BaseTableCell
                                     data={
                                         <div className="text-sm">
+                                            {movement.productName}{" "}
                                             {movement.modelName}
                                         </div>
                                     }

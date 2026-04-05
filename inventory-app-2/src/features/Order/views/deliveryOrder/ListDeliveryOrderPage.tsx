@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { useSearchParams, Link } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { listAllDeliveryOrders } from "../../api/DeliveryOrderAPI";
 import { EntityListLayout } from "@/layout/entity/EntityListLayout";
 import { ButtonLink } from "@/ui/ButtonLink";
@@ -18,6 +18,7 @@ import { handleFormatDateTimeText } from "@/utils/handleFormatDateTimeText";
 import type { DeliveryOrderItem } from "../../schemas/items";
 import { DeliveryOrderStatus } from "../../components/deliveryOrder/DeliveryOrderStatus";
 import { deliveryOrderStatusOptions } from "../../data/deliveryOrderStatusOptions";
+import { LinkText } from "@/components/LinkText";
 
 export const ListDeliveryOrderPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -36,7 +37,7 @@ export const ListDeliveryOrderPage = () => {
         status: status === undefined ? "" : String(status),
     });
 
-    const { data, isError } = useQuery({
+    const { data, isError, isLoading } = useQuery({
         queryKey: [
             "deliveryOrders",
             { batch, startDate, endDate, userClientName, status, page },
@@ -175,6 +176,7 @@ export const ListDeliveryOrderPage = () => {
                         "Cliente",
                         "Estado",
                     ]}
+                    isLoading={isLoading}
                     isError={isError}
                     isEmpty={!content?.length}
                     itemsCounter={
@@ -231,12 +233,9 @@ export const ListDeliveryOrderPage = () => {
                                 <BaseTableCell data={order.id} />
                                 <BaseTableCell
                                     data={
-                                        <Link
-                                            to={`/orders/${order.id}`}
-                                            className="hover:text-blue-900"
-                                        >
+                                        <LinkText to={`/orders/${order.id}`}>
                                             {order.batch}
-                                        </Link>
+                                        </LinkText>
                                     }
                                 />
                                 <BaseTableCell

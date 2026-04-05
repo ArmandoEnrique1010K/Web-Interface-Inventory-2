@@ -27,7 +27,7 @@ export const ListSubregionPage = () => {
         }
     }, [searchParams, setSearchParams]);
 
-    const { data, isError } = useQuery({
+    const { data, isError, isLoading } = useQuery({
         queryKey: ["subregions", "region", regionId],
         queryFn: () => listAllSubregionsByRegionId(regionId),
     });
@@ -74,6 +74,7 @@ export const ListSubregionPage = () => {
                     headers={["ID", "Nombre", "Editar"]}
                     isError={isError}
                     isEmpty={!data?.length}
+                    isLoading={isLoading}
                 >
                     {data?.map((subregion) => (
                         <TableRowContainer key={subregion.id}>

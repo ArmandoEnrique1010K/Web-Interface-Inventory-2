@@ -34,7 +34,7 @@ export async function listAllMovements(params: LocationQueryParams) {
     }
 }
 
-export async function getMovement(id: string) {
+export async function getMovement(id: number) {
     try {
         const url = `/movements/${id}`;
         const { data } = await api.get(url);

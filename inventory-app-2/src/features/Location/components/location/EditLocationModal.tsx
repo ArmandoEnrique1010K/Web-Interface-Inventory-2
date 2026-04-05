@@ -8,7 +8,7 @@ import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { InputText } from "@/ui/fields/InputText";
 import { listAllRegions } from "../../api/RegionAPI";
 import { listAllSubregionsByRegionId } from "../../api/SubregionAPI";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SelectOptionFilter } from "@/ui/filters/SelectOptionFilter";
 import { SelectOption } from "@/ui/fields/SelectOption";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
@@ -26,18 +26,22 @@ export const EditLocationModal = ({
     locationId,
     setShowModal,
 }: Props) => {
+    const initialValues = {
+        name: data.name,
+        address: data.address,
+        subregionId: data.subregionId,
+    };
     const {
         register,
         handleSubmit,
         setError,
         formState: { errors },
+        setValue,
     } = useForm({
-        defaultValues: {
-            name: data.name,
-            address: data.address,
-            subregionId: data.subregionId,
-        },
+        defaultValues: initialValues,
     });
+
+    console.log(data);
 
     const queryClient = useQueryClient();
 
@@ -96,7 +100,11 @@ export const EditLocationModal = ({
         queryFn: () => listAllSubregionsByRegionId(selectedRegionId!),
         enabled: !!selectedRegionId, // solo ejecuta si hay region
     });
+    useEffect(() => {
+        if (!subregionsData) return;
 
+        setValue("subregionId", data.subregionId);
+    }, [subregionsData]);
     const regions =
         regionsData
             ?.map((region) => ({

@@ -45,7 +45,7 @@ export const ListModelPage = () => {
         status: status === undefined ? "" : String(status),
     });
 
-    const { data, isError } = useQuery({
+    const { data, isError, isLoading } = useQuery({
         queryKey: [
             "models",
             {
@@ -100,7 +100,6 @@ export const ListModelPage = () => {
         })) || [];
 
     const statusOptions = [
-        { value: "", label: "Todos los estados" },
         { value: "true", label: "Activos" },
         { value: "false", label: "Inactivos" },
     ];
@@ -248,6 +247,7 @@ export const ListModelPage = () => {
                                 }))
                             }
                             value={form.status}
+                            textInNullOption="Todos los estados"
                         />
                     </div>
                 </FiltersFormContainer>
@@ -261,6 +261,7 @@ export const ListModelPage = () => {
                         "Estado",
                         "Editar",
                     ]}
+                    isLoading={isLoading}
                     isError={isError}
                     isEmpty={!content?.length}
                     itemsCounter={

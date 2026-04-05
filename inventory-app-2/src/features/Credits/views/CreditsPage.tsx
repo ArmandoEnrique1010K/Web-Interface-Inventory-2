@@ -2,6 +2,7 @@ import { CreditSection } from "../components/CreditSection";
 import { CreditItem } from "../components/CreditItem";
 import { EntityDetailsLayout } from "@/layout/entity/EntityDetailsLayout";
 import { PanelContainer } from "@/components/containers/PanelContainer";
+import { LinkText } from "@/components/LinkText";
 
 export const CreditsPage = () => {
     return (
@@ -17,16 +18,13 @@ export const CreditsPage = () => {
                             <CreditItem type="div">
                                 Desarrollado por{" "}
                                 {
-                                    <a
-                                        href={
-                                            "https://github.com/ArmandoEnrique1010K"
-                                        }
+                                    <LinkText
+                                        to="https://github.com/ArmandoEnrique1010K"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className=" hover:text-blue-700 underline"
                                     >
                                         ArmandoEnrique1010k
-                                    </a>
+                                    </LinkText>
                                 }
                             </CreditItem>
                             <CreditItem type="div">Version 1.0.0</CreditItem>

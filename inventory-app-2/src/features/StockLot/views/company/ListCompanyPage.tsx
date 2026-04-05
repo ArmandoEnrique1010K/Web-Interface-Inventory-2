@@ -9,7 +9,7 @@ import { EntityListLayout } from "@/layout/entity/EntityListLayout";
 import { EditCompanyButton } from "../../components/company/EditCompanyButton";
 
 export const ListCompanyPage = () => {
-    const { data, isError } = useQuery({
+    const { data, isError, isLoading } = useQuery({
         queryKey: ["companies"],
         queryFn: listAllCompanies,
     });
@@ -35,6 +35,7 @@ export const ListCompanyPage = () => {
                     headers={["ID", "Nombre", "Editar"]}
                     isError={isError}
                     isEmpty={!data?.length}
+                    isLoading={isLoading}
                 >
                     {data?.map((company) => (
                         <TableRowContainer key={company.id}>

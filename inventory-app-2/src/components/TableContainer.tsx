@@ -8,10 +8,10 @@ type Props = {
     headers: string[];
     isError: boolean;
     isEmpty: boolean;
+    isLoading: boolean;
     itemsCounter?: React.ReactNode;
     paginator?: React.ReactNode;
     children: React.ReactNode;
-    isLoading?: boolean;
 };
 
 export const TableContainer = ({

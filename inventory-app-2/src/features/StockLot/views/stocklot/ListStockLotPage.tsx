@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffectEvent, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { listAllStockLots } from "../../api/StockLotAPI";
 import { listAllActiveCategories } from "@/features/Product/api/CategoryAPI";
 import { listAllActiveTypes } from "@/features/Product/api/TypeAPI";
@@ -22,6 +22,7 @@ import { IncreaseStockLotButton } from "../../components/stocklot/IncreaseStockL
 import { DecreaseStockLotButton } from "../../components/stocklot/DecreaseStockLotButton";
 import { RecoveryStockLotButton } from "../../components/stocklot/RecoveryStockLotButton";
 import { TransferStockLotButton } from "../../components/stocklot/TransferStockLotButton";
+import { LinkText } from "@/components/LinkText";
 
 export const ListStockLotPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -72,7 +73,7 @@ export const ListStockLotPage = () => {
         });
     });
 
-    const { data, isError } = useQuery({
+    const { data, isError, isLoading } = useQuery({
         queryKey: [
             "stocklots",
             {
@@ -356,6 +357,7 @@ export const ListStockLotPage = () => {
                         "Fecha de entrada",
                         "Operaciones",
                     ]}
+                    isLoading={isLoading}
                     isError={isError}
                     isEmpty={!content?.length}
                     itemsCounter={
@@ -440,12 +442,11 @@ export const ListStockLotPage = () => {
                                 <BaseTableCell data={stockLot.id} />
                                 <BaseTableCell
                                     data={
-                                        <Link
+                                        <LinkText
                                             to={`/stocklots/${stockLot.id}`}
-                                            className="hover:text-blue-900"
                                         >
                                             {stockLot.batch}
-                                        </Link>
+                                        </LinkText>
                                     }
                                 />
                                 <BaseTableCell

@@ -17,9 +17,10 @@ import {
     UserCircleIcon,
     ArrowRightStartOnRectangleIcon,
 } from "@heroicons/react/24/solid";
-import { slide as Menu } from "react-burger-menu";
-import { DocumentTextIcon } from "@heroicons/react/24/outline";
+import { pushRotate as Menu } from "react-burger-menu";
+import { Bars3Icon, DocumentTextIcon } from "@heroicons/react/24/outline";
 import type { GeneralError, MenuItem } from "@/types";
+import { useState } from "react";
 
 const menuItems: MenuItem[] = [
     { label: "Dashboard", icon: <HomeIcon className="size-6" />, to: "/" },
@@ -96,15 +97,27 @@ export const Sidebar = () => {
         },
     });
 
+    const [showMenu, setShowMenu] = useState(false);
+
     return (
         <>
-            <div className="sm:hidden block h-20 relative  items-center justify-center">
+            {/* SOLAMENTE SE MOSTRARA EL MENU DE HAMBURGUESA EN DISPOSITIVOS MOVILES */}
+            <div
+                id="outer-container"
+                className="sm:hidden block h-20 relative bg-slate-900  items-center justify-center"
+            >
                 <Menu
+                    pageWrapId="page-wrap"
+                    outerContainerId="outer-container"
+                    isOpen={showMenu}
                     customBurgerIcon={
-                        <div className="text-black font-bold">
-                            Menu de hamburguesa
+                        <div className=" text-white font-bold">
+                            <Bars3Icon className="size-10" />
                         </div>
                     }
+                    width={"100%"}
+                    onOpen={() => setShowMenu(true)}
+                    onClose={() => setShowMenu(false)}
                     styles={{
                         bmBurgerButton: {
                             position: "absolute",
@@ -117,9 +130,85 @@ export const Sidebar = () => {
                         },
                     }}
                 >
-                    <a className="menu-item" href="/">
-                        Home
-                    </a>
+                    <div className="bg-slate-600 flex flex-col ">
+                        {menuItems.map((item) => (
+                            <Link
+                                key={item.label}
+                                to={item.to}
+                                onClick={() => setShowMenu(false)}
+                                className={`
+                            flex items-center justify-center gap-3 px-4 py-2 w-full 
+                            text-slate-300
+                            hover:bg-slate-800 hover:text-white
+                            transition-colors
+                            ${styleToCurrentPath(item.to)}
+                            `}
+                            >
+                                <span className="py-1 ">{item.label}</span>
+                            </Link>
+                        ))}
+
+                        <Link
+                            to={"/credits"}
+                            className={`
+                            flex items-center justify-center gap-3 px-4 py-2 w-full 
+                            text-slate-300
+                            hover:bg-slate-800 hover:text-white
+                            transition-colors
+                            ${styleToCurrentPath("/credits")}
+                             `}
+                            onClick={() => setShowMenu(false)}
+                        >
+                            <span className="py-1 ">Creditos del autor</span>
+                        </Link>
+
+                        <Link
+                            to={"/profile"}
+                            className={`
+                            flex items-center justify-center gap-3 px-4 py-2 w-full 
+                            text-slate-300
+                            hover:bg-slate-800 hover:text-white
+                            transition-colors                            
+                            ${styleToCurrentPath("/profile")}`}
+                            onClick={() => setShowMenu(false)}
+                        >
+                            <span className="py-1 ">Perfil</span>
+                        </Link>
+
+                        <form
+                            className="w-full"
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                mutate();
+                            }}
+                        >
+                            <button
+                                type="submit"
+                                className="
+                            flex items-center justify-center gap-3 px-4 py-2 w-full 
+                            text-slate-300
+                            hover:bg-slate-800 hover:text-white
+                            transition-colors bg-slate-600
+                            hover:cursor-pointer
+                            "
+                                onClick={() => setShowMenu(false)}
+                            >
+                                <span className="py-1 ">Cerrar sesión</span>
+                            </button>
+                        </form>
+
+                        <button
+                            className="                            flex items-center justify-center gap-3 px-4 py-2 w-full 
+                            text-slate-300
+                            hover:bg-slate-800 hover:text-white
+                            transition-colors bg-slate-600
+                            hover:cursor-pointer
+"
+                            onClick={() => setShowMenu(false)}
+                        >
+                            <span className="py-1 ">Cerrar menú</span>
+                        </button>
+                    </div>
                 </Menu>
             </div>
             <div className="min-h-screen bg-slate-900 text-slate-300 hidden sm:flex flex-col justify-between border-r border-slate-800">

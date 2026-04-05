@@ -10,7 +10,7 @@ import { StatusTypeButton } from "../../components/type/StatusTypeButton";
 import { EditTypeButton } from "../../components/type/EditTypeButton";
 
 export const ListTypePage = () => {
-    const { data, isError } = useQuery({
+    const { data, isError, isLoading } = useQuery({
         queryFn: listAllTypes,
         retry: 1,
         queryKey: ["types"],
@@ -37,6 +37,7 @@ export const ListTypePage = () => {
                     headers={["ID", "Nombre", "Editar", "Estado"]}
                     isError={isError}
                     isEmpty={!data?.length}
+                    isLoading={isLoading}
                 >
                     {data?.map((type) => (
                         <TableRowContainer key={type.id}>

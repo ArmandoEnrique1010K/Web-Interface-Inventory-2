@@ -50,6 +50,7 @@ export const DetailsDeliveryLinePage = () => {
     const {
         data: stockLotsByDeliveryLineData,
         isError: stockLotDeliveryLineError,
+        isLoading: stockLotDeliveryLineIsLoading,
     } = useQuery({
         queryKey: ["deliveryLine", "stockLots", deliveryLineId],
         queryFn: () => getStockLotsByDeliveryLine(deliveryLineId!),
@@ -264,6 +265,7 @@ export const DetailsDeliveryLinePage = () => {
                             ]}
                             isError={stockLotDeliveryLineError}
                             isEmpty={!content.length}
+                            isLoading={stockLotDeliveryLineIsLoading}
                         >
                             {content?.map((stockLot) => {
                                 return (

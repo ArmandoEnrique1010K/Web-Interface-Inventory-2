@@ -44,7 +44,7 @@ export const NewModelInDeliveryOrderModal = ({
         keyword: keyword,
     });
 
-    const { data, isError } = useQuery({
+    const { data, isError, isLoading } = useQuery({
         queryKey: ["products", { keyword, page }],
 
         queryFn: () =>
@@ -109,6 +109,7 @@ export const NewModelInDeliveryOrderModal = ({
                                 "Característica",
                                 "Agregar",
                             ]}
+                            isLoading={isLoading}
                             isError={isError}
                             isEmpty={!content?.length}
                             itemsCounter={

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { useSearchParams, Link } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { listAllPendingDeliveryOrders } from "../../api/DeliveryOrderAPI";
 import { EntityListLayout } from "@/layout/entity/EntityListLayout";
 import { FiltersFormContainer } from "@/components/FiltersFormContainer";
@@ -13,6 +13,7 @@ import { BaseTableCell } from "@/components/BaseTableCell";
 import { InputDateTimeFilter } from "@/ui/filters/InputDateTimeFilter";
 import { handleFormatDateTimeText } from "@/utils/handleFormatDateTimeText";
 import { DeliveryOrderStatus } from "../../components/deliveryOrder/DeliveryOrderStatus";
+import { LinkText } from "@/components/LinkText";
 
 export const ListPendingDeliveryOrderPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -29,10 +30,10 @@ export const ListPendingDeliveryOrderPage = () => {
         userClientName,
     });
 
-    const { data, isError } = useQuery({
+    const { data, isError, isLoading } = useQuery({
         queryKey: [
             "deliveryOrders",
-            { batch, startDate, endDate, userClientName, status, page },
+            { batch, startDate, endDate, userClientName, page },
         ],
 
         queryFn: () =>
@@ -120,6 +121,7 @@ export const ListPendingDeliveryOrderPage = () => {
                         "Cliente",
                         "Estado",
                     ]}
+                    isLoading={isLoading}
                     isError={isError}
                     isEmpty={!content?.length}
                     itemsCounter={
@@ -174,12 +176,11 @@ export const ListPendingDeliveryOrderPage = () => {
                                 <BaseTableCell data={order.id} />
                                 <BaseTableCell
                                     data={
-                                        <Link
+                                        <LinkText
                                             to={`/orders/pending/${order.id}`}
-                                            className="hover:text-blue-900"
                                         >
                                             {order.batch}
-                                        </Link>
+                                        </LinkText>
                                     }
                                 />
                                 <BaseTableCell

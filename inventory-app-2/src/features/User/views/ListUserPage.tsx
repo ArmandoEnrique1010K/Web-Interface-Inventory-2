@@ -44,7 +44,7 @@ export const ListUserPage = () => {
         });
     });
 
-    const { data, isError } = useQuery({
+    const { data, isError, isLoading } = useQuery({
         queryKey: ["users", { name, idRoles, page }],
 
         queryFn: () =>
@@ -139,6 +139,7 @@ export const ListUserPage = () => {
                         "Estado",
                         "Alterar roles",
                     ]}
+                    isLoading={isLoading}
                     isError={isError}
                     isEmpty={!content?.length}
                     itemsCounter={

@@ -99,7 +99,6 @@ export const ListProductPage = () => {
     };
 
     const statusOptions = [
-        { value: "", label: "Todos los estados" },
         { value: "true", label: "Activos" },
         { value: "false", label: "Inactivos" },
     ];
@@ -193,6 +192,7 @@ export const ListProductPage = () => {
                                 }))
                             }
                             value={form.status}
+                            textInNullOption="Todos los estados"
                         />
                     </div>
                 </FiltersFormContainer>

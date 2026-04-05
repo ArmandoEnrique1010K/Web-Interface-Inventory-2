@@ -75,15 +75,10 @@ export const NewLocationPage = () => {
     });
 
     const regions =
-        regionsData
-            ?.map((region) => ({
-                value: region.id.toString(),
-                label: region.name,
-            }))
-            .concat({
-                value: "",
-                label: "Seleccione una región",
-            }) || [];
+        regionsData?.map((region) => ({
+            value: region.id.toString(),
+            label: region.name,
+        })) || [];
 
     const subregions =
         subregionsData?.map((type) => ({
@@ -128,6 +123,7 @@ export const NewLocationPage = () => {
                                     setSelectedRegionId(e.target.value)
                                 }
                                 value={selectedRegionId}
+                                textInNullOption="Seleccione una región"
                             />
                             <div className="min-h-6">
                                 <p className="text-red-700 text-sm">

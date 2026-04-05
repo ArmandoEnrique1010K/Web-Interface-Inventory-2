@@ -9,7 +9,7 @@ import { EntityListLayout } from "@/layout/entity/EntityListLayout";
 import { EditRegionButton } from "../../components/region/EditRegionButton";
 
 export const ListRegionPage = () => {
-    const { data, isError } = useQuery({
+    const { data, isError, isLoading } = useQuery({
         queryKey: ["regions"],
         queryFn: listAllRegions,
     });
@@ -35,6 +35,7 @@ export const ListRegionPage = () => {
                     headers={["ID", "Nombre", "Editar"]}
                     isError={isError}
                     isEmpty={!data?.length}
+                    isLoading={isLoading}
                 >
                     {data?.map((region) => (
                         <TableRowContainer key={region.id}>

@@ -270,6 +270,7 @@ export const DetailsProductPage = () => {
                         ]}
                         isError={isErrorModels}
                         isEmpty={!modelsData?.length}
+                        isLoading={isLoadingModels}
                     >
                         {modelsData?.map((model) => (
                             <TableRowContainer key={model.id}>

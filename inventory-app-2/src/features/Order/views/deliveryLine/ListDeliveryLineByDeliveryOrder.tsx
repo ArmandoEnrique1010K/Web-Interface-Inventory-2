@@ -1,12 +1,7 @@
 import { EntityListLayout } from "@/layout/entity/EntityListLayout";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
-import {
-    Link,
-    useLocation,
-    useParams,
-    useSearchParams,
-} from "react-router-dom";
+import { useLocation, useParams, useSearchParams } from "react-router-dom";
 import { listAllDeliveryLinesByDeliveryOrder } from "../../api/DeliveryLineAPI";
 import { FiltersFormContainer } from "@/components/FiltersFormContainer";
 import { TableContainer } from "@/components/TableContainer";
@@ -26,6 +21,7 @@ import { AddDeliveryLineButton } from "../../components/deliveryLine/AddDelivery
 import { handleFormatDateTimeWithoutT } from "@/utils/handleFormatDateTime";
 import { DeliveryLineStatus } from "../../components/deliveryLine/DeliveryLineStatus";
 import { AllocateDeliveryLineButton } from "../../components/deliveryLine/AllocateDeliveryLineButton";
+import { LinkText } from "@/components/LinkText";
 
 type Props = {
     deliveryOrderStatus: DeliveryOrderItem["orderStatus"];
@@ -116,7 +112,7 @@ export const ListDeliveryLineByDeliveryOrder = ({
         }
     }, [deliveryOrderId]);
 
-    const { data, isError } = useQuery({
+    const { data, isError, isLoading } = useQuery({
         queryKey: [
             "deliveryLines",
             "deliveryOrder",
@@ -499,6 +495,7 @@ export const ListDeliveryLineByDeliveryOrder = ({
                             "estado",
                             "operaciones",
                         ]}
+                        isLoading={isLoading}
                         isError={isError}
                         isEmpty={!content.length}
                         itemsCounter={
@@ -550,7 +547,7 @@ export const ListDeliveryLineByDeliveryOrder = ({
                                         data={
                                             <>
                                                 {/* TODO: SOLUCION TEMPORAL, ¿QUE DEBERIA MOSTRAR AQUI? */}
-                                                <Link
+                                                <LinkText
                                                     to={getRoutePath(
                                                         deliveryLine.id,
                                                     )}
@@ -558,7 +555,7 @@ export const ListDeliveryLineByDeliveryOrder = ({
                                                     {
                                                         deliveryLine.modelproductName
                                                     }
-                                                </Link>
+                                                </LinkText>
                                             </>
                                         }
                                     />

@@ -23,12 +23,29 @@ export const movementSchema = z.object({
         "MOVEMENT_LINE_SIMULTANEOUS",
     ]),
     userName: z.string(),
+
+    productId: z.number(),
+    productName: z.string(),
+
     modelId: z.number(),
     modelName: z.string(),
-    movements_StockLots: z.array(z.number()),
-    stockLotReceiverId: z.number(),
-    stockLotReceiverBatch: z.string(),
-    stockLotEmitterId: z.number(),
-    stockLotEmitterBatch: z.string(),
-    deliveryLineId: z.number(),
+    imageUrl: z.string(),
+    // .nullable(): Permite null
+    // .optional(): Permite undefined
+
+    movements_StockLots: z.array(z.number().nullable()),
+    stockLotReceiverId: z.number().nullable(),
+    stockLotReceiverBatch: z.string().nullable(),
+    stockLotEmitterId: z.number().nullable(),
+    stockLotEmitterBatch: z.string().nullable(),
+    deliveryLineId: z.number().nullable(),
+    deliveryOrderId: z.number().nullable(),
+    deliveryOrderBatch: z.string().nullable(),
+});
+
+export const movement_StockLotSchema = z.object({
+    id: z.number(),
+    quantityTaken: z.number(),
+    stockLotId: z.number(),
+    stockLotBatch: z.string(),
 });

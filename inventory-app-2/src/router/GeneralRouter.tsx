@@ -13,7 +13,7 @@ import { ValidateUserTokenForm } from "@/features/Auth/views/ValidateUserTokenFo
 import { UpdateUserPasswordForm } from "@/features/Auth/views/UpdateUserPasswordForm";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
-import { Loading } from "@/views/Loading";
+import { GeneralLoadingView } from "@/views/GeneralLoadingView";
 import {
     ClipboardDocumentCheckIcon,
     ClipboardDocumentListIcon,
@@ -141,7 +141,7 @@ export const GeneralRouter = () => {
     );
 
     if (!authChecked) {
-        return <Loading />;
+        return <GeneralLoadingView />;
     }
 
     return (

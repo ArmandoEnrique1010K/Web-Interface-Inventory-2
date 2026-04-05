@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { useSearchParams, Link } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { listAllDeliveryOrdersByClient } from "../../api/DeliveryOrderAPI";
 import { EntityListLayout } from "@/layout/entity/EntityListLayout";
 import { FiltersFormContainer } from "@/components/FiltersFormContainer";
@@ -16,6 +16,7 @@ import { handleFormatDateTimeText } from "@/utils/handleFormatDateTimeText";
 import type { DeliveryOrderItem } from "../../schemas/items";
 import { deliveryOrderStatusOptions } from "../../data/deliveryOrderStatusOptions";
 import { DeliveryOrderStatus } from "../../components/deliveryOrder/DeliveryOrderStatus";
+import { LinkText } from "@/components/LinkText";
 
 export const ListDeliveryOrderByCurrentUserPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -32,7 +33,7 @@ export const ListDeliveryOrderByCurrentUserPage = () => {
         status: status === undefined ? "" : String(status),
     });
 
-    const { data, isError } = useQuery({
+    const { data, isError, isLoading } = useQuery({
         queryKey: [
             "deliveryOrders",
             { batch, startDate, endDate, status, page },
@@ -141,6 +142,7 @@ export const ListDeliveryOrderByCurrentUserPage = () => {
                         "Fecha prioritaria",
                         "Estado",
                     ]}
+                    isLoading={isLoading}
                     isError={isError}
                     isEmpty={!content?.length}
                     itemsCounter={
@@ -192,12 +194,11 @@ export const ListDeliveryOrderByCurrentUserPage = () => {
                                 <BaseTableCell data={order.id} />
                                 <BaseTableCell
                                     data={
-                                        <Link
+                                        <LinkText
                                             to={`/orders/my-orders/${order.id}`}
-                                            className="hover:text-blue-900"
                                         >
                                             {order.batch}
-                                        </Link>
+                                        </LinkText>
                                     }
                                 />
                                 <BaseTableCell

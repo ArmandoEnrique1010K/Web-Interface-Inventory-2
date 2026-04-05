@@ -3,15 +3,20 @@ import { movementTypeOptions } from "../data/movementTypeOptions";
 import type { MovementItem } from "../schemas/items";
 
 type Props = {
+    type?: "url" | "text";
     movementType: MovementItem["movementType"];
-    movementId: number;
+    movementId?: number;
 };
 
 const movementTypeMap = Object.fromEntries(
     movementTypeOptions.map((item) => [item.value, item]),
 );
 
-export const MovementType = ({ movementType, movementId }: Props) => {
+export const MovementType = ({
+    type = "text",
+    movementType,
+    movementId,
+}: Props) => {
     const movement = movementTypeMap[movementType];
 
     if (!movement) {
@@ -19,13 +24,17 @@ export const MovementType = ({ movementType, movementId }: Props) => {
     }
 
     return (
-        <div
-            className={`flex flex-row justify-center items-center gap-2 w-full ${movement.color} rounded-4xl px-3 py-1 text-sm`}
+        <span
+            className={`inline-flex justify-center items-center gap-2  ${movement.color} rounded-4xl px-3 py-1 text-sm`}
         >
             <span>{movement.icon}</span>
-            <LinkText to={`/movements/${movementId}`}>
-                {movement.label}
-            </LinkText>
-        </div>
+            {type === "url" ? (
+                <LinkText to={`/movements/${movementId}`}>
+                    {movement.label}
+                </LinkText>
+            ) : (
+                <span>{movement.label}</span>
+            )}
+        </span>
     );
 };

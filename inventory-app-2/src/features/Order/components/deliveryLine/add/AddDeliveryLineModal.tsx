@@ -148,27 +148,16 @@ export const AddDeliveryLineModal = ({
     });
 
     const regions =
-        regionsData
-            ?.map((region) => ({
-                value: region.id.toString(),
-                label: region.name,
-            }))
-            .concat({
-                value: "",
-                label: "Seleccione una región",
-            }) || [];
+        regionsData?.map((region) => ({
+            value: region.id.toString(),
+            label: region.name,
+        })) || [];
 
     const subregions =
         subregionsData?.map((type) => ({
             value: type.id.toString(),
             label: type.name,
         })) || [];
-
-    const subregionsList =
-        subregions.concat({
-            value: "",
-            label: "Seleccione una subregión",
-        }) || [];
 
     console.log(subregionsData);
     console.log(subregions);
@@ -258,6 +247,7 @@ export const AddDeliveryLineModal = ({
                                 setSelectedSubregionId("");
                             }}
                             value={selectedRegionId}
+                            textInNullOption="Seleccione una región"
                         />
                         <div className="min-h-6">
                             <p className="text-red-700 text-sm">
@@ -274,12 +264,13 @@ export const AddDeliveryLineModal = ({
                         <SelectOptionFilter
                             name="subregionId"
                             label="Subregión"
-                            options={subregionsList}
+                            options={subregions}
                             onChange={(e) => {
                                 setSelectedSubregionId(e.target.value);
                             }}
                             value={selectedSubregionId}
                             disabled={selectedRegionId === ""}
+                            textInNullOption="Seleccione una subregión"
                         />
                         <div className="min-h-6">
                             <p className="text-red-700 text-sm">
