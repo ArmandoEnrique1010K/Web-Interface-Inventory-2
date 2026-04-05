@@ -18,7 +18,7 @@ type HeaderProps = {
 AuthFormLayout.Header = ({ title, helpText }: HeaderProps) => {
     return (
         <>
-            <h1 className="sm:text-4xl text-2xl font-bold text-slate-900 text-center sm:mb-6 mb-4">
+            <h1 className="sm:text-4xl text-3xl font-bold text-slate-900 text-center sm:mb-6 mb-4">
                 {title}
             </h1>
 

@@ -47,26 +47,8 @@ export const CreditsPage = () => {
                             >
                                 React Router DOM
                             </CreditItem>
-                            <CreditItem
-                                type="li"
-                                url="https://tailwindcss.com/"
-                            >
-                                TailwindCSS
-                            </CreditItem>
                             <CreditItem type="li" url="https://redux.js.org/">
                                 Redux
-                            </CreditItem>
-                            <CreditItem type="li" url="https://axios-http.com/">
-                                Axios
-                            </CreditItem>
-                            <CreditItem type="li" url="https://zod.dev/">
-                                Zod
-                            </CreditItem>
-                            <CreditItem
-                                type="li"
-                                url="https://react-hook-form.com/"
-                            >
-                                React Hook Form
                             </CreditItem>
                             <CreditItem
                                 type="li"
@@ -74,20 +56,37 @@ export const CreditsPage = () => {
                             >
                                 TanStack React Query
                             </CreditItem>
+
+                            <CreditItem
+                                type="li"
+                                url="https://react-hook-form.com/"
+                            >
+                                React Hook Form
+                            </CreditItem>
+
+                            <CreditItem type="li" url="https://zod.dev/">
+                                Zod
+                            </CreditItem>
+                            <CreditItem type="li" url="https://axios-http.com/">
+                                Axios
+                            </CreditItem>
+                            <CreditItem
+                                type="li"
+                                url="https://tailwindcss.com/"
+                            >
+                                TailwindCSS
+                            </CreditItem>
                             <CreditItem
                                 type="li"
                                 url="https://www.radix-ui.com/"
                             >
                                 Radix UI
                             </CreditItem>
-                            <CreditItem type="li" url="https://heroicons.com/">
-                                Heroicons
-                            </CreditItem>
                             <CreditItem
                                 type="li"
-                                url="https://www.npmjs.com/package/react-burger-menu"
+                                url="https://react-select.com/home"
                             >
-                                React Burger Menu
+                                React Select
                             </CreditItem>
                             <CreditItem
                                 type="li"
@@ -107,19 +106,27 @@ export const CreditsPage = () => {
                             >
                                 React QR Code
                             </CreditItem>
-
-                            <CreditItem
-                                type="li"
-                                url="https://react-select.com/home"
-                            >
-                                React Select
-                            </CreditItem>
-
                             <CreditItem
                                 type="li"
                                 url="https://sonner.emilkowal.ski/"
                             >
                                 Sonner
+                            </CreditItem>
+                            <CreditItem
+                                type="li"
+                                url="https://www.npmjs.com/package/react-burger-menu"
+                            >
+                                React Burger Menu
+                            </CreditItem>
+
+                            <CreditItem type="li" url="https://heroicons.com/">
+                                Heroicons
+                            </CreditItem>
+                            <CreditItem
+                                type="li"
+                                url="https://www.npmjs.com/package/react-responsive"
+                            >
+                                React Responsive
                             </CreditItem>
                         </CreditSection>
 

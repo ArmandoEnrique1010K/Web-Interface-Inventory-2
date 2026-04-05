@@ -70,7 +70,7 @@ export const ListPendingDeliveryOrderPage = () => {
                     <InputTextFilter
                         name="batch"
                         label="Código de orden de entrega"
-                        placeholder="Buscar por código de orden de entrega"
+                        placeholder="Ej: 10001"
                         type="text"
                         value={form.batch}
                         onChange={(e) =>
@@ -80,28 +80,32 @@ export const ListPendingDeliveryOrderPage = () => {
                             }))
                         }
                     />
+                    <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
+                        <InputDateTimeFilter
+                            name="startDate"
+                            label="Fecha prioritaria minima de entrega"
+                            value={form.startDate}
+                            onChange={(value) =>
+                                setForm((prev) => ({
+                                    ...prev,
+                                    startDate: value,
+                                }))
+                            }
+                        />
 
-                    <InputDateTimeFilter
-                        name="startDate"
-                        label="Fecha prioritaria minima de entrega"
-                        value={form.startDate}
-                        onChange={(value) =>
-                            setForm((prev) => ({ ...prev, startDate: value }))
-                        }
-                    />
-
-                    <InputDateTimeFilter
-                        name="endDate"
-                        label="Fecha prioritaria maxima de entrega"
-                        value={form.endDate}
-                        onChange={(value) =>
-                            setForm((prev) => ({ ...prev, endDate: value }))
-                        }
-                    />
+                        <InputDateTimeFilter
+                            name="endDate"
+                            label="Fecha prioritaria maxima de entrega"
+                            value={form.endDate}
+                            onChange={(value) =>
+                                setForm((prev) => ({ ...prev, endDate: value }))
+                            }
+                        />
+                    </div>
                     <InputTextFilter
                         name="userClientName"
                         label="Nombre del cliente"
-                        placeholder="Buscar por nombre del cliente"
+                        placeholder="Nombre y/o apellido"
                         type="text"
                         value={form.userClientName}
                         onChange={(e) =>

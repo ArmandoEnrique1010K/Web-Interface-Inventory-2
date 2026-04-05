@@ -7,7 +7,6 @@ import { listAllTypes } from "../../api/TypeAPI";
 import { useSearchParams } from "react-router-dom";
 import { useState } from "react";
 import { Paginator } from "../../../../components/Paginator";
-import { useMediaQuery } from "react-responsive";
 import { SearchCounter } from "@/components/SearchCounter";
 import { FiltersFormContainer } from "@/components/FiltersFormContainer";
 import { InputTextFilter } from "@/ui/filters/InputTextFilter";
@@ -104,9 +103,6 @@ export const ListModelPage = () => {
         { value: "false", label: "Inactivos" },
     ];
 
-    const isSmallScreen = useMediaQuery({ query: "(max-width: 920px)" });
-    const isExtraSmallScreen = useMediaQuery({ query: "(max-width: 720px)" });
-
     return (
         <EntityListLayout>
             <EntityListLayout.Header title="Modelos"></EntityListLayout.Header>
@@ -138,7 +134,7 @@ export const ListModelPage = () => {
                     <InputTextFilter
                         name="keyword"
                         label="Nombre del modelo o producto"
-                        placeholder="Buscar modelos y/o productos por nombre"
+                        placeholder="Ej: Afiche modelo A"
                         type="text"
                         value={form.keyword}
                         onChange={(e) =>
@@ -148,13 +144,11 @@ export const ListModelPage = () => {
                             }))
                         }
                     />
-                    <div
-                        className={`flex ${isExtraSmallScreen ? "flex-col gap-4" : "flex-row gap-4"}`}
-                    >
+                    <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
                         <InputTextFilter
                             name="minStock"
                             label="Stock mínimo"
-                            placeholder="Stock mínimo"
+                            placeholder="Ej: 999"
                             type="number"
                             value={form.minStock.toString()}
                             onChange={(e) =>
@@ -168,7 +162,7 @@ export const ListModelPage = () => {
                         <InputTextFilter
                             name="maxStock"
                             label="Stock máximo"
-                            placeholder="Stock máximo"
+                            placeholder="Ej: 999999"
                             type="number"
                             value={form.maxStock.toString()}
                             onChange={(e) =>
@@ -180,9 +174,7 @@ export const ListModelPage = () => {
                         />
                     </div>
 
-                    <div
-                        className={`flex ${isExtraSmallScreen ? "flex-col gap-4" : "flex-row gap-4"}`}
-                    >
+                    <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
                         <InputDateFilter
                             name="minEntryDate"
                             label="Fecha minima de entrada"
@@ -207,9 +199,7 @@ export const ListModelPage = () => {
                         />
                     </div>
 
-                    <div
-                        className={`flex ${isSmallScreen ? "flex-col gap-4" : "flex-row gap-4"}`}
-                    >
+                    <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
                         <SelectOptionFilter
                             name="categoryId"
                             label="Categoría"

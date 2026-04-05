@@ -8,7 +8,6 @@ import { listAllTypes } from "../../api/TypeAPI";
 import { useSearchParams } from "react-router-dom";
 import { useState } from "react";
 import { Paginator } from "../../../../components/Paginator";
-import { useMediaQuery } from "react-responsive";
 import { SearchCounter } from "@/components/SearchCounter";
 import { FiltersFormContainer } from "@/components/FiltersFormContainer";
 import { ButtonLink } from "@/ui/ButtonLink";
@@ -103,8 +102,6 @@ export const ListProductPage = () => {
         { value: "false", label: "Inactivos" },
     ];
 
-    const isSmallScreen = useMediaQuery({ query: "(max-width: 920px)" });
-
     return (
         <EntityListLayout>
             <EntityListLayout.Header
@@ -141,7 +138,7 @@ export const ListProductPage = () => {
                     <InputTextFilter
                         name="name"
                         label="Nombre del producto"
-                        placeholder="Buscar productos por nombre"
+                        placeholder="Ej: Afiche"
                         type="text"
                         value={form.name}
                         onChange={(e) =>
@@ -152,9 +149,7 @@ export const ListProductPage = () => {
                         }
                     />
 
-                    <div
-                        className={`flex ${isSmallScreen ? "flex-col space-y-4" : "flex-row space-x-4"}`}
-                    >
+                    <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
                         <SelectOptionFilter
                             name="categoryId"
                             label="Categoría"

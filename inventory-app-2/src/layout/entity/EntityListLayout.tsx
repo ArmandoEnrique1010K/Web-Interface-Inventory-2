@@ -30,5 +30,5 @@ EntityListLayout.Header = ({ title, actions }: HeaderProps) => {
 };
 
 EntityListLayout.Content = ({ children }: Props) => {
-    return <div className="space-y-6">{children}</div>;
+    return <div className="sm:space-y-6 space-y-4">{children}</div>;
 };

@@ -334,7 +334,6 @@ export const GeneralRouter = () => {
                                 element={<DetailsDeliveryLinePage />}
                             />
 
-                            {/* TODO: AQUI DEBE TOMAR EL ENDPOINT QUE SE ENCARGA DE MOSTRAR UNA ORDEN POR CLIENTE */}
                             <Route
                                 path="my-orders"
                                 element={<ListDeliveryOrderByCurrentUserPage />}

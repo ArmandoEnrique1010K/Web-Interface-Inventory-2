@@ -97,53 +97,83 @@ export const ListMovementPage = () => {
                         setSearchParams(params);
                     }}
                 >
+                    <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
+                        <InputTextFilter
+                            name="minQuantity"
+                            label="Cantidad minima tomada"
+                            placeholder="Ej: 999"
+                            type="number"
+                            value={form.minQuantity}
+                            onChange={(e) =>
+                                setForm((prev) => ({
+                                    ...prev,
+                                    minQuantity: e.target.value,
+                                }))
+                            }
+                        />
+                        <InputTextFilter
+                            name="maxQuantity"
+                            label="Cantidad maxima tomada"
+                            placeholder="Ej: 999999"
+                            type="number"
+                            value={form.maxQuantity}
+                            onChange={(e) =>
+                                setForm((prev) => ({
+                                    ...prev,
+                                    maxQuantity: e.target.value,
+                                }))
+                            }
+                        />
+                    </div>
+                    <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
+                        <InputDateTimeFilter
+                            name={"minCreatedAt"}
+                            label={"Fecha minima"}
+                            value={form.minCreatedAt}
+                            onChange={(value) =>
+                                setForm((prev) => ({
+                                    ...prev,
+                                    minCreatedAt: value,
+                                }))
+                            }
+                        />
+
+                        <InputDateTimeFilter
+                            name={"maxCreatedAt"}
+                            label={"Fecha maxima"}
+                            value={form.maxCreatedAt}
+                            onChange={(value) =>
+                                setForm((prev) => ({
+                                    ...prev,
+                                    maxCreatedAt: value,
+                                }))
+                            }
+                        />
+                    </div>
                     <InputTextFilter
-                        name="minQuantity"
-                        label="Cantidad minima tomada"
-                        placeholder="Ej: 999"
-                        type="number"
-                        value={form.minQuantity}
+                        name="username"
+                        label="Usuario:"
+                        placeholder="Nombre, apellido, dni o correo"
+                        type="text"
+                        value={form.username}
                         onChange={(e) =>
                             setForm((prev) => ({
                                 ...prev,
-                                minQuantity: e.target.value,
-                            }))
-                        }
-                    />
-                    <InputTextFilter
-                        name="maxQuantity"
-                        label="Cantidad maxima tomada"
-                        placeholder="Ej: 999999"
-                        type="number"
-                        value={form.maxQuantity}
-                        onChange={(e) =>
-                            setForm((prev) => ({
-                                ...prev,
-                                maxQuantity: e.target.value,
+                                username: e.target.value,
                             }))
                         }
                     />
 
-                    <InputDateTimeFilter
-                        name={"minCreatedAt"}
-                        label={"Fecha minima"}
-                        value={form.minCreatedAt}
-                        onChange={(value) =>
+                    <InputTextFilter
+                        name="keyword"
+                        label="Producto:"
+                        placeholder="Nombre de producto o modelo"
+                        type="text"
+                        value={form.keyword}
+                        onChange={(e) =>
                             setForm((prev) => ({
                                 ...prev,
-                                minCreatedAt: value,
-                            }))
-                        }
-                    />
-
-                    <InputDateTimeFilter
-                        name={"maxCreatedAt"}
-                        label={"Fecha maxima"}
-                        value={form.maxCreatedAt}
-                        onChange={(value) =>
-                            setForm((prev) => ({
-                                ...prev,
-                                maxCreatedAt: value,
+                                keyword: e.target.value,
                             }))
                         }
                     />
@@ -166,44 +196,6 @@ export const ListMovementPage = () => {
                         textInNullOption="Todos los movimientos"
                         value={form.movementType}
                     />
-
-                    {/* TODO: FALTA CAMPO PARA LA LINEA DE ENTREGA */}
-
-                    {/* NOMBRE DE USUARIO */}
-                    <InputTextFilter
-                        name="username"
-                        label="Usuario"
-                        placeholder="Nombre, apellido, dni o correo"
-                        type="text"
-                        value={form.username}
-                        onChange={(e) =>
-                            setForm((prev) => ({
-                                ...prev,
-                                username: e.target.value,
-                            }))
-                        }
-                    />
-
-                    {/* NOMBRE DE PRODUCTO Y/O MODELO */}
-                    <InputTextFilter
-                        name="keyword"
-                        label="Producto o modelo"
-                        placeholder="Nombre de producto o modelo"
-                        type="text"
-                        value={form.keyword}
-                        onChange={(e) =>
-                            setForm((prev) => ({
-                                ...prev,
-                                keyword: e.target.value,
-                            }))
-                        }
-                    />
-
-                    {/* CAMPO PARA ID DE MODELO */}
-
-                    {/* CAMPO PARA NOMBRE DE USUARIO */}
-
-                    {/* CAMPO PARA LOTE DE STOCK RECEPTOR */}
                 </FiltersFormContainer>
                 <TableContainer
                     headers={[

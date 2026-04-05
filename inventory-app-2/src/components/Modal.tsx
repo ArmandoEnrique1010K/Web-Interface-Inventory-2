@@ -29,7 +29,7 @@ export const Modal = ({
         xl: "max-w-4xl",
     };
 
-    const isSmallScreen = useMediaQuery({ query: "(max-width: 640px)" });
+    const isMobile = useMediaQuery({ query: "(max-width: 640px)" });
 
     //* IMPORTANTE, CADA VEZ QUE SE ABRE LA VENTANA MODAL, VEO QUE EN LA ETIQUETA <body> CAMBIA EL ATRIBUTO "style"
     // Esta podria ser la solución para habilitar el boton de cerrado de la notificacion con sonner,
@@ -73,7 +73,7 @@ export const Modal = ({
                     // 👈 CLAVE
                     className={`fixed overflow-y-auto 
                     ${
-                        isSmallScreen
+                        isMobile
                             ? "inset-0 w-full h-full rounded-none flex flex-col p-4"
                             : `left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full ${sizeClasses[size]} max-h-[90vh] rounded-lg p-6`
                     }
@@ -92,7 +92,7 @@ export const Modal = ({
                     }
                     <Dialog.Close
                         className={`${handleApplyStyleColor("red")} absolute 
-                        ${isSmallScreen ? "right-4 top-4" : "right-6 top-6"} 
+                        ${isMobile ? "right-4 top-4" : "right-6 top-6"} 
                         border-none rounded-sm opacity-70 focus:ring-0 
                         focus:outline-none disabled:pointer-events-none`}
                     >

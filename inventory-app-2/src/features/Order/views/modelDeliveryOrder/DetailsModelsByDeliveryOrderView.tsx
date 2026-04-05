@@ -12,6 +12,7 @@ import { Modal } from "@/components/Modal";
 import { SendDeliveryOrderButton } from "../../components/deliveryOrder/SendDeliveryOrderButton";
 import { ChangeLimitDateButton } from "../../components/deliveryOrder/ChangeLimitDateButton";
 import { CancelDeliveryOrderButton } from "../../components/deliveryOrder/CancelDeliveryOrderButton";
+import { DeliveryOrderStatus } from "../../components/deliveryOrder/DeliveryOrderStatus";
 
 export const DetailsModelsByDeliveryOrderView = () => {
     const { pathname } = useLocation();
@@ -199,7 +200,11 @@ export const DetailsModelsByDeliveryOrderView = () => {
                                 )}
                             </PanelContainer.Detail>
                             <PanelContainer.Detail label="Estado">
-                                {deliveryOrderData.orderStatus}
+                                <DeliveryOrderStatus
+                                    deliveryOrderStatus={
+                                        deliveryOrderData.orderStatus
+                                    }
+                                />
                             </PanelContainer.Detail>
                             <PanelContainer.Detail label="Cambiar la fecha limite">
                                 <ChangeLimitDateButton

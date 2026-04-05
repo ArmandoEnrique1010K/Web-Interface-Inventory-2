@@ -4,7 +4,6 @@ import { useSearchParams } from "react-router-dom";
 import { listAllLocations } from "../../api/LocationAPI";
 import { listAllRegions } from "../../api/RegionAPI";
 import { listAllSubregionsByRegionId } from "../../api/SubregionAPI";
-import { useMediaQuery } from "react-responsive";
 import { ButtonLink } from "@/ui/ButtonLink";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import { FiltersFormContainer } from "@/components/FiltersFormContainer";
@@ -88,7 +87,6 @@ export const ListLocationPage = () => {
         { value: "true", label: "Activos" },
         { value: "false", label: "Inactivos" },
     ];
-    const isSmallScreen = useMediaQuery({ query: "(max-width: 479px)" });
 
     return (
         <EntityListLayout>
@@ -138,9 +136,7 @@ export const ListLocationPage = () => {
                         }
                     />
 
-                    <div
-                        className={`flex ${isSmallScreen ? "flex-col gap-2" : "flex-row gap-4"}`}
-                    >
+                    <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
                         <SelectOptionFilter
                             name="regionId"
                             label="Región:"
@@ -170,19 +166,19 @@ export const ListLocationPage = () => {
                             textInNullOption="Todas las subregiones asociadas"
                             value={form.subregionId}
                         />
-                        <SelectOptionFilter
-                            name="status"
-                            label="Estado:"
-                            options={statusOptions}
-                            onChange={(e) =>
-                                setForm((prev) => ({
-                                    ...prev,
-                                    status: e.target.value,
-                                }))
-                            }
-                            value={form.status}
-                        />
                     </div>
+                    <SelectOptionFilter
+                        name="status"
+                        label="Estado:"
+                        options={statusOptions}
+                        onChange={(e) =>
+                            setForm((prev) => ({
+                                ...prev,
+                                status: e.target.value,
+                            }))
+                        }
+                        value={form.status}
+                    />
                 </FiltersFormContainer>
 
                 <TableContainer

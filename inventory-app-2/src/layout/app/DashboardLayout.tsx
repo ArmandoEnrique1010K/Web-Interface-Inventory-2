@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import { Sidebar } from "../../views/Sidebar";
+import { SidebarMenuView } from "@/views/Sidebar/SidebarMenuView";
 
 export const DashboardLayout = () => {
     return (
@@ -9,7 +9,7 @@ export const DashboardLayout = () => {
                 id="outer-container"
                 className="flex flex-col sm:flex-row bg-slate-50 min-h-screen "
             >
-                <Sidebar />
+                <SidebarMenuView />
                 <main id="page-wrap" className="overflow-y-auto w-full">
                     <Outlet />
                 </main>

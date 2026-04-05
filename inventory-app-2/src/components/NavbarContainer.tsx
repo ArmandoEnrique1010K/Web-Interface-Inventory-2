@@ -51,13 +51,13 @@ export const NavbarContainer = ({ menuItems, children, keyword }: Props) => {
                 {menuItems &&
                     menuItems.map((item) => (
                         <Link
-                            to={item.to}
+                            to={item.to!}
                             className={`
                         flex items-center gap-2 
                         px-4 py-3 
                         font-medium 
                         transition-colors
-                        ${styleToCurrentPath(item.to)} 
+                        ${styleToCurrentPath(item.to!)} 
                         `}
                             key={item.label}
                         >

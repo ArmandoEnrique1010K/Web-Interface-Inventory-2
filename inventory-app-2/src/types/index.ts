@@ -88,7 +88,8 @@ export const errorResponseSchema = responseSchema.pick({
 export type MenuItem = {
     label: string;
     icon: React.ReactNode;
-    to: string;
+    to?: string;
+    isForm?: boolean;
 };
 
 export type GeneralError = {

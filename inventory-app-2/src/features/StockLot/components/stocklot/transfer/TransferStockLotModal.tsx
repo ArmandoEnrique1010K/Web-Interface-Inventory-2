@@ -122,7 +122,6 @@ export const TransferStockLotModal = ({
                             functionEnabled={register("comment")}
                         />
 
-                        {/* TODO: PODRIA SER MÁS INTUITIVO */}
                         {/* OBTENER LOS LOTES DE STOCK CUYO MODELO SEA EL MISMO DEL STOCK LOT EMITTER */}
 
                         <SelectOption

@@ -54,9 +54,9 @@ EntityDetailsLayout.Content = ({ children, columns = 2 }: ContentProps) => {
     const gridCols = columns === 1 ? "md:grid-cols-1" : "md:grid-cols-8";
 
     return (
-        <div className="flex flex-col justify-center items-center pb-6">
+        <div className="flex flex-col justify-center items-center sm:pb-6 pb-4">
             <div
-                className={`mx-auto grid grid-cols-1 ${gridCols} gap-6 w-full`}
+                className={`mx-auto grid grid-cols-1 ${gridCols} sm:gap-6 gap-4 w-full`}
             >
                 {children}
             </div>
@@ -66,7 +66,11 @@ EntityDetailsLayout.Content = ({ children, columns = 2 }: ContentProps) => {
 
 EntityDetailsLayout.Column = ({ children }: Props) => {
     //  bg-white rounded-2xl shadow-sm p-4
-    return <div className=" flex flex-col gap-6 md:col-span-4">{children}</div>;
+    return (
+        <div className="flex flex-col sm:gap-6 gap-4 md:col-span-4">
+            {children}
+        </div>
+    );
 };
 
 EntityDetailsLayout.Grid = ({ children }: Props) => {

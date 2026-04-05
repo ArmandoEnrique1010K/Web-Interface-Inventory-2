@@ -31,7 +31,8 @@ export const AllocateDeliveryLineModal = ({
 
     if (storedModelId !== modelId.toString()) {
         // console.log(typeof storedModelId)
-        // console.log(typeof modelId) // TODO: POR ALGUNA RAZON ES NUMBER
+        // console.log(typeof modelId)
+        // //* POR ALGUNA RAZON ES NUMBER
         sessionStorage.removeItem("stockLotsSelected");
     }
 

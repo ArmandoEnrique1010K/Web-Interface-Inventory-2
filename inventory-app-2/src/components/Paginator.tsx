@@ -1,30 +1,29 @@
-import { Button } from "@/ui/Button"
-import { useMediaQuery } from 'react-responsive'
+import { Button } from "@/ui/Button";
+import { useMediaQuery } from "react-responsive";
 
 type Props = {
-    currentPage: number
-    totalPages: number
-    isFirst: boolean
-    isLast: boolean
-    onPageChange: (page: number) => void
-}
+    currentPage: number;
+    totalPages: number;
+    isFirst: boolean;
+    isLast: boolean;
+    onPageChange: (page: number) => void;
+};
 
 export const Paginator = ({
     currentPage,
     totalPages,
     isFirst,
     isLast,
-    onPageChange
+    onPageChange,
 }: Props) => {
-
-    const goFirst = () => onPageChange(0)
-    const goLast = () => onPageChange(totalPages - 1)
-    const goPrev = () => onPageChange(currentPage - 1)
-    const goNext = () => onPageChange(currentPage + 1)
+    const goFirst = () => onPageChange(0);
+    const goLast = () => onPageChange(totalPages - 1);
+    const goPrev = () => onPageChange(currentPage - 1);
+    const goNext = () => onPageChange(currentPage + 1);
     const goToPage = (page: number) => onPageChange(page);
 
     // Se ocultaran algunos botones en dispositivos moviles
-    const isMobile = useMediaQuery({ query: '(max-width: 639.99px)' })
+    const isMobile = useMediaQuery({ query: "(max-width: 640px)" });
 
     //* En dispositivos moviles no se mostraran los botones de las paginas x - 2, x - 1, x + 1, x + 2, donde x es la pagina actual
     return (
@@ -51,38 +50,30 @@ export const Paginator = ({
                     showTextOnMobile
                 />
 
-                {
-                    !isMobile && (
-                        <>
-
-                            {
-                                !(currentPage - 2 < 0) && (
-                                    <Button
-                                        text={(currentPage - 1).toString()}
-                                        type="button"
-                                        color="blue"
-                                        onClick={() => goToPage(currentPage - 2)}
-                                        size="small"
-                                        aditionalStyles="px-2"
-                                    />
-                                )
-                            }
-                            {
-                                !(currentPage - 1 < 0) && (
-                                    <Button
-                                        text={(currentPage).toString()}
-                                        type="button"
-                                        color="blue"
-                                        onClick={() => goToPage(currentPage - 1)}
-                                        size="small"
-                                        aditionalStyles="px-2"
-                                    />
-                                )
-                            }
-                        </>
-
-                    )
-                }
+                {!isMobile && (
+                    <>
+                        {!(currentPage - 2 < 0) && (
+                            <Button
+                                text={(currentPage - 1).toString()}
+                                type="button"
+                                color="blue"
+                                onClick={() => goToPage(currentPage - 2)}
+                                size="small"
+                                aditionalStyles="px-2"
+                            />
+                        )}
+                        {!(currentPage - 1 < 0) && (
+                            <Button
+                                text={currentPage.toString()}
+                                type="button"
+                                color="blue"
+                                onClick={() => goToPage(currentPage - 1)}
+                                size="small"
+                                aditionalStyles="px-2"
+                            />
+                        )}
+                    </>
+                )}
 
                 <Button
                     text={(currentPage + 1).toString()}
@@ -93,40 +84,31 @@ export const Paginator = ({
                     showTextOnMobile
                 />
 
-                {
-                    !isMobile && (
-                        <>
-                            {
-                                !(currentPage + 1 >= totalPages) && (
-                                    <Button
-                                        text={(currentPage + 2).toString()}
-                                        type="button"
-                                        color="blue"
-                                        onClick={() => goToPage(currentPage + 1)}
-                                        size="small"
-                                        aditionalStyles="px-2"
-                                    />
-                                )
-                            }
+                {!isMobile && (
+                    <>
+                        {!(currentPage + 1 >= totalPages) && (
+                            <Button
+                                text={(currentPage + 2).toString()}
+                                type="button"
+                                color="blue"
+                                onClick={() => goToPage(currentPage + 1)}
+                                size="small"
+                                aditionalStyles="px-2"
+                            />
+                        )}
 
-                            {
-                                !(currentPage + 2 >= totalPages) && (
-                                    <Button
-                                        text={(currentPage + 3).toString()}
-                                        type="button"
-                                        color="blue"
-                                        onClick={() => goToPage(currentPage + 2)}
-                                        size="small"
-                                        aditionalStyles="px-2"
-                                    />
-                                )
-                            }
-                        </>
-
-                    )
-                }
-
-
+                        {!(currentPage + 2 >= totalPages) && (
+                            <Button
+                                text={(currentPage + 3).toString()}
+                                type="button"
+                                color="blue"
+                                onClick={() => goToPage(currentPage + 2)}
+                                size="small"
+                                aditionalStyles="px-2"
+                            />
+                        )}
+                    </>
+                )}
 
                 <Button
                     text="►"
@@ -151,6 +133,5 @@ export const Paginator = ({
                 />
             </div>
         </div>
-    )
-}
-
+    );
+};

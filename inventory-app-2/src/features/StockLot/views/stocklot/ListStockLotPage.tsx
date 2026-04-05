@@ -5,7 +5,6 @@ import { listAllStockLots } from "../../api/StockLotAPI";
 import { listAllActiveCategories } from "@/features/Product/api/CategoryAPI";
 import { listAllActiveTypes } from "@/features/Product/api/TypeAPI";
 import { listAllCompanies } from "../../api/CompanyAPI";
-import { useMediaQuery } from "react-responsive";
 import { ButtonLink } from "@/ui/ButtonLink";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import { FiltersFormContainer } from "@/components/FiltersFormContainer";
@@ -147,9 +146,6 @@ export const ListStockLotPage = () => {
             label: type.name,
         })) || [];
 
-    const isSmallScreen = useMediaQuery({ query: "(max-width: 920px)" });
-    const isExtraSmallScreen = useMediaQuery({ query: "(max-width: 720px)" });
-
     return (
         <EntityListLayout>
             <EntityListLayout.Header
@@ -208,8 +204,8 @@ export const ListStockLotPage = () => {
                 >
                     <InputTextFilter
                         name="keyword"
-                        label="Nombre del producto o modelo:"
-                        placeholder="Buscar lotes de stock por nombre de producto y/o modelo"
+                        label="Nombre del producto o modelo"
+                        placeholder="Ej: Afiche modelo A"
                         type="text"
                         value={form.keyword}
                         onChange={(e) =>
@@ -222,9 +218,9 @@ export const ListStockLotPage = () => {
 
                     <InputTextFilter
                         name="modelId"
-                        label="ID del modelo:"
-                        placeholder="Introduzca el ID númerico asociado al modelo"
-                        type="text"
+                        label="ID del modelo"
+                        placeholder="Ej: 123"
+                        type="number"
                         value={form.modelId}
                         onChange={(e) =>
                             setForm((prev) => ({
@@ -233,14 +229,12 @@ export const ListStockLotPage = () => {
                             }))
                         }
                     />
-                    <div
-                        className={`flex ${isExtraSmallScreen ? "flex-col gap-4" : "flex-row gap-4"}`}
-                    >
+                    <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
                         <div className="flex-row w-full">
                             <InputTextFilter
                                 name="minQuantityAvailable"
-                                label="Cantidad minima disponible:"
-                                placeholder="Cantidad minima disponible"
+                                label="Cantidad minima disponible"
+                                placeholder="Ej: 999"
                                 type="number"
                                 value={form.minQuantityAvailable.toString()}
                                 onChange={(e) =>
@@ -254,8 +248,8 @@ export const ListStockLotPage = () => {
                         <div className="flex-row w-full">
                             <InputTextFilter
                                 name="maxQuantityAvailable"
-                                label="Cantidad maxima disponible:"
-                                placeholder="Cantidad maxima disponible"
+                                label="Cantidad maxima disponible"
+                                placeholder="Ej: 999999"
                                 type="number"
                                 value={form.maxQuantityAvailable.toString()}
                                 onChange={(e) =>
@@ -268,14 +262,12 @@ export const ListStockLotPage = () => {
                         </div>
                     </div>
 
-                    <div
-                        className={`flex ${isExtraSmallScreen ? "flex-col gap-4" : "flex-row gap-4"}`}
-                    >
+                    <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
                         <div className="flex-row w-full">
                             <InputTextFilter
                                 name="minQuantityReceived"
-                                label="Cantidad minima recibida:"
-                                placeholder="Cantidad minima recibida"
+                                label="Cantidad minima recibida"
+                                placeholder="Ej: 999"
                                 type="number"
                                 value={form.minQuantityReceived.toString()}
                                 onChange={(e) =>
@@ -289,8 +281,8 @@ export const ListStockLotPage = () => {
                         <div className="flex-row w-full">
                             <InputTextFilter
                                 name="maxQuantityReceived"
-                                label="Cantidad maxima recibida:"
-                                placeholder="Cantidad maxima recibida"
+                                label="Cantidad maxima recibida"
+                                placeholder="Ej: 999999"
                                 type="number"
                                 value={form.maxQuantityReceived.toString()}
                                 onChange={(e) =>
@@ -303,12 +295,10 @@ export const ListStockLotPage = () => {
                         </div>
                     </div>
 
-                    <div
-                        className={`flex ${isSmallScreen ? "flex-col gap-4" : "flex-row gap-4"}`}
-                    >
+                    <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
                         <SelectOptionFilter
                             name="companyId"
-                            label="Empresa:"
+                            label="Empresa"
                             options={companies}
                             onChange={(e) =>
                                 setForm((prev) => ({
@@ -322,7 +312,7 @@ export const ListStockLotPage = () => {
 
                         <SelectOptionFilter
                             name="categoryId"
-                            label="Categoría:"
+                            label="Categoría"
                             options={categories}
                             onChange={(e) =>
                                 setForm((prev) => ({
@@ -335,7 +325,7 @@ export const ListStockLotPage = () => {
                         />
                         <SelectOptionFilter
                             name="typeId"
-                            label="Tipo:"
+                            label="Tipo"
                             options={types}
                             onChange={(e) =>
                                 setForm((prev) => ({

@@ -362,72 +362,62 @@ export const ListDeliveryLineByDeliveryOrder = ({
                             );
                         }}
                     >
-                        <InputTextFilter
-                            name="minRequiredQuantity"
-                            label="Cantidad minima"
-                            placeholder="Cantidad"
-                            type="number"
-                            value={form.minRequiredQuantity}
-                            onChange={(e) =>
-                                setForm((prev) => ({
-                                    ...prev,
-                                    minRequiredQuantity: e.target.value,
-                                }))
-                            }
-                        />
-                        <InputTextFilter
-                            name="maxRequiredQuantity"
-                            label="Cantidad maxima"
-                            placeholder="Cantidad"
-                            type="number"
-                            value={form.maxRequiredQuantity}
-                            onChange={(e) =>
-                                setForm((prev) => ({
-                                    ...prev,
-                                    maxRequiredQuantity: e.target.value,
-                                }))
-                            }
-                        />
-
-                        <InputDateTimeFilter
-                            name={"minLimitDate"}
-                            label={"Fecha limite minima"}
-                            value={form.minLimitDate}
-                            onChange={(value) =>
-                                setForm((prev) => ({
-                                    ...prev,
-                                    minLimitDate: value,
-                                }))
-                            }
-                        />
-                        <InputDateTimeFilter
-                            name={"maxLimitDate"}
-                            label={"Fecha limite maxima"}
-                            value={form.maxLimitDate}
-                            onChange={(value) =>
-                                setForm((prev) => ({
-                                    ...prev,
-                                    maxLimitDate: value,
-                                }))
-                            }
-                        />
-                        <SelectOptionFilter
-                            name="status"
-                            label="Estado"
-                            options={statusOptions}
-                            onChange={(e) =>
-                                setForm((prev) => ({
-                                    ...prev,
-                                    lineStatus: e.target.value,
-                                }))
-                            }
-                            textInNullOption="Todos los estados"
-                            value={form.lineStatus}
-                        />
+                        <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
+                            <InputTextFilter
+                                name="minRequiredQuantity"
+                                label="Cantidad minima"
+                                placeholder="Ej: 999"
+                                type="number"
+                                value={form.minRequiredQuantity}
+                                onChange={(e) =>
+                                    setForm((prev) => ({
+                                        ...prev,
+                                        minRequiredQuantity: e.target.value,
+                                    }))
+                                }
+                            />
+                            <InputTextFilter
+                                name="maxRequiredQuantity"
+                                label="Cantidad maxima"
+                                placeholder="Ej: 999999"
+                                type="number"
+                                value={form.maxRequiredQuantity}
+                                onChange={(e) =>
+                                    setForm((prev) => ({
+                                        ...prev,
+                                        maxRequiredQuantity: e.target.value,
+                                    }))
+                                }
+                            />
+                        </div>
+                        <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
+                            <InputDateTimeFilter
+                                name={"minLimitDate"}
+                                label={"Fecha limite minima"}
+                                value={form.minLimitDate}
+                                onChange={(value) =>
+                                    setForm((prev) => ({
+                                        ...prev,
+                                        minLimitDate: value,
+                                    }))
+                                }
+                            />
+                            <InputDateTimeFilter
+                                name={"maxLimitDate"}
+                                label={"Fecha limite maxima"}
+                                value={form.maxLimitDate}
+                                onChange={(value) =>
+                                    setForm((prev) => ({
+                                        ...prev,
+                                        maxLimitDate: value,
+                                    }))
+                                }
+                            />
+                        </div>
                         <InputTextFilter
                             name="location"
                             label="Ubicación"
-                            placeholder="ubicación"
+                            placeholder="Ej: Lima"
                             type="text"
                             value={form.location}
                             onChange={(e) =>
@@ -440,36 +430,37 @@ export const ListDeliveryLineByDeliveryOrder = ({
                         {/* TODO: EN ALGUNA FUTURA ACTUALIZACIÓN SE PODRIA OPTAR POR SOLAMENTE LISTAR LAS REGIONES Y SUBREGIONES QUE ESTEN ASOCIADAS A LA ORDEN DE ENTREGA MEDIANTE UNA PETICION A LA API REST */}
 
                         {/* CADA VEZ QUE CAMBIE DE REGIONID, SUBREGIONID DEBE SER REINICIADO, ESTABLECER EL VALOR NULL */}
-                        <SelectOptionFilter
-                            name="regionId"
-                            label="Región"
-                            options={regions}
-                            onChange={(e) =>
-                                setForm((prev) => ({
-                                    ...prev,
-                                    regionId: e.target.value,
-                                    subregionId: "",
-                                }))
-                            }
-                            textInNullOption="Todas las regiones"
-                            value={form.regionId}
-                        />
+                        <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
+                            <SelectOptionFilter
+                                name="regionId"
+                                label="Región"
+                                options={regions}
+                                onChange={(e) =>
+                                    setForm((prev) => ({
+                                        ...prev,
+                                        regionId: e.target.value,
+                                        subregionId: "",
+                                    }))
+                                }
+                                textInNullOption="Todas las regiones"
+                                value={form.regionId}
+                            />
 
-                        {/* SI NO HA SELECCIONADO UNA REGION, ESTE CAMPO SE DEBE LIMPIAR QUE NO HAYA NINGUNA SUBREGION SELECCIONADA */}
-                        <SelectOptionFilter
-                            name="subregionId"
-                            label="Subregión:"
-                            options={subregions}
-                            onChange={(e) =>
-                                setForm((prev) => ({
-                                    ...prev,
-                                    subregionId: e.target.value,
-                                }))
-                            }
-                            textInNullOption="Todas las subregiones asociadas"
-                            value={form.subregionId}
-                        />
-
+                            {/* SI NO HA SELECCIONADO UNA REGION, ESTE CAMPO SE DEBE LIMPIAR QUE NO HAYA NINGUNA SUBREGION SELECCIONADA */}
+                            <SelectOptionFilter
+                                name="subregionId"
+                                label="Subregión:"
+                                options={subregions}
+                                onChange={(e) =>
+                                    setForm((prev) => ({
+                                        ...prev,
+                                        subregionId: e.target.value,
+                                    }))
+                                }
+                                textInNullOption="Todas las subregiones asociadas"
+                                value={form.subregionId}
+                            />
+                        </div>
                         <SelectOptionFilter
                             name="modelId"
                             label="Modelo de la orden de entrega"
@@ -482,6 +473,20 @@ export const ListDeliveryLineByDeliveryOrder = ({
                             }
                             textInNullOption="Todos los modelos"
                             value={form.modelId}
+                        />
+
+                        <SelectOptionFilter
+                            name="status"
+                            label="Estado"
+                            options={statusOptions}
+                            onChange={(e) =>
+                                setForm((prev) => ({
+                                    ...prev,
+                                    lineStatus: e.target.value,
+                                }))
+                            }
+                            textInNullOption="Todos los estados"
+                            value={form.lineStatus}
                         />
                     </FiltersFormContainer>
 
