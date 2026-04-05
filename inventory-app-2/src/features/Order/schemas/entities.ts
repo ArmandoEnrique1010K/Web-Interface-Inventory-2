@@ -87,3 +87,34 @@ export const stockLotDeliveryLineSchema = z.object({
     stockLotId: z.number(),
     stockLotBatch: z.string(),
 });
+
+// ARBOL: REGION -> SUBREGION -> MODEL - PRODUCT
+
+const modelProductSchema = z.object({
+    modelId: z.number(),
+    modelName: z.string(),
+    productId: z.number(),
+    productName: z.string(),
+    totalQuantity: z.number(),
+});
+
+const subregionSchema = z.object({
+    subregionId: z.number(),
+    subregionName: z.string(),
+    totalQuantity: z.number(),
+    items: z.array(modelProductSchema),
+});
+
+export const summarySchema = z.array(
+    z.object({
+        regionId: z.number(),
+        regionName: z.string(),
+        totalQuantity: z.number(),
+        subregions: z.array(subregionSchema),
+    }),
+);
+
+// export const deliveryOrderSummarySchema = z.object({
+//     deliveryOrderId: z.number(),
+//     regions: z.array(regionSchema),
+// });

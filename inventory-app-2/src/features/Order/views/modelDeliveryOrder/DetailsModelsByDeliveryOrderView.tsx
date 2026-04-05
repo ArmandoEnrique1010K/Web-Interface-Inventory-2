@@ -13,6 +13,7 @@ import { SendDeliveryOrderButton } from "../../components/deliveryOrder/SendDeli
 import { ChangeLimitDateButton } from "../../components/deliveryOrder/ChangeLimitDateButton";
 import { CancelDeliveryOrderButton } from "../../components/deliveryOrder/CancelDeliveryOrderButton";
 import { DeliveryOrderStatus } from "../../components/deliveryOrder/DeliveryOrderStatus";
+import { ListDeliveryOrderSumaries } from "../../components/deliveryOrderSummary/ListDeliveryOrderSumaries";
 
 export const DetailsModelsByDeliveryOrderView = () => {
     const { pathname } = useLocation();
@@ -356,6 +357,9 @@ export const DetailsModelsByDeliveryOrderView = () => {
                         </PanelContainer>
                     )}
                 </EntityDetailsLayout.Column>
+            </EntityDetailsLayout.Content>
+            <EntityDetailsLayout.Content columns={1}>
+                <ListDeliveryOrderSumaries deliveryOrderId={deliveryOrderId} />
             </EntityDetailsLayout.Content>
         </>
     );

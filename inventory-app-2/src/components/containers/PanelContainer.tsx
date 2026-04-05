@@ -20,7 +20,9 @@ type ActionsProps = {
 
 PanelContainer.Actions = ({ children }: ActionsProps) => {
     return (
-        <div className="flex items-center justify-center gap-3">{children}</div>
+        <div className="flex items-center justify-center sm:gap-3 gap-1">
+            {children}
+        </div>
     );
 };
 

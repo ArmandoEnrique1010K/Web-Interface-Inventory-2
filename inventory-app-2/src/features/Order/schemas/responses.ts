@@ -10,6 +10,7 @@ import {
     deliveryOrderClientItemSchema,
     deliveryOrderDetailsItemSchema,
     deliveryOrderItemSchema,
+    deliveryOrderSummarySchema,
     modelDeliveryOrderItemSchema,
     stockLotDeliveryLineItemSchema,
 } from "./items";
@@ -51,4 +52,9 @@ export const deliveryLineDetailResponseSchema = createDataSchema(
 // LISTA DE LOTES DE STOCKS RELACIONADOS HACIA UNA LINEA DE ENTREGA
 export const stockLotsToDeliveryLineListResponseSchema = createDataListSchema(
     stockLotDeliveryLineItemSchema,
+);
+
+// SUMMARY (RESUMEN TOTAL DE LAS CANTIDADES)
+export const deliveryOrderSummaryResponseSchema = createDataSchema(
+    deliveryOrderSummarySchema,
 );

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { summarySchema } from "./entities";
 import {
     deliveryOrderSchema,
     modelDeliveryOrderSchema,
@@ -116,6 +117,12 @@ export const stockLotDeliveryLineItemSchema = stockLotDeliveryLineSchema;
 
 export type StockLotDeliveryLineItem = z.infer<
     typeof stockLotDeliveryLineItemSchema
+>;
+
+// SUMMARY
+export const deliveryOrderSummarySchema = summarySchema;
+export type DeliveryOrderSummaryItem = z.infer<
+    typeof deliveryOrderSummarySchema
 >;
 
 export type LineStatusOptions = {
