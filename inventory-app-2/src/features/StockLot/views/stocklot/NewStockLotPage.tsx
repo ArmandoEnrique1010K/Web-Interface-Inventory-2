@@ -1,5 +1,5 @@
-import { useForm } from "react-hook-form";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useForm, useWatch } from "react-hook-form";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { registerStockLot } from "../../api/StockLotAPI";
 import type { GeneralError } from "@/types/index";
 import { toast } from "sonner";
@@ -12,7 +12,11 @@ import { ButtonLink } from "@/ui/ButtonLink";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 import { AsyncSelectField, type Option } from "@/ui/fields/AsyncSelectOption";
-import { listFirstTenModelsByKeyword } from "@/features/Product/api/ModelAPI";
+import {
+    getModel,
+    listFirstTenModelsByKeyword,
+} from "@/features/Product/api/ModelAPI";
+import { PreviewImage } from "@/components/PreviewImage";
 
 type StockLotFields = {
     quantity: number | undefined;
@@ -41,6 +45,8 @@ export const NewStockLotPage = () => {
 
     const navigate = useNavigate();
 
+    const queryClient = useQueryClient();
+
     const { mutate } = useMutation({
         mutationFn: registerStockLot,
         retry: false,
@@ -64,9 +70,24 @@ export const NewStockLotPage = () => {
             }
         },
         onSuccess: (data) => {
+            queryClient.invalidateQueries({ queryKey: ["movements"] });
             toast.success(data);
             navigate("/stocklots");
         },
+    });
+
+    const modelIdValue = useWatch({
+        control,
+        name: "modelId",
+        defaultValue: null,
+    }) as Option | null;
+    const modelId = modelIdValue?.value;
+
+    const { data: dataModel } = useQuery({
+        queryKey: ["model", modelId],
+        queryFn: () => getModel(+modelId!),
+        retry: false,
+        enabled: !!modelId,
     });
 
     const { data: companiesData } = useQuery({
@@ -154,6 +175,11 @@ export const NewStockLotPage = () => {
                             );
                         }}
                     />
+
+                    {/* MOSTRAR UNA IMAGEN DEL MODELO */}
+                    {dataModel && (
+                        <PreviewImage imageUrl={dataModel?.imageUrl} />
+                    )}
                 </EntityFormLayout.Inputs>
 
                 <EntityFormLayout.Actions>

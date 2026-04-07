@@ -70,6 +70,7 @@ export const LostDeliveryLineModal = ({
                     deliveryLineId ? +deliveryLineId : 0,
                 ],
             });
+            queryClient.invalidateQueries({ queryKey: ["movements"] });
 
             toast.success(data);
             setShowModal(false);

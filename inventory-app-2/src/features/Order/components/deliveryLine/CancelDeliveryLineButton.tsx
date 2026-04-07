@@ -41,6 +41,7 @@ export const CancelDeliveryLineButton = ({
                     deliveryLineId ? +deliveryLineId : 0,
                 ],
             });
+            queryClient.invalidateQueries({ queryKey: ["movements"] });
             toast.success(data);
             navigate(`/orders/${deliveryOrderId}`);
         },

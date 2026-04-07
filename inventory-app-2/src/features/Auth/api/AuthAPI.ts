@@ -7,6 +7,8 @@ import type {
     AuthValidateUserTokenForm,
 } from "../schemas/requests";
 import { responseSchema } from "@/types";
+import { currentSessionResponseSchema } from "../schemas/responses";
+import { AxiosError } from "axios";
 
 export async function login(formData: AuthLoginForm) {
     try {
@@ -76,16 +78,20 @@ export async function logout() {
     }
 }
 
-// TODO: PENDIENTE ESTE ENDPOINT
 export async function currentSession() {
     try {
         const url = `/auth/current-session`;
         const { data } = await api.get(url);
-
-        if (data.type === "success") {
-            return data;
+        const parsed = currentSessionResponseSchema.parse(data);
+        if (parsed.type === "error") {
+            throw new Error(parsed.message);
         }
-    } catch (error: unknown) {
+        return parsed.data;
+    } catch (error) {
+        if (error instanceof AxiosError && error.response?.status === 401) {
+            throw error; // 🔥 importante
+        }
+
         throwApiErrorMessage(error);
     }
 }

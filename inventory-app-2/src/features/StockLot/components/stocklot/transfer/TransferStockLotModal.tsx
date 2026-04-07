@@ -66,6 +66,7 @@ export const TransferStockLotModal = ({
             queryClient.invalidateQueries({
                 queryKey: ["stocklot", stockLotEmitterId],
             });
+            queryClient.invalidateQueries({ queryKey: ["movements"] });
             toast.success(data);
             setShowModal(false);
         },

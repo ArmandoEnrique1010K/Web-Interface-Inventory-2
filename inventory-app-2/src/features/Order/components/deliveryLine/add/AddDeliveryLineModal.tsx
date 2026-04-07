@@ -16,6 +16,8 @@ import { AsyncSelectField, type Option } from "@/ui/fields/AsyncSelectOption";
 import { listFirstTenLocationsByKeyword } from "@/features/Location/api/LocationAPI";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { Button } from "@/ui/Button";
+import { PreviewImage } from "@/components/PreviewImage";
+import { getModel } from "@/features/Product/api/ModelAPI";
 
 type Props = {
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -133,8 +135,8 @@ export const AddDeliveryLineModal = ({
         getInitialSubregionId(),
     );
 
-    console.log(typeof selectedSubregionId);
-    console.log(selectedSubregionId); // ""
+    // console.log(typeof selectedSubregionId);
+    // console.log(selectedSubregionId); // ""
 
     const { data: regionsData } = useQuery({
         queryKey: ["regions"],
@@ -159,8 +161,8 @@ export const AddDeliveryLineModal = ({
             label: type.name,
         })) || [];
 
-    console.log(subregionsData);
-    console.log(subregions);
+    // console.log(subregionsData);
+    // console.log(subregions);
 
     useEffect(() => {
         const saved = sessionStorage.getItem(STORAGE_KEY);
@@ -178,6 +180,13 @@ export const AddDeliveryLineModal = ({
     const limitDate = useWatch({ control, name: "limitDate" });
     // const locationId = useWatch({ control, name: 'locationId' });
     const modelId = useWatch({ control, name: "modelId" });
+
+    const { data: dataModel } = useQuery({
+        queryKey: ["model", modelId],
+        queryFn: () => getModel(+modelId!),
+        retry: false,
+        enabled: !!modelId,
+    });
 
     useEffect(() => {
         const dataToSave = {
@@ -234,6 +243,10 @@ export const AddDeliveryLineModal = ({
                         options={modelsByDeliveryOrder}
                         textInNullOption="Seleccione un modelo"
                     ></SelectOption>
+
+                    {dataModel && (
+                        <PreviewImage imageUrl={dataModel?.imageUrl} />
+                    )}
 
                     {/* CAMPO PARA SELECCIONAR UNA REGIÓN */}
 

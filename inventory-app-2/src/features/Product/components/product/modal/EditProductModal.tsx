@@ -9,7 +9,6 @@ import { SelectOption } from "@/ui/fields/SelectOption";
 import { listAllActiveCategories } from "../../../api/CategoryAPI";
 import { listAllActiveTypes } from "../../../api/TypeAPI";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
-import { TextMessage } from "@/components/TextMessage";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 import type { ProductUpdateForm } from "../../../schemas/requests";
 
@@ -88,11 +87,11 @@ export const EditProductModal = ({
         };
         mutate(data);
     };
-    const { data: categoriesData, isLoading: categoriesLoading } = useQuery({
+    const { data: categoriesData } = useQuery({
         queryKey: ["categories", "active"],
         queryFn: listAllActiveCategories,
     });
-    const { data: typesData, isLoading: typesLoading } = useQuery({
+    const { data: typesData } = useQuery({
         queryKey: ["types", "active"],
         queryFn: listAllActiveTypes,
     });
@@ -108,11 +107,6 @@ export const EditProductModal = ({
             value: type.id.toString(),
             label: type.name,
         })) || [];
-
-    // NO OLVIDAR esperar a que se cargue la lista para mostrarla en la vista del usuario
-    if (categoriesLoading || typesLoading) {
-        return <TextMessage text="Cargando..." align="left" color="black" />;
-    }
 
     return (
         <EntityFormLayout isCompact>

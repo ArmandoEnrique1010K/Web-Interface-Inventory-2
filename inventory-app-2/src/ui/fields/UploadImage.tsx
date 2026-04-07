@@ -1,13 +1,13 @@
-import type { UseFormRegisterReturn } from "react-hook-form"
+import type { UseFormRegisterReturn } from "react-hook-form";
 
 type Props = {
-    id: string
-    label: string
-    register: UseFormRegisterReturn
-    previewImage: string | null
-    setFile: React.Dispatch<React.SetStateAction<File | null>>
-    setPreview: React.Dispatch<React.SetStateAction<string | null>>
-}
+    id: string;
+    label: string;
+    register: UseFormRegisterReturn;
+    previewImage: string | null;
+    setFile: React.Dispatch<React.SetStateAction<File | null>>;
+    setPreview: React.Dispatch<React.SetStateAction<string | null>>;
+};
 
 export const UploadImage = ({
     id,
@@ -15,36 +15,37 @@ export const UploadImage = ({
     register,
     previewImage,
     setFile,
-    setPreview
+    setPreview,
 }: Props) => {
-
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const selectedFile = e.target.files?.[0]
+        const selectedFile = e.target.files?.[0];
 
-        if (!selectedFile) return
+        if (!selectedFile) return;
 
         if (selectedFile) {
             // Obtiene el tipo de dato del archivo
             // console.log(selectedFile.type);
 
             // Si no coincide con el tipo de archivo image
-            if (!selectedFile.type.startsWith('image/')) {
-                setFile(null)
-                setPreview(null)
-                return
+            if (!selectedFile.type.startsWith("image/")) {
+                setFile(null);
+                setPreview(null);
+                return;
             }
 
-            setFile(selectedFile)
-            setPreview(URL.createObjectURL(selectedFile))
+            setFile(selectedFile);
+            setPreview(URL.createObjectURL(selectedFile));
         }
 
         // importante: mantener el onChange de react-hook-form
-        register.onChange(e)
-    }
+        register.onChange(e);
+    };
 
     return (
         <div className="flex flex-col w-full space-y-1">
-            <label className="text-sm font-medium text-slate-700">{label}:</label>
+            <label className="text-sm font-medium text-slate-700" htmlFor={id}>
+                {label}:
+            </label>
 
             {/* Input oculto */}
             <input
@@ -82,9 +83,7 @@ export const UploadImage = ({
                 />
             )}
 
-
-            <div className='min-h-5'>
-            </div>
+            <div className="min-h-5"></div>
         </div>
-    )
-}
+    );
+};

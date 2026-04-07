@@ -62,6 +62,7 @@ export const CancelDeliveryOrderModal = ({
             queryClient.removeQueries({
                 queryKey: ["deliveryOrder", deliveryOrderId],
             });
+            queryClient.invalidateQueries({ queryKey: ["movements"] });
             toast.success(data);
             setShowModal(false);
             navigate(`/orders`);

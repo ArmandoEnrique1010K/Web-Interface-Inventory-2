@@ -15,6 +15,8 @@ import type {
     DeliveryOrderClientDetailsItem,
     DeliveryOrderDetailsItem,
 } from "../../schemas/items";
+import { LoadingView } from "@/views/LoadingView";
+import { Error } from "@/views/Error";
 
 export const DetailsDeliveryOrderPage = () => {
     // ESTABLECE SI VA A MOSTRAR LA DESCRIPCION O LAS ORDENES DE ENTREGA
@@ -37,15 +39,18 @@ export const DetailsDeliveryOrderPage = () => {
 
     const deliveryOrderId = +deliveryOrderIdStr!;
 
-    const { data: deliveryOrderData, isLoading: isDeliveryOrderDataLoading } =
-        useQuery<DeliveryOrderDetailsItem | DeliveryOrderClientDetailsItem>({
-            queryKey: ["deliveryOrder", deliveryOrderId],
-            queryFn: () =>
-                from && from === "my-orders"
-                    ? getDeliveryOrderForClient(deliveryOrderId!)
-                    : getDeliveryOrder(deliveryOrderId!),
-            enabled: !!deliveryOrderId,
-        });
+    const {
+        data: deliveryOrderData,
+        isLoading: isDeliveryOrderLoading,
+        isError: isDeliveryOrderError,
+    } = useQuery<DeliveryOrderDetailsItem | DeliveryOrderClientDetailsItem>({
+        queryKey: ["deliveryOrder", deliveryOrderId],
+        queryFn: () =>
+            from && from === "my-orders"
+                ? getDeliveryOrderForClient(deliveryOrderId!)
+                : getDeliveryOrder(deliveryOrderId!),
+        enabled: !!deliveryOrderId,
+    });
     //
 
     const getRouteToOrders = () => {
@@ -59,17 +64,16 @@ export const DetailsDeliveryOrderPage = () => {
         return `/orders`;
     };
 
-    if (isDeliveryOrderDataLoading) {
-        return <div>Cargando...</div>;
+    if (isDeliveryOrderLoading) {
+        return <LoadingView />;
+    }
+
+    if (isDeliveryOrderError) {
+        return <Error type="500" />;
     }
 
     if (!deliveryOrderData) {
-        return (
-            <div>
-                Orden de entrega no encontrada o desactivada en
-                DeliveryOrderPage
-            </div>
-        );
+        return <Error type="404" />;
     }
 
     return (

@@ -11,8 +11,8 @@ import { DashboardLayout } from "@/layout/app/DashboardLayout";
 import { RestoreUserPasswordForm } from "@/features/Auth/views/RestoreUserPasswordForm";
 import { ValidateUserTokenForm } from "@/features/Auth/views/ValidateUserTokenForm";
 import { UpdateUserPasswordForm } from "@/features/Auth/views/UpdateUserPasswordForm";
-import { useSelector } from "react-redux";
-import type { RootState } from "@/store/store";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "@/store/store";
 import { GeneralLoadingView } from "@/views/GeneralLoadingView";
 import {
     ClipboardDocumentCheckIcon,
@@ -63,6 +63,8 @@ import { DetailsDeliveryLinePage } from "@/features/Order/views/deliveryLine/Det
 import type { MenuItem } from "@/types";
 import { ListMovementPage } from "@/features/Movement/views/ListMovementPage";
 import { DetailMovementPage } from "@/features/Movement/views/DetailMovementPage";
+import { useEffect } from "react";
+import { loadUserSession } from "@/store/authThunks";
 
 const productItems: MenuItem[] = [
     {
@@ -136,6 +138,13 @@ const orderItems: MenuItem[] = [
 ];
 
 export const GeneralRouter = () => {
+    const dispatch = useDispatch<AppDispatch>();
+
+    // Verifica si hay algun usuario activo
+    useEffect(() => {
+        dispatch(loadUserSession());
+    }, []);
+
     const { isAuthenticated, authChecked } = useSelector(
         (state: RootState) => state.auth,
     );

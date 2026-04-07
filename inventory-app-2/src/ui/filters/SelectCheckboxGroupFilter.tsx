@@ -1,12 +1,18 @@
 type Props = {
-    name: string
+    name: string;
     label: string; // Etiqueta del input
-    options: { value: string, label: string }[],
-    onChange?: (selectedValues: string[]) => void,
-    value: string[] // Cambiado de string a string[]
-}
+    options: { value: string; label: string }[];
+    onChange?: (selectedValues: string[]) => void;
+    value: string[]; // Cambiado de string a string[]
+};
 
-export const SelectCheckboxGroupFilter = ({ name, label, options, onChange, value }: Props) => {
+export const SelectCheckboxGroupFilter = ({
+    name,
+    label,
+    options,
+    onChange,
+    value,
+}: Props) => {
     const handleCheckboxChange = (optionValue: string, isChecked: boolean) => {
         let newSelectedValues: string[];
 
@@ -15,16 +21,18 @@ export const SelectCheckboxGroupFilter = ({ name, label, options, onChange, valu
             newSelectedValues = [...value, optionValue.toString()];
         } else {
             // Remover el valor si está desmarcado
-            newSelectedValues = value.filter(v => v !== optionValue.toString());
+            newSelectedValues = value.filter(
+                (v) => v !== optionValue.toString(),
+            );
         }
 
         onChange?.(newSelectedValues);
         // console.log(newSelectedValues)
-    }
+    };
 
     return (
         <div className="flex flex-col w-full space-y-1">
-            <label className="text-sm font-base text-slate-700">{label}:</label>
+            <div className="text-sm font-base text-slate-700">{label}:</div>
             <div className="flex flex-col space-y-1">
                 {options.map((option) => (
                     <div key={option.value} className="flex items-center gap-2">
@@ -34,7 +42,12 @@ export const SelectCheckboxGroupFilter = ({ name, label, options, onChange, valu
                             name={name}
                             value={option.value}
                             checked={value.includes(option.value)}
-                            onChange={(e) => handleCheckboxChange(option.value, e.target.checked)}
+                            onChange={(e) =>
+                                handleCheckboxChange(
+                                    option.value,
+                                    e.target.checked,
+                                )
+                            }
                             className="w-4 h-4 text-blue-600 bg-gray-100 border border-slate-300 rounded-lg outline-none focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
                         />
                         <label
@@ -47,5 +60,5 @@ export const SelectCheckboxGroupFilter = ({ name, label, options, onChange, valu
                 ))}
             </div>
         </div>
-    )
-}
+    );
+};

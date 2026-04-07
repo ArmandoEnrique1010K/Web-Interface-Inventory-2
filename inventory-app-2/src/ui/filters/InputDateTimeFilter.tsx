@@ -1,22 +1,25 @@
-import { handleFormatDateTime } from '@/utils/handleFormatDateTime'
-import DateTimePicker from 'react-datetime-picker'
-
+import { handleFormatDateTime } from "@/utils/handleFormatDateTime";
+import DateTimePicker from "react-datetime-picker";
 
 type Props = {
-    name: string,
-    label: string,
-    value: string
+    name: string;
+    label: string;
+    value: string;
     onChange: (value: string) => void;
-}
+};
 
-export const InputDateTimeFilter = ({ name, label, value, onChange }: Props) => {
+export const InputDateTimeFilter = ({
+    name,
+    label,
+    value,
+    onChange,
+}: Props) => {
     return (
-
         <div className="flex flex-col w-full space-y-1">
-            <label className="text-sm font-medium text-slate-700" htmlFor={name}>{label}:</label>
+            <div className="text-sm font-medium text-slate-700">{label}:</div>
 
             <DateTimePicker
-                id={name}
+                aria-label={name}
                 value={value ? new Date(value) : null}
                 onChange={(date: Date | null) => {
                     if (!date) {
@@ -24,11 +27,11 @@ export const InputDateTimeFilter = ({ name, label, value, onChange }: Props) => 
                         return;
                     }
 
-
                     onChange(handleFormatDateTime(date));
                 }}
                 format="y-MM-dd HH:mm:ss"
-                className="w-full border border-slate-300 rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500" yearPlaceholder="yyyy"
+                className="w-full border border-slate-300 rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500"
+                yearPlaceholder="yyyy"
                 monthPlaceholder="mm"
                 dayPlaceholder="dd"
                 hourPlaceholder="hh"
@@ -36,10 +39,9 @@ export const InputDateTimeFilter = ({ name, label, value, onChange }: Props) => 
                 secondPlaceholder="ss"
                 // Oculta los iconos
                 calendarIcon={null}
-
                 // Oculta el reloj
                 disableClock
             />
         </div>
-    )
-}
+    );
+};

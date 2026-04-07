@@ -22,6 +22,7 @@ import { handleFormatDateTimeWithoutT } from "@/utils/handleFormatDateTime";
 import { DeliveryLineStatus } from "../../components/deliveryLine/DeliveryLineStatus";
 import { AllocateDeliveryLineButton } from "../../components/deliveryLine/AllocateDeliveryLineButton";
 import { LinkText } from "@/components/LinkText";
+import { SendDeliveryLineButton } from "../../components/deliveryLine/SendDeliveryLineButton";
 
 type Props = {
     deliveryOrderStatus: DeliveryOrderItem["orderStatus"];
@@ -493,8 +494,8 @@ export const ListDeliveryLineByDeliveryOrder = ({
                     <TableContainer
                         headers={[
                             "ID",
-                            "Nombre",
                             "Ubicación",
+                            "Nombre",
                             "Cantidad",
                             "fecha limite",
                             "estado",
@@ -551,21 +552,18 @@ export const ListDeliveryLineByDeliveryOrder = ({
                                     <BaseTableCell
                                         data={
                                             <>
-                                                {/* TODO: SOLUCION TEMPORAL, ¿QUE DEBERIA MOSTRAR AQUI? */}
                                                 <LinkText
                                                     to={getRoutePath(
                                                         deliveryLine.id,
                                                     )}
                                                 >
-                                                    {
-                                                        deliveryLine.modelproductName
-                                                    }
+                                                    {deliveryLine.locationName}
                                                 </LinkText>
                                             </>
                                         }
                                     />
                                     <BaseTableCell
-                                        data={deliveryLine.locationName}
+                                        data={deliveryLine.modelproductName}
                                     />
                                     <BaseTableCell
                                         data={
@@ -592,13 +590,27 @@ export const ListDeliveryLineByDeliveryOrder = ({
                                     />
                                     <BaseTableCell
                                         data={
-                                            <AllocateDeliveryLineButton
-                                                deliveryLineId={deliveryLine.id}
-                                                deliveryOrderId={
-                                                    deliveryOrderId
-                                                }
-                                                modelId={deliveryLine.modelId}
-                                            />
+                                            <div className="flex flex-col gap-2 justify-center items-center">
+                                                <AllocateDeliveryLineButton
+                                                    deliveryLineId={
+                                                        deliveryLine.id
+                                                    }
+                                                    deliveryOrderId={
+                                                        deliveryOrderId
+                                                    }
+                                                    modelId={
+                                                        deliveryLine.modelId
+                                                    }
+                                                />
+                                                <SendDeliveryLineButton
+                                                    deliveryLineId={
+                                                        deliveryLine.id
+                                                    }
+                                                    deliveryOrderId={
+                                                        deliveryOrderId
+                                                    }
+                                                />
+                                            </div>
                                         }
                                     />
                                 </TableRowContainer>

@@ -27,6 +27,7 @@ export const SendDeliveryOrderButton = ({ deliveryOrderId }: Props) => {
             queryClient.invalidateQueries({
                 queryKey: ["deliveryOrder", deliveryOrderId],
             });
+            queryClient.invalidateQueries({ queryKey: ["movements"] });
             toast.success(data);
         },
     });

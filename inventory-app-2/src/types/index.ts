@@ -8,23 +8,29 @@ export const responseSchema = z.object({
     secretField: z.optional(z.string()),
 });
 
+export const errorSchema = z.object({
+    type: z.enum(["error"]),
+    status: z.number(),
+    message: z.string(),
+});
+
 export const createDataSchema = <T extends z.ZodType>(dataSchema: T) =>
     z.object({
-        type: z.enum(["success", "error"]),
+        type: z.enum(["success"]),
         status: z.number(),
         data: dataSchema,
     });
 
 export const createDataListSchema = <T extends z.ZodType>(dataListSchema: T) =>
     z.object({
-        type: z.enum(["success", "error"]),
+        type: z.enum(["success"]),
         status: z.number(),
         data: z.array(dataListSchema),
     });
 
 export const createPageDataListSchema = <T extends z.ZodType>(itemSchema: T) =>
     z.object({
-        type: z.enum(["success", "error"]),
+        type: z.enum(["success"]),
         status: z.number(),
         data: z.object({
             content: z.array(itemSchema),

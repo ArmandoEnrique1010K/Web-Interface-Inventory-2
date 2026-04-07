@@ -113,6 +113,7 @@ export const AllocateDeliveryLineModal = ({
             queryClient.invalidateQueries({
                 queryKey: ["deliveryLine", "stockLots", deliveryLineId],
             });
+            queryClient.invalidateQueries({ queryKey: ["movements"] });
 
             toast.success(data);
             setShowModal(false);
@@ -142,7 +143,9 @@ export const AllocateDeliveryLineModal = ({
     return (
         <EntityFormLayout isCompact>
             <EntityFormLayout.Form onSubmit={handleSubmit(handleForm)}>
-                {stockLotOptions.length ? (
+                {stockLotOptions.length === 0 ? (
+                    <EntityFormLayout.Header helpText="No se encontrarón lotes de stock disponibles para el modelo del producto seleccionado"></EntityFormLayout.Header>
+                ) : (
                     <EntityFormLayout.Inputs isCompact>
                         <InputText
                             id="quantity"
@@ -169,11 +172,6 @@ export const AllocateDeliveryLineModal = ({
                             />
                         }
                     </EntityFormLayout.Inputs>
-                ) : (
-                    // TODO: APLICAR UN DISEÑO SIMILAR A LA OTRA VENTANA MODAL QUE SE ENCUENTRA EN TRANSFERSTOCKLOT
-                    <div>
-                        No se encontrarón lotes de stock para el producto actual
-                    </div>
                 )}
                 <EntityFormLayout.Actions>
                     {stockLotOptions.length !== 0 && (

@@ -1,9 +1,9 @@
 // OBTENER PERFIL DEL USUARIO
 import { api } from "@/lib/axiosConfig";
-import type { UserProfilePageForm } from "../types";
 import { throwApiErrorMessage } from "@/utils/throwApiErrorMessage";
 import { userProfileResponseSchema } from "../schemas/response";
 import { responseSchema } from "@/types";
+import type { UserDetailsItem } from "../schemas/item";
 
 export const getUserProfilePage = async () => {
     try {
@@ -15,7 +15,7 @@ export const getUserProfilePage = async () => {
         throwApiErrorMessage(error);
     }
 };
-export const updateUserProfilePage = async (formData: UserProfilePageForm) => {
+export const updateUserProfilePage = async (formData: UserDetailsItem) => {
     try {
         const url = `/profile`;
         const { data } = await api.put(url, formData);

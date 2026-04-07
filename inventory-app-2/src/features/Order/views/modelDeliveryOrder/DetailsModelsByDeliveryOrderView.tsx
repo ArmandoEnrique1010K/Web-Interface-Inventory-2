@@ -14,6 +14,8 @@ import { ChangeLimitDateButton } from "../../components/deliveryOrder/ChangeLimi
 import { CancelDeliveryOrderButton } from "../../components/deliveryOrder/CancelDeliveryOrderButton";
 import { DeliveryOrderStatus } from "../../components/deliveryOrder/DeliveryOrderStatus";
 import { ListDeliveryOrderSumaries } from "../../components/deliveryOrderSummary/ListDeliveryOrderSumaries";
+import { LoadingView } from "@/views/LoadingView";
+import { Error } from "@/views/Error";
 
 export const DetailsModelsByDeliveryOrderView = () => {
     const { pathname } = useLocation();
@@ -46,7 +48,9 @@ export const DetailsModelsByDeliveryOrderView = () => {
     const deliveryOrderId = +deliveryOrderIdStr!;
 
     const {
-        data: deliveryOrderData /* isLoading: isDeliveryOrderDataLoading */,
+        data: deliveryOrderData,
+        isLoading: isDeliveryOrderLoading,
+        isError: isDeliveryOrderError,
     } = useQuery({
         queryKey: ["deliveryOrder", deliveryOrderId],
         queryFn: () => getDeliveryOrder(deliveryOrderId!),
@@ -55,7 +59,9 @@ export const DetailsModelsByDeliveryOrderView = () => {
 
     // Obtiene la lista de modelos que corresponden a la orden de entrega
     const {
-        data: modelsDeliveryOrderData = [] /* isLoading: isModelsDeliveryOrderDataLoading */,
+        data: modelsDeliveryOrderData = [],
+        isLoading: isModelsDeliveryOrderLoading,
+        isError: isModelsDeliveryOrderError,
     } = useQuery({
         queryKey: ["models", "deliveryOrder", deliveryOrderId],
         queryFn: () => listAllModelsByDeliveryOrder(deliveryOrderId!),
@@ -132,13 +138,16 @@ export const DetailsModelsByDeliveryOrderView = () => {
         }
     };
 
-    if (!deliveryOrderData) {
-        return (
-            <div>
-                Orden de entrega no encontrada o desactivada en
-                DetailsModelsByDeliveryOrderView
-            </div>
-        );
+    if (isDeliveryOrderLoading || isModelsDeliveryOrderLoading) {
+        return <LoadingView />;
+    }
+
+    if (isDeliveryOrderError || isModelsDeliveryOrderError) {
+        return <Error type="500" />;
+    }
+
+    if (!deliveryOrderData || !modelsDeliveryOrderData) {
+        return <Error type="404" />;
     }
 
     return (

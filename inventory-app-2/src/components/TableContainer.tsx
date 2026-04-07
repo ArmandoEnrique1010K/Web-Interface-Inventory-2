@@ -35,6 +35,12 @@ export const TableContainer = ({
     return (
         // NOTA: ES IMPOSIBLE AÑADIR UN STICKY
         <div className="bg-white shadow-sm rounded-xl border border-gray-200 sm:p-6 p-4">
+            {title && (
+                <div className="pb-4">
+                    <Subtitle>{title}</Subtitle>
+                </div>
+            )}
+
             {isLoading && <BlueLoader />}
 
             {!isLoading && isError && (
@@ -51,12 +57,6 @@ export const TableContainer = ({
 
             {!isLoading && !isError && !isEmpty && (
                 <>
-                    {title && (
-                        <div className="pb-4">
-                            <Subtitle>{title}</Subtitle>
-                        </div>
-                    )}
-
                     {itemsCounter && <div className="pb-4">{itemsCounter}</div>}
 
                     <div className="overflow-x-auto">

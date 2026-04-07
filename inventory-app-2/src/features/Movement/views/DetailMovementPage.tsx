@@ -54,21 +54,26 @@ export const DetailMovementPage = () => {
 
     return (
         <EntityDetailsLayout>
-            <EntityDetailsLayout.Header title={`Movimiento #${movementId}`} />
+            <EntityDetailsLayout.Header
+                title={`Movimiento #${movementId}`}
+                textDetails={
+                    <div className="text-right">
+                        <div>Realizado por: {movementData.userName}</div>
+                        <div>
+                            {" "}
+                            {handleFormatDateTimeWithoutT(
+                                new Date(movementData.createdAt),
+                            )}
+                        </div>
+                    </div>
+                }
+            />
             <EntityDetailsLayout.Content columns={1}>
                 <EntityDetailsLayout.Column>
-                    <PanelContainer subtitle="Caracteristicas">
+                    <PanelContainer subtitle="Tipo">
                         <PanelContainer.DetailsGrid>
                             <PanelContainer.Detail label="ID">
                                 {movementData.id}
-                            </PanelContainer.Detail>
-                            <PanelContainer.Detail label="Fecha">
-                                {handleFormatDateTimeWithoutT(
-                                    new Date(movementData.createdAt),
-                                )}
-                            </PanelContainer.Detail>
-                            <PanelContainer.Detail label="Usuario">
-                                {movementData.userName}
                             </PanelContainer.Detail>
                             <PanelContainer.Detail label="Tipo de movimiento">
                                 <MovementType

@@ -55,6 +55,7 @@ export const RecoveryStockLotModal = ({ stockLotId, setShowModal }: Props) => {
             queryClient.invalidateQueries({
                 queryKey: ["stocklot", stockLotId],
             });
+            queryClient.invalidateQueries({ queryKey: ["movements"] });
             toast.success(data);
             setShowModal(false);
         },

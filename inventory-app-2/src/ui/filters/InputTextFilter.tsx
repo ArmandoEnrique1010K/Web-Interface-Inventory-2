@@ -1,20 +1,33 @@
-import React from 'react'
+import React from "react";
 
 type Props = {
-    name: string,
-    label: string,
-    placeholder: string
-    type: 'text' | 'number' | 'search'
-    value: string
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-}
+    name: string;
+    label: string;
+    placeholder: string;
+    type: "text" | "number" | "search";
+    value: string;
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+};
 
-export const InputTextFilter = ({ name, label, placeholder, type, value, onChange }: Props) => {
+export const InputTextFilter = ({
+    name,
+    label,
+    placeholder,
+    type,
+    value,
+    onChange,
+}: Props) => {
     return (
-        <div className='flex flex-col w-full space-y-1'>
-            <label className="text-sm font-medium text-slate-700" htmlFor={name}>{label}:</label>
+        <div className="flex flex-col w-full space-y-1">
+            <label
+                className="text-sm font-medium text-slate-700"
+                htmlFor={name}
+            >
+                {label}:
+            </label>
 
             <input
+                autoComplete="off"
                 className="outline-none focus:outline-none border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 type={type}
                 placeholder={placeholder}
@@ -25,5 +38,5 @@ export const InputTextFilter = ({ name, label, placeholder, type, value, onChang
                 value={value}
             />
         </div>
-    )
-}
+    );
+};

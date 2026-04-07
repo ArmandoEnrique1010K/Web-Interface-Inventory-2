@@ -134,14 +134,14 @@ export const Sidebar = () => {
                         {menuItems.map((item) => (
                             <Link
                                 key={item.label}
-                                to={item.to}
+                                to={item.to!}
                                 onClick={() => setShowMenu(false)}
                                 className={`
                             flex items-center justify-center gap-3 px-4 py-2 w-full 
                             text-slate-300
                             hover:bg-slate-800 hover:text-white
                             transition-colors
-                            ${styleToCurrentPath(item.to)}
+                            ${styleToCurrentPath(item.to!)}
                             `}
                             >
                                 <span className="py-1 ">{item.label}</span>
@@ -231,13 +231,13 @@ export const Sidebar = () => {
                         {menuItems.map((item) => (
                             <Link
                                 key={item.label}
-                                to={item.to}
+                                to={item.to!}
                                 className={`
                             flex items-center justify-center gap-3 px-4 py-2 w-full 
                             text-slate-300
                             hover:bg-slate-800 hover:text-white
                             transition-colors
-                            ${styleToCurrentPath(item.to)}
+                            ${styleToCurrentPath(item.to!)}
                             `}
                             >
                                 <div>{item.icon}</div>

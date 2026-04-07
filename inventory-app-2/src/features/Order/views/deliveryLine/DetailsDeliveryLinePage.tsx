@@ -20,6 +20,8 @@ import { LostDeliveryLineButton } from "../../components/deliveryLine/LostDelive
 import { ReturnDeliveryLineButton } from "../../components/deliveryLine/ReturnDeliveryLineButton";
 import { EditDeliveryLineButton } from "../../components/deliveryLine/EditDeliveryLineButton";
 import { DeliveryLineStatus } from "../../components/deliveryLine/DeliveryLineStatus";
+import { LoadingView } from "@/views/LoadingView";
+import { Error } from "@/views/Error";
 
 export const DetailsDeliveryLinePage = () => {
     const {
@@ -39,7 +41,7 @@ export const DetailsDeliveryLinePage = () => {
           ? "my-orders"
           : null;
 
-    const { data, isLoading } = useQuery<DeliveryLineDetailsItem>({
+    const { data, isLoading, isError } = useQuery<DeliveryLineDetailsItem>({
         queryKey: ["deliveryLine", deliveryLineId],
         queryFn: () => getDeliveryLine(deliveryLineId!),
         enabled: !!deliveryLineId,
@@ -49,8 +51,8 @@ export const DetailsDeliveryLinePage = () => {
     // Obtener las cantidades tomadas
     const {
         data: stockLotsByDeliveryLineData,
-        isError: stockLotDeliveryLineError,
-        isLoading: stockLotDeliveryLineIsLoading,
+        isError: stockLotByDeliveryLineError,
+        isLoading: stockLotByDeliveryLineIsLoading,
     } = useQuery({
         queryKey: ["deliveryLine", "stockLots", deliveryLineId],
         queryFn: () => getStockLotsByDeliveryLine(deliveryLineId!),
@@ -72,10 +74,10 @@ export const DetailsDeliveryLinePage = () => {
 
     // Nunca navegues cuando se renderiza el componente
     useEffect(() => {
-        if (stockLotDeliveryLineError) {
+        if (stockLotByDeliveryLineError) {
             navigate(buildStartRoutePath());
         }
-    }, [stockLotDeliveryLineError]);
+    }, [stockLotByDeliveryLineError]);
 
     useEffect(() => {
         if (!data && !isLoading) {
@@ -83,28 +85,16 @@ export const DetailsDeliveryLinePage = () => {
         }
     }, [data, isLoading]);
 
-    if (isLoading) {
-        return <div>Cargando...</div>;
+    if (isLoading || stockLotByDeliveryLineIsLoading) {
+        return <LoadingView />;
     }
 
-    if (!data) {
-        return <div>Error no controlado</div>;
+    if (isError || stockLotByDeliveryLineError) {
+        return <Error type="500" />;
+    }
 
-        // TODO: MEJORAR ESTE MENSAJE DE ERROR
-        // return (
-        //     <div className="text-center p-8">
-        //         <h2 className="text-xl font-semibold text-red-600 mb-2">
-        //             Error de Validación
-        //         </h2>
-        //         <p className="text-gray-600 mb-4">
-        //             La linea de entrega #{deliveryLineId} no pertenece a la orden de entrega #{deliveryOrderId}.
-        //         </p>
-        //         <Link to={'/'}>
-        //             IR A INICIO
-        //         </Link>
-        //     </div>
-
-        // )
+    if (!data || !stockLotsByDeliveryLineData) {
+        return <Error type="404" />;
     }
 
     return (
@@ -131,7 +121,7 @@ export const DetailsDeliveryLinePage = () => {
                 textDetails={
                     <div className="text-right">
                         <div>Actualizado por: {data.userUpdaterFullname}</div>
-                        <div className="">
+                        <div>
                             (
                             {
                                 handleFormatDateTimeText(
@@ -263,9 +253,9 @@ export const DetailsDeliveryLinePage = () => {
                                 "Fecha",
                                 "Código de lote de stock",
                             ]}
-                            isError={stockLotDeliveryLineError}
+                            isError={stockLotByDeliveryLineError}
                             isEmpty={!content.length}
-                            isLoading={stockLotDeliveryLineIsLoading}
+                            isLoading={stockLotByDeliveryLineIsLoading}
                         >
                             {content?.map((stockLot) => {
                                 return (

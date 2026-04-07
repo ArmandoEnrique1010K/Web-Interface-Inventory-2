@@ -23,18 +23,26 @@ export function InputDateTime<T extends FieldValues>({
     control,
     errorMessage,
 }: InputDateTimeProps<T>) {
+    // Algunos elementos de formularios personalizados (como react-datetime-picker o selectores de fecha/tiempo
+    // avanzados) no generan un <input> HTML directo, sino que renderizan varios elementos internos y envoltorios
+    // <div> para manejar la UI y los eventos. En estos casos, asignar un id al contenedor no vincula correctamente
+    // el <label>, porque el label solo funciona con un <input> o <textarea> que tenga ese id. Por eso, en lugar
+    // de id y htmlFor, se debe usar aria-label directamente en el componente, que proporciona la información
+    // accesible a lectores de pantalla y herramientas de accesibilidad sin depender de la relación label–input
+    // tradicional.
+
     return (
         <div className="flex flex-col w-full space-y-1">
-            <label className="text-sm font-medium text-slate-700" htmlFor={id}>
-                {label}:
-            </label>
+            {/* Un elemento label no puede existir si no tiene un atributo htmlFor */}
+            <div className="text-sm font-medium text-slate-700">{label}:</div>
             <Controller
                 name={name}
                 control={control}
                 render={({ field }) => {
                     return (
                         <DateTimePicker
-                            id={id}
+                            // En lugar de id se utiliza un aria-label
+                            aria-label={id}
                             name={name}
                             value={field.value ? new Date(field.value) : null}
                             onBlur={field.onBlur}

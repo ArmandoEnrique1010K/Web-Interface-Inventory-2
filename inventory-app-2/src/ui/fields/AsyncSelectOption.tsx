@@ -96,9 +96,8 @@ export function AsyncSelectField<T extends FieldValues>({
 
     return (
         <div className="flex flex-col w-full space-y-1">
-            <label className="text-sm font-medium text-slate-700">
-                {label}:
-            </label>
+            {/* Un elemento label no puede existir si no tiene un atributo htmlFor */}
+            <div className="text-sm font-medium text-slate-700">{label}:</div>
 
             <div
                 className={`${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}
@@ -108,6 +107,8 @@ export function AsyncSelectField<T extends FieldValues>({
                     control={control}
                     render={({ field }) => (
                         <AsyncSelect
+                            // En lugar de id se utiliza un aria-label
+                            aria-label={name}
                             cacheOptions
                             defaultOptions={false}
                             loadOptions={loadOptionsWrapper}
