@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useEffectEvent, useState } from "react";
+import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { listAllUsers } from "../api/UserAPI";
 import { listAllRoles } from "../api/RoleAPI";
@@ -23,26 +23,31 @@ export const ListUserPage = () => {
     const page = Number(searchParams.get("page") ?? 0);
     const name = searchParams.get("name") ?? "";
     // IdRoles es una lista de numeros List<Long>
-    const idRolesParam = searchParams.get("idRoles") ?? "";
-    const idRoles = idRolesParam
-        ? idRolesParam
-              .split(",")
-              .map(Number)
-              .filter((n) => !isNaN(n))
-        : [];
+    // const idRolesParam = searchParams.get("idRoles") ?? "";
+    // const idRoles = idRolesParam
+    //     ? idRolesParam
+    //           .split(",")
+    //           .map(Number)
+    //           .filter((n) => !isNaN(n))
+    //     : [];
+
+    const idRoles = searchParams
+        .getAll("idRoles")
+        .map(Number)
+        .filter((n) => !isNaN(n));
 
     const [form, setForm] = useState({
         page: page,
         name: name,
         idRoles: idRoles,
     });
-    useEffectEvent(() => {
-        setForm({
-            page: page,
-            name: name,
-            idRoles: idRoles,
-        });
-    });
+    // useEffectEvent(() => {
+    //     setForm({
+    //         page: page,
+    //         name: name,
+    //         idRoles: idRoles,
+    //     });
+    // });
 
     const { data, isError, isLoading } = useQuery({
         queryKey: ["users", { name, idRoles, page }],
@@ -96,6 +101,9 @@ export const ListUserPage = () => {
 
                         // Se corrige el problema de la URL en la que se reemplaza las comas (,)
                         // Resultado: http://localhost:5173/users?idRoles=4&idRoles=3
+
+                        console.log(form.idRoles);
+
                         if (form.idRoles)
                             form.idRoles.forEach((role) =>
                                 params.append("idRoles", role.toString()),
@@ -117,18 +125,21 @@ export const ListUserPage = () => {
                             }))
                         }
                     />
-                    <SelectCheckboxGroupFilter
-                        name="idRoles"
-                        label="Roles"
-                        options={roles}
-                        onChange={(selectedValues) =>
-                            setForm((prev) => ({
-                                ...prev,
-                                idRoles: selectedValues.map(Number),
-                            }))
-                        }
-                        value={form.idRoles.map(String)} // Convert numbers to strings
-                    />
+
+                    {rolesData && (
+                        <SelectCheckboxGroupFilter
+                            name="idRoles"
+                            label="Roles"
+                            options={roles}
+                            onChange={(selectedValues) =>
+                                setForm((prev) => ({
+                                    ...prev,
+                                    idRoles: selectedValues.map(Number),
+                                }))
+                            }
+                            value={form.idRoles.map(String)} // Convierte numeros a string
+                        />
+                    )}
                 </FiltersFormContainer>
                 <TableContainer
                     headers={[

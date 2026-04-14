@@ -78,7 +78,7 @@ export const EditProfilePage = ({ data }: { data: ProfileForm }) => {
                         functionEnabled={register("firstname")}
                     />
                     <InputText
-                        id="firstname"
+                        id="lastname"
                         label="Apellido"
                         placeholder="Apellido del usuario"
                         type="text"

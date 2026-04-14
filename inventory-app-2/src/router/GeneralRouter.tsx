@@ -5,54 +5,25 @@ import {
     Route,
     Routes,
 } from "react-router-dom";
-import { AuthLayout } from "@/layout/app/AuthLayout";
-import { LoginForm } from "@/features/Auth/views/LoginForm";
-import { DashboardLayout } from "@/layout/app/DashboardLayout";
-import { RestoreUserPasswordForm } from "@/features/Auth/views/RestoreUserPasswordForm";
-import { ValidateUserTokenForm } from "@/features/Auth/views/ValidateUserTokenForm";
-import { UpdateUserPasswordForm } from "@/features/Auth/views/UpdateUserPasswordForm";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "@/store/store";
-import { GeneralLoadingView } from "@/views/GeneralLoadingView";
 import {
     ClipboardDocumentCheckIcon,
     ClipboardDocumentListIcon,
     ClipboardIcon,
     CubeIcon,
-    DocumentDuplicateIcon,
     FlagIcon,
     MapIcon,
     MapPinIcon,
-    NewspaperIcon,
-    RectangleGroupIcon,
-    TagIcon,
     TruckIcon,
 } from "@heroicons/react/24/outline";
-import { NewCategoryPage } from "@/features/Product/views/category/NewCategoryPage";
-import { ListCategoryPage } from "@/features/Product/views/category/ListCategoryPage";
-import { NavbarContainer } from "@/components/NavbarContainer";
-import { CreditsPage } from "@/features/Credits/views/CreditsPage";
 import { LoaderProfile } from "@/features/Profile/components/LoaderProfile";
-import { ListModelPage } from "@/features/Product/views/model/ListModelPage";
+
 import { ListCompanyPage } from "@/features/StockLot/views/company/ListCompanyPage";
 import { NewCompanyPage } from "@/features/StockLot/views/company/NewCompanyPage";
-import { DetailsModelPage } from "@/features/Product/views/model/DetailsModelPage";
 import { ListStockLotPage } from "@/features/StockLot/views/stocklot/ListStockLotPage";
 import { NewStockLotPage } from "@/features/StockLot/views/stocklot/NewStockLotPage";
 import { DetailsStockLotPage } from "@/features/StockLot/views/stocklot/DetailsStockLotPage";
-import { ListRegionPage } from "@/features/Location/views/region/ListRegionPage";
-import { NewRegionPage } from "@/features/Location/views/region/NewRegionPage";
-import { NewSubregionPage } from "@/features/Location/views/subregion/NewSubregionPage";
-import { ListLocationPage } from "@/features/Location/views/location/ListLocationPage";
-import { NewLocationPage } from "@/features/Location/views/location/NewLocationPage";
-import { DetailsProductPage } from "@/features/Product/views/product/DetailsProductPage";
-import { ListProductPage } from "@/features/Product/views/product/ListProductPage";
-import { NewProductPage } from "@/features/Product/views/product/NewProductPage";
-import { ListTypePage } from "@/features/Product/views/type/ListTypePage";
-import { NewTypePage } from "@/features/Product/views/type/NewTypePage";
-import { ListSubregionPage } from "@/features/Location/views/subregion/ListSubregionPage";
-import { ListUserPage } from "@/features/User/views/ListUserPage";
-import { RegisterUserPage } from "@/features/User/views/RegisterUserPage";
 import { UserProfilePage } from "@/features/Profile/views/UserProfilePage";
 import { ListDeliveryOrderPage } from "@/features/Order/views/deliveryOrder/ListDeliveryOrderPage";
 import { NewDeliveryOrderPage } from "@/features/Order/views/deliveryOrder/NewDeliveryOrderPage";
@@ -63,31 +34,21 @@ import { DetailsDeliveryLinePage } from "@/features/Order/views/deliveryLine/Det
 import type { MenuItem } from "@/types";
 import { ListMovementPage } from "@/features/Movement/views/ListMovementPage";
 import { DetailMovementPage } from "@/features/Movement/views/DetailMovementPage";
-import { useEffect } from "react";
+import { lazy, useEffect } from "react";
 import { loadUserSession } from "@/store/authThunks";
-
-const productItems: MenuItem[] = [
-    {
-        label: "Productos",
-        icon: <NewspaperIcon className="size-6" />,
-        to: "/products",
-    },
-    {
-        label: "Modelos",
-        icon: <DocumentDuplicateIcon className="size-6" />,
-        to: "/products/models",
-    },
-    {
-        label: "Categorias",
-        icon: <TagIcon className="size-6" />,
-        to: "/products/categories",
-    },
-    {
-        label: "Tipos",
-        icon: <RectangleGroupIcon className="size-6" />,
-        to: "/products/types",
-    },
-];
+import { NavbarContainer } from "@/components/NavbarContainer";
+import { ListLocationPage } from "@/features/Location/views/location/ListLocationPage";
+import { NewLocationPage } from "@/features/Location/views/location/NewLocationPage";
+import { ListRegionPage } from "@/features/Location/views/region/ListRegionPage";
+import { NewRegionPage } from "@/features/Location/views/region/NewRegionPage";
+import { ListSubregionPage } from "@/features/Location/views/subregion/ListSubregionPage";
+import { NewSubregionPage } from "@/features/Location/views/subregion/NewSubregionPage";
+import { CreditsPage } from "@/features/Credits/views/CreditsPage";
+import { LazyLoader } from "./LazyLoader";
+import { LoginForm } from "@/features/Auth/views/LoginForm";
+import { RestoreUserPasswordForm } from "@/features/Auth/views/RestoreUserPasswordForm";
+import { ValidateUserTokenForm } from "@/features/Auth/views/ValidateUserTokenForm";
+import { UpdateUserPasswordForm } from "@/features/Auth/views/UpdateUserPasswordForm";
 
 const stockLotsItems: MenuItem[] = [
     {
@@ -137,6 +98,31 @@ const orderItems: MenuItem[] = [
     },
 ];
 
+// Layouts
+const AuthLayout = lazy(() => import("@/layout/app/AuthLayout"));
+const DashboardLayout = lazy(() => import("@/layout/app/DashboardLayout"));
+
+// Grupo de rutas
+const ProductRoutes = lazy(() => import("./ProductRoutes"));
+const UserRoutes = lazy(() => import("./UserRoutes"));
+
+// // Componente auxiliar para mostrar un loading mientras se carga el componente
+// const Lazy = ({ children }: { children: React.ReactNode }) => (
+//     <Suspense fallback={<GeneralLoadingView />}>{children}</Suspense>
+// );
+
+// // Función auxiliar para renderizar el componente auxiliar dentro de un componente
+// const lazyLoad = (
+//     Component: React.LazyExoticComponent<React.ComponentType>,
+// ) => (
+//     <Lazy>
+//         <Component />
+//     </Lazy>
+// );
+// EL CODIGO SE VE MÁS LIMPIO
+
+// TODO: CONTINUAR EN LOS DEMÁS MODULOS DESDE PRODUCT
+
 export const GeneralRouter = () => {
     const dispatch = useDispatch<AppDispatch>();
 
@@ -149,8 +135,9 @@ export const GeneralRouter = () => {
         (state: RootState) => state.auth,
     );
 
+    // TODO: SE PODRIA RENDERIZAR OTRO COMPONENTE DE CARGA
     if (!authChecked) {
-        return <GeneralLoadingView />;
+        return <div>Espere un momento...</div>;
     }
 
     return (
@@ -158,7 +145,14 @@ export const GeneralRouter = () => {
             <Routes>
                 {/* Rutas públicas */}
                 {!isAuthenticated && (
-                    <Route path="/" element={<AuthLayout />}>
+                    <Route
+                        path="/*"
+                        element={
+                            <LazyLoader>
+                                <AuthLayout />
+                            </LazyLoader>
+                        }
+                    >
                         <Route index element={<LoginForm />} />
                         <Route
                             path="restore-password"
@@ -178,7 +172,14 @@ export const GeneralRouter = () => {
 
                 {/* Rutas privadas */}
                 {isAuthenticated && (
-                    <Route path="/" element={<DashboardLayout />}>
+                    <Route
+                        path="/"
+                        element={
+                            <LazyLoader>
+                                <DashboardLayout />
+                            </LazyLoader>
+                        }
+                    >
                         <Route
                             index
                             element={
@@ -187,55 +188,35 @@ export const GeneralRouter = () => {
                                 </h1>
                             }
                         />
-
+                        {/* RELACIONADO A PRODUCTS */}
                         <Route
-                            path="products"
+                            // El * indica que esta ruta acepta cualquier cosa despues
+                            path="products/*"
                             element={
-                                <NavbarContainer
-                                    menuItems={productItems}
-                                    keyword="products"
-                                >
-                                    <Outlet />
-                                </NavbarContainer>
+                                <LazyLoader>
+                                    <ProductRoutes />
+                                </LazyLoader>
+                                // <NavbarContainer
+                                //     menuItems={productItems}
+                                //     keyword="products"
+                                // >
+                                //     <Outlet />
+                                // </NavbarContainer>
                             }
-                        >
-                            {/* RELACIONADO A PRODUCTS */}
-                            <Route index element={<ListProductPage />} />
-                            <Route
-                                path=":id"
-                                element={<DetailsProductPage />}
-                            />
-                            <Route path="new" element={<NewProductPage />} />
-
-                            {/* RELACIONADO A MODELS */}
-                            <Route path="models" element={<ListModelPage />} />
-                            {/* :productId es el ID del producto que corresponde al modelo */}
-                            <Route
-                                path="models/:modelId"
-                                element={<DetailsModelPage />}
-                            />
-
-                            {/* RELACIONADO A CATEGORIES */}
-                            <Route
-                                path="categories"
-                                element={<ListCategoryPage />}
-                            />
-                            <Route
-                                path="categories/new"
-                                element={<NewCategoryPage />}
-                            />
-
-                            {/* RELACIONADO A TYPES */}
-                            <Route path="types" element={<ListTypePage />} />
-                            <Route path="types/new" element={<NewTypePage />} />
-                        </Route>
-
+                        ></Route>
                         {/* RELACIONADO A USER */}
-                        <Route path="users" element={<Outlet />}>
+                        {/* <Route path="users" element={<Outlet />}>
                             <Route index element={<ListUserPage />} />
                             <Route path="new" element={<RegisterUserPage />} />
-                        </Route>
-
+                        </Route> */}
+                        <Route
+                            path="users/*"
+                            element={
+                                <LazyLoader>
+                                    <UserRoutes />
+                                </LazyLoader>
+                            }
+                        />
                         {/* RELACIONADO A LOCATION */}
                         <Route
                             path="locations"
@@ -269,13 +250,12 @@ export const GeneralRouter = () => {
                                 element={<NewSubregionPage />}
                             />
                         </Route>
-
+                        // TODO: CONTINUAR AQUI
                         {/* RELACIONADO A PROFILE */}
                         <Route path="profile" element={<Outlet />}>
                             <Route index element={<UserProfilePage />} />
                             <Route path="update" element={<LoaderProfile />} />
                         </Route>
-
                         {/* RELACIONADO A STOCKLOT */}
                         <Route
                             path="stocklots"
@@ -305,9 +285,7 @@ export const GeneralRouter = () => {
                                 element={<NewCompanyPage />}
                             />
                         </Route>
-
                         {/* RELACIONADO A ORDENES */}
-
                         <Route
                             path="orders"
                             element={
@@ -361,7 +339,6 @@ export const GeneralRouter = () => {
                                 element={<NewDeliveryOrderPage />}
                             />
                         </Route>
-
                         {/* RELACIONADO A MOVEMENT */}
                         <Route path="movements" element={<Outlet />}>
                             <Route index element={<ListMovementPage />} />
@@ -370,12 +347,10 @@ export const GeneralRouter = () => {
                                 element={<DetailMovementPage />}
                             />
                         </Route>
-
                         {/* RELACIONADO A CREDITS */}
                         <Route path="credits" element={<Outlet />}>
                             <Route index element={<CreditsPage />} />
                         </Route>
-
                         {/* CUALQUIER OTRA RUTA REDIRIGIRA AL LOGIN O AL DASHBOARD (SI HA INICIADO SESION) */}
                         <Route path="*" element={<Navigate to="/" replace />} />
                     </Route>

@@ -1,8 +1,8 @@
-import type { UserItem } from "@/features/User/schemas/items";
+import type { RoleForUserProfileItem } from "@/features/Profile/schemas/item";
 
 // SOLAMENTE SE EXTRAE EL TIPO DE UN ELEMENTO DEL ARREGLO
 // type Role = ("Usuario" | "Operador" | "Secretario" | "Administrador")[]
-type Role = UserItem["roles"][number];
+type Role = RoleForUserProfileItem["roles"][number];
 
 // EN lugar de un find se utiliza un objeto de tipo mapa: el key es Usuario, Operador, etc. y el valor es el estilo de tailwind
 const rolesColors: Record<Role, string> = {

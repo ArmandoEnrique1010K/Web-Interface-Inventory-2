@@ -3,7 +3,7 @@ import { api } from "@/lib/axiosConfig";
 import { throwApiErrorMessage } from "@/utils/throwApiErrorMessage";
 import { userProfileResponseSchema } from "../schemas/response";
 import { responseSchema } from "@/types";
-import type { UserDetailsItem } from "../schemas/item";
+import type { ProfileForm } from "../schemas/request";
 
 export const getUserProfilePage = async () => {
     try {
@@ -15,7 +15,7 @@ export const getUserProfilePage = async () => {
         throwApiErrorMessage(error);
     }
 };
-export const updateUserProfilePage = async (formData: UserDetailsItem) => {
+export const updateUserProfilePage = async (formData: ProfileForm) => {
     try {
         const url = `/profile`;
         const { data } = await api.put(url, formData);

@@ -31,7 +31,8 @@ export type ListAllUsersQueryParams = {
 export const listAllUsers = async (params: ListAllUsersQueryParams) => {
     try {
         const url = `/users`;
-        const { data } = await api.get(url, { params: params });
+        const { data } = await api.get(url, { params });
+        console.log(params);
 
         const parsed = usersPageListResponseSchema.parse(data);
         return parsed.data;

@@ -2,11 +2,11 @@ import { useQuery } from "@tanstack/react-query";
 import { getUserProfilePage } from "../api/ProfileAPI";
 import { EntityDetailsLayout } from "@/layout/entity/EntityDetailsLayout";
 import { PanelContainer } from "@/components/containers/PanelContainer";
-import { handleApplyRoleStyle } from "@/utils/handleApplyRoleStyle";
 import { ButtonLink } from "@/ui/ButtonLink";
 import { UserIcon } from "@heroicons/react/24/outline";
 import { LoadingView } from "@/views/LoadingView";
 import { Error } from "@/views/Error";
+import { handleApplyRoleStyle } from "@/utils/handleApplyRoleStyle";
 
 export const UserProfilePage = () => {
     const { data, isError, isLoading } = useQuery({

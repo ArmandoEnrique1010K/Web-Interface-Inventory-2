@@ -2,7 +2,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import { SidebarMenuView } from "@/views/Sidebar/SidebarMenuView";
 import { useEffect } from "react";
 
-export const DashboardLayout = () => {
+export default function DashboardLayout() {
     const { pathname } = useLocation();
 
     // Cuando navegas entre rutas, el scroll NO se resetea. Es comportamiento normal de SPA con React Router DOM
@@ -34,4 +34,4 @@ export const DashboardLayout = () => {
             </div>
         </>
     );
-};
+}

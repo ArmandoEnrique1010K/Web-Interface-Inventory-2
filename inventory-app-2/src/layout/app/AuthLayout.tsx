@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 
-export const AuthLayout = () => {
+export default function AuthLayout() {
     return (
         // IGNORAR LOS ID "outer-container" Y "page-wrap" SOLAMENTE SE UTILIZAN PARA NO MOSTRAR UN ERROR EN LA CONSOLA CUANDO EL COMPONENTE <SidebarMenuView/> SE DESMONTA AL CERRAR SESION
         <div
@@ -24,4 +24,4 @@ export const AuthLayout = () => {
             </div>
         </div>
     );
-};
+}
