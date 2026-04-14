@@ -18,6 +18,8 @@ import { pushRotate as Menu } from "react-burger-menu";
 import { Link } from "react-router-dom";
 import { SidebarItem } from "./SidebarItem";
 import { useMediaQuery } from "react-responsive";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store/store";
 
 const menuItems: MenuItem[] = [
     { label: "Dashboard", icon: <HomeIcon className="size-6" />, to: "/" },
@@ -51,7 +53,9 @@ const menuItems: MenuItem[] = [
         icon: <MapPinIcon className="size-6" />,
         to: "/locations",
     },
+];
 
+const bottomMenuItems: MenuItem[] = [
     {
         label: "Creditos del autor",
         icon: <DocumentTextIcon className="size-6" />,
@@ -62,7 +66,6 @@ const menuItems: MenuItem[] = [
         icon: <UserCircleIcon className="size-6" />,
         to: "/profile",
     },
-
     {
         label: "Cerrar sesión",
         icon: <ArrowRightStartOnRectangleIcon className="size-6" />,
@@ -71,11 +74,81 @@ const menuItems: MenuItem[] = [
 ];
 
 export const SidebarMenuView = () => {
+    const { userRoles } = useSelector((state: RootState) => state.auth);
+
     const [showMenu, setShowMenu] = useState(false);
 
     const isMobile = useMediaQuery({ query: "(max-width: 640px)" });
 
     const isMenuOpen = isMobile && showMenu;
+
+    // Se deben filtrar las opciones del menu por roles
+    // Un usuario tiene más de un rol, pero solamente si tiene el rol mayor:
+    // ROLE_USER < ROLE_OPERATOR < ROLE_SECRETARY < ROLE_ADMIN
+    // userRoles devuelve un arreglo de strings con los nombres mencionadosa
+
+    // ROLE_USER: Dashboard, Ordenes
+    // ROLE_OPERATOR: Dashboard, Ordenes, Productos, Lotes de Stock, Ubicaciones
+    // ROLE_SECRETARY Y ADMIN: Dashboard, Ordenes, Productos, Lotes de Stock, Movimientos, Usuarios, Ubicaciones
+
+    // Jerarquia de roles
+    const rolePriority: Record<string, number> = {
+        ROLE_USER: 1,
+        ROLE_OPERATOR: 2,
+        ROLE_SECRETARY: 3,
+        ROLE_ADMIN: 4,
+    };
+
+    // Obtiene el rol mayor del usuario
+    const getHighestRole = (roles: string[]) => {
+        return roles.reduce((highest, current) => {
+            return rolePriority[current] > rolePriority[highest]
+                ? current
+                : highest;
+        }, roles[0]);
+    };
+
+    // Permisos por rol, estas opciones del menú se mostraran de acuerdo al rol mayor del usuario
+    const rolePermissions: Record<string, string[]> = {
+        ROLE_USER: ["Dashboard", "Ordenes"],
+
+        ROLE_OPERATOR: [
+            "Dashboard",
+            "Ordenes",
+            "Productos",
+            "Lotes de stock",
+            "Ubicaciones",
+        ],
+
+        ROLE_SECRETARY: [
+            "Dashboard",
+            "Ordenes",
+            "Productos",
+            "Lotes de stock",
+            "Movimientos",
+            "Usuarios",
+            "Ubicaciones",
+        ],
+
+        ROLE_ADMIN: [
+            "Dashboard",
+            "Ordenes",
+            "Productos",
+            "Lotes de stock",
+            "Movimientos",
+            "Usuarios",
+            "Ubicaciones",
+        ],
+    };
+
+    // Filtrar el menú
+    const highestRole = getHighestRole(userRoles);
+
+    const allowedLabels = rolePermissions[highestRole] || [];
+
+    const filteredMenu = menuItems.filter((item) =>
+        allowedLabels.includes(item.label),
+    );
 
     // CAMBIAR EL ATRIBUTO STYLE DEL ELEMENTO BODY CUANDO SE TENGA UNA VISTA DE MOVIL
     useEffect(() => {
@@ -122,7 +195,7 @@ export const SidebarMenuView = () => {
                     }}
                 >
                     <div className="min-h-screen bg-slate-900 flex flex-col overflow-y-auto">
-                        {menuItems.map((item) => (
+                        {filteredMenu.map((item) => (
                             <SidebarItem
                                 key={item.label}
                                 item={{
@@ -133,6 +206,20 @@ export const SidebarMenuView = () => {
                                 }}
                                 isMobile={true}
                                 setShowMenu={setShowMenu}
+                            />
+                        ))}
+
+                        {bottomMenuItems.map((menuItem) => (
+                            <SidebarItem
+                                key={menuItem.label}
+                                setShowMenu={setShowMenu}
+                                item={{
+                                    label: menuItem.label,
+                                    icon: menuItem.icon,
+                                    to: menuItem.to,
+                                    isForm: menuItem.isForm,
+                                }}
+                                isMobile={false}
                             />
                         ))}
 
@@ -174,7 +261,7 @@ export const SidebarMenuView = () => {
 
                     <nav className="flex flex-col justify-center items-center space-y-1 mb-1">
                         {/* FILTRAR DE MENU ITEMS ESOS ELEMENTOS */}
-                        {menuItems
+                        {filteredMenu
                             .filter((item) =>
                                 [
                                     "Dashboard",
@@ -204,27 +291,19 @@ export const SidebarMenuView = () => {
 
                 <div>
                     <div className="flex flex-col justify-center items-center space-y-1">
-                        {menuItems
-                            .filter((item) =>
-                                [
-                                    "Creditos del autor",
-                                    "Perfil",
-                                    "Cerrar sesión",
-                                ].includes(item.label),
-                            )
-                            .map((menuItem) => (
-                                <SidebarItem
-                                    key={menuItem.label}
-                                    setShowMenu={setShowMenu}
-                                    item={{
-                                        label: menuItem.label,
-                                        icon: menuItem.icon,
-                                        to: menuItem.to,
-                                        isForm: menuItem.isForm,
-                                    }}
-                                    isMobile={false}
-                                />
-                            ))}
+                        {bottomMenuItems.map((menuItem) => (
+                            <SidebarItem
+                                key={menuItem.label}
+                                setShowMenu={setShowMenu}
+                                item={{
+                                    label: menuItem.label,
+                                    icon: menuItem.icon,
+                                    to: menuItem.to,
+                                    isForm: menuItem.isForm,
+                                }}
+                                isMobile={false}
+                            />
+                        ))}
                     </div>
                 </div>
             </div>
