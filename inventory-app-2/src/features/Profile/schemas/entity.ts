@@ -5,7 +5,5 @@ export const profileSchema = z.object({
     lastname: z.string(),
     email: z.string(),
     dni: z.number(),
-    roles: z.array(
-        z.enum(["Administrador", "Secretario", "Operador", "Usuario"]),
-    ),
+    role: z.enum(["ROLE_USER", "ROLE_OPERATOR", "ROLE_ADMIN"]),
 });

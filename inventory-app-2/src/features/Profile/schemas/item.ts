@@ -6,11 +6,11 @@ export const userDetailsItemSchema = profileSchema.pick({
     lastname: true,
     email: true,
     dni: true,
-    roles: true,
+    role: true,
 });
 
 export const roleForUserProfileSchema = userDetailsItemSchema.pick({
-    roles: true,
+    role: true,
 });
 
 export type UserDetailsItem = z.infer<typeof userDetailsItemSchema>;

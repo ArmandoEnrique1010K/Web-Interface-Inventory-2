@@ -64,14 +64,11 @@ export const UserProfilePage = () => {
                                     </PanelContainer.Detail>
                                     <PanelContainer.Detail label="Roles">
                                         <span className="flex flex-wrap gap-2 text-sm">
-                                            {data.roles.map((role) => (
-                                                <span
-                                                    key={role}
-                                                    className={`px-3 py-1 rounded-4xl ${handleApplyRoleStyle(role)}`}
-                                                >
-                                                    {role}
-                                                </span>
-                                            ))}
+                                            <span
+                                                className={`px-3 py-1 rounded-4xl ${handleApplyRoleStyle(data.role)}`}
+                                            >
+                                                {data.role}
+                                            </span>
                                         </span>
                                     </PanelContainer.Detail>
                                 </>
