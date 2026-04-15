@@ -59,6 +59,7 @@ export const NewTypePage = () => {
         <EntityFormLayout>
             <EntityFormLayout.Header title="Añadir nuevo tipo" />
             <EntityFormLayout.Form
+                styled
                 onSubmit={handleSubmit((data) => mutate(data))}
             >
                 <EntityFormLayout.Inputs>

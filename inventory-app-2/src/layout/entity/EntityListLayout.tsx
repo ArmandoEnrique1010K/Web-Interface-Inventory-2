@@ -21,7 +21,8 @@ EntityListLayout.Header = ({ title, actions }: HeaderProps) => {
             {title && <Title>{title}</Title>}
 
             {actions && (
-                <div className="flex flex-row sm:mb-6 mb-4 gap-4">
+                // sm:mb-6 mb-4
+                <div className="flex flex-row gap-4 sm:mb-6 mb-4">
                     {actions}
                 </div>
             )}

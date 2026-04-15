@@ -16,6 +16,8 @@ import { DeliveryOrderStatus } from "../../components/deliveryOrder/DeliveryOrde
 import { ListDeliveryOrderSumaries } from "../../components/deliveryOrderSummary/ListDeliveryOrderSumaries";
 import { LoadingView } from "@/views/LoadingView";
 import { Error } from "@/views/Error";
+import { ROLE_ADMIN } from "@/constants";
+import { RoleGuard } from "@/components/RoleGuard";
 
 export const DetailsModelsByDeliveryOrderView = () => {
     const { pathname } = useLocation();
@@ -216,11 +218,13 @@ export const DetailsModelsByDeliveryOrderView = () => {
                                     }
                                 />
                             </PanelContainer.Detail>
-                            <PanelContainer.Detail label="Cambiar la fecha limite">
-                                <ChangeLimitDateButton
-                                    deliveryOrderId={deliveryOrderData.id}
-                                />
-                            </PanelContainer.Detail>
+                            <RoleGuard requiredRole={ROLE_ADMIN}>
+                                <PanelContainer.Detail label="Cambiar la fecha limite">
+                                    <ChangeLimitDateButton
+                                        deliveryOrderId={deliveryOrderData.id}
+                                    />
+                                </PanelContainer.Detail>
+                            </RoleGuard>
                         </PanelContainer.DetailsGrid>
                     </PanelContainer>
                 </EntityDetailsLayout.Column>
@@ -278,18 +282,19 @@ export const DetailsModelsByDeliveryOrderView = () => {
                                 showTextOnMobile
                             />
 
-                            <Button
-                                type="button"
-                                size="small"
-                                color="green"
-                                text="Añadir"
-                                showTextOnMobile={true}
-                                isLargeOnMobile={false}
-                                onClick={() => {
-                                    setAddModelDeliveryOrderModalOpen(true);
-                                }}
-                            />
-
+                            <RoleGuard requiredRole={ROLE_ADMIN}>
+                                <Button
+                                    type="button"
+                                    size="small"
+                                    color="green"
+                                    text="Añadir"
+                                    showTextOnMobile={true}
+                                    isLargeOnMobile={false}
+                                    onClick={() => {
+                                        setAddModelDeliveryOrderModalOpen(true);
+                                    }}
+                                />
+                            </RoleGuard>
                             {addModelDeliveryOrderModalOpen &&
                                 deliveryOrderId && (
                                     <Modal
@@ -350,20 +355,22 @@ export const DetailsModelsByDeliveryOrderView = () => {
                     </PanelContainer>
 
                     {from === "my-orders" || (
-                        <PanelContainer subtitle="Operaciones">
-                            <PanelContainer.DetailsGrid>
-                                <PanelContainer.Detail label="Entregar">
-                                    <SendDeliveryOrderButton
-                                        deliveryOrderId={deliveryOrderId}
-                                    />
-                                </PanelContainer.Detail>
-                                <PanelContainer.Detail label="Cancelar">
-                                    <CancelDeliveryOrderButton
-                                        deliveryOrderId={deliveryOrderId}
-                                    />
-                                </PanelContainer.Detail>
-                            </PanelContainer.DetailsGrid>
-                        </PanelContainer>
+                        <RoleGuard requiredRole={ROLE_ADMIN}>
+                            <PanelContainer subtitle="Operaciones">
+                                <PanelContainer.DetailsGrid>
+                                    <PanelContainer.Detail label="Entregar">
+                                        <SendDeliveryOrderButton
+                                            deliveryOrderId={deliveryOrderId}
+                                        />
+                                    </PanelContainer.Detail>
+                                    <PanelContainer.Detail label="Cancelar">
+                                        <CancelDeliveryOrderButton
+                                            deliveryOrderId={deliveryOrderId}
+                                        />
+                                    </PanelContainer.Detail>
+                                </PanelContainer.DetailsGrid>
+                            </PanelContainer>
+                        </RoleGuard>
                     )}
                 </EntityDetailsLayout.Column>
             </EntityDetailsLayout.Content>

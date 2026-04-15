@@ -2,7 +2,7 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 type AuthState = {
     secretToken: string;
-    userRoles: string[];
+    userRole: string;
     isAuthenticated: boolean;
     authChecked: boolean;
 };
@@ -10,7 +10,7 @@ type AuthState = {
 // Al recargar la pagina, redux vuelve los estados a sus valores inicales
 const initialState: AuthState = {
     secretToken: "",
-    userRoles: [],
+    userRole: "",
     isAuthenticated: false,
     authChecked: false,
 };
@@ -30,13 +30,13 @@ export const authSlice = createSlice({
         },
 
         // Establece los roles
-        setUserRoles: (state, action: PayloadAction<string[]>) => {
-            state.userRoles = action.payload;
+        setUserRoles: (state, action: PayloadAction<string>) => {
+            state.userRole = action.payload;
         },
 
         // Limpia los datos del usuario autenticado
         clearAuth: (state) => {
-            state.userRoles = [];
+            state.userRole = "";
             state.isAuthenticated = false;
             state.authChecked = true;
         },

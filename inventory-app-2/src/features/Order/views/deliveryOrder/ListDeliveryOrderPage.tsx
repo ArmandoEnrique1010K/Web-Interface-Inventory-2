@@ -64,6 +64,7 @@ export const ListDeliveryOrderPage = () => {
             <EntityListLayout.Header
                 title="Ordenes de entrega"
                 actions={
+                    // En este caso no hace falta definir un RoleGuard para ocultar el botón, dado que este componente se va a mostrar si o si cuando el usuario tenga el rol de ADMIN
                     <ButtonLink
                         icon={<PlusCircleIcon />}
                         size="large"

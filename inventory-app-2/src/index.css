@@ -52,12 +52,16 @@ body,
 }
 
 .react-datepicker__header {
-    background-color: rgb(69, 85, 108);
+    background-color: rgb(69, 85, 108) !important;
+}
+
+.react-datepicker__day--keyboard-selected {
+    background-color: none;
 }
 
 .react-datepicker__current-month {
     background-color: rgb(69, 85, 108);
-    color: white;
+    color: white !important;
     font-size: 16px;
 }
 

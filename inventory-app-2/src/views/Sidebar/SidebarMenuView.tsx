@@ -74,7 +74,7 @@ const bottomMenuItems: MenuItem[] = [
 ];
 
 export const SidebarMenuView = () => {
-    const { userRoles } = useSelector((state: RootState) => state.auth);
+    const { userRole } = useSelector((state: RootState) => state.auth);
 
     const [showMenu, setShowMenu] = useState(false);
 
@@ -92,21 +92,20 @@ export const SidebarMenuView = () => {
     // ROLE_SECRETARY Y ADMIN: Dashboard, Ordenes, Productos, Lotes de Stock, Movimientos, Usuarios, Ubicaciones
 
     // Jerarquia de roles
-    const rolePriority: Record<string, number> = {
-        ROLE_USER: 1,
-        ROLE_OPERATOR: 2,
-        ROLE_SECRETARY: 3,
-        ROLE_ADMIN: 4,
-    };
+    // const rolePriority: Record<string, number> = {
+    //     ROLE_USER: 1,
+    //     ROLE_OPERATOR: 2,
+    //     ROLE_ADMIN: 3,
+    // };
 
     // Obtiene el rol mayor del usuario
-    const getHighestRole = (roles: string[]) => {
-        return roles.reduce((highest, current) => {
-            return rolePriority[current] > rolePriority[highest]
-                ? current
-                : highest;
-        }, roles[0]);
-    };
+    // const getHighestRole = (roles: string) => {
+    //     return roles.reduce((highest, current) => {
+    //         return rolePriority[current] > rolePriority[highest]
+    //             ? current
+    //             : highest;
+    //     }, roles[0]);
+    // };
 
     // Permisos por rol, estas opciones del menú se mostraran de acuerdo al rol mayor del usuario
     const rolePermissions: Record<string, string[]> = {
@@ -119,17 +118,6 @@ export const SidebarMenuView = () => {
             "Lotes de stock",
             "Ubicaciones",
         ],
-
-        ROLE_SECRETARY: [
-            "Dashboard",
-            "Ordenes",
-            "Productos",
-            "Lotes de stock",
-            "Movimientos",
-            "Usuarios",
-            "Ubicaciones",
-        ],
-
         ROLE_ADMIN: [
             "Dashboard",
             "Ordenes",
@@ -141,10 +129,7 @@ export const SidebarMenuView = () => {
         ],
     };
 
-    // Filtrar el menú
-    const highestRole = getHighestRole(userRoles);
-
-    const allowedLabels = rolePermissions[highestRole] || [];
+    const allowedLabels = rolePermissions[userRole] || [];
 
     const filteredMenu = menuItems.filter((item) =>
         allowedLabels.includes(item.label),
@@ -162,6 +147,7 @@ export const SidebarMenuView = () => {
             document.body.style.overflow = "";
         };
     }, [showMenu, isMobile]);
+
     return (
         <>
             {/* VISTA DE MOVIL: REACT BURGER MENU */}

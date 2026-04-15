@@ -23,6 +23,11 @@ import { DeliveryLineStatus } from "../../components/deliveryLine/DeliveryLineSt
 import { AllocateDeliveryLineButton } from "../../components/deliveryLine/AllocateDeliveryLineButton";
 import { LinkText } from "@/components/LinkText";
 import { SendDeliveryLineButton } from "../../components/deliveryLine/SendDeliveryLineButton";
+import { RoleGuard } from "@/components/RoleGuard";
+import { ROLE_ADMIN, ROLE_OPERATOR } from "@/constants";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store/store";
+import { hasPermission } from "@/utils/hasPermission";
 
 type Props = {
     deliveryOrderStatus: DeliveryOrderItem["orderStatus"];
@@ -254,24 +259,41 @@ export const ListDeliveryLineByDeliveryOrder = ({
         return `/orders/${deliveryOrderId}/line/${deliveryLineId}`;
     };
 
+    const { userRole } = useSelector((state: RootState) => state.auth);
+
+    // Evalua si el usuario tiene el rol de admin para definir las cabeceras de la tabla
+    // Como minimo debe tener el rol de OPERADOR para mostrar "Operaciones"
+    const tableHeaders = hasPermission(userRole, ROLE_OPERATOR)
+        ? [
+              "ID",
+              "Ubicación",
+              "Nombre",
+              "Cantidad",
+              "Fecha limite",
+              "Estado",
+              "Operaciones",
+          ]
+        : ["ID", "Ubicación", "Nombre", "Cantidad", "Fecha limite", "Estado"];
+
     return (
         <>
             <EntityListLayout isCompact>
-                <EntityListLayout.Header
-                    actions={
-                        (from !== "pending" &&
-                            from !== "my-orders" &&
-                            ["ORDER_CANCELED", "ORDER_DELIVERED"].includes(
-                                deliveryOrderStatus,
-                            )) || (
-                            <>
+                <RoleGuard requiredRole={ROLE_ADMIN}>
+                    <EntityListLayout.Header
+                        actions={
+                            (from !== "pending" &&
+                                from !== "my-orders" &&
+                                ["ORDER_CANCELED", "ORDER_DELIVERED"].includes(
+                                    deliveryOrderStatus,
+                                )) || (
                                 <AddDeliveryLineButton
                                     deliveryOrderId={deliveryOrderId}
                                 />
-                            </>
-                        )
-                    }
-                ></EntityListLayout.Header>
+                            )
+                        }
+                    ></EntityListLayout.Header>
+                </RoleGuard>
+
                 <EntityListLayout.Content>
                     <FiltersFormContainer
                         onSubmit={(e) => {
@@ -492,15 +514,7 @@ export const ListDeliveryLineByDeliveryOrder = ({
                     </FiltersFormContainer>
 
                     <TableContainer
-                        headers={[
-                            "ID",
-                            "Ubicación",
-                            "Nombre",
-                            "Cantidad",
-                            "fecha limite",
-                            "estado",
-                            "operaciones",
-                        ]}
+                        headers={tableHeaders}
                         isLoading={isLoading}
                         isError={isError}
                         isEmpty={!content.length}
@@ -588,31 +602,42 @@ export const ListDeliveryLineByDeliveryOrder = ({
                                             />
                                         }
                                     />
-                                    <BaseTableCell
-                                        data={
-                                            <div className="flex flex-col gap-2 justify-center items-center">
-                                                <AllocateDeliveryLineButton
-                                                    deliveryLineId={
-                                                        deliveryLine.id
-                                                    }
-                                                    deliveryOrderId={
-                                                        deliveryOrderId
-                                                    }
-                                                    modelId={
-                                                        deliveryLine.modelId
-                                                    }
-                                                />
-                                                <SendDeliveryLineButton
-                                                    deliveryLineId={
-                                                        deliveryLine.id
-                                                    }
-                                                    deliveryOrderId={
-                                                        deliveryOrderId
-                                                    }
-                                                />
-                                            </div>
-                                        }
-                                    />
+                                    {
+                                        <RoleGuard requiredRole={ROLE_OPERATOR}>
+                                            <BaseTableCell
+                                                data={
+                                                    <div className="flex flex-col gap-2 justify-center items-center">
+                                                        <AllocateDeliveryLineButton
+                                                            deliveryLineId={
+                                                                deliveryLine.id
+                                                            }
+                                                            deliveryOrderId={
+                                                                deliveryOrderId
+                                                            }
+                                                            modelId={
+                                                                deliveryLine.modelId
+                                                            }
+                                                        />
+
+                                                        <RoleGuard
+                                                            requiredRole={
+                                                                ROLE_ADMIN
+                                                            }
+                                                        >
+                                                            <SendDeliveryLineButton
+                                                                deliveryLineId={
+                                                                    deliveryLine.id
+                                                                }
+                                                                deliveryOrderId={
+                                                                    deliveryOrderId
+                                                                }
+                                                            />
+                                                        </RoleGuard>
+                                                    </div>
+                                                }
+                                            />
+                                        </RoleGuard>
+                                    }
                                 </TableRowContainer>
                             );
                         })}

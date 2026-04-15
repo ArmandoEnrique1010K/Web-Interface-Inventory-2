@@ -22,6 +22,8 @@ import { EditDeliveryLineButton } from "../../components/deliveryLine/EditDelive
 import { DeliveryLineStatus } from "../../components/deliveryLine/DeliveryLineStatus";
 import { LoadingView } from "@/views/LoadingView";
 import { Error } from "@/views/Error";
+import { RoleGuard } from "@/components/RoleGuard";
+import { ROLE_ADMIN, ROLE_OPERATOR } from "@/constants";
 
 export const DetailsDeliveryLinePage = () => {
     const {
@@ -103,12 +105,14 @@ export const DetailsDeliveryLinePage = () => {
                 title={`Linea de entrega #${deliveryLineId}`}
                 actions={
                     <>
-                        <EditDeliveryLineButton
-                            deliveryLineId={deliveryLineId}
-                            deliveryOrderId={deliveryOrderId}
-                            limitDate={data.limitDate}
-                            requiredQuantity={data.requiredQuantity}
-                        />
+                        <RoleGuard requiredRole={ROLE_ADMIN}>
+                            <EditDeliveryLineButton
+                                deliveryLineId={deliveryLineId}
+                                deliveryOrderId={deliveryOrderId}
+                                limitDate={data.limitDate}
+                                requiredQuantity={data.requiredQuantity}
+                            />
+                        </RoleGuard>
                         <ButtonLink
                             size={"large"}
                             text={"Volver a orden"}
@@ -195,90 +199,112 @@ export const DetailsDeliveryLinePage = () => {
                     </EntityDetailsLayout.Grid>
 
                     {from !== "my-orders" && (
-                        <PanelContainer subtitle="Operaciones">
-                            <PanelContainer.DetailsGrid>
-                                <PanelContainer.Detail label="Distribuir">
-                                    <AllocateDeliveryLineButton
-                                        deliveryLineId={deliveryLineId}
-                                        deliveryOrderId={deliveryOrderId}
-                                        modelId={data.modelId}
-                                    />
-                                </PanelContainer.Detail>
-                                <PanelContainer.Detail label="Quitar">
-                                    <LostDeliveryLineButton
-                                        deliveryLineId={deliveryLineId}
-                                        deliveryOrderId={deliveryOrderId}
-                                    />
-                                </PanelContainer.Detail>
-                                <PanelContainer.Detail label="Devolver">
-                                    <ReturnDeliveryLineButton
-                                        deliveryLineId={deliveryLineId}
-                                        deliveryOrderId={deliveryOrderId}
-                                    />
-                                </PanelContainer.Detail>
-                                <PanelContainer.Detail label="Entregar">
-                                    <SendDeliveryLineButton
-                                        deliveryLineId={deliveryLineId!}
-                                        deliveryOrderId={deliveryOrderId!}
-                                    />
-                                </PanelContainer.Detail>
-                                <PanelContainer.Detail label="Eliminar">
-                                    <CancelDeliveryLineButton
-                                        deliveryLineId={deliveryLineId!}
-                                        deliveryOrderId={deliveryOrderId!}
-                                    />
-                                </PanelContainer.Detail>
-                                <PanelContainer.Detail label="Reportar perdida">
-                                    <MissingDeliveryLineButton
-                                        deliveryLineId={deliveryLineId!}
-                                        deliveryOrderId={deliveryOrderId!}
-                                    />
-                                </PanelContainer.Detail>
-                            </PanelContainer.DetailsGrid>
-                        </PanelContainer>
+                        <RoleGuard requiredRole={ROLE_OPERATOR}>
+                            <PanelContainer subtitle="Operaciones">
+                                <PanelContainer.DetailsGrid>
+                                    <PanelContainer.Detail label="Distribuir">
+                                        <AllocateDeliveryLineButton
+                                            deliveryLineId={deliveryLineId}
+                                            deliveryOrderId={deliveryOrderId}
+                                            modelId={data.modelId}
+                                        />
+                                    </PanelContainer.Detail>
+                                    <PanelContainer.Detail label="Quitar">
+                                        <LostDeliveryLineButton
+                                            deliveryLineId={deliveryLineId}
+                                            deliveryOrderId={deliveryOrderId}
+                                        />
+                                    </PanelContainer.Detail>
+                                    <PanelContainer.Detail label="Devolver">
+                                        <ReturnDeliveryLineButton
+                                            deliveryLineId={deliveryLineId}
+                                            deliveryOrderId={deliveryOrderId}
+                                        />
+                                    </PanelContainer.Detail>
+                                    {
+                                        <RoleGuard requiredRole={ROLE_ADMIN}>
+                                            <PanelContainer.Detail label="Entregar">
+                                                <SendDeliveryLineButton
+                                                    deliveryLineId={
+                                                        deliveryLineId!
+                                                    }
+                                                    deliveryOrderId={
+                                                        deliveryOrderId!
+                                                    }
+                                                />
+                                            </PanelContainer.Detail>
+                                            <PanelContainer.Detail label="Eliminar">
+                                                <CancelDeliveryLineButton
+                                                    deliveryLineId={
+                                                        deliveryLineId!
+                                                    }
+                                                    deliveryOrderId={
+                                                        deliveryOrderId!
+                                                    }
+                                                />
+                                            </PanelContainer.Detail>
+                                            <PanelContainer.Detail label="Reportar perdida">
+                                                <MissingDeliveryLineButton
+                                                    deliveryLineId={
+                                                        deliveryLineId!
+                                                    }
+                                                    deliveryOrderId={
+                                                        deliveryOrderId!
+                                                    }
+                                                />
+                                            </PanelContainer.Detail>
+                                        </RoleGuard>
+                                    }
+                                </PanelContainer.DetailsGrid>
+                            </PanelContainer>
+                        </RoleGuard>
                     )}
                 </EntityDetailsLayout.Column>
             </EntityDetailsLayout.Content>
 
             {/* DETALLA DE QUE LOTE DE ENTREGA SE HA TOMADO PARA COMPLETAR LA LINEA DE ENTREGA */}
 
-            {from !== "my-orders" && (
-                <EntityDetailsLayout.Content columns={1}>
-                    <EntityDetailsLayout.Column>
-                        <TableContainer
-                            title="Historial de las cantidades tomadas de los lotes de stock"
-                            headers={[
-                                "ID",
-                                "Cantidad",
-                                "Fecha",
-                                "Código de lote de stock",
-                            ]}
-                            isError={stockLotByDeliveryLineError}
-                            isEmpty={!content.length}
-                            isLoading={stockLotByDeliveryLineIsLoading}
-                        >
-                            {content?.map((stockLot) => {
-                                return (
-                                    <TableRowContainer key={stockLot.id}>
-                                        <BaseTableCell data={stockLot.id} />
-                                        <BaseTableCell
-                                            data={stockLot.quantityUsed}
-                                        />
-                                        <BaseTableCell
-                                            data={handleFormatDateTimeWithoutT(
-                                                new Date(stockLot.createdAt),
-                                            )}
-                                        />
-                                        <BaseTableCell
-                                            data={stockLot.stockLotBatch}
-                                        />
-                                    </TableRowContainer>
-                                );
-                            })}
-                        </TableContainer>
-                    </EntityDetailsLayout.Column>
-                </EntityDetailsLayout.Content>
-            )}
+            <RoleGuard requiredRole={ROLE_OPERATOR}>
+                {from !== "my-orders" && (
+                    <EntityDetailsLayout.Content columns={1}>
+                        <EntityDetailsLayout.Column>
+                            <TableContainer
+                                title="Historial de las cantidades tomadas de los lotes de stock"
+                                headers={[
+                                    "ID",
+                                    "Cantidad",
+                                    "Fecha",
+                                    "Código de lote de stock",
+                                ]}
+                                isError={stockLotByDeliveryLineError}
+                                isEmpty={!content.length}
+                                isLoading={stockLotByDeliveryLineIsLoading}
+                            >
+                                {content?.map((stockLot) => {
+                                    return (
+                                        <TableRowContainer key={stockLot.id}>
+                                            <BaseTableCell data={stockLot.id} />
+                                            <BaseTableCell
+                                                data={stockLot.quantityUsed}
+                                            />
+                                            <BaseTableCell
+                                                data={handleFormatDateTimeWithoutT(
+                                                    new Date(
+                                                        stockLot.createdAt,
+                                                    ),
+                                                )}
+                                            />
+                                            <BaseTableCell
+                                                data={stockLot.stockLotBatch}
+                                            />
+                                        </TableRowContainer>
+                                    );
+                                })}
+                            </TableContainer>
+                        </EntityDetailsLayout.Column>
+                    </EntityDetailsLayout.Content>
+                )}
+            </RoleGuard>
         </EntityDetailsLayout>
     );
 };

@@ -15,6 +15,7 @@ import { LoginForm } from "@/features/Auth/views/LoginForm";
 import { RestoreUserPasswordForm } from "@/features/Auth/views/RestoreUserPasswordForm";
 import { ValidateUserTokenForm } from "@/features/Auth/views/ValidateUserTokenForm";
 import { UpdateUserPasswordForm } from "@/features/Auth/views/UpdateUserPasswordForm";
+import { hasPermission } from "@/utils/hasPermission";
 
 // Layouts
 const AuthLayout = lazy(() => import("@/layout/app/AuthLayout"));
@@ -31,7 +32,7 @@ const MovementRoutes = lazy(() => import("./MovementRoutes"));
 
 export const GeneralRouter = () => {
     const dispatch = useDispatch<AppDispatch>();
-    const { userRoles } = useSelector((state: RootState) => state.auth);
+    const { userRole } = useSelector((state: RootState) => state.auth);
 
     // Verifica si hay algun usuario activo
     useEffect(() => {
@@ -107,7 +108,7 @@ export const GeneralRouter = () => {
                         ></Route>
 
                         {/* RELACIONADO A PRODUCTS */}
-                        {userRoles.includes("ROLE_OPERATOR") && (
+                        {hasPermission(userRole, "ROLE_OPERATOR") && (
                             <Route
                                 // El * indica que esta ruta acepta cualquier cosa despues
                                 path="products/*"
@@ -126,7 +127,7 @@ export const GeneralRouter = () => {
                         )}
 
                         {/* RELACIONADO A STOCKLOT */}
-                        {userRoles.includes("ROLE_OPERATOR") && (
+                        {hasPermission(userRole, "ROLE_OPERATOR") && (
                             <Route
                                 path="stocklots/*"
                                 element={
@@ -138,7 +139,7 @@ export const GeneralRouter = () => {
                         )}
 
                         {/* RELACIONADO A MOVEMENT */}
-                        {userRoles.includes("ROLE_SECRETARY") && (
+                        {hasPermission(userRole, "ROLE_ADMIN") && (
                             <Route
                                 path="movements/*"
                                 element={
@@ -154,7 +155,7 @@ export const GeneralRouter = () => {
                             <Route index element={<ListUserPage />} />
                             <Route path="new" element={<RegisterUserPage />} />
                         </Route> */}
-                        {userRoles.includes("ROLE_SECRETARY") && (
+                        {hasPermission(userRole, "ROLE_ADMIN") && (
                             <Route
                                 path="users/*"
                                 element={
@@ -166,7 +167,7 @@ export const GeneralRouter = () => {
                         )}
 
                         {/* RELACIONADO A LOCATION */}
-                        {userRoles.includes("ROLE_OPERATOR") && (
+                        {hasPermission(userRole, "ROLE_OPERATOR") && (
                             <Route
                                 path="locations/*"
                                 element={

@@ -22,7 +22,7 @@ export const loadUserSession = () => async (dispatch: AppDispatch) => {
 }
         */
         dispatch(setAuthenticated());
-        dispatch(setUserRoles(profile.roles));
+        dispatch(setUserRoles(profile.role));
     } catch {
         dispatch(clearAuth());
     } finally {

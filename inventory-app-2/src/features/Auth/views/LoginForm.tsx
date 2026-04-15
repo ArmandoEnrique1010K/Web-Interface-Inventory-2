@@ -49,7 +49,7 @@ export const LoginForm = () => {
         onSuccess: async (data) => {
             toast.success(data);
             const userDetails = await currentSession();
-            dispatch(setUserRoles(userDetails.roles));
+            dispatch(setUserRoles(userDetails.role));
             dispatch(setAuthenticated());
             navigate("/");
         },

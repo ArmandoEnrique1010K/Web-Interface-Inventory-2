@@ -69,6 +69,13 @@ export const NewModelInDeliveryOrderModal = ({
     // [ ]
     // console.log(existingModels)
 
+    // const { userRole } = useSelector((state: RootState) => state.auth);
+
+    // Evalua si el usuario tiene el rol de admin para definir las cabeceras de la tabla
+    // const tableHeaders = hasPermission(userRole, ROLE_ADMIN)
+    //     ? ["ID", "Nombre", "Característica", "Agregar"]
+    //     : ["ID", "Nombre", "Característica"];
+
     return (
         <EntityFormLayout isCompact>
             <EntityListLayout isCompact>

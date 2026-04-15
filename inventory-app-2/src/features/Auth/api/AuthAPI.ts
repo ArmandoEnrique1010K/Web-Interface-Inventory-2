@@ -83,11 +83,13 @@ export async function currentSession() {
         const url = `/auth/current-session`;
         const { data } = await api.get(url);
         const parsed = currentSessionResponseSchema.parse(data);
+        console.log(parsed);
         if (parsed.type === "error") {
             throw new Error(parsed.message);
         }
         return parsed.data;
     } catch (error) {
+        console.log(error);
         if (error instanceof AxiosError && error.response?.status === 401) {
             throw error; // 🔥 importante
         }
