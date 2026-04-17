@@ -16,6 +16,8 @@ import {
     RectangleGroupIcon,
     TagIcon,
 } from "@heroicons/react/24/outline";
+import { useAuthRole } from "@/hooks/useAuthRole";
+import { ROLE_ADMIN } from "@/constants";
 
 const productItems: MenuItem[] = [
     {
@@ -41,19 +43,32 @@ const productItems: MenuItem[] = [
 ];
 
 export default function ProductRoutes() {
+    const { hasPermission } = useAuthRole();
+
     return (
         <NavbarContainer menuItems={productItems} keyword="products">
             <Routes>
                 <Route index element={<ListProductPage />} />
+
                 <Route path=":id" element={<DetailsProductPage />} />
-                <Route path="new" element={<NewProductPage />} />
                 <Route path="models" element={<ListModelPage />} />
                 {/* :productId es el ID del producto que corresponde al modelo */}
                 <Route path="models/:modelId" element={<DetailsModelPage />} />
                 <Route path="categories" element={<ListCategoryPage />} />
-                <Route path="categories/new" element={<NewCategoryPage />} />
                 <Route path="types" element={<ListTypePage />} />
-                <Route path="types/new" element={<NewTypePage />} />
+
+                {hasPermission(ROLE_ADMIN) && (
+                    <>
+                        <Route path="new" element={<NewProductPage />} />
+
+                        <Route
+                            path="categories/new"
+                            element={<NewCategoryPage />}
+                        />
+                        <Route path="types/new" element={<NewTypePage />} />
+                    </>
+                )}
+
                 <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
         </NavbarContainer>

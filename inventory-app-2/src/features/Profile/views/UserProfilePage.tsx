@@ -7,6 +7,7 @@ import { UserIcon } from "@heroicons/react/24/outline";
 import { LoadingView } from "@/views/LoadingView";
 import { Error } from "@/views/Error";
 import { handleApplyRoleStyle } from "@/utils/handleApplyRoleStyle";
+import { formatRole } from "../../../utils/formatRole";
 
 export const UserProfilePage = () => {
     const { data, isError, isLoading } = useQuery({
@@ -62,12 +63,12 @@ export const UserProfilePage = () => {
                                             {data.email}
                                         </span>
                                     </PanelContainer.Detail>
-                                    <PanelContainer.Detail label="Roles">
+                                    <PanelContainer.Detail label="Rol">
                                         <span className="flex flex-wrap gap-2 text-sm">
                                             <span
                                                 className={`px-3 py-1 rounded-4xl ${handleApplyRoleStyle(data.role)}`}
                                             >
-                                                {data.role}
+                                                {formatRole(data.role)}
                                             </span>
                                         </span>
                                     </PanelContainer.Detail>

@@ -25,9 +25,7 @@ import { LinkText } from "@/components/LinkText";
 import { SendDeliveryLineButton } from "../../components/deliveryLine/SendDeliveryLineButton";
 import { RoleGuard } from "@/components/RoleGuard";
 import { ROLE_ADMIN, ROLE_OPERATOR } from "@/constants";
-import { useSelector } from "react-redux";
-import type { RootState } from "@/store/store";
-import { hasPermission } from "@/utils/hasPermission";
+import { useAuthRole } from "@/hooks/useAuthRole";
 
 type Props = {
     deliveryOrderStatus: DeliveryOrderItem["orderStatus"];
@@ -147,6 +145,7 @@ export const ListDeliveryLineByDeliveryOrder = ({
                 Object.fromEntries(searchParams),
             ),
     });
+    const { hasPermission } = useAuthRole();
 
     useEffect(() => {
         const saved = sessionStorage.getItem(STORAGE_KEY);
@@ -259,11 +258,9 @@ export const ListDeliveryLineByDeliveryOrder = ({
         return `/orders/${deliveryOrderId}/line/${deliveryLineId}`;
     };
 
-    const { userRole } = useSelector((state: RootState) => state.auth);
-
     // Evalua si el usuario tiene el rol de admin para definir las cabeceras de la tabla
     // Como minimo debe tener el rol de OPERADOR para mostrar "Operaciones"
-    const tableHeaders = hasPermission(userRole, ROLE_OPERATOR)
+    const tableHeaders = hasPermission(ROLE_OPERATOR)
         ? [
               "ID",
               "Ubicación",

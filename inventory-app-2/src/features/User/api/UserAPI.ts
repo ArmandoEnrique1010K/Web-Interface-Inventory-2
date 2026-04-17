@@ -7,6 +7,7 @@ import {
     usersTopTenResponseSchema,
 } from "../schemas/response";
 import type { RolesForm, UserRegisterForm } from "../schemas/requests";
+import type { UserItem } from "../schemas/items";
 
 export const registerUser = async (formData: UserRegisterForm) => {
     try {
@@ -26,17 +27,20 @@ export type ListAllUsersQueryParams = {
     page?: number;
     name?: string;
     idRoles?: number[];
+    role: UserItem["role"] | "";
 };
 
 export const listAllUsers = async (params: ListAllUsersQueryParams) => {
     try {
         const url = `/users`;
         const { data } = await api.get(url, { params });
-        console.log(params);
+        // console.log(params);
 
         const parsed = usersPageListResponseSchema.parse(data);
+        console.log(parsed);
         return parsed.data;
     } catch (error) {
+        console.log(error);
         throwApiErrorMessage(error);
     }
 };
@@ -63,6 +67,7 @@ type UpdateUserRolesPayload = {
     formData: RolesForm;
 };
 
+// TODO: CAMBIAR EL NOMBRE DE LA FUNCION EN EL BACKEND
 export const getUserRoles = async (id: number) => {
     try {
         const url = `/users/${id}/roles`;

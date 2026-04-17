@@ -16,7 +16,7 @@ import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
 import { ROLE_ADMIN, ROLE_OPERATOR, ROLE_USER } from "@/constants";
 import { useMemo } from "react";
-import { hasPermission } from "@/utils/hasPermission";
+import { useAuthRole } from "@/hooks/useAuthRole";
 
 const orderItems: MenuItem[] = [
     {
@@ -49,6 +49,8 @@ export default function OrderRoutes() {
     const filteredOrderItems = orderItems.filter((item) =>
         (orderPermissions[userRole] ?? []).includes(item.label),
     );
+
+    const { hasPermission } = useAuthRole();
 
     // El string devuelto por esta funcion sera utilizado para redirigir al usuario
     const defaultRoute = useMemo(() => {
@@ -91,7 +93,7 @@ export default function OrderRoutes() {
                     path="my-orders/:id"
                     element={<DetailsDeliveryOrderPage />}
                 />
-                {hasPermission(userRole, ROLE_OPERATOR) && (
+                {hasPermission(ROLE_OPERATOR) && (
                     <>
                         <Route
                             path="pending"
@@ -107,7 +109,7 @@ export default function OrderRoutes() {
                         />
                     </>
                 )}
-                {hasPermission(userRole, ROLE_ADMIN) && (
+                {hasPermission(ROLE_ADMIN) && (
                     <>
                         <Route path="new" element={<NewDeliveryOrderPage />} />
                     </>

@@ -10,6 +10,7 @@ import {
     type FieldPath,
     type FieldValues,
 } from "react-hook-form";
+import { useRef } from "react";
 
 export type Option = {
     label: string;
@@ -33,33 +34,53 @@ export function AsyncSelectField<T extends FieldValues>({
     loadOptions,
     disabled = false, // valor por defecto
 }: AsyncSelectFieldProps<T>) {
-    // // debounce para evitar spam
-    // const debouncedLoadOptions = debounce(
-    //     async (inputValue: string, callback: (options: Option[]) => void) => {
-    //         if (!inputValue) return callback([]);
+    // debounce para evitar spam
+    // const debouncedLoadOptions = useMemo(
+    //     () =>
+    //         debounce(async (inputValue: string) => {
+    //             if (!inputValue || disabled) return [];
 
-    //         try {
-    //             const options = await loadOptions(inputValue);
-    //             callback(options);
-    //         } catch {
-    //             callback([]);
-    //         }
-    //     },
-    //     300
+    //             try {
+    //                 return await loadOptions(inputValue);
+    //             } catch {
+    //                 return [];
+    //             }
+    //         }, 1000),
+    //     [loadOptions, disabled],
     // );
 
-    // debounce para evitar spam
-    const loadOptionsWrapper = async (inputValue: string) => {
-        if (!inputValue || disabled) return [];
+    const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-        try {
-            // Imprimir todas las opciones que se pasan aqui
-            // console.log(await loadOptions(inputValue));
-            return await loadOptions(inputValue);
-        } catch {
-            return [];
-        }
-    };
+    const loadOptionsDebounced = (inputValue: string) => {
+        return new Promise<Option[]>((resolve) => {
+            // 🔴 cancela el anterior
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+            }
+
+            timeoutRef.current = setTimeout(async () => {
+                if (!inputValue || disabled) return resolve([]);
+
+                try {
+                    const res = await loadOptions(inputValue);
+                    resolve(res);
+                } catch {
+                    resolve([]);
+                }
+            }, 1000);
+        });
+    }; // debounce para evitar spam
+    // const loadOptionsWrapper = async (inputValue: string) => {
+    //     if (!inputValue || disabled) return [];
+
+    //     try {
+    //         // Imprimir todas las opciones que se pasan aqui
+    //         // console.log(await loadOptions(inputValue));
+    //         return await loadOptions(inputValue);
+    //     } catch {
+    //         return [];
+    //     }
+    // };
 
     // Estilos propios, no funciona con tailwindCSS
     const customStyles = {
@@ -111,7 +132,7 @@ export function AsyncSelectField<T extends FieldValues>({
                             aria-label={name}
                             cacheOptions
                             defaultOptions={false}
-                            loadOptions={loadOptionsWrapper}
+                            loadOptions={loadOptionsDebounced} //loadOptionsWrapper
                             isDisabled={disabled}
                             // onChange={(option: Option | null) => {
                             //     field.onChange(option ? option.value : "");

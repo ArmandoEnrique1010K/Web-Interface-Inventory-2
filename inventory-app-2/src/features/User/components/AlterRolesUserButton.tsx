@@ -15,7 +15,7 @@ export const AlterRolesUserButton = ({ userId }: Props) => {
             <Button
                 type="button"
                 size="small"
-                text="Alterar roles"
+                text="Alterar rol"
                 color="red-outline"
                 onClick={() => {
                     setShowModal(true);

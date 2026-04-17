@@ -7,7 +7,6 @@ import { FiltersFormContainer } from "@/components/FiltersFormContainer";
 import { InputTextFilter } from "@/ui/filters/InputTextFilter";
 import { SearchCounter } from "@/components/SearchCounter";
 import { TableContainer } from "@/components/TableContainer";
-import { SelectCheckboxGroupFilter } from "@/ui/filters/SelectCheckboxGroupFilter";
 import { TableRowContainer } from "@/components/TableRowContainer";
 import { BaseTableCell } from "@/components/BaseTableCell";
 import { ButtonLink } from "@/ui/ButtonLink";
@@ -15,8 +14,11 @@ import { Paginator } from "@/components/Paginator";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import { StatusUserButton } from "../components/StatusUserButton";
 import { EntityListLayout } from "@/layout/entity/EntityListLayout";
-import { handleApplyRoleStyle } from "@/utils/handleApplyRoleStyle";
 import { AlterRolesUserButton } from "../components/AlterRolesUserButton";
+import { formatRole } from "@/utils/formatRole";
+import { handleApplyRoleStyle } from "@/utils/handleApplyRoleStyle";
+import { SelectOptionFilter } from "@/ui/filters/SelectOptionFilter";
+import type { UserItem } from "../schemas/items";
 
 export const ListUserPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -31,15 +33,18 @@ export const ListUserPage = () => {
     //           .filter((n) => !isNaN(n))
     //     : [];
 
-    const idRoles = searchParams
-        .getAll("idRoles")
-        .map(Number)
-        .filter((n) => !isNaN(n));
+    // const idRoles = searchParams
+    //     .getAll("idRoles")
+    //     .map(Number)
+    //     .filter((n) => !isNaN(n));
+
+    const role = searchParams.get("role") ?? "";
 
     const [form, setForm] = useState({
         page: page,
         name: name,
-        idRoles: idRoles,
+        role: role,
+        // idRoles: idRoles,
     });
     // useEffectEvent(() => {
     //     setForm({
@@ -50,13 +55,14 @@ export const ListUserPage = () => {
     // });
 
     const { data, isError, isLoading } = useQuery({
-        queryKey: ["users", { name, idRoles, page }],
-
+        // queryKey: ["users", { name, idRoles, page }],
+        queryKey: ["users", { name, role, page }],
         queryFn: () =>
             listAllUsers({
                 page: page,
                 name: name,
-                idRoles: idRoles,
+                // idRoles: idRoles,
+                role: role as UserItem["role"],
             }),
     });
 
@@ -69,8 +75,8 @@ export const ListUserPage = () => {
 
     const roles =
         rolesData?.map((role) => ({
-            value: role.id.toString(),
-            label: role.label,
+            value: role.label.toString(),
+            label: formatRole(role.label),
         })) || [];
 
     return (
@@ -102,12 +108,14 @@ export const ListUserPage = () => {
                         // Se corrige el problema de la URL en la que se reemplaza las comas (,)
                         // Resultado: http://localhost:5173/users?idRoles=4&idRoles=3
 
-                        console.log(form.idRoles);
+                        // console.log(form.idRoles);
 
-                        if (form.idRoles)
-                            form.idRoles.forEach((role) =>
-                                params.append("idRoles", role.toString()),
-                            );
+                        // if (form.idRoles)
+                        //     form.idRoles.forEach((role) =>
+                        //         params.append("idRoles", role.toString()),
+                        //     );
+
+                        if (form.role) params.set("role", form.role);
 
                         setSearchParams(params);
                     }}
@@ -126,7 +134,7 @@ export const ListUserPage = () => {
                         }
                     />
 
-                    {rolesData && (
+                    {/* {rolesData && (
                         <SelectCheckboxGroupFilter
                             name="idRoles"
                             label="Roles"
@@ -139,6 +147,22 @@ export const ListUserPage = () => {
                             }
                             value={form.idRoles.map(String)} // Convierte numeros a string
                         />
+                    )} */}
+
+                    {rolesData && (
+                        <SelectOptionFilter
+                            name="role"
+                            label="Rol"
+                            options={roles}
+                            onChange={(e) =>
+                                setForm((prev) => ({
+                                    ...prev,
+                                    role: e.target.value,
+                                }))
+                            }
+                            textInNullOption="Todos los roles"
+                            value={form.role}
+                        />
                     )}
                 </FiltersFormContainer>
                 <TableContainer
@@ -146,9 +170,9 @@ export const ListUserPage = () => {
                         "ID",
                         "Nombres",
                         "DNI",
-                        "Roles",
+                        "Rol",
                         "Estado",
-                        "Alterar roles",
+                        "Alterar rol",
                     ]}
                     isLoading={isLoading}
                     isError={isError}
@@ -180,7 +204,9 @@ export const ListUserPage = () => {
                                     if (form.name)
                                         params.set("name", form.name);
                                     // if (form.idRoles) params.set('idRoles', form.idRoles.toString())
-                                    if (form.idRoles) params.getAll("idRoles");
+                                    // if (form.idRoles) params.getAll("idRoles");
+                                    if (form.role)
+                                        params.set("role", form.role);
                                     params.set("page", page.toString());
 
                                     setSearchParams(params);
@@ -202,16 +228,13 @@ export const ListUserPage = () => {
                                 />
                                 <BaseTableCell data={user.dni} />
                                 <BaseTableCell
+                                    isCenter
                                     data={
-                                        <span className="flex flex-wrap gap-2 text-sm">
-                                            {user.roles.map((role) => (
-                                                <span
-                                                    key={role}
-                                                    className={`px-3 py-1 rounded-4xl ${handleApplyRoleStyle(role)}`}
-                                                >
-                                                    {role}
-                                                </span>
-                                            ))}
+                                        <span
+                                            className={`px-3 py-1 rounded-4xl text-sm ${handleApplyRoleStyle(user.role)}`}
+                                        >
+                                            {" "}
+                                            {formatRole(user.role)}
                                         </span>
                                     }
                                 />

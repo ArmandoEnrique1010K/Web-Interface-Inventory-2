@@ -1,14 +1,16 @@
-import { useForm, type UseFormRegisterReturn } from "react-hook-form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { updateUserRoles } from "../../api/UserAPI";
 import type { GeneralError } from "@/types/index";
 import { toast } from "sonner";
 import { Button } from "@/ui/Button";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
-import { SelectCheckboxGroup } from "@/ui/fields/SelectCheckboxGroup";
 import type { RolesForm } from "../../schemas/requests";
 import type { UserRolesDetails } from "../../schemas/items";
+import { SelectOption } from "@/ui/fields/SelectOption";
+import { listAllRoles } from "../../api/RoleAPI";
+import { formatRole } from "@/utils/formatRole";
 
 type Props = {
     data: UserRolesDetails;
@@ -17,11 +19,17 @@ type Props = {
 };
 
 export const AlterRolesUserModal = ({ data, userId, setShowModal }: Props) => {
-    const { register, handleSubmit, setError } = useForm<RolesForm>({
+    const {
+        register,
+        handleSubmit,
+        setError,
+        formState: { errors },
+    } = useForm<RolesForm>({
         defaultValues: {
-            operator: data.operator,
-            secretary: data.secretary,
-            admin: data.admin,
+            // operator: data.operator,
+            // secretary: data.secretary,
+            // admin: data.admin,
+            role: data.role,
         },
     });
 
@@ -64,20 +72,31 @@ export const AlterRolesUserModal = ({ data, userId, setShowModal }: Props) => {
         mutate(data);
     };
 
-    const rolesGroup: { name: string; action: UseFormRegisterReturn }[] = [
-        {
-            name: "Operador",
-            action: register("operator"),
-        },
-        {
-            name: "Secretario",
-            action: register("secretary"),
-        },
-        {
-            name: "Administrador",
-            action: register("admin"),
-        },
-    ];
+    const { data: roleData } = useQuery({
+        queryKey: ["roles"],
+        queryFn: listAllRoles,
+    });
+
+    // const rolesGroup: { name: string; action: UseFormRegisterReturn }[] = [
+    //     {
+    //         name: "Operador",
+    //         action: register("operator"),
+    //     },
+    //     {
+    //         name: "Secretario",
+    //         action: register("secretary"),
+    //     },
+    //     {
+    //         name: "Administrador",
+    //         action: register("admin"),
+    //     },
+    // ];
+
+    const roles =
+        roleData?.map((role) => ({
+            value: role.label.toString(),
+            label: formatRole(role.label),
+        })) || [];
 
     return (
         <EntityFormLayout isCompact>
@@ -87,7 +106,15 @@ export const AlterRolesUserModal = ({ data, userId, setShowModal }: Props) => {
             ></EntityFormLayout.Header>
             <EntityFormLayout.Form onSubmit={handleSubmit(handleForm)}>
                 <EntityFormLayout.Inputs isCompact>
-                    <SelectCheckboxGroup group={rolesGroup} label="Roles" />
+                    {/* <SelectCheckboxGroup group={rolesGroup} label="Roles" /> */}
+                    <SelectOption
+                        id={"role"}
+                        label={"Rol"}
+                        errorMessage={errors.role}
+                        functionEnabled={register("role")}
+                        options={roles}
+                        textInNullOption="Seleccione un rol"
+                    />
                 </EntityFormLayout.Inputs>
                 <EntityFormLayout.Actions isCompact>
                     <Button

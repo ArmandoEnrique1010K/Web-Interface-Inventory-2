@@ -3,7 +3,6 @@ import { z } from "zod";
 import { roleSchema, userSchema } from "./entities";
 
 export const roleItemSchema = roleSchema.pick({
-    id: true,
     label: true,
 });
 
@@ -13,7 +12,7 @@ export const userItemSchema = userSchema.pick({
     lastname: true,
     dni: true,
     status: true,
-    roles: true,
+    role: true,
 });
 
 export const userByKeywordItemSchema = userSchema.pick({
@@ -24,9 +23,10 @@ export const userByKeywordItemSchema = userSchema.pick({
 });
 
 export const userRolesDetailsSchema = roleSchema.pick({
-    operator: true,
-    secretary: true,
-    admin: true,
+    // operator: true,
+    // secretary: true,
+    // admin: true,
+    role: true,
 });
 
 export type RoleItem = z.infer<typeof roleItemSchema>;

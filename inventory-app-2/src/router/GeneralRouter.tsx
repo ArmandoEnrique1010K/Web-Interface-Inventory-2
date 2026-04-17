@@ -15,7 +15,8 @@ import { LoginForm } from "@/features/Auth/views/LoginForm";
 import { RestoreUserPasswordForm } from "@/features/Auth/views/RestoreUserPasswordForm";
 import { ValidateUserTokenForm } from "@/features/Auth/views/ValidateUserTokenForm";
 import { UpdateUserPasswordForm } from "@/features/Auth/views/UpdateUserPasswordForm";
-import { hasPermission } from "@/utils/hasPermission";
+import { useAuthRole } from "@/hooks/useAuthRole";
+import { ROLE_ADMIN, ROLE_OPERATOR } from "@/constants";
 
 // Layouts
 const AuthLayout = lazy(() => import("@/layout/app/AuthLayout"));
@@ -32,7 +33,6 @@ const MovementRoutes = lazy(() => import("./MovementRoutes"));
 
 export const GeneralRouter = () => {
     const dispatch = useDispatch<AppDispatch>();
-    const { userRole } = useSelector((state: RootState) => state.auth);
 
     // Verifica si hay algun usuario activo
     useEffect(() => {
@@ -42,8 +42,8 @@ export const GeneralRouter = () => {
     const { isAuthenticated, authChecked } = useSelector(
         (state: RootState) => state.auth,
     );
+    const { hasPermission } = useAuthRole();
 
-    // TODO: SE PODRIA RENDERIZAR OTRO COMPONENTE DE CARGA
     if (!authChecked) {
         return <div>Espere un momento...</div>;
     }
@@ -108,7 +108,7 @@ export const GeneralRouter = () => {
                         ></Route>
 
                         {/* RELACIONADO A PRODUCTS */}
-                        {hasPermission(userRole, "ROLE_OPERATOR") && (
+                        {hasPermission(ROLE_OPERATOR) && (
                             <Route
                                 // El * indica que esta ruta acepta cualquier cosa despues
                                 path="products/*"
@@ -127,7 +127,7 @@ export const GeneralRouter = () => {
                         )}
 
                         {/* RELACIONADO A STOCKLOT */}
-                        {hasPermission(userRole, "ROLE_OPERATOR") && (
+                        {hasPermission(ROLE_OPERATOR) && (
                             <Route
                                 path="stocklots/*"
                                 element={
@@ -139,7 +139,7 @@ export const GeneralRouter = () => {
                         )}
 
                         {/* RELACIONADO A MOVEMENT */}
-                        {hasPermission(userRole, "ROLE_ADMIN") && (
+                        {hasPermission(ROLE_ADMIN) && (
                             <Route
                                 path="movements/*"
                                 element={
@@ -155,7 +155,7 @@ export const GeneralRouter = () => {
                             <Route index element={<ListUserPage />} />
                             <Route path="new" element={<RegisterUserPage />} />
                         </Route> */}
-                        {hasPermission(userRole, "ROLE_ADMIN") && (
+                        {hasPermission(ROLE_ADMIN) && (
                             <Route
                                 path="users/*"
                                 element={
@@ -167,7 +167,7 @@ export const GeneralRouter = () => {
                         )}
 
                         {/* RELACIONADO A LOCATION */}
-                        {hasPermission(userRole, "ROLE_OPERATOR") && (
+                        {hasPermission(ROLE_OPERATOR) && (
                             <Route
                                 path="locations/*"
                                 element={

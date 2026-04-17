@@ -12,16 +12,18 @@ export const userRegisterForm = userSchema
     })
     .and(
         roleSchema.pick({
-            operator: true,
-            secretary: true,
-            admin: true,
+            // operator: true,
+            // secretary: true,
+            // admin: true,
+            role: true,
         }),
     );
 
 export const rolesForm = roleSchema.pick({
-    operator: true,
-    secretary: true,
-    admin: true,
+    // operator: true,
+    // secretary: true,
+    // admin: true,
+    role: true,
 });
 
 export type UserRegisterForm = z.infer<typeof userRegisterForm>;

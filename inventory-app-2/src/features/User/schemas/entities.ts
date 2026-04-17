@@ -2,12 +2,7 @@ import { z } from "zod";
 
 export const sessionSchema = z.object({
     email: z.string(),
-    role: z.enum([
-        "ROLE_USER",
-        "ROLE_OPERATOR",
-        "ROLE_SECRETARY",
-        "ROLE_ADMIN",
-    ]),
+    role: z.enum(["ROLE_USER", "ROLE_OPERATOR", "ROLE_ADMIN"]),
 });
 
 export const userSchema = z.object({
@@ -18,17 +13,16 @@ export const userSchema = z.object({
     email: z.string(),
     dni: z.number(),
     password: z.string(),
-    roles: z.array(
-        z.enum(["ROLE_USER", "ROLE_OPERATOR", "ROLE_SECRETARY", "ROLE_ADMIN"]),
-    ),
+    role: z.enum(["ROLE_USER", "ROLE_OPERATOR", "ROLE_ADMIN"]),
     status: z.boolean(),
 });
 
 export const roleSchema = z.object({
-    id: z.number(),
+    // id: z.number(),
     label: z.string(),
 
-    operator: z.boolean(),
-    secretary: z.boolean(),
-    admin: z.boolean(),
+    role: z.string(),
+    // operator: z.boolean(),
+    // secretary: z.boolean(),
+    // admin: z.boolean(),
 });

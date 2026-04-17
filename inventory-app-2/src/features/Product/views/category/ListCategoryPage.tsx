@@ -8,6 +8,8 @@ import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import { EntityListLayout } from "@/layout/entity/EntityListLayout";
 import { StatusCategoryButton } from "../../components/category/StatusCategoryButton";
 import { EditCategoryButton } from "../../components/category/EditCategoryButton";
+import { ROLE_ADMIN } from "@/constants";
+import { useAuthRole } from "@/hooks/useAuthRole";
 
 export const ListCategoryPage = () => {
     const { data, isError, isLoading } = useQuery({
@@ -16,25 +18,34 @@ export const ListCategoryPage = () => {
         queryKey: ["categories"],
     });
 
+    const { hasPermission } = useAuthRole();
+
     return (
         <EntityListLayout>
-            <EntityListLayout.Header
-                title="Categorias"
-                actions={
-                    <ButtonLink
-                        icon={<PlusCircleIcon />}
-                        size="large"
-                        text="Nueva categoria"
-                        to="/products/categories/new"
-                        color="blue"
-                        showIconOnMobile={false}
-                        showTextOnMobile
-                    />
-                }
-            ></EntityListLayout.Header>
+            <EntityListLayout.Header title="Categorias" />
+            {hasPermission(ROLE_ADMIN) && (
+                <EntityListLayout.Header
+                    actions={
+                        <ButtonLink
+                            icon={<PlusCircleIcon />}
+                            size="large"
+                            text="Nueva categoria"
+                            to="/products/categories/new"
+                            color="blue"
+                            showIconOnMobile={false}
+                            showTextOnMobile
+                        />
+                    }
+                ></EntityListLayout.Header>
+            )}
+
             <EntityListLayout.Content>
                 <TableContainer
-                    headers={["ID", "Nombre", "Editar", "Estado"]}
+                    headers={
+                        hasPermission(ROLE_ADMIN)
+                            ? ["ID", "Nombre", "Editar", "Estado"]
+                            : ["ID", "Nombre"]
+                    }
                     isError={isError}
                     isEmpty={!data?.length}
                     isLoading={isLoading}
@@ -43,23 +54,27 @@ export const ListCategoryPage = () => {
                         <TableRowContainer key={category.id}>
                             <BaseTableCell data={category.id} />
                             <BaseTableCell data={category.name} />
-                            <BaseTableCell
-                                data={
-                                    <EditCategoryButton
-                                        categoryId={category.id}
+                            {hasPermission(ROLE_ADMIN) && (
+                                <>
+                                    <BaseTableCell
+                                        data={
+                                            <EditCategoryButton
+                                                categoryId={category.id}
+                                            />
+                                        }
+                                        isCenter
                                     />
-                                }
-                                isCenter
-                            />
-                            <BaseTableCell
-                                isCenter
-                                data={
-                                    <StatusCategoryButton
-                                        categoryId={category.id}
-                                        status={category.status}
-                                    />
-                                }
-                            ></BaseTableCell>
+                                    <BaseTableCell
+                                        isCenter
+                                        data={
+                                            <StatusCategoryButton
+                                                categoryId={category.id}
+                                                status={category.status}
+                                            />
+                                        }
+                                    ></BaseTableCell>
+                                </>
+                            )}
                         </TableRowContainer>
                     ))}
                 </TableContainer>
