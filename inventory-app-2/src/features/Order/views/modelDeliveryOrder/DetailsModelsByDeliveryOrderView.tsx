@@ -17,10 +17,11 @@ import { ListDeliveryOrderSumaries } from "../../components/deliveryOrderSummary
 import { LoadingView } from "@/views/LoadingView";
 import { Error } from "@/views/Error";
 import { ROLE_ADMIN } from "@/constants";
-import { RoleGuard } from "@/components/RoleGuard";
+import { useAuthRole } from "@/hooks/useAuthRole";
 
 export const DetailsModelsByDeliveryOrderView = () => {
     const { pathname } = useLocation();
+    const { hasPermission } = useAuthRole();
 
     const from = pathname.includes("pending")
         ? "pending"
@@ -218,13 +219,13 @@ export const DetailsModelsByDeliveryOrderView = () => {
                                     }
                                 />
                             </PanelContainer.Detail>
-                            <RoleGuard requiredRole={ROLE_ADMIN}>
+                            {hasPermission(ROLE_ADMIN) && (
                                 <PanelContainer.Detail label="Cambiar la fecha limite">
                                     <ChangeLimitDateButton
                                         deliveryOrderId={deliveryOrderData.id}
                                     />
                                 </PanelContainer.Detail>
-                            </RoleGuard>
+                            )}
                         </PanelContainer.DetailsGrid>
                     </PanelContainer>
                 </EntityDetailsLayout.Column>
@@ -282,7 +283,7 @@ export const DetailsModelsByDeliveryOrderView = () => {
                                 showTextOnMobile
                             />
 
-                            <RoleGuard requiredRole={ROLE_ADMIN}>
+                            {hasPermission(ROLE_ADMIN) && (
                                 <Button
                                     type="button"
                                     size="small"
@@ -294,7 +295,7 @@ export const DetailsModelsByDeliveryOrderView = () => {
                                         setAddModelDeliveryOrderModalOpen(true);
                                     }}
                                 />
-                            </RoleGuard>
+                            )}
                             {addModelDeliveryOrderModalOpen &&
                                 deliveryOrderId && (
                                     <Modal
@@ -354,8 +355,8 @@ export const DetailsModelsByDeliveryOrderView = () => {
                         </PanelContainer.DetailsGrid>
                     </PanelContainer>
 
-                    {from === "my-orders" || (
-                        <RoleGuard requiredRole={ROLE_ADMIN}>
+                    {from === "my-orders" ||
+                        (hasPermission(ROLE_ADMIN) && (
                             <PanelContainer subtitle="Operaciones">
                                 <PanelContainer.DetailsGrid>
                                     <PanelContainer.Detail label="Entregar">
@@ -370,8 +371,7 @@ export const DetailsModelsByDeliveryOrderView = () => {
                                     </PanelContainer.Detail>
                                 </PanelContainer.DetailsGrid>
                             </PanelContainer>
-                        </RoleGuard>
-                    )}
+                        ))}
                 </EntityDetailsLayout.Column>
             </EntityDetailsLayout.Content>
             <EntityDetailsLayout.Content columns={1}>

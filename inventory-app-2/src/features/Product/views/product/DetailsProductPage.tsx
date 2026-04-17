@@ -20,10 +20,14 @@ import { AddModelButton } from "../../components/product/AddModelButton";
 import { EditProductButton } from "../../components/product/EditProductButton";
 import { EditModelButton } from "../../components/model/EditModelButton";
 import { QRButton } from "../../components/QRButton";
+import { ROLE_ADMIN } from "@/constants";
+import { useAuthRole } from "@/hooks/useAuthRole";
+import { StatusText } from "@/components/StatusText";
 
 export const DetailsProductPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const modelIdParam = searchParams.get("modelId");
+    const { hasPermission } = useAuthRole();
 
     const location = useLocation();
     const path = location.pathname;
@@ -143,19 +147,29 @@ export const DetailsProductPage = () => {
                         )}
 
                         <PanelContainer.DetailsGrid>
-                            {productData.status && (
-                                <PanelContainer.Detail label="Editar producto">
-                                    <EditProductButton productId={productId} />
+                            {hasPermission(ROLE_ADMIN) ? (
+                                <>
+                                    {productData.status && (
+                                        <PanelContainer.Detail label="Editar producto">
+                                            <EditProductButton
+                                                productId={productId}
+                                            />
+                                        </PanelContainer.Detail>
+                                    )}
+
+                                    <PanelContainer.Detail label="Estado del producto">
+                                        <StatusProductButton
+                                            size="small"
+                                            productId={productId!}
+                                            isActive={productData.status}
+                                        />
+                                    </PanelContainer.Detail>
+                                </>
+                            ) : (
+                                <PanelContainer.Detail label="Estado del producto">
+                                    <StatusText value={productData.status} />
                                 </PanelContainer.Detail>
                             )}
-
-                            <PanelContainer.Detail label="Estado del producto">
-                                <StatusProductButton
-                                    size="small"
-                                    productId={productId!}
-                                    isActive={productData.status}
-                                />
-                            </PanelContainer.Detail>
                         </PanelContainer.DetailsGrid>
                     </PanelContainer>
                 </EntityDetailsLayout.Column>
@@ -191,8 +205,9 @@ export const DetailsProductPage = () => {
                                 size="small"
                                 showTextOnMobile
                             />
-
-                            <AddModelButton productId={productId} />
+                            {hasPermission(ROLE_ADMIN) && (
+                                <AddModelButton productId={productId} />
+                            )}
                         </PanelContainer.Actions>
 
                         <PanelContainer.DetailsGrid>
@@ -230,29 +245,37 @@ export const DetailsProductPage = () => {
                                 />
                             </PanelContainer.Detail>
 
-                            {selectedModel.status && (
-                                <PanelContainer.Detail label="Editar modelo">
-                                    <EditModelButton
-                                        modelId={selectedModel.id}
-                                    />
+                            {hasPermission(ROLE_ADMIN) ? (
+                                <>
+                                    {selectedModel.status && (
+                                        <PanelContainer.Detail label="Editar modelo">
+                                            <EditModelButton
+                                                modelId={selectedModel.id}
+                                            />
+                                        </PanelContainer.Detail>
+                                    )}
+
+                                    <PanelContainer.Detail
+                                        label="Estado del modelo"
+                                        isButton
+                                    >
+                                        <StatusModelButton
+                                            modelId={selectedModel.id}
+                                            productId={productId!}
+                                            value={
+                                                selectedModel.status
+                                                    ? "Activo"
+                                                    : "Inactivo"
+                                            }
+                                            size={"small"}
+                                        />
+                                    </PanelContainer.Detail>
+                                </>
+                            ) : (
+                                <PanelContainer.Detail label="Estado del modelo">
+                                    <StatusText value={selectedModel.status} />
                                 </PanelContainer.Detail>
                             )}
-
-                            <PanelContainer.Detail
-                                label="Estado del modelo"
-                                isButton
-                            >
-                                <StatusModelButton
-                                    modelId={selectedModel.id}
-                                    productId={productId!}
-                                    value={
-                                        selectedModel.status
-                                            ? "Activo"
-                                            : "Inactivo"
-                                    }
-                                    size={"small"}
-                                />
-                            </PanelContainer.Detail>
                         </PanelContainer.DetailsGrid>
                     </PanelContainer>
                 </EntityDetailsLayout.Column>

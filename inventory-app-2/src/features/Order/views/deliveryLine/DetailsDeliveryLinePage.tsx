@@ -22,8 +22,8 @@ import { EditDeliveryLineButton } from "../../components/deliveryLine/EditDelive
 import { DeliveryLineStatus } from "../../components/deliveryLine/DeliveryLineStatus";
 import { LoadingView } from "@/views/LoadingView";
 import { Error } from "@/views/Error";
-import { RoleGuard } from "@/components/RoleGuard";
 import { ROLE_ADMIN, ROLE_OPERATOR } from "@/constants";
+import { useAuthRole } from "@/hooks/useAuthRole";
 
 export const DetailsDeliveryLinePage = () => {
     const {
@@ -41,7 +41,7 @@ export const DetailsDeliveryLinePage = () => {
         ? "pending"
         : pathname.includes("my-orders")
           ? "my-orders"
-          : null;
+          : "";
 
     const { data, isLoading, isError } = useQuery<DeliveryLineDetailsItem>({
         queryKey: ["deliveryLine", deliveryLineId],
@@ -51,6 +51,11 @@ export const DetailsDeliveryLinePage = () => {
     });
 
     // Obtener las cantidades tomadas
+    const { hasPermission } = useAuthRole();
+
+    const canViewStockLots = hasPermission(ROLE_OPERATOR);
+
+    //* ESTE ENDPOINT SOLAMENTE LO PUEDE VER USUARIOS CON EL ROL DE OPERADOR Y SUPERIORES
     const {
         data: stockLotsByDeliveryLineData,
         isError: stockLotByDeliveryLineError,
@@ -58,7 +63,7 @@ export const DetailsDeliveryLinePage = () => {
     } = useQuery({
         queryKey: ["deliveryLine", "stockLots", deliveryLineId],
         queryFn: () => getStockLotsByDeliveryLine(deliveryLineId!),
-        enabled: !!deliveryLineId,
+        enabled: !!deliveryLineId && canViewStockLots,
         retry: 0,
     });
     const content = stockLotsByDeliveryLineData || [];
@@ -87,15 +92,19 @@ export const DetailsDeliveryLinePage = () => {
         }
     }, [data, isLoading]);
 
-    if (isLoading || stockLotByDeliveryLineIsLoading) {
+    if (isLoading || (canViewStockLots && stockLotByDeliveryLineIsLoading)) {
         return <LoadingView />;
     }
 
-    if (isError || stockLotByDeliveryLineError) {
+    if (isError) {
         return <Error type="500" />;
     }
 
-    if (!data || !stockLotsByDeliveryLineData) {
+    if (canViewStockLots && stockLotByDeliveryLineError) {
+        return <Error type="500" />;
+    }
+
+    if (!data) {
         return <Error type="404" />;
     }
 
@@ -105,14 +114,14 @@ export const DetailsDeliveryLinePage = () => {
                 title={`Linea de entrega #${deliveryLineId}`}
                 actions={
                     <>
-                        <RoleGuard requiredRole={ROLE_ADMIN}>
+                        {hasPermission(ROLE_ADMIN) && (
                             <EditDeliveryLineButton
                                 deliveryLineId={deliveryLineId}
                                 deliveryOrderId={deliveryOrderId}
                                 limitDate={data.limitDate}
                                 requiredQuantity={data.requiredQuantity}
                             />
-                        </RoleGuard>
+                        )}
                         <ButtonLink
                             size={"large"}
                             text={"Volver a orden"}
@@ -198,8 +207,8 @@ export const DetailsDeliveryLinePage = () => {
                         </PanelContainer>
                     </EntityDetailsLayout.Grid>
 
-                    {from !== "my-orders" && (
-                        <RoleGuard requiredRole={ROLE_OPERATOR}>
+                    {from !== "my-orders" && hasPermission(ROLE_OPERATOR) && (
+                        <>
                             <PanelContainer subtitle="Operaciones">
                                 <PanelContainer.DetailsGrid>
                                     <PanelContainer.Detail label="Distribuir">
@@ -221,8 +230,8 @@ export const DetailsDeliveryLinePage = () => {
                                             deliveryOrderId={deliveryOrderId}
                                         />
                                     </PanelContainer.Detail>
-                                    {
-                                        <RoleGuard requiredRole={ROLE_ADMIN}>
+                                    {hasPermission(ROLE_ADMIN) && (
+                                        <>
                                             <PanelContainer.Detail label="Entregar">
                                                 <SendDeliveryLineButton
                                                     deliveryLineId={
@@ -253,58 +262,55 @@ export const DetailsDeliveryLinePage = () => {
                                                     }
                                                 />
                                             </PanelContainer.Detail>
-                                        </RoleGuard>
-                                    }
+                                        </>
+                                    )}
+                                    {}
                                 </PanelContainer.DetailsGrid>
                             </PanelContainer>
-                        </RoleGuard>
+                        </>
                     )}
                 </EntityDetailsLayout.Column>
             </EntityDetailsLayout.Content>
 
             {/* DETALLA DE QUE LOTE DE ENTREGA SE HA TOMADO PARA COMPLETAR LA LINEA DE ENTREGA */}
 
-            <RoleGuard requiredRole={ROLE_OPERATOR}>
-                {from !== "my-orders" && (
-                    <EntityDetailsLayout.Content columns={1}>
-                        <EntityDetailsLayout.Column>
-                            <TableContainer
-                                title="Historial de las cantidades tomadas de los lotes de stock"
-                                headers={[
-                                    "ID",
-                                    "Cantidad",
-                                    "Fecha",
-                                    "Código de lote de stock",
-                                ]}
-                                isError={stockLotByDeliveryLineError}
-                                isEmpty={!content.length}
-                                isLoading={stockLotByDeliveryLineIsLoading}
-                            >
-                                {content?.map((stockLot) => {
-                                    return (
-                                        <TableRowContainer key={stockLot.id}>
-                                            <BaseTableCell data={stockLot.id} />
-                                            <BaseTableCell
-                                                data={stockLot.quantityUsed}
-                                            />
-                                            <BaseTableCell
-                                                data={handleFormatDateTimeWithoutT(
-                                                    new Date(
-                                                        stockLot.createdAt,
-                                                    ),
-                                                )}
-                                            />
-                                            <BaseTableCell
-                                                data={stockLot.stockLotBatch}
-                                            />
-                                        </TableRowContainer>
-                                    );
-                                })}
-                            </TableContainer>
-                        </EntityDetailsLayout.Column>
-                    </EntityDetailsLayout.Content>
-                )}
-            </RoleGuard>
+            {hasPermission(ROLE_OPERATOR) && from !== "my-orders" && (
+                <EntityDetailsLayout.Content columns={1}>
+                    <EntityDetailsLayout.Column>
+                        <TableContainer
+                            title="Historial de las cantidades tomadas de los lotes de stock"
+                            headers={[
+                                "ID",
+                                "Cantidad",
+                                "Fecha",
+                                "Código de lote de stock",
+                            ]}
+                            isError={stockLotByDeliveryLineError}
+                            isEmpty={!content.length}
+                            isLoading={stockLotByDeliveryLineIsLoading}
+                        >
+                            {content?.map((stockLot) => {
+                                return (
+                                    <TableRowContainer key={stockLot.id}>
+                                        <BaseTableCell data={stockLot.id} />
+                                        <BaseTableCell
+                                            data={stockLot.quantityUsed}
+                                        />
+                                        <BaseTableCell
+                                            data={handleFormatDateTimeWithoutT(
+                                                new Date(stockLot.createdAt),
+                                            )}
+                                        />
+                                        <BaseTableCell
+                                            data={stockLot.stockLotBatch}
+                                        />
+                                    </TableRowContainer>
+                                );
+                            })}
+                        </TableContainer>
+                    </EntityDetailsLayout.Column>
+                </EntityDetailsLayout.Content>
+            )}
         </EntityDetailsLayout>
     );
 };

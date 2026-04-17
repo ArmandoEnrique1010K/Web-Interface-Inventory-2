@@ -20,6 +20,9 @@ import { StatusProductButton } from "../../components/product/StatusProductButto
 import { type ProductItem } from "../../schemas/items";
 import { EditProductButton } from "../../components/product/EditProductButton";
 import { LinkText } from "@/components/LinkText";
+import { useAuthRole } from "@/hooks/useAuthRole";
+import { ROLE_ADMIN } from "@/constants";
+import { StatusText } from "@/components/StatusText";
 export const ListProductPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const page = Number(searchParams.get("page") ?? 0);
@@ -50,6 +53,11 @@ export const ListProductPage = () => {
     //         status: status === undefined ? '' : String(status),
     //     })
     // })
+    const { hasPermission } = useAuthRole();
+
+    const tableHeaders = hasPermission(ROLE_ADMIN)
+        ? ["ID", "Nombre", "Característica", "Medidas", "Estado", "Editar"]
+        : ["ID", "Nombre", "Característica", "Medidas", "Estado"];
 
     const { data, isError, isLoading } = useQuery({
         queryKey: ["products", { name, categoryId, typeId, status, page }],
@@ -104,20 +112,22 @@ export const ListProductPage = () => {
 
     return (
         <EntityListLayout>
-            <EntityListLayout.Header
-                title="Productos"
-                actions={
-                    <ButtonLink
-                        icon={<PlusCircleIcon />}
-                        size="large"
-                        text="Nuevo producto"
-                        to="/products/new"
-                        color="blue"
-                        showIconOnMobile={false}
-                        showTextOnMobile
-                    />
-                }
-            ></EntityListLayout.Header>
+            <EntityListLayout.Header title="Productos" />
+            {hasPermission(ROLE_ADMIN) && (
+                <EntityListLayout.Header
+                    actions={
+                        <ButtonLink
+                            icon={<PlusCircleIcon />}
+                            size="large"
+                            text="Nuevo producto"
+                            to="/products/new"
+                            color="blue"
+                            showIconOnMobile={false}
+                            showTextOnMobile
+                        />
+                    }
+                />
+            )}
             <EntityListLayout.Content>
                 <FiltersFormContainer
                     onSubmit={(e) => {
@@ -193,14 +203,7 @@ export const ListProductPage = () => {
                 </FiltersFormContainer>
 
                 <TableContainer
-                    headers={[
-                        "ID",
-                        "Nombre",
-                        "Característica",
-                        "Medidas",
-                        "Estado",
-                        "Editar",
-                    ]}
+                    headers={tableHeaders}
                     isError={isError}
                     isEmpty={!content?.length}
                     isLoading={isLoading}
@@ -287,25 +290,36 @@ export const ListProductPage = () => {
                                 <BaseTableCell
                                     isCenter
                                     data={
-                                        <StatusProductButton
-                                            size="small"
-                                            productId={product.id}
-                                            isActive={product.status}
-                                        />
-                                    }
-                                />
-
-                                <BaseTableCell
-                                    isCenter
-                                    data={
-                                        //* SOLAMENTE SI UN PRODUCTO ESTA ACTIVO, PUEDE SER EDITADO
-                                        product.status === true && (
-                                            <EditProductButton
+                                        hasPermission(ROLE_ADMIN) ? (
+                                            <StatusProductButton
+                                                size="small"
                                                 productId={product.id}
+                                                isActive={product.status}
+                                            />
+                                        ) : (
+                                            <StatusText
+                                                value={product.status}
                                             />
                                         )
                                     }
                                 />
+                                {hasPermission(ROLE_ADMIN) && (
+                                    <BaseTableCell
+                                        isCenter
+                                        data={
+                                            //* SOLAMENTE SI UN PRODUCTO ESTA ACTIVO, PUEDE SER EDITADO
+                                            product.status ? (
+                                                <EditProductButton
+                                                    productId={product.id}
+                                                />
+                                            ) : (
+                                                <span className="text-xs">
+                                                    ...
+                                                </span>
+                                            )
+                                        }
+                                    />
+                                )}
                             </TableRowContainer>
                         );
                     })}

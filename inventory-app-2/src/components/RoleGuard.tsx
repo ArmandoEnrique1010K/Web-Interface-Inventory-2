@@ -1,5 +1,5 @@
 import type { RootState } from "@/store/store";
-import { hasPermission } from "@/utils/hasPermission";
+import { hasPermission2 } from "@/utils/hasPermission";
 import { useSelector } from "react-redux";
 
 type CanProps = {
@@ -11,6 +11,6 @@ type CanProps = {
 export const RoleGuard = ({ requiredRole, children }: CanProps) => {
     const { userRole } = useSelector((state: RootState) => state.auth);
 
-    if (!hasPermission(userRole, requiredRole)) return null;
+    if (!hasPermission2(userRole, requiredRole)) return null;
     return <>{children}</>;
 };

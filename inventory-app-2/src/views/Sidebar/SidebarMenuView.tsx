@@ -205,7 +205,7 @@ export const SidebarMenuView = () => {
                                     to: menuItem.to,
                                     isForm: menuItem.isForm,
                                 }}
-                                isMobile={false}
+                                isMobile={true}
                             />
                         ))}
 

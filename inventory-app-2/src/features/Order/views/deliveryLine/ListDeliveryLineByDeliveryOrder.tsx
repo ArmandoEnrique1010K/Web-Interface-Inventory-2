@@ -23,7 +23,6 @@ import { DeliveryLineStatus } from "../../components/deliveryLine/DeliveryLineSt
 import { AllocateDeliveryLineButton } from "../../components/deliveryLine/AllocateDeliveryLineButton";
 import { LinkText } from "@/components/LinkText";
 import { SendDeliveryLineButton } from "../../components/deliveryLine/SendDeliveryLineButton";
-import { RoleGuard } from "@/components/RoleGuard";
 import { ROLE_ADMIN, ROLE_OPERATOR } from "@/constants";
 import { useAuthRole } from "@/hooks/useAuthRole";
 
@@ -35,6 +34,8 @@ export const ListDeliveryLineByDeliveryOrder = ({
     deliveryOrderStatus,
 }: Props) => {
     const { pathname } = useLocation();
+
+    const { hasPermission } = useAuthRole();
 
     const from = pathname.includes("pending")
         ? "pending"
@@ -145,7 +146,6 @@ export const ListDeliveryLineByDeliveryOrder = ({
                 Object.fromEntries(searchParams),
             ),
     });
-    const { hasPermission } = useAuthRole();
 
     useEffect(() => {
         const saved = sessionStorage.getItem(STORAGE_KEY);
@@ -272,24 +272,28 @@ export const ListDeliveryLineByDeliveryOrder = ({
           ]
         : ["ID", "Ubicación", "Nombre", "Cantidad", "Fecha limite", "Estado"];
 
+    // TODO: REPARAR LA LOGICA PARA MOSTRAR LA NUEVA ORDEN DE ENTREGA
     return (
         <>
             <EntityListLayout isCompact>
-                <RoleGuard requiredRole={ROLE_ADMIN}>
-                    <EntityListLayout.Header
-                        actions={
-                            (from !== "pending" &&
-                                from !== "my-orders" &&
-                                ["ORDER_CANCELED", "ORDER_DELIVERED"].includes(
-                                    deliveryOrderStatus,
-                                )) || (
-                                <AddDeliveryLineButton
-                                    deliveryOrderId={deliveryOrderId}
-                                />
-                            )
-                        }
-                    ></EntityListLayout.Header>
-                </RoleGuard>
+                {!pathname.includes("my-orders") &&
+                    !pathname.includes("pending") &&
+                    hasPermission(ROLE_ADMIN) && (
+                        <EntityListLayout.Header
+                            actions={
+                                (from !== "pending" &&
+                                    from !== "my-orders" &&
+                                    [
+                                        "ORDER_CANCELED",
+                                        "ORDER_DELIVERED",
+                                    ].includes(deliveryOrderStatus)) || (
+                                    <AddDeliveryLineButton
+                                        deliveryOrderId={deliveryOrderId}
+                                    />
+                                )
+                            }
+                        />
+                    )}
 
                 <EntityListLayout.Content>
                     <FiltersFormContainer
@@ -599,42 +603,38 @@ export const ListDeliveryLineByDeliveryOrder = ({
                                             />
                                         }
                                     />
-                                    {
-                                        <RoleGuard requiredRole={ROLE_OPERATOR}>
-                                            <BaseTableCell
-                                                data={
-                                                    <div className="flex flex-col gap-2 justify-center items-center">
-                                                        <AllocateDeliveryLineButton
+                                    {hasPermission(ROLE_OPERATOR) && (
+                                        <BaseTableCell
+                                            data={
+                                                <div className="flex flex-col gap-2 justify-center items-center">
+                                                    <AllocateDeliveryLineButton
+                                                        deliveryLineId={
+                                                            deliveryLine.id
+                                                        }
+                                                        deliveryOrderId={
+                                                            deliveryOrderId
+                                                        }
+                                                        modelId={
+                                                            deliveryLine.modelId
+                                                        }
+                                                    />
+
+                                                    {hasPermission(
+                                                        ROLE_ADMIN,
+                                                    ) && (
+                                                        <SendDeliveryLineButton
                                                             deliveryLineId={
                                                                 deliveryLine.id
                                                             }
                                                             deliveryOrderId={
                                                                 deliveryOrderId
                                                             }
-                                                            modelId={
-                                                                deliveryLine.modelId
-                                                            }
                                                         />
-
-                                                        <RoleGuard
-                                                            requiredRole={
-                                                                ROLE_ADMIN
-                                                            }
-                                                        >
-                                                            <SendDeliveryLineButton
-                                                                deliveryLineId={
-                                                                    deliveryLine.id
-                                                                }
-                                                                deliveryOrderId={
-                                                                    deliveryOrderId
-                                                                }
-                                                            />
-                                                        </RoleGuard>
-                                                    </div>
-                                                }
-                                            />
-                                        </RoleGuard>
-                                    }
+                                                    )}
+                                                </div>
+                                            }
+                                        />
+                                    )}
                                 </TableRowContainer>
                             );
                         })}

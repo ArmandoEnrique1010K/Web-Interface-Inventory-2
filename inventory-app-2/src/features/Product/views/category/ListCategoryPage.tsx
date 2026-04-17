@@ -10,6 +10,7 @@ import { StatusCategoryButton } from "../../components/category/StatusCategoryBu
 import { EditCategoryButton } from "../../components/category/EditCategoryButton";
 import { ROLE_ADMIN } from "@/constants";
 import { useAuthRole } from "@/hooks/useAuthRole";
+import { StatusText } from "@/components/StatusText";
 
 export const ListCategoryPage = () => {
     const { data, isError, isLoading } = useQuery({
@@ -19,6 +20,10 @@ export const ListCategoryPage = () => {
     });
 
     const { hasPermission } = useAuthRole();
+
+    const tableHeaders = hasPermission(ROLE_ADMIN)
+        ? ["ID", "Nombre", "Estado", "Editar"]
+        : ["ID", "Nombre", "Estado"];
 
     return (
         <EntityListLayout>
@@ -41,11 +46,7 @@ export const ListCategoryPage = () => {
 
             <EntityListLayout.Content>
                 <TableContainer
-                    headers={
-                        hasPermission(ROLE_ADMIN)
-                            ? ["ID", "Nombre", "Editar", "Estado"]
-                            : ["ID", "Nombre"]
-                    }
+                    headers={tableHeaders}
                     isError={isError}
                     isEmpty={!data?.length}
                     isLoading={isLoading}
@@ -54,26 +55,35 @@ export const ListCategoryPage = () => {
                         <TableRowContainer key={category.id}>
                             <BaseTableCell data={category.id} />
                             <BaseTableCell data={category.name} />
+
+                            {/* Estado */}
+                            <BaseTableCell
+                                isCenter
+                                data={
+                                    hasPermission(ROLE_ADMIN) ? (
+                                        <StatusCategoryButton
+                                            categoryId={category.id}
+                                            status={category.status}
+                                        />
+                                    ) : (
+                                        <StatusText value={category.status} />
+                                    )
+                                }
+                            />
+
                             {hasPermission(ROLE_ADMIN) && (
-                                <>
-                                    <BaseTableCell
-                                        data={
+                                <BaseTableCell
+                                    isCenter
+                                    data={
+                                        category.status ? (
                                             <EditCategoryButton
                                                 categoryId={category.id}
                                             />
-                                        }
-                                        isCenter
-                                    />
-                                    <BaseTableCell
-                                        isCenter
-                                        data={
-                                            <StatusCategoryButton
-                                                categoryId={category.id}
-                                                status={category.status}
-                                            />
-                                        }
-                                    ></BaseTableCell>
-                                </>
+                                        ) : (
+                                            <span className="text-xs">...</span>
+                                        )
+                                    }
+                                />
                             )}
                         </TableRowContainer>
                     ))}

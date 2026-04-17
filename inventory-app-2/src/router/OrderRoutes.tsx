@@ -82,16 +82,16 @@ export default function OrderRoutes() {
                     element={<DetailsDeliveryLinePage />}
                 />
                 <Route
-                    path="my-orders/:deliveryOrderId/line/:deliveryLineId"
-                    element={<DetailsDeliveryLinePage />}
-                />
-                <Route
                     path="my-orders"
                     element={<ListDeliveryOrderByCurrentUserPage />}
                 />
                 <Route
                     path="my-orders/:id"
                     element={<DetailsDeliveryOrderPage />}
+                />
+                <Route
+                    path="my-orders/:deliveryOrderId/line/:deliveryLineId"
+                    element={<DetailsDeliveryLinePage />}
                 />
                 {hasPermission(ROLE_OPERATOR) && (
                     <>

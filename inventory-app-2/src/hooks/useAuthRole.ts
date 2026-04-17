@@ -17,16 +17,16 @@ export const useAuthRole = () => {
 
     const is = (role: string) => userRole === role;
 
-    const isAdmin = () => userRole === "ROLE_ADMIN";
+    // const isAdmin = () => userRole === "ROLE_ADMIN";
 
-    const isOperatorOrHigher = () =>
-        rolePriority[userRole] >= rolePriority["ROLE_OPERATOR"];
+    // const isOperatorOrHigher = () =>
+    //     rolePriority[userRole] >= rolePriority["ROLE_OPERATOR"];
 
     return {
         userRole,
         hasPermission,
         is,
-        isAdmin,
-        isOperatorOrHigher,
+        // isAdmin,
+        // isOperatorOrHigher,
     };
 };

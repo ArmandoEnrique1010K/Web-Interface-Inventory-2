@@ -4,7 +4,7 @@ const rolePriority: Record<string, number> = {
     ROLE_ADMIN: 3,
 };
 
-export const hasPermission = (userRole: string, requiredRole: string) => {
+export const hasPermission2 = (userRole: string, requiredRole: string) => {
     return rolePriority[userRole] >= rolePriority[requiredRole];
 };
 // const getHighestRole = (roles: string[]) => {

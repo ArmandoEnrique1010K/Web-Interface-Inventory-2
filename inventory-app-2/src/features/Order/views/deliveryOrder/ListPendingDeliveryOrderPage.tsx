@@ -51,6 +51,22 @@ export const ListPendingDeliveryOrderPage = () => {
     return (
         <EntityListLayout>
             <EntityListLayout.Header title="Ordenes de entrega pendientes"></EntityListLayout.Header>
+            {/* <RoleGuard requiredRole={ROLE_ADMIN}>
+                <EntityListLayout.Header
+                    actions={
+                        <ButtonLink
+                            icon={<PlusCircleIcon />}
+                            size="large"
+                            text="Nueva orden"
+                            to="/orders/new"
+                            color="blue"
+                            showIconOnMobile={false}
+                            showTextOnMobile
+                        />
+                    }
+                ></EntityListLayout.Header>
+            </RoleGuard> */}
+
             <EntityListLayout.Content>
                 <FiltersFormContainer
                     onSubmit={(e) => {

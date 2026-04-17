@@ -10,9 +10,13 @@ import { Error } from "@/views/Error";
 import { EditModelButton } from "../../components/model/EditModelButton";
 import { EditProductButton } from "../../components/product/EditProductButton";
 import { QRButton } from "../../components/QRButton";
+import { StatusText } from "@/components/StatusText";
+import { ROLE_ADMIN } from "@/constants";
+import { useAuthRole } from "@/hooks/useAuthRole";
 
 export const DetailsModelPage = () => {
     const { modelId: modelIdStr } = useParams();
+    const { hasPermission } = useAuthRole();
 
     const modelId = +modelIdStr!; // convertir a numero
 
@@ -68,18 +72,32 @@ export const DetailsModelPage = () => {
                         />
 
                         <PanelContainer.DetailsGrid>
-                            <PanelContainer.Detail label="Estado del modelo">
-                                <StatusModelButton
-                                    from="product-details"
-                                    modelId={modelId!}
-                                    size="small"
-                                    productId={data.productId}
-                                    value={data.status ? "Activo" : "Inactivo"}
-                                />
-                            </PanelContainer.Detail>
-                            {data.status && (
-                                <PanelContainer.Detail label="Editar modelo">
-                                    <EditModelButton modelId={modelId} />
+                            {hasPermission(ROLE_ADMIN) ? (
+                                <>
+                                    <PanelContainer.Detail label="Estado del modelo">
+                                        <StatusModelButton
+                                            from="product-details"
+                                            modelId={modelId!}
+                                            size="small"
+                                            productId={data.productId}
+                                            value={
+                                                data.status
+                                                    ? "Activo"
+                                                    : "Inactivo"
+                                            }
+                                        />
+                                    </PanelContainer.Detail>
+                                    {data.status && (
+                                        <PanelContainer.Detail label="Editar modelo">
+                                            <EditModelButton
+                                                modelId={modelId}
+                                            />
+                                        </PanelContainer.Detail>
+                                    )}
+                                </>
+                            ) : (
+                                <PanelContainer.Detail label="Estado del modelo">
+                                    <StatusText value={data.status} />
                                 </PanelContainer.Detail>
                             )}
                         </PanelContainer.DetailsGrid>
@@ -122,22 +140,29 @@ export const DetailsModelPage = () => {
                                     path={path}
                                 />
                             </PanelContainer.Detail>
-
-                            <PanelContainer.Detail
-                                label="Estado del producto"
-                                isButton
-                            >
-                                <StatusProductButton
-                                    isActive={data.productStatus}
-                                    productId={data.productId}
-                                    size={"small"}
-                                />
-                            </PanelContainer.Detail>
-                            {data.productStatus && (
-                                <PanelContainer.Detail label="Editar producto">
-                                    <EditProductButton
-                                        productId={data.productId}
-                                    />
+                            {hasPermission(ROLE_ADMIN) ? (
+                                <>
+                                    <PanelContainer.Detail
+                                        label="Estado del producto"
+                                        isButton
+                                    >
+                                        <StatusProductButton
+                                            isActive={data.productStatus}
+                                            productId={data.productId}
+                                            size={"small"}
+                                        />
+                                    </PanelContainer.Detail>
+                                    {data.productStatus && (
+                                        <PanelContainer.Detail label="Editar producto">
+                                            <EditProductButton
+                                                productId={data.productId}
+                                            />
+                                        </PanelContainer.Detail>
+                                    )}
+                                </>
+                            ) : (
+                                <PanelContainer.Detail label="Estado del producto">
+                                    <StatusText value={data.productStatus} />
                                 </PanelContainer.Detail>
                             )}
                         </PanelContainer.DetailsGrid>

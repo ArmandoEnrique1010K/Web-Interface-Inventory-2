@@ -8,6 +8,9 @@ import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import { EntityListLayout } from "@/layout/entity/EntityListLayout";
 import { StatusTypeButton } from "../../components/type/StatusTypeButton";
 import { EditTypeButton } from "../../components/type/EditTypeButton";
+import { useAuthRole } from "@/hooks/useAuthRole";
+import { ROLE_ADMIN } from "@/constants";
+import { StatusText } from "@/components/StatusText";
 
 export const ListTypePage = () => {
     const { data, isError, isLoading } = useQuery({
@@ -16,25 +19,33 @@ export const ListTypePage = () => {
         queryKey: ["types"],
     });
 
+    const { hasPermission } = useAuthRole();
+
+    const tableHeaders = hasPermission(ROLE_ADMIN)
+        ? ["ID", "Nombre", "Estado", "Editar"]
+        : ["ID", "Nombre", "Estado"];
+
     return (
         <EntityListLayout>
-            <EntityListLayout.Header
-                title="Tipos"
-                actions={
-                    <ButtonLink
-                        icon={<PlusCircleIcon />}
-                        size="large"
-                        text="Nuevo tipo"
-                        to="/products/types/new"
-                        color="blue"
-                        showIconOnMobile={false}
-                        showTextOnMobile
-                    />
-                }
-            ></EntityListLayout.Header>
+            <EntityListLayout.Header title="Tipos" />
+            {hasPermission(ROLE_ADMIN) && (
+                <EntityListLayout.Header
+                    actions={
+                        <ButtonLink
+                            icon={<PlusCircleIcon />}
+                            size="large"
+                            text="Nuevo tipo"
+                            to="/products/types/new"
+                            color="blue"
+                            showIconOnMobile={false}
+                            showTextOnMobile
+                        />
+                    }
+                ></EntityListLayout.Header>
+            )}
             <EntityListLayout.Content>
                 <TableContainer
-                    headers={["ID", "Nombre", "Editar", "Estado"]}
+                    headers={tableHeaders}
                     isError={isError}
                     isEmpty={!data?.length}
                     isLoading={isLoading}
@@ -43,19 +54,33 @@ export const ListTypePage = () => {
                         <TableRowContainer key={type.id}>
                             <BaseTableCell data={type.id} />
                             <BaseTableCell data={type.name} />
-                            <BaseTableCell
-                                isCenter
-                                data={<EditTypeButton typeId={type.id} />}
-                            />
+
                             <BaseTableCell
                                 isCenter
                                 data={
-                                    <StatusTypeButton
-                                        typeId={type.id}
-                                        status={type.status}
-                                    />
+                                    hasPermission(ROLE_ADMIN) ? (
+                                        <StatusTypeButton
+                                            typeId={type.id}
+                                            status={type.status}
+                                        />
+                                    ) : (
+                                        <StatusText value={type.status} />
+                                    )
                                 }
-                            ></BaseTableCell>
+                            />
+
+                            {hasPermission(ROLE_ADMIN) && (
+                                <BaseTableCell
+                                    isCenter
+                                    data={
+                                        type.status ? (
+                                            <EditTypeButton typeId={type.id} />
+                                        ) : (
+                                            <span className="text-xs">...</span>
+                                        )
+                                    }
+                                />
+                            )}
                         </TableRowContainer>
                     ))}
                 </TableContainer>

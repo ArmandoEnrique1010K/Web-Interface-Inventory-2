@@ -17,6 +17,9 @@ import { StatusModelButton } from "../../components/model/StatusModelButton";
 import { EntityListLayout } from "@/layout/entity/EntityListLayout";
 import { EditModelButton } from "../../components/model/EditModelButton";
 import { LinkText } from "@/components/LinkText";
+import { useAuthRole } from "@/hooks/useAuthRole";
+import { ROLE_ADMIN } from "@/constants";
+import { StatusText } from "@/components/StatusText";
 
 export const ListModelPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -102,6 +105,10 @@ export const ListModelPage = () => {
         { value: "true", label: "Activos" },
         { value: "false", label: "Inactivos" },
     ];
+    const { hasPermission } = useAuthRole();
+    const tableHeaders = hasPermission(ROLE_ADMIN)
+        ? ["ID", "Nombre", "Cantidad disponible", "Fechas", "Estado", "Editar"]
+        : ["ID", "Nombre", "Cantidad disponible", "Fechas", "Estado"];
 
     return (
         <EntityListLayout>
@@ -243,14 +250,7 @@ export const ListModelPage = () => {
                 </FiltersFormContainer>
 
                 <TableContainer
-                    headers={[
-                        "ID",
-                        "Nombre",
-                        "Cantidad disponible",
-                        "Fechas",
-                        "Estado",
-                        "Editar",
-                    ]}
+                    headers={tableHeaders}
                     isLoading={isLoading}
                     isError={isError}
                     isEmpty={!content?.length}
@@ -346,7 +346,12 @@ export const ListModelPage = () => {
                                     }
                                 />
                                 <BaseTableCell
-                                    data={model.totalQuantityAvailable}
+                                    isCenter
+                                    data={
+                                        <div className="text-xl">
+                                            {model.totalQuantityAvailable}
+                                        </div>
+                                    }
                                 />
 
                                 <BaseTableCell
@@ -365,30 +370,39 @@ export const ListModelPage = () => {
                                 <BaseTableCell
                                     isCenter
                                     data={
-                                        <StatusModelButton
-                                            size="small"
-                                            modelId={model.id}
-                                            productId={model.productId}
-                                            value={
-                                                model.status
-                                                    ? "Activo"
-                                                    : "Inactivo"
-                                            }
-                                        />
-                                    }
-                                />
-
-                                <BaseTableCell
-                                    isCenter
-                                    data={
-                                        //* SOLAMENTE SI UN PRODUCTO ESTA ACTIVO, PUEDE SER EDITADO
-                                        model.status === true && (
-                                            <EditModelButton
+                                        hasPermission(ROLE_ADMIN) ? (
+                                            <StatusModelButton
+                                                size="small"
                                                 modelId={model.id}
+                                                productId={model.productId}
+                                                value={
+                                                    model.status
+                                                        ? "Activo"
+                                                        : "Inactivo"
+                                                }
                                             />
+                                        ) : (
+                                            <StatusText value={model.status} />
                                         )
                                     }
                                 />
+                                {hasPermission(ROLE_ADMIN) && (
+                                    <BaseTableCell
+                                        isCenter
+                                        data={
+                                            //* SOLAMENTE SI UN PRODUCTO ESTA ACTIVO, PUEDE SER EDITADO
+                                            model.status ? (
+                                                <EditModelButton
+                                                    modelId={model.id}
+                                                />
+                                            ) : (
+                                                <span className="text-xs">
+                                                    ...
+                                                </span>
+                                            )
+                                        }
+                                    />
+                                )}
                             </TableRowContainer>
                         );
                     })}
