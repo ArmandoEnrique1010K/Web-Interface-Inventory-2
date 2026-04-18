@@ -7,6 +7,8 @@ import { NewCompanyPage } from "@/features/StockLot/views/company/NewCompanyPage
 import { ListStockLotPage } from "@/features/StockLot/views/stocklot/ListStockLotPage";
 import { NewStockLotPage } from "@/features/StockLot/views/stocklot/NewStockLotPage";
 import { DetailsStockLotPage } from "@/features/StockLot/views/stocklot/DetailsStockLotPage";
+import { useAuthRole } from "@/hooks/useAuthRole";
+import { ROLE_ADMIN } from "@/constants";
 
 const stockLotsItems: MenuItem[] = [
     {
@@ -21,16 +23,26 @@ const stockLotsItems: MenuItem[] = [
     },
 ];
 export default function StockLotRoutes() {
+    const { hasPermission } = useAuthRole();
+
     return (
         <NavbarContainer menuItems={stockLotsItems} keyword="stocklots">
             <Routes>
                 <Route index element={<ListStockLotPage />} />
-                <Route path="new" element={<NewStockLotPage />} />
                 <Route path=":id" element={<DetailsStockLotPage />} />
+                <Route path="new" element={<NewStockLotPage />} />
 
-                {/* RELACIONADO A COMPANIES */}
                 <Route path="companies" element={<ListCompanyPage />} />
-                <Route path="companies/new" element={<NewCompanyPage />} />
+
+                {hasPermission(ROLE_ADMIN) && (
+                    <>
+                        <Route
+                            path="companies/new"
+                            element={<NewCompanyPage />}
+                        />
+                    </>
+                )}
+
                 <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
         </NavbarContainer>

@@ -12,6 +12,8 @@ import { EntityListLayout } from "@/layout/entity/EntityListLayout";
 import { FiltersFormContainer } from "@/components/FiltersFormContainer";
 import { ButtonsGroupFilter } from "@/ui/filters/ButtonsGroupFilter";
 import { EditSubregionButton } from "../../components/subregion/EditSubregionButton";
+import { useAuthRole } from "@/hooks/useAuthRole";
+import { ROLE_ADMIN } from "@/constants";
 
 export const ListSubregionPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -37,22 +39,31 @@ export const ListSubregionPage = () => {
         queryFn: listAllRegions,
     });
 
+    const { hasPermission } = useAuthRole();
+
+    const tableHeaders = hasPermission(ROLE_ADMIN)
+        ? ["ID", "Nombre", "Editar"]
+        : ["ID", "Nombre"];
+
     return (
         <EntityListLayout>
-            <EntityListLayout.Header
-                title="Subregiones"
-                actions={
-                    <ButtonLink
-                        icon={<PlusCircleIcon />}
-                        size="large"
-                        text="Nueva subregión"
-                        to="/locations/subregions/new"
-                        color="blue"
-                        showIconOnMobile={false}
-                        showTextOnMobile
-                    />
-                }
-            ></EntityListLayout.Header>
+            <EntityListLayout.Header title="Subregiones" />
+            {hasPermission(ROLE_ADMIN) && (
+                <EntityListLayout.Header
+                    actions={
+                        <ButtonLink
+                            icon={<PlusCircleIcon />}
+                            size="large"
+                            text="Nueva subregión"
+                            to="/locations/subregions/new"
+                            color="blue"
+                            showIconOnMobile={false}
+                            showTextOnMobile
+                        />
+                    }
+                ></EntityListLayout.Header>
+            )}
+
             <EntityListLayout.Content>
                 <FiltersFormContainer hiddenButton>
                     {!isErrorRegion && dataRegion && (
@@ -71,7 +82,7 @@ export const ListSubregionPage = () => {
                     )}
                 </FiltersFormContainer>
                 <TableContainer
-                    headers={["ID", "Nombre", "Editar"]}
+                    headers={tableHeaders}
                     isError={isError}
                     isEmpty={!data?.length}
                     isLoading={isLoading}
@@ -80,14 +91,16 @@ export const ListSubregionPage = () => {
                         <TableRowContainer key={subregion.id}>
                             <BaseTableCell data={subregion.id} />
                             <BaseTableCell data={subregion.name} />
-                            <BaseTableCell
-                                data={
-                                    <EditSubregionButton
-                                        subregionId={subregion.id}
-                                    />
-                                }
-                                isCenter
-                            />
+                            {hasPermission(ROLE_ADMIN) && (
+                                <BaseTableCell
+                                    isCenter
+                                    data={
+                                        <EditSubregionButton
+                                            subregionId={subregion.id}
+                                        />
+                                    }
+                                />
+                            )}
                         </TableRowContainer>
                     ))}
                 </TableContainer>

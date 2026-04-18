@@ -28,11 +28,12 @@ export const ListDeliveryOrderPage = () => {
     const endDate = searchParams.get("endDate") ?? "";
     const userClientName = searchParams.get("userClientName") ?? "";
     const status = searchParams.get("status") ?? "";
+
     const [form, setForm] = useState({
         page: page,
         batch,
-        startDate,
-        endDate,
+        startDate: startDate,
+        endDate: endDate,
         userClientName,
         status: status === undefined ? "" : String(status),
     });

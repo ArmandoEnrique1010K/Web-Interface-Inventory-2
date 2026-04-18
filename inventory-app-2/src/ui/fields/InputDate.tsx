@@ -1,12 +1,16 @@
-import { Controller, type Control, type FieldPath, type FieldValues } from "react-hook-form";
+import {
+    Controller,
+    type Control,
+    type FieldPath,
+    type FieldValues,
+} from "react-hook-form";
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css"
 import { registerLocale } from "react-datepicker";
-import { es } from 'date-fns/locale/es';
+import { es } from "date-fns/locale/es";
 import { handleFormatDate } from "@/utils/handleFormatDate";
 
 // Registrar el idioma español para el calendario
-registerLocale('spanish', es)
+registerLocale("spanish", es);
 
 type InputDateProps<T extends FieldValues> = {
     id: string;
@@ -23,23 +27,23 @@ export function InputDate<T extends FieldValues>({
     label,
     name,
     control,
-    errorMessage
+    errorMessage,
 }: InputDateProps<T>) {
-
     return (
         <div className="flex flex-col w-full space-y-1">
-            <label className="text-sm font-medium text-slate-700" htmlFor={id}>{label}:</label>
+            <label className="text-sm font-medium text-slate-700" htmlFor={id}>
+                {label}:
+            </label>
             <Controller
                 name={name}
                 control={control}
                 render={({ field }) => {
-
                     // Convierte de String a Date
                     // T12:00:00 Evita bugs de zona horaria
-                    const selectedDate =
-                        field.value ? new Date(field.value + "T12:00:00") : null;
+                    const selectedDate = field.value
+                        ? new Date(field.value + "T12:00:00")
+                        : null;
                     return (
-
                         <DatePicker
                             id={id}
                             name={name}
@@ -63,7 +67,6 @@ export function InputDate<T extends FieldValues>({
                                 // Aplica el formato de YYYY-MM-DD
                                 field.onChange(handleFormatDate(date));
                             }}
-
                             onBlur={field.onBlur}
                             // TODO: EN ALGUNA FUTURA ACTUALIZACIÓN SE PUEDE CORREGIR EL FORMATO DE FECHA
                             dateFormat="yyyy-MM-dd"
@@ -75,17 +78,15 @@ export function InputDate<T extends FieldValues>({
                             // Alinea el calendario a lado izquierdo y abajo del campo seleccionador
                             popperPlacement="bottom-start"
                             // Se coloca el valor de como se ha denominado al idioma registrado
-                            locale={'spanish'}
+                            locale={"spanish"}
                         />
                     );
                 }}
             />
 
-            <div className='min-h-5'>
-                <p className="text-red-600 text-xs mt-1">
-                    {errorMessage}
-                </p>
+            <div className="min-h-5">
+                <p className="text-red-600 text-xs mt-1">{errorMessage}</p>
             </div>
         </div>
-    )
+    );
 }

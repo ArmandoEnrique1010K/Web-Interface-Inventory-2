@@ -127,8 +127,8 @@ export const ListMovementPage = () => {
                     </div>
                     <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
                         <InputDateTimeFilter
-                            name={"minCreatedAt"}
-                            label={"Fecha minima"}
+                            name="minCreatedAt"
+                            label="Fecha minima"
                             value={form.minCreatedAt}
                             onChange={(value) =>
                                 setForm((prev) => ({
@@ -137,10 +137,9 @@ export const ListMovementPage = () => {
                                 }))
                             }
                         />
-
                         <InputDateTimeFilter
-                            name={"maxCreatedAt"}
-                            label={"Fecha maxima"}
+                            name="maxCreatedAt"
+                            label="Fecha maxima"
                             value={form.maxCreatedAt}
                             onChange={(value) =>
                                 setForm((prev) => ({

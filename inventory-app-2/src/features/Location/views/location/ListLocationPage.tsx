@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useEffectEvent, useState } from "react";
+import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { listAllLocations } from "../../api/LocationAPI";
 import { listAllRegions } from "../../api/RegionAPI";
@@ -17,6 +17,9 @@ import { Paginator } from "@/components/Paginator";
 import { StatusLocationButton } from "../../components/location/StatusLocationButton";
 import { EntityListLayout } from "@/layout/entity/EntityListLayout";
 import { EditLocationButton } from "../../components/location/EditLocationButton";
+import { useAuthRole } from "@/hooks/useAuthRole";
+import { ROLE_ADMIN } from "@/constants";
+import { StatusText } from "@/components/StatusText";
 
 export const ListLocationPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -35,15 +38,15 @@ export const ListLocationPage = () => {
         status: status === undefined ? "" : String(status),
     });
 
-    useEffectEvent(() => {
-        setForm({
-            page: page,
-            name: name,
-            regionId: regionId ?? "",
-            subregionId: subregionId ?? "",
-            status: status === undefined ? "" : String(status),
-        });
-    });
+    // useEffectEvent(() => {
+    //     setForm({
+    //         page: page,
+    //         name: name,
+    //         regionId: regionId ?? "",
+    //         subregionId: subregionId ?? "",
+    //         status: status === undefined ? "" : String(status),
+    //     });
+    // });
 
     const { data, isError, isLoading } = useQuery({
         queryKey: ["locations", { name, regionId, subregionId, status, page }],
@@ -88,22 +91,31 @@ export const ListLocationPage = () => {
         { value: "false", label: "Inactivos" },
     ];
 
+    const { hasPermission } = useAuthRole();
+
+    const tableHeaders = hasPermission(ROLE_ADMIN)
+        ? ["ID", "Nombre", "Ubicación", "Subregión", "Estado", "Editar"]
+        : ["ID", "Nombre", "Ubicación", "Subregión", "Estado"];
+
     return (
         <EntityListLayout>
-            <EntityListLayout.Header
-                title="Ubicaciones"
-                actions={
-                    <ButtonLink
-                        icon={<PlusCircleIcon />}
-                        size="large"
-                        text="Nueva ubicación"
-                        to="/locations/new"
-                        color="blue"
-                        showIconOnMobile={false}
-                        showTextOnMobile
-                    />
-                }
-            ></EntityListLayout.Header>
+            <EntityListLayout.Header title="Ubicaciones" />
+
+            {hasPermission(ROLE_ADMIN) && (
+                <EntityListLayout.Header
+                    actions={
+                        <ButtonLink
+                            icon={<PlusCircleIcon />}
+                            size="large"
+                            text="Nueva ubicación"
+                            to="/locations/new"
+                            color="blue"
+                            showIconOnMobile={false}
+                            showTextOnMobile
+                        />
+                    }
+                ></EntityListLayout.Header>
+            )}
             <EntityListLayout.Content>
                 <FiltersFormContainer
                     onSubmit={(e) => {
@@ -182,14 +194,7 @@ export const ListLocationPage = () => {
                 </FiltersFormContainer>
 
                 <TableContainer
-                    headers={[
-                        "ID",
-                        "Nombre",
-                        "Ubicación",
-                        "Subregión",
-                        "Estado",
-                        "Editar",
-                    ]}
+                    headers={tableHeaders}
                     isError={isError}
                     isEmpty={!content?.length}
                     isLoading={isLoading}
@@ -252,24 +257,36 @@ export const ListLocationPage = () => {
                                 <BaseTableCell data={location.subregionName} />
 
                                 <BaseTableCell
-                                    data={
-                                        <StatusLocationButton
-                                            locationId={location.id}
-                                            locationStatus={location.status}
-                                        />
-                                    }
-                                />
-
-                                <BaseTableCell
                                     isCenter
                                     data={
-                                        location.status === true && (
-                                            <EditLocationButton
+                                        hasPermission(ROLE_ADMIN) ? (
+                                            <StatusLocationButton
                                                 locationId={location.id}
+                                                locationStatus={location.status}
+                                            />
+                                        ) : (
+                                            <StatusText
+                                                value={location.status}
                                             />
                                         )
                                     }
                                 />
+                                {hasPermission(ROLE_ADMIN) && (
+                                    <BaseTableCell
+                                        isCenter
+                                        data={
+                                            location.status ? (
+                                                <EditLocationButton
+                                                    locationId={location.id}
+                                                />
+                                            ) : (
+                                                <span className="text-xs">
+                                                    ...
+                                                </span>
+                                            )
+                                        }
+                                    />
+                                )}
                             </TableRowContainer>
                         );
                     })}

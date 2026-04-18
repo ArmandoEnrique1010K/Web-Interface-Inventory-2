@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useEffectEvent, useState } from "react";
+import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { listAllStockLots } from "../../api/StockLotAPI";
 import { listAllActiveCategories } from "@/features/Product/api/CategoryAPI";
@@ -54,23 +54,23 @@ export const ListStockLotPage = () => {
         modelId: modelId ?? "",
     });
 
-    useEffectEvent(() => {
-        setForm({
-            page: page,
-            keyword: keyword,
+    // useEffectEvent(() => {
+    //     setForm({
+    //         page: page,
+    //         keyword: keyword,
 
-            minQuantityReceived: minQuantityReceived,
-            maxQuantityReceived: maxQuantityReceived,
-            minQuantityAvailable: minQuantityAvailable,
-            maxQuantityAvailable: maxQuantityAvailable,
-            minCreatedAt: minCreatedAt,
-            maxCreatedAt: maxCreatedAt,
-            companyId: companyId ?? "",
-            categoryId: categoryId ?? "",
-            typeId: typeId ?? "",
-            modelId: modelId ?? "",
-        });
-    });
+    //         minQuantityReceived: minQuantityReceived,
+    //         maxQuantityReceived: maxQuantityReceived,
+    //         minQuantityAvailable: minQuantityAvailable,
+    //         maxQuantityAvailable: maxQuantityAvailable,
+    //         minCreatedAt: minCreatedAt,
+    //         maxCreatedAt: maxCreatedAt,
+    //         companyId: companyId ?? "",
+    //         categoryId: categoryId ?? "",
+    //         typeId: typeId ?? "",
+    //         modelId: modelId ?? "",
+    //     });
+    // });
 
     const { data, isError, isLoading } = useQuery({
         queryKey: [

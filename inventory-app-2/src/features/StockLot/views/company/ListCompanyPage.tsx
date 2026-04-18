@@ -7,6 +7,8 @@ import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import { listAllCompanies } from "../../api/CompanyAPI";
 import { EntityListLayout } from "@/layout/entity/EntityListLayout";
 import { EditCompanyButton } from "../../components/company/EditCompanyButton";
+import { useAuthRole } from "@/hooks/useAuthRole";
+import { ROLE_ADMIN } from "@/constants";
 
 export const ListCompanyPage = () => {
     const { data, isError, isLoading } = useQuery({
@@ -14,25 +16,34 @@ export const ListCompanyPage = () => {
         queryFn: listAllCompanies,
     });
 
+    const { hasPermission } = useAuthRole();
+
+    const tableHeaders = hasPermission(ROLE_ADMIN)
+        ? ["ID", "Nombre", "Editar"]
+        : ["ID", "Nombre"];
+
     return (
         <EntityListLayout>
-            <EntityListLayout.Header
-                title="Empresas importadoras"
-                actions={
-                    <ButtonLink
-                        icon={<PlusCircleIcon />}
-                        size="large"
-                        text="Nueva empresa"
-                        to="/stocklots/companies/new"
-                        color="blue"
-                        showIconOnMobile={false}
-                        showTextOnMobile
-                    />
-                }
-            ></EntityListLayout.Header>
+            <EntityListLayout.Header title="Empresas importadoras" />
+            {hasPermission(ROLE_ADMIN) && (
+                <EntityListLayout.Header
+                    actions={
+                        <ButtonLink
+                            icon={<PlusCircleIcon />}
+                            size="large"
+                            text="Nueva empresa"
+                            to="/stocklots/companies/new"
+                            color="blue"
+                            showIconOnMobile={false}
+                            showTextOnMobile
+                        />
+                    }
+                />
+            )}
+
             <EntityListLayout.Content>
                 <TableContainer
-                    headers={["ID", "Nombre", "Editar"]}
+                    headers={tableHeaders}
                     isError={isError}
                     isEmpty={!data?.length}
                     isLoading={isLoading}
@@ -41,12 +52,16 @@ export const ListCompanyPage = () => {
                         <TableRowContainer key={company.id}>
                             <BaseTableCell data={company.id} />
                             <BaseTableCell data={company.name} />
-                            <BaseTableCell
-                                isCenter
-                                data={
-                                    <EditCompanyButton companyId={company.id} />
-                                }
-                            />
+                            {hasPermission(ROLE_ADMIN) && (
+                                <BaseTableCell
+                                    isCenter
+                                    data={
+                                        <EditCompanyButton
+                                            companyId={company.id}
+                                        />
+                                    }
+                                />
+                            )}
                         </TableRowContainer>
                     ))}
                 </TableContainer>
