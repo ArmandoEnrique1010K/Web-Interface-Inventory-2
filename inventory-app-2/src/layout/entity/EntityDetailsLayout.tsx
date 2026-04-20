@@ -80,3 +80,11 @@ EntityDetailsLayout.Grid = ({ children }: Props) => {
 EntityDetailsLayout.Summary = ({ children }: Props) => {
     return <div className="w-full mx-auto">{children}</div>;
 };
+
+EntityDetailsLayout.Counter = ({ children }: Props) => {
+    return (
+        <div className="flex flex-row justify-between w-full gap-4 items-center bg-white rounded-2xl shadow-sm p-4">
+            {children}
+        </div>
+    );
+};

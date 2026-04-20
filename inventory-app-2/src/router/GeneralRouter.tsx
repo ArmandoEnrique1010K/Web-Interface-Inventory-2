@@ -17,6 +17,7 @@ import { ValidateUserTokenForm } from "@/features/Auth/views/ValidateUserTokenFo
 import { UpdateUserPasswordForm } from "@/features/Auth/views/UpdateUserPasswordForm";
 import { useAuthRole } from "@/hooks/useAuthRole";
 import { ROLE_ADMIN, ROLE_OPERATOR } from "@/constants";
+import { DashboardPage } from "@/features/Dashboard/views/DashboardPage";
 
 // Layouts
 const AuthLayout = lazy(() => import("@/layout/app/AuthLayout"));
@@ -89,14 +90,7 @@ export const GeneralRouter = () => {
                             </LazyLoader>
                         }
                     >
-                        <Route
-                            index
-                            element={
-                                <h1>
-                                    TODO: AQUI SE COLOCA EL DASHBOARD PRINCIPAL
-                                </h1>
-                            }
-                        />
+                        <Route index element={<DashboardPage />} />
 
                         {/* RELACIONADO A ORDENES */}
                         <Route

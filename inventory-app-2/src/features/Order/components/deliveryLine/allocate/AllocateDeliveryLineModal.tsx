@@ -162,7 +162,7 @@ export const AllocateDeliveryLineModal = ({
                             <CheckboxGroup<DeliveryLineAllocateForm>
                                 name="stockLotsIds"
                                 control={control}
-                                label="Seleccionar lotes"
+                                label="Seleccione al menos un lote (si selecciona varios se tomara el orden de marcado)"
                                 options={stockLotOptions}
                                 errorMessage={
                                     errors.stockLotsIds as

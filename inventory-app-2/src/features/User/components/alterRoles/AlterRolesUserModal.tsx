@@ -102,7 +102,7 @@ export const AlterRolesUserModal = ({ data, userId, setShowModal }: Props) => {
         <EntityFormLayout isCompact>
             <EntityFormLayout.Header
                 isCompact
-                helpText="Tenga cuidado al alterar los roles de un usuario, podria acceder a cierta información confidencial, recuerde usted altera los roles bajo su propia responsabilidad. Por defecto los usuarios siempre van a tener el rol de 'Usuario'"
+                helpText="Tenga cuidado al alterar el rol de un usuario, podria acceder a cierta información confidencial, recuerde usted altera el rol bajo su propia responsabilidad."
             ></EntityFormLayout.Header>
             <EntityFormLayout.Form onSubmit={handleSubmit(handleForm)}>
                 <EntityFormLayout.Inputs isCompact>

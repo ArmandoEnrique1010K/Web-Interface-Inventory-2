@@ -1,7 +1,6 @@
 import { handleFormatDate } from "@/utils/handleFormatDate";
 import { es } from "date-fns/locale/es";
 import DatePicker, { registerLocale } from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 
 type Props = {
     name: string;
