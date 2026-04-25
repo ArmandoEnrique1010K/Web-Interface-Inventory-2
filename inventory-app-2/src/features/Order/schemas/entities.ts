@@ -19,6 +19,9 @@ export const deliveryOrderSchema = z.object({
     userIdClient: z.number(),
     userClientFullname: z.string(),
     movementComment: z.string(),
+    percentage: z.number(),
+    deliveredAt: z.string().nullable(),
+    onTimeStatus: z.enum(["UNKNOWN", "ON_TIME", "LATE"]),
 });
 
 export const modelDeliveryOrderSchema = z.object({
@@ -35,7 +38,7 @@ export const deliveryLineSchema = z.object({
     requiredQuantity: z.number(),
     deliveredQuantity: z.number(),
     pendingQuantity: z.number(),
-    limitDate: z.string(),
+    limitDate: z.string().nullable(),
     updatedAt: z.string(),
     lineStatus: z.enum([
         "LINE_MISSING",

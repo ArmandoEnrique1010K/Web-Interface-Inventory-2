@@ -2,11 +2,13 @@ import { z } from "zod";
 import { dashboardSchema } from "./entities";
 
 export const userDashboardItemSchema = dashboardSchema.pick({
+    userFullname: true,
     pendingDeliveryOrdersByUserCount: true,
     pendingDeliveryOrdersByUser: true,
 });
 
 export const operatorDashboardItemSchema = dashboardSchema.pick({
+    userFullname: true,
     quantityDeliveryOrdersPending: true,
     quantityModelsActive: true,
     quantityLowStockModels: true,
@@ -19,6 +21,8 @@ export const operatorDashboardItemSchema = dashboardSchema.pick({
 });
 
 export const adminDashboardItemSchema = dashboardSchema.pick({
+    userFullname: true,
+
     quantityDeliveryOrdersPending: true,
     quantityModelsActive: true,
     quantityLowStockModels: true,

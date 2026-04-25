@@ -5,7 +5,6 @@ import { handleFormatDateTimeText } from "@/utils/handleFormatDateTimeText";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useParams, useSearchParams } from "react-router-dom";
-import { getDeliveryOrder } from "../../api/DeliveryOrderAPI";
 import { listAllModelsByDeliveryOrder } from "../../api/ModelDeliveryOrderAPI";
 import { NewModelInDeliveryOrderModal } from "../../components/modelDeliveryOrder/newModelInDeliveryOrder/NewModelInDeliveryOrderModal";
 import { Modal } from "@/components/Modal";
@@ -16,11 +15,26 @@ import { DeliveryOrderStatus } from "../../components/deliveryOrder/DeliveryOrde
 import { ListDeliveryOrderSumaries } from "../../components/deliveryOrderSummary/ListDeliveryOrderSumaries";
 import { LoadingView } from "@/views/LoadingView";
 import { Error } from "@/views/Error";
-import { ROLE_ADMIN } from "@/constants";
+import { ROLE_ADMIN, ROLE_OPERATOR } from "@/constants";
 import { useAuthRole } from "@/hooks/useAuthRole";
+import { handleFormatDateTimeWithoutT } from "@/utils/handleFormatDateTime";
+import { DeliveryOrderOnTimeStatus } from "../../components/deliveryOrder/DeliveryOrderOnTimeStatus";
+import type {
+    DeliveryOrderClientDetailsItem,
+    DeliveryOrderDetailsItem,
+} from "../../schemas/items";
 
-export const DetailsModelsByDeliveryOrderView = () => {
+type Props = {
+    deliveryOrderData:
+        | DeliveryOrderDetailsItem
+        | DeliveryOrderClientDetailsItem;
+};
+
+export const DetailsModelsByDeliveryOrderView = ({
+    deliveryOrderData,
+}: Props) => {
     const { pathname } = useLocation();
+
     const { hasPermission } = useAuthRole();
 
     const from = pathname.includes("pending")
@@ -50,15 +64,19 @@ export const DetailsModelsByDeliveryOrderView = () => {
     const { id: deliveryOrderIdStr } = useParams();
     const deliveryOrderId = +deliveryOrderIdStr!;
 
-    const {
-        data: deliveryOrderData,
-        isLoading: isDeliveryOrderLoading,
-        isError: isDeliveryOrderError,
-    } = useQuery({
-        queryKey: ["deliveryOrder", deliveryOrderId],
-        queryFn: () => getDeliveryOrder(deliveryOrderId!),
-        enabled: !!deliveryOrderId,
-    });
+    // const {
+    //     data: deliveryOrderData,
+    //     isLoading: isDeliveryOrderLoading,
+    //     isError: isDeliveryOrderError,
+    // } = useQuery({
+    //     queryKey: ["deliveryOrder", deliveryOrderId],
+    //     // queryFn: () => getDeliveryOrder(deliveryOrderId!),
+    //     queryFn: () =>
+    //         from && from === "my-orders"
+    //             ? getDeliveryOrderForClient(deliveryOrderId!)
+    //             : getDeliveryOrder(deliveryOrderId!),
+    //     enabled: !!deliveryOrderId,
+    // });
 
     // Obtiene la lista de modelos que corresponden a la orden de entrega
     const {
@@ -141,11 +159,11 @@ export const DetailsModelsByDeliveryOrderView = () => {
         }
     };
 
-    if (isDeliveryOrderLoading || isModelsDeliveryOrderLoading) {
+    if (isModelsDeliveryOrderLoading) {
         return <LoadingView />;
     }
 
-    if (isDeliveryOrderError || isModelsDeliveryOrderError) {
+    if (isModelsDeliveryOrderError) {
         return <Error type="500" />;
     }
 
@@ -190,28 +208,33 @@ export const DetailsModelsByDeliveryOrderView = () => {
                                     <span>No disponible</span>
                                 )}
                             </PanelContainer.Detail>
-                            <PanelContainer.Detail label="Fecha limite prioritaria">
-                                {deliveryOrderData.priorityDate ? (
-                                    <span>
-                                        {
-                                            handleFormatDateTimeText(
-                                                new Date(
-                                                    deliveryOrderData.priorityDate,
-                                                ),
-                                            ).date
-                                        }{" "}
-                                        {
-                                            handleFormatDateTimeText(
-                                                new Date(
-                                                    deliveryOrderData.priorityDate,
-                                                ),
-                                            ).hour
-                                        }
-                                    </span>
-                                ) : (
-                                    <span>No hay prioridad</span>
+
+                            {hasPermission(ROLE_OPERATOR) &&
+                                "priorityDate" in deliveryOrderData && (
+                                    <PanelContainer.Detail label="Fecha limite prioritaria">
+                                        {deliveryOrderData.priorityDate ? (
+                                            <span>
+                                                {
+                                                    handleFormatDateTimeText(
+                                                        new Date(
+                                                            deliveryOrderData.priorityDate,
+                                                        ),
+                                                    ).date
+                                                }{" "}
+                                                {
+                                                    handleFormatDateTimeText(
+                                                        new Date(
+                                                            deliveryOrderData.priorityDate,
+                                                        ),
+                                                    ).hour
+                                                }
+                                            </span>
+                                        ) : (
+                                            <span>No hay prioridad</span>
+                                        )}
+                                    </PanelContainer.Detail>
                                 )}
-                            </PanelContainer.Detail>
+
                             <PanelContainer.Detail label="Estado">
                                 <DeliveryOrderStatus
                                     deliveryOrderStatus={
@@ -219,13 +242,32 @@ export const DetailsModelsByDeliveryOrderView = () => {
                                     }
                                 />
                             </PanelContainer.Detail>
-                            {hasPermission(ROLE_ADMIN) && (
-                                <PanelContainer.Detail label="Cambiar la fecha limite">
-                                    <ChangeLimitDateButton
-                                        deliveryOrderId={deliveryOrderData.id}
-                                    />
-                                </PanelContainer.Detail>
-                            )}
+
+                            {hasPermission(ROLE_OPERATOR) &&
+                                "deliveredAt" in deliveryOrderData &&
+                                "onTimeStatus" in deliveryOrderData &&
+                                deliveryOrderData.deliveredAt &&
+                                (deliveryOrderData.orderStatus ===
+                                    "ORDER_DELIVERED" ||
+                                    deliveryOrderData.orderStatus ===
+                                        "ORDER_PARTIALLY_DELIVERED") && (
+                                    <>
+                                        <PanelContainer.Detail label="Se entrego">
+                                            <DeliveryOrderOnTimeStatus
+                                                deliveryOrderOnTimeStatus={
+                                                    deliveryOrderData.onTimeStatus
+                                                }
+                                            />
+                                        </PanelContainer.Detail>
+                                        <PanelContainer.Detail label="Fue entregado el dia">
+                                            {handleFormatDateTimeWithoutT(
+                                                new Date(
+                                                    deliveryOrderData.deliveredAt,
+                                                ),
+                                            )}
+                                        </PanelContainer.Detail>
+                                    </>
+                                )}
                         </PanelContainer.DetailsGrid>
                     </PanelContainer>
                 </EntityDetailsLayout.Column>
@@ -359,6 +401,20 @@ export const DetailsModelsByDeliveryOrderView = () => {
                         (hasPermission(ROLE_ADMIN) && (
                             <PanelContainer subtitle="Operaciones">
                                 <PanelContainer.DetailsGrid>
+                                    {hasPermission(ROLE_ADMIN) &&
+                                        deliveryOrderData.orderStatus !==
+                                            "ORDER_DELIVERED" &&
+                                        deliveryOrderData.orderStatus !==
+                                            "ORDER_PARTIALLY_DELIVERED" && (
+                                            <PanelContainer.Detail label="Cambiar la fecha limite">
+                                                <ChangeLimitDateButton
+                                                    deliveryOrderId={
+                                                        deliveryOrderData.id
+                                                    }
+                                                />
+                                            </PanelContainer.Detail>
+                                        )}
+
                                     <PanelContainer.Detail label="Entregar">
                                         <SendDeliveryOrderButton
                                             deliveryOrderId={deliveryOrderId}
@@ -374,9 +430,13 @@ export const DetailsModelsByDeliveryOrderView = () => {
                         ))}
                 </EntityDetailsLayout.Column>
             </EntityDetailsLayout.Content>
-            <EntityDetailsLayout.Content columns={1}>
-                <ListDeliveryOrderSumaries deliveryOrderId={deliveryOrderId} />
-            </EntityDetailsLayout.Content>
+            {hasPermission(ROLE_OPERATOR) && (
+                <EntityDetailsLayout.Content columns={1}>
+                    <ListDeliveryOrderSumaries
+                        deliveryOrderId={deliveryOrderId}
+                    />
+                </EntityDetailsLayout.Content>
+            )}
         </>
     );
 };

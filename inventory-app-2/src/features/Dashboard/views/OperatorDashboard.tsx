@@ -1,53 +1,51 @@
-import React from "react";
-import type { AdminDashboardItem } from "../schemas/items";
-import { EntityDetailsLayout } from "@/layout/entity/EntityDetailsLayout";
 import { TableContainer } from "@/components/TableContainer";
+import type { OperatorDashboardItem } from "../schemas/items";
 import { TableRowContainer } from "@/components/TableRowContainer";
 import { BaseTableCell } from "@/components/BaseTableCell";
 import { LinkText } from "@/components/LinkText";
 import { handleFormatDateTimeText } from "@/utils/handleFormatDateTimeText";
 import { formatPercentage } from "@/utils/formatPercentage";
-import { MovementType } from "@/features/Movement/components/MovementType";
-
+import { useState } from "react";
+import { CounterGroup } from "../components/CounterGroup";
 type Props = {
-    data: AdminDashboardItem;
+    data: OperatorDashboardItem;
     isError: boolean;
     isLoading: boolean;
 };
 
-export const AdminDashboard = ({ data, isError, isLoading }: Props) => {
+export const OperatorDashboard = ({ data, isError, isLoading }: Props) => {
+    const [items] = useState([
+        // TODO: AJUSTAR QUERY PARAMS
+        {
+            textSingular: "Orden pendiente",
+            textPlural: "Ordenes pendientes",
+            value: data.quantityDeliveryOrdersPending,
+            to: "/orders/pending",
+        },
+        {
+            textSingular: "Modelo de producto con bajo stock",
+            textPlural: "Modelos de productos con bajo stock",
+            value: data.quantityLowStockModels,
+            to: "/products/models",
+        },
+        {
+            textSingular: "Modelo de producto a punto de caducar",
+            textPlural: "Modelos de productos a punto de caducar",
+            value: data.quantityNearCaducityDateModels,
+            to: "/products/models",
+        },
+        {
+            textSingular: "Modelo de producto en el sistema",
+            textPlural: "Modelos de productos en el sistema",
+            value: data.quantityModelsActive,
+            to: "/products/models",
+        },
+    ]);
+
     return (
         <>
-            <div className="lg:flex lg:flex-row gap-4">
-                <EntityDetailsLayout.Counter>
-                    <span>Ordenes pendientes</span>
-                    <span className="text-lg">
-                        {data.quantityDeliveryOrdersPending}
-                    </span>
-                </EntityDetailsLayout.Counter>
-                <EntityDetailsLayout.Counter>
-                    <span>Productos con bajo stock</span>
-                    <span className="text-lg">
-                        {data.quantityLowStockModels}
-                    </span>
-                </EntityDetailsLayout.Counter>
-                <EntityDetailsLayout.Counter>
-                    <span>Productos a punto de caducar</span>
-                    <span className="text-lg">
-                        {data.quantityNearCaducityDateModels}
-                    </span>
-                </EntityDetailsLayout.Counter>
-                <EntityDetailsLayout.Counter>
-                    <span>Cantidad total de productos</span>
-                    <span className="text-lg">{data.quantityModelsActive}</span>
-                </EntityDetailsLayout.Counter>
-                <EntityDetailsLayout.Counter>
-                    <span>Movimientos realizados durante el dia</span>
-                    <span className="text-lg">
-                        {data.quantityMovementsToday}
-                    </span>
-                </EntityDetailsLayout.Counter>
-            </div>
+            <CounterGroup items={items} />
+
             <TableContainer
                 title="Ordenes pendientes"
                 headers={["Factura", "Fecha prioritaria", "Porcentaje"]}
@@ -66,18 +64,22 @@ export const AdminDashboard = ({ data, isError, isLoading }: Props) => {
                         />
                         <BaseTableCell
                             data={
-                                <>
-                                    {
-                                        handleFormatDateTimeText(
-                                            new Date(order.priorityDate!),
-                                        ).date
-                                    }{" "}
-                                    {
-                                        handleFormatDateTimeText(
-                                            new Date(order.priorityDate!),
-                                        ).hour
-                                    }
-                                </>
+                                order.priorityDate ? (
+                                    <>
+                                        {
+                                            handleFormatDateTimeText(
+                                                new Date(order.priorityDate!),
+                                            ).date
+                                        }{" "}
+                                        {
+                                            handleFormatDateTimeText(
+                                                new Date(order.priorityDate!),
+                                            ).hour
+                                        }
+                                    </>
+                                ) : (
+                                    <div>No hay prioridad</div>
+                                )
                             }
                         />
                         <BaseTableCell
@@ -172,36 +174,6 @@ export const AdminDashboard = ({ data, isError, isLoading }: Props) => {
                             }
                         />
                         <BaseTableCell data={model.totalQuantityAvailable} />
-                    </TableRowContainer>
-                ))}
-            </TableContainer>
-
-            <TableContainer
-                title="Movimientos realizados en el dia de hoy"
-                headers={["Movimiento", "Producto", "Cantidad"]}
-                isError={isError}
-                isLoading={isLoading}
-                isEmpty={!data.recentMovements?.length}
-            >
-                {data.recentMovements.map((movement) => (
-                    <TableRowContainer key={movement.id}>
-                        <BaseTableCell
-                            data={
-                                <MovementType
-                                    type="url"
-                                    movementId={movement.id}
-                                    movementType={movement.movementType}
-                                />
-                            }
-                        />
-                        <BaseTableCell
-                            data={
-                                <>
-                                    {movement.productName} {movement.modelName}
-                                </>
-                            }
-                        />
-                        <BaseTableCell data={movement.quantity} />
                     </TableRowContainer>
                 ))}
             </TableContainer>

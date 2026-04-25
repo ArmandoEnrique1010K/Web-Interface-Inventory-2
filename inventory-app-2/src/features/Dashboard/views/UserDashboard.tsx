@@ -1,11 +1,12 @@
 import { TableContainer } from "@/components/TableContainer";
 import type { UserDashboardItem } from "../schemas/items";
-import { EntityDetailsLayout } from "@/layout/entity/EntityDetailsLayout";
 import { TableRowContainer } from "@/components/TableRowContainer";
 import { BaseTableCell } from "@/components/BaseTableCell";
 import { formatPercentage } from "@/utils/formatPercentage";
 import { handleFormatDateTimeText } from "@/utils/handleFormatDateTimeText";
 import { LinkText } from "@/components/LinkText";
+import { useState } from "react";
+import { CounterGroup } from "../components/CounterGroup";
 
 type Props = {
     data: UserDashboardItem;
@@ -14,14 +15,19 @@ type Props = {
 };
 
 export const UserDashboard = ({ data, isError, isLoading }: Props) => {
+    const [items] = useState([
+        // TODO: AJUSTAR QUERY PARAMS
+        {
+            textSingular: "Orden pendiente",
+            textPlural: "Ordenes pendientes",
+            value: data.pendingDeliveryOrdersByUserCount,
+            to: "/orders/my-orders",
+        },
+    ]);
+
     return (
         <>
-            <EntityDetailsLayout.Counter>
-                <span>Ordenes pendientes:</span>
-                <span className="text-lg">
-                    {data.pendingDeliveryOrdersByUserCount}
-                </span>
-            </EntityDetailsLayout.Counter>
+            <CounterGroup items={items} />
             <TableContainer
                 title="Ordenes pendientes"
                 headers={["Factura", "Fecha prioritaria", "Porcentaje"]}

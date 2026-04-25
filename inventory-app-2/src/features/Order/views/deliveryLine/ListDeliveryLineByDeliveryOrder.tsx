@@ -12,8 +12,8 @@ import { BaseTableCell } from "@/components/BaseTableCell";
 import { InputTextFilter } from "@/ui/filters/InputTextFilter";
 import { InputDateTimeFilter } from "@/ui/filters/InputDateTimeFilter";
 import { SelectOptionFilter } from "@/ui/filters/SelectOptionFilter";
-import { listAllRegions } from "@/features/Location/api/RegionAPI";
-import { listAllSubregionsByRegionId } from "@/features/Location/api/SubregionAPI";
+import { listAllRegionsByDeliveryOrder } from "@/features/Location/api/RegionAPI";
+import { listAllSubregionsByDeliveryOrderAndRegion } from "@/features/Location/api/SubregionAPI";
 import { listAllModelsByDeliveryOrder } from "../../api/ModelDeliveryOrderAPI";
 import type { DeliveryOrderItem } from "../../schemas/items";
 import { deliveryLineStatusOptions } from "../../data/deliveryLineStatusOptions";
@@ -174,8 +174,9 @@ export const ListDeliveryLineByDeliveryOrder = ({
 
     // OBTENER SUBREGIONES, REGIONES
     const { data: regionsData } = useQuery({
-        queryKey: ["regions"],
-        queryFn: listAllRegions,
+        queryKey: ["regions", "deliveryOrder", deliveryOrderId],
+        // queryFn: listAllRegions,
+        queryFn: () => listAllRegionsByDeliveryOrder(deliveryOrderId),
     });
 
     const regions =
@@ -185,8 +186,18 @@ export const ListDeliveryLineByDeliveryOrder = ({
         })) || [];
 
     const { data: subregionData } = useQuery({
-        queryKey: ["subregions", "region", form.regionId],
-        queryFn: () => listAllSubregionsByRegionId(form.regionId), // Debe listar las subregiones por una region seleccionada
+        queryKey: [
+            "subregions",
+            "deliveryOrder",
+            deliveryOrderId,
+            "region",
+            form.regionId,
+        ],
+        queryFn: () =>
+            listAllSubregionsByDeliveryOrderAndRegion(
+                deliveryOrderId,
+                form.regionId,
+            ), // Debe listar las subregiones por una region seleccionada
         enabled: !!form.regionId, // solo ejecuta si hay region
     });
 
@@ -272,7 +283,6 @@ export const ListDeliveryLineByDeliveryOrder = ({
           ]
         : ["ID", "Ubicación", "Nombre", "Cantidad", "Fecha limite", "Estado"];
 
-    // TODO: REPARAR LA LOGICA PARA MOSTRAR LA NUEVA ORDEN DE ENTREGA
     return (
         <>
             <EntityListLayout isCompact>
@@ -590,9 +600,15 @@ export const ListDeliveryLineByDeliveryOrder = ({
                                         }
                                     />
                                     <BaseTableCell
-                                        data={handleFormatDateTimeWithoutT(
-                                            new Date(deliveryLine.limitDate),
-                                        )}
+                                        data={
+                                            deliveryLine.limitDate
+                                                ? handleFormatDateTimeWithoutT(
+                                                      new Date(
+                                                          deliveryLine.limitDate,
+                                                      ),
+                                                  )
+                                                : "Sin prioridad"
+                                        }
                                     />
                                     <BaseTableCell
                                         data={

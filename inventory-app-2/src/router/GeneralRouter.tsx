@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "@/store/store";
 import { lazy, useEffect } from "react";
 import { loadUserSession } from "@/store/authThunks";
-import { CreditsPage } from "@/features/Credits/views/CreditsPage";
+import { CreditsPage } from "@/features/Credits/pages/CreditsPage";
 import { LazyLoader } from "./LazyLoader";
 import { LoginForm } from "@/features/Auth/views/LoginForm";
 import { RestoreUserPasswordForm } from "@/features/Auth/views/RestoreUserPasswordForm";
@@ -17,7 +17,7 @@ import { ValidateUserTokenForm } from "@/features/Auth/views/ValidateUserTokenFo
 import { UpdateUserPasswordForm } from "@/features/Auth/views/UpdateUserPasswordForm";
 import { useAuthRole } from "@/hooks/useAuthRole";
 import { ROLE_ADMIN, ROLE_OPERATOR } from "@/constants";
-import { DashboardPage } from "@/features/Dashboard/views/DashboardPage";
+import { DashboardPage } from "@/features/Dashboard/pages/DashboardPage";
 
 // Layouts
 const AuthLayout = lazy(() => import("@/layout/app/AuthLayout"));

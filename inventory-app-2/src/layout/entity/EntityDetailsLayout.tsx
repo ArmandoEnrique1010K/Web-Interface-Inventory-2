@@ -1,5 +1,6 @@
 import { Title } from "@/components/Title";
 import type React from "react";
+import { Link } from "react-router-dom";
 
 // COMPOSICION DE COMPONENTES
 type Props = {
@@ -25,7 +26,7 @@ EntityDetailsLayout.Header = ({ title, textDetails, actions }: HeaderProps) => {
                         <div className="flex-5">
                             <Title>{title}</Title>
                         </div>
-                        <div className="flex-4 pb-6">
+                        <div className="flex-4 sm:pb-6 pb-4">
                             {textDetails && (
                                 <div className="text-xs">{textDetails}</div>
                             )}
@@ -83,8 +84,42 @@ EntityDetailsLayout.Summary = ({ children }: Props) => {
 
 EntityDetailsLayout.Counter = ({ children }: Props) => {
     return (
-        <div className="flex flex-row justify-between w-full gap-4 items-center bg-white rounded-2xl shadow-sm p-4">
+        <div
+            className="
+      flex flex-col sm:flex-row
+      sm:justify-between
+      gap-2 sm:gap-4
+      items-start sm:items-center
+      bg-white rounded-2xl shadow-sm p-4 min-h-24
+    "
+        >
             {children}
         </div>
+    );
+};
+
+type CounterItemProps = {
+    textSingular: string;
+    textPlural: string;
+    value: number | string;
+    to: string;
+};
+
+EntityDetailsLayout.CounterItem = ({
+    textSingular,
+    textPlural,
+    value,
+    to,
+}: CounterItemProps) => {
+    return (
+        <Link
+            className="bg-white rounded-2xl shadow-sm p-4 h-full flex flex-row  sm:gap-6 gap-4 items-center hover:bg-blue-100"
+            to={to}
+        >
+            <span className="sm:text-3xl text-2xl font-bold">{value}</span>
+            <span className="text-sm text-gray-500">
+                {value !== 1 ? textPlural : textSingular}
+            </span>
+        </Link>
     );
 };

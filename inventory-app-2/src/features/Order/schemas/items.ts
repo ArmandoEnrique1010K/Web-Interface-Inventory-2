@@ -28,6 +28,9 @@ export const deliveryOrderDetailsItemSchema = deliveryOrderSchema.pick({
     createdAt: true,
     updatedAt: true,
     orderStatus: true,
+    percentage: true,
+    deliveredAt: true,
+    onTimeStatus: true,
 });
 export const deliveryOrderClientItemSchema = deliveryOrderSchema.pick({
     id: true,
@@ -36,12 +39,19 @@ export const deliveryOrderClientItemSchema = deliveryOrderSchema.pick({
     priorityDate: true,
     orderStatus: true,
 });
+
 export const deliveryOrderClientDetailsItemSchema = deliveryOrderSchema.pick({
     id: true,
     batch: true,
     limitDate: true,
     userClientFullname: true,
     orderStatus: true,
+    percentage: true,
+
+    // TODO: ESTE CAMPO NO SE MUESTRA EN EL BACKEND
+    // priorityDate: true, // ← ADD THIS LINE
+    // deliveredAt: true,
+    // onTimeStatus: true,
 });
 
 export type DeliveryOrderItem = z.infer<typeof deliveryOrderItemSchema>;
@@ -93,6 +103,8 @@ export const deliveryLineDetailsItemSchema = deliveryLineSchema.pick({
     locationName: true,
     regionId: true,
     regionName: true,
+    subregionId: true,
+    subregionName: true,
     modelId: true,
     modelName: true,
     modelImageUrl: true,
@@ -136,3 +148,9 @@ export type OrderStatusOptions = {
     label: string;
     color?: string;
 }[];
+
+export type OrderOnTimeStatus = {
+    value: DeliveryOrderDetailsItem["onTimeStatus"];
+    label: string;
+    color?: string;
+};

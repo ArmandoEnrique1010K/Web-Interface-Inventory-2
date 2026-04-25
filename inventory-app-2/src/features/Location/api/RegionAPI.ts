@@ -58,3 +58,14 @@ export async function updateRegion({
         throwApiErrorMessage(error);
     }
 }
+
+export async function listAllRegionsByDeliveryOrder(deliveryOrderId: number) {
+    try {
+        const url = `/regions/deliveryOrder/${deliveryOrderId}`;
+        const { data } = await api.get(url);
+        const parsed = regionsListResponseSchema.parse(data);
+        return parsed.data;
+    } catch (error) {
+        throwApiErrorMessage(error);
+    }
+}

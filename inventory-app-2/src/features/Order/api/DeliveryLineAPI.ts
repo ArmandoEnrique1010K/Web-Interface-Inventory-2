@@ -57,6 +57,7 @@ export async function listAllDeliveryLinesByDeliveryOrder(
         const parsed = deliveryLinesPageListResponseSchema.parse(data);
         return parsed.data;
     } catch (error) {
+        console.log(error);
         throwApiErrorMessage(error);
     }
 }

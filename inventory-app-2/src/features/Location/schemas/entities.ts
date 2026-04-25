@@ -12,6 +12,11 @@ export const subregionSchema = z.object({
     regionName: z.string(),
 });
 
+export const subregionListSchema = z.object({
+    id: z.number(),
+    name: z.string(),
+});
+
 export const locationSchema = z.object({
     id: z.number(),
     name: z.string(),

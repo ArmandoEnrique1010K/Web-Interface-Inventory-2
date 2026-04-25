@@ -83,6 +83,7 @@ export async function getDeliveryOrder(id: number) {
         const parsed = deliveryOrderDetailResponseSchema.parse(data);
         return parsed.data;
     } catch (error) {
+        console.log(error);
         throwApiErrorMessage(error);
     }
 }
@@ -94,6 +95,7 @@ export async function getDeliveryOrderForClient(id: number) {
         const parsed = deliveryOrderByClientDetailResponseSchema.parse(data);
         return parsed.data;
     } catch (error) {
+        console.log(error);
         throwApiErrorMessage(error);
     }
 }

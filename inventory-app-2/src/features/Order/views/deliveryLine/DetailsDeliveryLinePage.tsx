@@ -118,7 +118,7 @@ export const DetailsDeliveryLinePage = () => {
                             <EditDeliveryLineButton
                                 deliveryLineId={deliveryLineId}
                                 deliveryOrderId={deliveryOrderId}
-                                limitDate={data.limitDate}
+                                limitDate={data.limitDate ? data.limitDate : ""}
                                 requiredQuantity={data.requiredQuantity}
                             />
                         )}
@@ -183,10 +183,22 @@ export const DetailsDeliveryLinePage = () => {
                     <EntityDetailsLayout.Grid>
                         <PanelContainer subtitle="Descripción de la linea">
                             <PanelContainer.DetailsGrid>
-                                <PanelContainer.Detail label="Fecha limite de entrega">
-                                    {handleFormatDateTimeWithoutT(
-                                        new Date(data.limitDate),
-                                    )}
+                                {data.limitDate && (
+                                    <PanelContainer.Detail label="Fecha limite de entrega">
+                                        {handleFormatDateTimeWithoutT(
+                                            new Date(data.limitDate),
+                                        )}
+                                    </PanelContainer.Detail>
+                                )}
+
+                                <PanelContainer.Detail label="Región">
+                                    {data.regionName}
+                                </PanelContainer.Detail>
+                                <PanelContainer.Detail label="Subregión">
+                                    {data.subregionName}
+                                </PanelContainer.Detail>
+                                <PanelContainer.Detail label="Ubicación">
+                                    {data.locationName}
                                 </PanelContainer.Detail>
 
                                 <PanelContainer.Detail label="Cantidad requerida">

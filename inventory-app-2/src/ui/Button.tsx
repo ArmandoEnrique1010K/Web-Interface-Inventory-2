@@ -1,19 +1,19 @@
-import { handleApplyStyleColor } from "@/utils/handleApplyStyleColor"
+import { handleApplyStyleColor } from "@/utils/handleApplyStyleColor";
 
 type Props = {
     size?: "small" | "large"; // Tamaño
     text?: string; // Texto
     type: "submit" | "button"; // Tipo
     color:
-    | "blue"
-    | "green"
-    | "gray"
-    | "red"
-    | "none"
-    | "green-outline"
-    | "red-outline"
-    | "blue-outline"
-    | "gray-outline"; // Color
+        | "blue"
+        | "green"
+        | "gray"
+        | "red"
+        | "none"
+        | "green-outline"
+        | "red-outline"
+        | "blue-outline"
+        | "gray-outline"; // Color
     isLarge?: boolean; // ¿Ocupa todo el ancho?
     aditionalStyles?: string; // Estilos adicionales
     disabled?: boolean; // Deshabilitado
@@ -60,8 +60,8 @@ export const Button = ({
     const widthStyles = isLarge
         ? "w-full"
         : isLargeOnMobile
-            ? "w-full sm:w-max"
-            : "";
+          ? "w-full sm:w-max"
+          : "";
 
     return (
         <button
@@ -82,7 +82,7 @@ export const Button = ({
             {icon && (
                 <span
                     className={`
-                        flex items-center justify-center size-8
+                        flex items-center justify-center ${size === "small" ? "size-6" : "size-8"}
                         ${text ? "" : ""}
                         ${showIconOnMobile ? "" : "hidden sm:inline"}
                     `}

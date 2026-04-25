@@ -13,12 +13,11 @@ import type {
     UserDashboardItem,
 } from "../schemas/items";
 import { PanelContainer } from "@/components/containers/PanelContainer";
-import { getUserProfilePage } from "@/features/Profile/api/ProfileAPI";
 import { LoadingView } from "@/views/LoadingView";
 import { Error } from "@/views/Error";
-import { UserDashboard } from "../components/UserDashboard";
-import { OperatorDashboard } from "../components/OperatorDashboard";
-import { AdminDashboard } from "../components/AdminDashboard";
+import { UserDashboard } from "../views/UserDashboard";
+import { OperatorDashboard } from "../views/OperatorDashboard";
+import { AdminDashboard } from "../views/AdminDashboard";
 
 export const DashboardPage = () => {
     const { hasPermission, userRole } = useAuthRole();
@@ -38,26 +37,15 @@ export const DashboardPage = () => {
         },
     });
 
-    const {
-        data: userData,
-        isLoading: userLoading,
-        isError: userError,
-    } = useQuery({
-        queryKey: ["profile"],
-        queryFn: () => getUserProfilePage(),
-        retry: false,
-    });
-
-    //
-    if (isLoading || userLoading) {
+    if (isLoading) {
         return <LoadingView />;
     }
 
-    if (isError || userError) {
+    if (isError) {
         return <Error type="500" />;
     }
 
-    if (!data || !userData) {
+    if (!data) {
         return <Error type="404" />;
     }
 
@@ -66,8 +54,8 @@ export const DashboardPage = () => {
             <EntityDetailsLayout.Content columns={1}>
                 <EntityDetailsLayout.Column>
                     <PanelContainer>
-                        <div className="text-center text-3xl font-bold">
-                            Bienvenido {userData.firstname} {userData.lastname}
+                        <div className="text-center sm:text-4xl text-2xl font-bold">
+                            Bienvenido {data.userFullname}
                         </div>
                     </PanelContainer>
 

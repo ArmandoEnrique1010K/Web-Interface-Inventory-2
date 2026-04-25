@@ -48,6 +48,7 @@ const movementSchema = z.object({
 });
 
 export const dashboardSchema = z.object({
+    userFullname: z.string(),
     pendingDeliveryOrdersByUserCount: z.number(),
     quantityDeliveryOrdersPending: z.number(),
     quantityModelsActive: z.number(),

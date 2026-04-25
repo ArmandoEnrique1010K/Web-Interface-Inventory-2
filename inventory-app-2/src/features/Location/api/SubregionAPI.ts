@@ -4,6 +4,7 @@ import type { SubregionForm } from "../schemas/requests";
 import { responseSchema } from "@/types";
 import {
     subregionDetailResponseSchema,
+    subregionsListNamesResponseSchema,
     subregionsListResponseSchema,
 } from "../schemas/responses";
 
@@ -54,6 +55,20 @@ export async function updateSubregion({
         const { data } = await api.put(url, formData);
         const parsed = responseSchema.parse(data);
         return parsed.message;
+    } catch (error) {
+        throwApiErrorMessage(error);
+    }
+}
+
+export async function listAllSubregionsByDeliveryOrderAndRegion(
+    deliveryOrderId: number,
+    regionId: number,
+) {
+    try {
+        const url = `/subregions/deliveryOrder/${deliveryOrderId}/region/${regionId}`;
+        const { data } = await api.get(url);
+        const parsed = subregionsListNamesResponseSchema.parse(data);
+        return parsed.data;
     } catch (error) {
         throwApiErrorMessage(error);
     }

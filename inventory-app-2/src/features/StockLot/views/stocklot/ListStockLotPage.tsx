@@ -37,7 +37,7 @@ export const ListStockLotPage = () => {
     const companyId = searchParams.get("companyId") ?? undefined;
     const categoryId = searchParams.get("categoryId") ?? undefined;
     const typeId = searchParams.get("typeId") ?? undefined;
-    const modelId = searchParams.get("modelId") ?? undefined;
+    // const modelId = searchParams.get("modelId") ?? undefined;
 
     const [form, setForm] = useState({
         page: page,
@@ -51,7 +51,7 @@ export const ListStockLotPage = () => {
         companyId: companyId ?? "",
         categoryId: categoryId ?? "",
         typeId: typeId ?? "",
-        modelId: modelId ?? "",
+        // modelId: modelId ?? "",
     });
 
     // useEffectEvent(() => {
@@ -86,7 +86,7 @@ export const ListStockLotPage = () => {
                 companyId,
                 categoryId,
                 typeId,
-                modelId,
+                // modelId,
                 page,
             },
         ],
@@ -104,7 +104,7 @@ export const ListStockLotPage = () => {
                 companyId,
                 categoryId,
                 typeId,
-                modelId,
+                // modelId,
             }),
     });
 
@@ -198,7 +198,7 @@ export const ListStockLotPage = () => {
                         if (form.categoryId)
                             params.set("categoryId", form.categoryId);
                         if (form.typeId) params.set("typeId", form.typeId);
-                        if (form.modelId) params.set("modelId", form.modelId);
+                        // if (form.modelId) params.set("modelId", form.modelId);
                         setSearchParams(params);
                     }}
                 >
@@ -216,7 +216,7 @@ export const ListStockLotPage = () => {
                         }
                     />
 
-                    <InputTextFilter
+                    {/* <InputTextFilter
                         name="modelId"
                         label="ID del modelo"
                         placeholder="Ej: 123"
@@ -228,7 +228,7 @@ export const ListStockLotPage = () => {
                                 modelId: e.target.value,
                             }))
                         }
-                    />
+                    /> */}
                     <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
                         <div className="flex-row w-full">
                             <InputTextFilter
@@ -415,8 +415,8 @@ export const ListStockLotPage = () => {
                                         );
                                     if (form.typeId)
                                         params.set("typeId", form.typeId);
-                                    if (form.modelId)
-                                        params.set("modelId", form.modelId);
+                                    // if (form.modelId)
+                                    //     params.set("modelId", form.modelId);
 
                                     params.set("page", page.toString());
 

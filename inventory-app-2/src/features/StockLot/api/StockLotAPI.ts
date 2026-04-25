@@ -35,7 +35,7 @@ export type StockLotQueryParams = {
     companyId?: string;
     categoryId?: string;
     typeId?: string;
-    modelId?: string;
+    // modelId?: string;
 };
 
 export async function listAllStockLots(params: StockLotQueryParams) {

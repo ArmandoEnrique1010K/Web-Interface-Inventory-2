@@ -1,10 +1,7 @@
-
 type Props = {
-    children: string
-}
+    children: string;
+};
 
 export const Subtitle = ({ children }: Props) => {
-    return (
-        <h2 className="text-3xl font-bold">{children}</h2>
-    )
-}
+    return <h2 className="sm:text-3xl text-2xl font-bold">{children}</h2>;
+};

@@ -1,4 +1,8 @@
-import { searchLocationItemSchema, subregionItemSchema } from "./items";
+import {
+    searchLocationItemSchema,
+    subregionItemSchema,
+    subregionListItemSchema,
+} from "./items";
 import {
     createDataListSchema,
     createDataSchema,
@@ -15,7 +19,9 @@ export const subregionsListResponseSchema =
     createDataListSchema(subregionItemSchema);
 export const subregionDetailResponseSchema =
     createDataSchema(subregionItemSchema);
-
+export const subregionsListNamesResponseSchema = createDataListSchema(
+    subregionListItemSchema,
+);
 // LOCATION
 export const locationsListResponseSchema =
     createPageDataListSchema(locationItemSchema);
