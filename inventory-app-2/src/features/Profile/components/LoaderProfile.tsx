@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { TextMessage } from "@/components/TextMessage";
-import { EditProfilePage } from "../views/EditProfilePage";
+import { EditProfilePage } from "../pages/EditProfilePage";
 import { getUserProfilePage } from "../api/ProfileAPI";
 import { BlueLoader } from "@/components/BlueLoader/BlueLoader";
 

@@ -6,12 +6,12 @@ import {
     ClipboardIcon,
 } from "@heroicons/react/24/outline";
 import { Navigate, Route, Routes } from "react-router-dom";
-import { ListDeliveryOrderPage } from "@/features/Order/views/deliveryOrder/ListDeliveryOrderPage";
-import { NewDeliveryOrderPage } from "@/features/Order/views/deliveryOrder/NewDeliveryOrderPage";
-import { DetailsDeliveryOrderPage } from "@/features/Order/views/deliveryOrder/DetailsDeliveryOrderPage";
-import { ListPendingDeliveryOrderPage } from "@/features/Order/views/deliveryOrder/ListPendingDeliveryOrderPage";
-import { ListDeliveryOrderByCurrentUserPage } from "@/features/Order/views/deliveryOrder/ListDeliveryOrderByCurrentUserPage";
-import { DetailsDeliveryLinePage } from "@/features/Order/views/deliveryLine/DetailsDeliveryLinePage";
+import { ListDeliveryOrderPage } from "@/features/Order/pages/deliveryOrder/ListDeliveryOrderPage";
+import { NewDeliveryOrderPage } from "@/features/Order/pages/deliveryOrder/NewDeliveryOrderPage";
+import { DetailsDeliveryOrderPage } from "@/features/Order/pages/deliveryOrder/DetailsDeliveryOrderPage";
+import { ListPendingDeliveryOrderPage } from "@/features/Order/pages/deliveryOrder/ListPendingDeliveryOrderPage";
+import { ListDeliveryOrderByCurrentUserPage } from "@/features/Order/pages/deliveryOrder/ListDeliveryOrderByCurrentUserPage";
+import { DetailsDeliveryLinePage } from "@/features/Order/pages/deliveryLine/DetailsDeliveryLinePage";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
 import { ROLE_ADMIN, ROLE_OPERATOR, ROLE_USER } from "@/constants";

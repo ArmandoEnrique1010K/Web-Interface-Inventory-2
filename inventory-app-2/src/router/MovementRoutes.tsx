@@ -1,5 +1,5 @@
-import { DetailMovementPage } from "@/features/Movement/views/DetailMovementPage";
-import { ListMovementPage } from "@/features/Movement/views/ListMovementPage";
+import { DetailMovementPage } from "@/features/Movement/pages/DetailMovementPage";
+import { ListMovementPage } from "@/features/Movement/pages/ListMovementPage";
 import { Navigate, Route, Routes } from "react-router-dom";
 
 export default function MovementRoutes() {

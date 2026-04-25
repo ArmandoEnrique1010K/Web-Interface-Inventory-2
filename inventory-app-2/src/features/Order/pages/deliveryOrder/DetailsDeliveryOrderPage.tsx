@@ -7,8 +7,8 @@ import {
 import { EntityDetailsLayout } from "@/layout/entity/EntityDetailsLayout";
 import { handleFormatDateTimeText } from "@/utils/handleFormatDateTimeText";
 import { useState } from "react";
-import { DetailsModelsByDeliveryOrderView } from "../modelDeliveryOrder/DetailsModelsByDeliveryOrderView";
-import { ListDeliveryLineByDeliveryOrder } from "../deliveryLine/ListDeliveryLineByDeliveryOrder";
+import { DetailsModelsByDeliveryOrderView } from "../../views/modelDeliveryOrder/DetailsModelsByDeliveryOrderView";
+import { ListDeliveryLineByDeliveryOrder } from "../../views/deliveryLine/ListDeliveryLineByDeliveryOrder";
 import { ButtonLink } from "@/ui/ButtonLink";
 import { ArrowLeftCircleIcon } from "@heroicons/react/24/outline";
 import type {

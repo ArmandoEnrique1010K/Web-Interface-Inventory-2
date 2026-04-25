@@ -1,10 +1,10 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import { ListLocationPage } from "@/features/Location/views/location/ListLocationPage";
-import { NewLocationPage } from "@/features/Location/views/location/NewLocationPage";
-import { ListRegionPage } from "@/features/Location/views/region/ListRegionPage";
-import { NewRegionPage } from "@/features/Location/views/region/NewRegionPage";
-import { ListSubregionPage } from "@/features/Location/views/subregion/ListSubregionPage";
-import { NewSubregionPage } from "@/features/Location/views/subregion/NewSubregionPage";
+import { ListLocationPage } from "@/features/Location/pages/location/ListLocationPage";
+import { NewLocationPage } from "@/features/Location/pages/location/NewLocationPage";
+import { ListRegionPage } from "@/features/Location/pages/region/ListRegionPage";
+import { NewRegionPage } from "@/features/Location/pages/region/NewRegionPage";
+import { ListSubregionPage } from "@/features/Location/pages/subregion/ListSubregionPage";
+import { NewSubregionPage } from "@/features/Location/pages/subregion/NewSubregionPage";
 import { NavbarContainer } from "@/components/NavbarContainer";
 import type { MenuItem } from "@/types";
 import { FlagIcon, MapIcon, MapPinIcon } from "@heroicons/react/24/outline";
