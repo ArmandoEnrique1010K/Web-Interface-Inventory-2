@@ -118,7 +118,6 @@ export const DetailsStockLotPage = () => {
                         </PanelContainer>
                     </EntityDetailsLayout.Grid>
                     <EntityDetailsLayout.Grid>
-                        {/* TODO: PENDIENTE EL MANEJO DEL CAMPO ZEROSTOCKLOT */}
                         <PanelContainer subtitle={"Operaciones"}>
                             <PanelContainer.DetailsGrid>
                                 <PanelContainer.Detail label="Agregar">

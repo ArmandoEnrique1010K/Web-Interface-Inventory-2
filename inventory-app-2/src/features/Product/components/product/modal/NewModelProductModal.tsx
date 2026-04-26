@@ -28,6 +28,7 @@ export const NewModelProductModal = ({ setShowModal, productId }: Props) => {
             .split("T")[0], // 2026-03-11 -> String
         // La fecha de caducidad debe ser futura o ningun valor
         caducityDate: "",
+        minimumAvailableQuantity: null,
     };
 
     const {
@@ -116,6 +117,15 @@ export const NewModelProductModal = ({ setShowModal, productId }: Props) => {
                                     className="w-40 mt-2 rounded"
                                 />
                             )} */}
+
+                    <InputText
+                        id="minimumAvailableQuantity"
+                        label="Cantidad minima para declarar bajo stock"
+                        placeholder="Cantidad minima"
+                        type="number"
+                        errorMessage={errors.minimumAvailableQuantity}
+                        functionEnabled={register("minimumAvailableQuantity")}
+                    />
 
                     <UploadImage
                         id="file"

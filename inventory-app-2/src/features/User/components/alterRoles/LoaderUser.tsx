@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getUserRoles } from "../../api/UserAPI";
+import { getUserRole } from "../../api/UserAPI";
 import { TextMessage } from "@/components/TextMessage";
 import { AlterRolesUserModal } from "./AlterRolesUserModal";
 import { BlueLoader } from "@/components/BlueLoader/BlueLoader";
@@ -12,7 +12,7 @@ type Props = {
 export const LoaderUser = ({ userId, setShowModal }: Props) => {
     const { data, isLoading, isError } = useQuery({
         queryKey: ["roles", userId],
-        queryFn: () => getUserRoles(userId),
+        queryFn: () => getUserRole(userId),
         retry: 1,
     });
 

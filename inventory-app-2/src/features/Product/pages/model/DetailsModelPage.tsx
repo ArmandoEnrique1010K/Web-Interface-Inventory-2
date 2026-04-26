@@ -13,6 +13,7 @@ import { QRButton } from "../../components/QRButton";
 import { StatusText } from "@/components/StatusText";
 import { ROLE_ADMIN } from "@/constants";
 import { useAuthRole } from "@/hooks/useAuthRole";
+import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 
 export const DetailsModelPage = () => {
     const { modelId: modelIdStr } = useParams();
@@ -63,6 +64,27 @@ export const DetailsModelPage = () => {
                             </PanelContainer.Detail>
                             <PanelContainer.Detail label="Fecha de caducidad">
                                 {data.caducityDate}
+                            </PanelContainer.Detail>
+
+                            <PanelContainer.Detail label="Cantidad disponible">
+                                <div className="flex flex-row gap-2 items-center">
+                                    <span> {data.totalQuantityAvailable}</span>
+                                    {data.lowStock && (
+                                        <div
+                                            className="flex flex-row gap-2 items-end text-amber-600 text-sm"
+                                            title="Alerta de bajo stock, no pasa de la cantidad minima"
+                                        >
+                                            <ExclamationTriangleIcon className="size-6 " />
+                                            ({data.minimumAvailableQuantity})
+                                        </div>
+                                    )}
+                                </div>
+                            </PanelContainer.Detail>
+                            <PanelContainer.Detail label="Cantidad recibida">
+                                {data.totalQuantityReceived}
+                            </PanelContainer.Detail>
+                            <PanelContainer.Detail label="Cantidad entregada">
+                                {data.totalQuantityDelivered}
                             </PanelContainer.Detail>
                         </PanelContainer.DetailsGrid>
                         <PanelContainer.Image

@@ -1,23 +1,58 @@
 import { z } from "zod";
 
-const pendingDeliveryOrdersSchema = z.object({
+const pendingDeliveryOrdersByClientSchema = z.object({
     id: z.number(),
     batch: z.string(),
     priorityDate: z.string().nullable(),
     percentage: z.number(),
+    orderStatus: z.enum(["ORDER_READY", "ORDER_PENDING"]),
 });
 
-const modelSchema = z.object({
+const pendingDeliveryOrdersSchema = z.object({
+    id: z.number(),
+    batch: z.string(),
+    userClientFirstname: z.string(),
+    userClientLastname: z.string(),
+    priorityDate: z.string().nullable(),
+    percentage: z.number(),
+    orderStatus: z.enum(["ORDER_READY", "ORDER_PENDING"]),
+});
+
+const modelRecentsSummarySchema = z.object({
     id: z.number(),
     modelName: z.string(),
-    totalQuantityAvailable: z.number(),
     productId: z.number(),
     productName: z.string(),
     categoryName: z.string(),
     typeName: z.string(),
     entryDate: z.string(),
-    caducityDate: z.string(),
+    totalQuantityAvailable: z.number(),
 });
+
+const modelLowStockSummarySchema = z.object({
+    id: z.number(),
+    modelName: z.string(),
+    productId: z.number(),
+    productName: z.string(),
+    categoryName: z.string(),
+    typeName: z.string(),
+    totalQuantityAvailable: z.number(),
+    minimumAvailableQuantity: z.number(),
+});
+
+const modelExpiringSoonSummarySchema = z.object({
+    id: z.number(),
+    modelName: z.string(),
+    productId: z.number(),
+    productName: z.string(),
+    categoryName: z.string(),
+    typeName: z.string(),
+    caducityDate: z.string(),
+    totalQuantityAvailable: z.number(),
+});
+
+// totalQuantityAvailable: z.number(),
+// caducityDate: z.string(),
 
 const movementSchema = z.object({
     id: z.number(),
@@ -40,7 +75,7 @@ const movementSchema = z.object({
         "MOVEMENT_LINE_SIMULTANEOUS",
     ]),
     userFirstname: z.string(),
-    userLastName: z.string(),
+    userLastname: z.string(),
     modelId: z.number(),
     modelName: z.string(),
     productId: z.number(),
@@ -56,10 +91,10 @@ export const dashboardSchema = z.object({
     quantityNearCaducityDateModels: z.number(),
     quantityMovementsToday: z.number(),
 
-    pendingDeliveryOrdersByUser: z.array(pendingDeliveryOrdersSchema),
+    pendingDeliveryOrdersByUser: z.array(pendingDeliveryOrdersByClientSchema),
     pendingDeliveryOrders: z.array(pendingDeliveryOrdersSchema),
-    lowStockModels: z.array(modelSchema),
-    recentModels: z.array(modelSchema),
-    expiringSoonModels: z.array(modelSchema),
+    lowStockModels: z.array(modelLowStockSummarySchema),
+    recentModels: z.array(modelRecentsSummarySchema),
+    expiringSoonModels: z.array(modelExpiringSoonSummarySchema),
     recentMovements: z.array(movementSchema),
 });

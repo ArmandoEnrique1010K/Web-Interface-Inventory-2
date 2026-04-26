@@ -20,6 +20,7 @@ import { LinkText } from "@/components/LinkText";
 import { useAuthRole } from "@/hooks/useAuthRole";
 import { ROLE_ADMIN } from "@/constants";
 import { StatusText } from "@/components/StatusText";
+import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 
 export const ListModelPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -34,6 +35,10 @@ export const ListModelPage = () => {
     const typeId = searchParams.get("typeId") ?? undefined;
     const statusParam = searchParams.get("status");
     const status = statusParam === null ? undefined : statusParam === "true";
+
+    const lowStockParam = searchParams.get("lowStock");
+    const lowStock =
+        lowStockParam === null ? undefined : lowStockParam === "true";
 
     const directionParam = searchParams.get("direction");
     const direction =
@@ -64,6 +69,7 @@ export const ListModelPage = () => {
         categoryId: categoryId ?? "",
         typeId: typeId ?? "",
         status: status === undefined ? "" : String(status),
+        lowStock: lowStock === undefined ? "" : String(lowStock),
 
         direction: direction ?? "",
         sortBy: sortBy ?? "",
@@ -81,6 +87,7 @@ export const ListModelPage = () => {
                 categoryId,
                 typeId,
                 status,
+                lowStock,
                 page,
                 direction,
                 sortBy,
@@ -98,6 +105,7 @@ export const ListModelPage = () => {
                 categoryId: categoryId,
                 typeId: typeId,
                 status: status,
+                lowStock: lowStock,
                 direction: direction,
                 sortBy: sortBy,
             }),
@@ -131,6 +139,12 @@ export const ListModelPage = () => {
         { value: "true", label: "Activos" },
         { value: "false", label: "Inactivos" },
     ];
+
+    const lowStockOptions = [
+        { value: "true", label: "Con bajo stock" },
+        { value: "false", label: "Sin bajo stock" },
+    ];
+
     const { hasPermission } = useAuthRole();
     const tableHeaders = hasPermission(ROLE_ADMIN)
         ? ["ID", "Nombre", "Cantidad disponible", "Fechas", "Estado", "Editar"]
@@ -160,6 +174,10 @@ export const ListModelPage = () => {
                         if (form.typeId) params.set("typeId", form.typeId);
                         if (form.status !== "")
                             params.set("status", form.status);
+
+                        if (form.lowStock !== "")
+                            params.set("lowStock", form.lowStock);
+
                         if (form.sortBy) params.set("sortBy", form.sortBy);
                         if (form.direction)
                             params.set("direction", form.direction);
@@ -262,6 +280,9 @@ export const ListModelPage = () => {
                             textInNullOption="Todos los tipos"
                             value={form.typeId}
                         />
+                    </div>
+
+                    <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
                         <SelectOptionFilter
                             name="status"
                             label="Estado"
@@ -275,7 +296,21 @@ export const ListModelPage = () => {
                             value={form.status}
                             textInNullOption="Todos los estados"
                         />
+                        <SelectOptionFilter
+                            name="lowStock"
+                            label="Bajo stock"
+                            options={lowStockOptions}
+                            onChange={(e) =>
+                                setForm((prev) => ({
+                                    ...prev,
+                                    lowStock: e.target.value,
+                                }))
+                            }
+                            value={form.lowStock}
+                            textInNullOption="Omitir filtro"
+                        />
                     </div>
+
                     <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
                         <SelectOptionFilter
                             name="sortBy"
@@ -394,6 +429,9 @@ export const ListModelPage = () => {
                                         params.set("typeId", form.typeId);
                                     if (form.status !== "")
                                         params.set("status", form.status);
+                                    if (form.lowStock !== "")
+                                        params.set("lowStock", form.lowStock);
+
                                     if (form.sortBy)
                                         params.set("sortBy", form.sortBy);
                                     if (form.direction)
@@ -435,8 +473,14 @@ export const ListModelPage = () => {
                                 <BaseTableCell
                                     isCenter
                                     data={
-                                        <div className="text-xl">
+                                        <div className="flex flex-row justify-center items-center gap-2 text-xl">
                                             {model.totalQuantityAvailable}
+                                            {model.lowStock === true && (
+                                                <ExclamationTriangleIcon
+                                                    title="Alerta de bajo stock, no pasa de la cantidad minima"
+                                                    className="size-6 text-amber-600"
+                                                />
+                                            )}
                                         </div>
                                     }
                                 />

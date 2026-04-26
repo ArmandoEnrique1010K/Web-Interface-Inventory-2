@@ -8,6 +8,8 @@ import { formatPercentage } from "@/utils/formatPercentage";
 import { MovementType } from "@/features/Movement/components/MovementType";
 import { useState } from "react";
 import { CounterGroup } from "../components/CounterGroup";
+import { handleFormatDate } from "@/utils/handleFormatDate";
+import { DeliveryOrderStatus } from "@/features/Order/components/deliveryOrder/DeliveryOrderStatus";
 
 type Props = {
     data: AdminDashboardItem;
@@ -26,7 +28,7 @@ export const AdminDashboard = ({ data, isError, isLoading }: Props) => {
         return `${year}-${month}-${day}T00%3A00%3A00`;
     };
 
-    console.log(formatDateNow());
+    // console.log(formatDateNow());
 
     const [items] = useState([
         {
@@ -36,12 +38,11 @@ export const AdminDashboard = ({ data, isError, isLoading }: Props) => {
             to: "/orders/pending",
         },
 
-        // TODO: REALIZAR UN AJUSTE EN LA ENTIDAD MODELS PARA AJUSTAR EL STOCK MINIMO
         {
             textSingular: "Modelo de producto con bajo stock",
             textPlural: "Modelos de productos con bajo stock",
             value: data.quantityLowStockModels,
-            to: "/products/models",
+            to: "/products/models?lowStock=true&sortBy=totalQuantityAvailable&direction=asc",
         },
         {
             textSingular: "Modelo de producto a punto de caducar",
@@ -67,12 +68,18 @@ export const AdminDashboard = ({ data, isError, isLoading }: Props) => {
             <CounterGroup items={items} />
             <TableContainer
                 title="Ordenes pendientes"
-                headers={["Factura", "Fecha prioritaria", "Porcentaje"]}
+                headers={[
+                    "Factura",
+                    "Fecha prioritaria",
+                    "Cliente",
+                    "Completado al",
+                    "Estado",
+                ]}
                 isError={isError}
                 isLoading={isLoading}
                 isEmpty={!data.pendingDeliveryOrders?.length}
-                showButton={true}
-                showData={false}
+                // showButton={true}
+                // showData={false}
             >
                 {data.pendingDeliveryOrders.map((order) => (
                     <TableRowContainer key={order.id}>
@@ -104,19 +111,34 @@ export const AdminDashboard = ({ data, isError, isLoading }: Props) => {
                             }
                         />
                         <BaseTableCell
+                            data={
+                                <>
+                                    {order.userClientFirstname}{" "}
+                                    {order.userClientLastname}
+                                </>
+                            }
+                        />
+                        <BaseTableCell
                             data={formatPercentage(order.percentage)}
+                        />
+                        <BaseTableCell
+                            data={
+                                <DeliveryOrderStatus
+                                    deliveryOrderStatus={order.orderStatus}
+                                />
+                            }
                         />
                     </TableRowContainer>
                 ))}
             </TableContainer>
             <TableContainer
                 title="Productos con bajo stock"
-                headers={["Nombre", "Caracteristica", "Cantidad"]}
+                headers={["Nombre", "Caracteristica", "Cantidad disponible"]}
                 isError={isError}
                 isLoading={isLoading}
                 isEmpty={!data.lowStockModels?.length}
-                showButton
-                showData={false}
+                // showButton
+                // showData={false}
             >
                 {data.lowStockModels.map((model) => (
                     <TableRowContainer key={model.id}>
@@ -136,18 +158,32 @@ export const AdminDashboard = ({ data, isError, isLoading }: Props) => {
                                 </>
                             }
                         />
-                        <BaseTableCell data={model.totalQuantityAvailable} />
+                        <BaseTableCell
+                            data={
+                                <>
+                                    <div>{model.totalQuantityAvailable}</div>
+                                    <div className="text-sm text-gray-500">
+                                        Minimo: {model.minimumAvailableQuantity}
+                                    </div>
+                                </>
+                            }
+                        />
                     </TableRowContainer>
                 ))}
             </TableContainer>
             <TableContainer
                 title="Productos a punto de caducar"
-                headers={["Nombre", "Caracteristica", "Cantidad"]}
+                headers={[
+                    "Nombre",
+                    "Caracteristica",
+                    "Fecha de caducidad",
+                    "Cantidad",
+                ]}
                 isError={isError}
                 isLoading={isLoading}
                 isEmpty={!data.expiringSoonModels?.length}
-                showButton
-                showData={false}
+                // showButton
+                // showData={false}
             >
                 {data.expiringSoonModels.map((model) => (
                     <TableRowContainer key={model.id}>
@@ -167,18 +203,28 @@ export const AdminDashboard = ({ data, isError, isLoading }: Props) => {
                                 </>
                             }
                         />
+                        <BaseTableCell
+                            data={handleFormatDate(
+                                new Date(model.caducityDate),
+                            )}
+                        />
                         <BaseTableCell data={model.totalQuantityAvailable} />
                     </TableRowContainer>
                 ))}
             </TableContainer>
             <TableContainer
                 title="Ultimos productos registrados"
-                headers={["Nombre", "Caracteristica", "Cantidad"]}
+                headers={[
+                    "Nombre",
+                    "Caracteristica",
+                    "Fecha de entrada",
+                    "Cantidad",
+                ]}
                 isError={isError}
                 isLoading={isLoading}
                 isEmpty={!data.recentModels?.length}
-                showButton
-                showData={false}
+                // showButton
+                // showData={false}
             >
                 {data.recentModels.map((model) => (
                     <TableRowContainer key={model.id}>
@@ -198,18 +244,21 @@ export const AdminDashboard = ({ data, isError, isLoading }: Props) => {
                                 </>
                             }
                         />
+                        <BaseTableCell
+                            data={handleFormatDate(new Date(model.entryDate))}
+                        />
                         <BaseTableCell data={model.totalQuantityAvailable} />
                     </TableRowContainer>
                 ))}
             </TableContainer>
             <TableContainer
                 title="Movimientos realizados en el dia de hoy"
-                headers={["Movimiento", "Producto", "Cantidad"]}
+                headers={["Movimiento", "Producto", "Cantidad", "Usuario"]}
                 isError={isError}
                 isLoading={isLoading}
                 isEmpty={!data.recentMovements?.length}
-                showButton
-                showData={false}
+                // showButton
+                // showData={false}
             >
                 {data.recentMovements.map((movement) => (
                     <TableRowContainer key={movement.id}>
@@ -230,6 +279,14 @@ export const AdminDashboard = ({ data, isError, isLoading }: Props) => {
                             }
                         />
                         <BaseTableCell data={movement.quantity} />
+                        <BaseTableCell
+                            data={
+                                <>
+                                    {movement.userFirstname}{" "}
+                                    {movement.userLastname}
+                                </>
+                            }
+                        />
                     </TableRowContainer>
                 ))}
             </TableContainer>

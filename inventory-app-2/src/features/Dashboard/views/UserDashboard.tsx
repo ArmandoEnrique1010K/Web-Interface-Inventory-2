@@ -7,6 +7,7 @@ import { handleFormatDateTimeText } from "@/utils/handleFormatDateTimeText";
 import { LinkText } from "@/components/LinkText";
 import { useState } from "react";
 import { CounterGroup } from "../components/CounterGroup";
+import { DeliveryOrderStatus } from "@/features/Order/components/deliveryOrder/DeliveryOrderStatus";
 
 type Props = {
     data: UserDashboardItem;
@@ -29,7 +30,12 @@ export const UserDashboard = ({ data, isError, isLoading }: Props) => {
             <CounterGroup items={items} />
             <TableContainer
                 title="Ordenes pendientes"
-                headers={["Factura", "Fecha prioritaria", "Porcentaje"]}
+                headers={[
+                    "Factura",
+                    "Fecha prioritaria",
+                    "Completado al",
+                    "Estado",
+                ]}
                 isError={isError}
                 isLoading={isLoading}
                 isEmpty={!data.pendingDeliveryOrdersByUser?.length}
@@ -61,6 +67,13 @@ export const UserDashboard = ({ data, isError, isLoading }: Props) => {
                         />
                         <BaseTableCell
                             data={formatPercentage(order.percentage)}
+                        />
+                        <BaseTableCell
+                            data={
+                                <DeliveryOrderStatus
+                                    deliveryOrderStatus={order.orderStatus}
+                                />
+                            }
                         />
                     </TableRowContainer>
                 ))}

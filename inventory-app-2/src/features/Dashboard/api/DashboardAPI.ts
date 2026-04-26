@@ -35,6 +35,7 @@ export async function getDashboardAdmin() {
         const parsed = adminDashboardDetailResponseSchema.parse(data);
         return parsed.data;
     } catch (error) {
+        console.log(error);
         throwApiErrorMessage(error);
     }
 }

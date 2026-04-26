@@ -26,6 +26,10 @@ export async function registerModelInProduct({
     formData.append("name", data.name);
     formData.append("entryDate", data.entryDate ?? "");
     formData.append("caducityDate", data.caducityDate ?? "");
+    formData.append(
+        "minimumAvailableQuantity",
+        String(data.minimumAvailableQuantity ?? ""),
+    );
 
     if (file) {
         formData.append("file", file);
@@ -62,6 +66,7 @@ export type ModelQueryParams = {
     status?: boolean;
     categoryId?: string;
     typeId?: string;
+    lowStock?: boolean;
     direction?: "desc" | "asc";
     sortBy?:
         | "id"
@@ -156,6 +161,10 @@ export async function updateModel({ modelId, data, file }: UpdateModelPayload) {
     formData.append("name", data.name);
     formData.append("entryDate", data.entryDate ?? "");
     formData.append("caducityDate", data.caducityDate ?? "");
+    formData.append(
+        "minimumAvailableQuantity",
+        String(data.minimumAvailableQuantity ?? 0),
+    );
 
     if (file) {
         formData.append("file", file);

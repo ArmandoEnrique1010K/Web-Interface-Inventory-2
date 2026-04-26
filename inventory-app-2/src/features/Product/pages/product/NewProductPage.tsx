@@ -167,6 +167,17 @@ export const NewProductPage = () => {
                         functionEnabled={register("modelName")}
                     />
 
+                    <InputText
+                        id="modelMinimumAvailableQuantity"
+                        label="Cantidad minima para declarar bajo stock"
+                        placeholder="Cantidad minima"
+                        type="number"
+                        errorMessage={errors.modelMinimumAvailableQuantity}
+                        functionEnabled={register(
+                            "modelMinimumAvailableQuantity",
+                        )}
+                    />
+
                     {/** NOTA: SI NO SUBE UNA FECHA DE ENTRADA, SE ESTABLECERA LA FECHA DE HOY DIA */}
                     <InputDate<ProductCreateForm & { file: File }>
                         id="modelEntryDate"

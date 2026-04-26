@@ -19,6 +19,7 @@ export const modelForm = modelSchema.pick({
     name: true,
     entryDate: true,
     caducityDate: true,
+    minimumAvailableQuantity: true,
 });
 
 export const productCreateForm = productSchema.pick({
@@ -29,6 +30,7 @@ export const productCreateForm = productSchema.pick({
     modelName: true,
     modelEntryDate: true,
     modelCaducityDate: true,
+    modelMinimumAvailableQuantity: true,
     categoryId: true,
     typeId: true,
 });

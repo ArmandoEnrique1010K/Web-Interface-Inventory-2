@@ -30,6 +30,10 @@ export async function registerProduct({ data, file }: ProductCreatePayload) {
     formData.append("modelCaducityDate", data.modelCaducityDate);
     formData.append("categoryId", data.categoryId.toString());
     formData.append("typeId", data.typeId.toString());
+    formData.append(
+        "modelMinimumAvailableQuantity",
+        String(data.modelMinimumAvailableQuantity ?? ""),
+    );
 
     if (file) {
         formData.append("file", file);

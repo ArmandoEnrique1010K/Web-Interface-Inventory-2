@@ -69,8 +69,7 @@ type UpdateUserRolesPayload = {
     formData: RolesForm;
 };
 
-// TODO: CAMBIAR EL NOMBRE DE LA FUNCION EN EL BACKEND
-export const getUserRoles = async (id: number) => {
+export const getUserRole = async (id: number) => {
     try {
         const url = `/users/${id}/roles`;
         const { data } = await api.get(url);
@@ -81,7 +80,7 @@ export const getUserRoles = async (id: number) => {
     }
 };
 
-export const updateUserRoles = async ({
+export const updateUserRole = async ({
     userId,
     formData,
 }: UpdateUserRolesPayload) => {

@@ -23,6 +23,7 @@ import { QRButton } from "../../components/QRButton";
 import { ROLE_ADMIN } from "@/constants";
 import { useAuthRole } from "@/hooks/useAuthRole";
 import { StatusText } from "@/components/StatusText";
+import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 
 export const DetailsProductPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -227,8 +228,26 @@ export const DetailsProductPage = () => {
                                 </PanelContainer.Detail>
                             )}
 
-                            <PanelContainer.Detail label="Cantidad diponible">
-                                {selectedModel.totalQuantityAvailable}
+                            <PanelContainer.Detail label="Cantidad disponible">
+                                <div className="flex flex-row gap-2 items-center">
+                                    <span>
+                                        {" "}
+                                        {selectedModel.totalQuantityAvailable}
+                                    </span>
+                                    {selectedModel.lowStock && (
+                                        <div
+                                            className="flex flex-row gap-2 items-end text-amber-600 text-sm"
+                                            title="Alerta de bajo stock, no pasa de la cantidad minima"
+                                        >
+                                            <ExclamationTriangleIcon className="size-6 " />
+                                            (
+                                            {
+                                                selectedModel.minimumAvailableQuantity
+                                            }
+                                            )
+                                        </div>
+                                    )}
+                                </div>
                             </PanelContainer.Detail>
                             <PanelContainer.Detail label="Cantidad recibida">
                                 {selectedModel.totalQuantityReceived}

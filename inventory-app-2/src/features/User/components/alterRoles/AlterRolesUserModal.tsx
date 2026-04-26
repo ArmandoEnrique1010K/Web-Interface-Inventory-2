@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { updateUserRoles } from "../../api/UserAPI";
+import { updateUserRole } from "../../api/UserAPI";
 import type { GeneralError } from "@/types/index";
 import { toast } from "sonner";
 import { Button } from "@/ui/Button";
@@ -36,7 +36,7 @@ export const AlterRolesUserModal = ({ data, userId, setShowModal }: Props) => {
     const queryClient = useQueryClient();
 
     const { mutate } = useMutation({
-        mutationFn: updateUserRoles,
+        mutationFn: updateUserRole,
         retry: false,
         onError: (error: unknown) => {
             const e = error as GeneralError;

@@ -38,6 +38,9 @@ export const modelSchema = z.object({
     typeId: z.number(),
     typeName: z.string(),
 
+    minimumAvailableQuantity: z.number().nullable(),
+    lowStock: z.boolean(),
+
     // Concatenación
     modelProductName: z.string(),
 });
@@ -60,9 +63,9 @@ export const productSchema = z.object({
     modelImageUrl: z.string(),
     modelEntryDate: z.string(),
     modelCaducityDate: z.string(),
+    modelMinimumAvailableQuantity: z.number(),
 
     // Tipo
     typeId: z.number(),
     typeName: z.string(),
 });
-
