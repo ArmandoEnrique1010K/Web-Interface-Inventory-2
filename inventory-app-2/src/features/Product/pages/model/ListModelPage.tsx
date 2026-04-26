@@ -35,6 +35,25 @@ export const ListModelPage = () => {
     const statusParam = searchParams.get("status");
     const status = statusParam === null ? undefined : statusParam === "true";
 
+    const directionParam = searchParams.get("direction");
+    const direction =
+        directionParam === "asc" || directionParam === "desc"
+            ? directionParam
+            : undefined;
+
+    const sortByParam = searchParams.get("sortBy");
+    const sortBy =
+        sortByParam === "id" ||
+        sortByParam === "productName" ||
+        sortByParam === "modelName" ||
+        sortByParam === "categoryName" ||
+        sortByParam === "typeName" ||
+        sortByParam === "caducityDate" ||
+        sortByParam === "entryDate" ||
+        sortByParam === "totalQuantityAvailable"
+            ? sortByParam
+            : undefined;
+
     const [form, setForm] = useState({
         page: page,
         keyword: keyword,
@@ -45,6 +64,9 @@ export const ListModelPage = () => {
         categoryId: categoryId ?? "",
         typeId: typeId ?? "",
         status: status === undefined ? "" : String(status),
+
+        direction: direction ?? "",
+        sortBy: sortBy ?? "",
     });
 
     const { data, isError, isLoading } = useQuery({
@@ -60,6 +82,8 @@ export const ListModelPage = () => {
                 typeId,
                 status,
                 page,
+                direction,
+                sortBy,
             },
         ],
 
@@ -74,6 +98,8 @@ export const ListModelPage = () => {
                 categoryId: categoryId,
                 typeId: typeId,
                 status: status,
+                direction: direction,
+                sortBy: sortBy,
             }),
     });
 
@@ -134,6 +160,9 @@ export const ListModelPage = () => {
                         if (form.typeId) params.set("typeId", form.typeId);
                         if (form.status !== "")
                             params.set("status", form.status);
+                        if (form.sortBy) params.set("sortBy", form.sortBy);
+                        if (form.direction)
+                            params.set("direction", form.direction);
 
                         setSearchParams(params);
                     }}
@@ -247,6 +276,60 @@ export const ListModelPage = () => {
                             textInNullOption="Todos los estados"
                         />
                     </div>
+                    <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
+                        <SelectOptionFilter
+                            name="sortBy"
+                            label="Ordenar por"
+                            value={form.sortBy}
+                            onChange={(e) =>
+                                setForm((prev) => ({
+                                    ...prev,
+                                    sortBy: e.target.value,
+                                }))
+                            }
+                            options={[
+                                { value: "id", label: "ID" },
+                                {
+                                    value: "productName",
+                                    label: "Nombre de producto",
+                                },
+                                {
+                                    value: "modelName",
+                                    label: "Nombre de modelo",
+                                },
+                                { value: "categoryName", label: "Categoria" },
+                                { value: "typeName", label: "Tipo" },
+                                {
+                                    value: "caducityDate",
+                                    label: "Fecha de caducidad",
+                                },
+                                {
+                                    value: "entryDate",
+                                    label: "Fecha de entrada",
+                                },
+                                {
+                                    value: "totalQuantityAvailable",
+                                    label: "Cantidad disponible",
+                                },
+                            ]}
+                        />
+
+                        <SelectOptionFilter
+                            name="direction"
+                            label="Dirección"
+                            value={form.direction}
+                            onChange={(e) =>
+                                setForm((prev) => ({
+                                    ...prev,
+                                    direction: e.target.value,
+                                }))
+                            }
+                            options={[
+                                { value: "desc", label: "Descendente" },
+                                { value: "asc", label: "Ascendente" },
+                            ]}
+                        />
+                    </div>
                 </FiltersFormContainer>
 
                 <TableContainer
@@ -311,6 +394,10 @@ export const ListModelPage = () => {
                                         params.set("typeId", form.typeId);
                                     if (form.status !== "")
                                         params.set("status", form.status);
+                                    if (form.sortBy)
+                                        params.set("sortBy", form.sortBy);
+                                    if (form.direction)
+                                        params.set("direction", form.direction);
 
                                     params.set("page", page.toString());
 

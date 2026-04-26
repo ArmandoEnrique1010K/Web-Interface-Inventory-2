@@ -15,13 +15,14 @@ type Props = {
 
 export const OperatorDashboard = ({ data, isError, isLoading }: Props) => {
     const [items] = useState([
-        // TODO: AJUSTAR QUERY PARAMS
         {
             textSingular: "Orden pendiente",
             textPlural: "Ordenes pendientes",
             value: data.quantityDeliveryOrdersPending,
             to: "/orders/pending",
         },
+
+        // TODO: REALIZAR UN AJUSTE EN LA ENTIDAD MODELS PARA AJUSTAR EL STOCK MINIMO
         {
             textSingular: "Modelo de producto con bajo stock",
             textPlural: "Modelos de productos con bajo stock",
@@ -32,13 +33,13 @@ export const OperatorDashboard = ({ data, isError, isLoading }: Props) => {
             textSingular: "Modelo de producto a punto de caducar",
             textPlural: "Modelos de productos a punto de caducar",
             value: data.quantityNearCaducityDateModels,
-            to: "/products/models",
+            to: "/products/models?sortBy=caducityDate&direction=desc",
         },
         {
             textSingular: "Modelo de producto en el sistema",
             textPlural: "Modelos de productos en el sistema",
             value: data.quantityModelsActive,
-            to: "/products/models",
+            to: "/products/models?status=true&sortBy=entryDate&direction=desc",
         },
     ]);
 

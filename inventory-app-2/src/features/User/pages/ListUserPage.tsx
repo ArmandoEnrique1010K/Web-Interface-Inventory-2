@@ -40,11 +40,30 @@ export const ListUserPage = () => {
 
     const role = searchParams.get("role") ?? "";
 
+    const directionParam = searchParams.get("direction");
+    const direction =
+        directionParam === "asc" || directionParam === "desc"
+            ? directionParam
+            : undefined;
+
+    const sortByParam = searchParams.get("sortBy");
+    const sortBy =
+        sortByParam === "id" ||
+        sortByParam === "firstname" ||
+        sortByParam === "lastname" ||
+        sortByParam === "dni" ||
+        sortByParam === "role"
+            ? sortByParam
+            : undefined;
+
     const [form, setForm] = useState({
         page: page,
         name: name,
         role: role,
         // idRoles: idRoles,
+
+        direction: direction ?? "",
+        sortBy: sortBy ?? "",
     });
     // useEffectEvent(() => {
     //     setForm({
@@ -56,13 +75,15 @@ export const ListUserPage = () => {
 
     const { data, isError, isLoading } = useQuery({
         // queryKey: ["users", { name, idRoles, page }],
-        queryKey: ["users", { name, role, page }],
+        queryKey: ["users", { name, role, page, direction, sortBy }],
         queryFn: () =>
             listAllUsers({
                 page: page,
                 name: name,
                 // idRoles: idRoles,
                 role: role as UserItem["role"],
+                direction,
+                sortBy,
             }),
     });
 
@@ -117,6 +138,10 @@ export const ListUserPage = () => {
 
                         if (form.role) params.set("role", form.role);
 
+                        if (form.sortBy) params.set("sortBy", form.sortBy);
+                        if (form.direction)
+                            params.set("direction", form.direction);
+
                         setSearchParams(params);
                     }}
                 >
@@ -164,6 +189,48 @@ export const ListUserPage = () => {
                             value={form.role}
                         />
                     )}
+                    <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
+                        <SelectOptionFilter
+                            name="sortBy"
+                            label="Ordenar por"
+                            value={form.sortBy}
+                            onChange={(e) =>
+                                setForm((prev) => ({
+                                    ...prev,
+                                    sortBy: e.target.value,
+                                }))
+                            }
+                            options={[
+                                { value: "id", label: "ID" },
+                                {
+                                    value: "firstname",
+                                    label: "Nombres",
+                                },
+                                {
+                                    value: "lastname",
+                                    label: "Apellidos",
+                                },
+                                { value: "dni", label: "DNI" },
+                                { value: "role", label: "Rol" },
+                            ]}
+                        />
+
+                        <SelectOptionFilter
+                            name="direction"
+                            label="Dirección"
+                            value={form.direction}
+                            onChange={(e) =>
+                                setForm((prev) => ({
+                                    ...prev,
+                                    direction: e.target.value,
+                                }))
+                            }
+                            options={[
+                                { value: "desc", label: "Descendente" },
+                                { value: "asc", label: "Ascendente" },
+                            ]}
+                        />
+                    </div>
                 </FiltersFormContainer>
                 <TableContainer
                     headers={[
@@ -207,6 +274,12 @@ export const ListUserPage = () => {
                                     // if (form.idRoles) params.getAll("idRoles");
                                     if (form.role)
                                         params.set("role", form.role);
+
+                                    if (form.sortBy)
+                                        params.set("sortBy", form.sortBy);
+                                    if (form.direction)
+                                        params.set("direction", form.direction);
+
                                     params.set("page", page.toString());
 
                                     setSearchParams(params);

@@ -27,6 +27,24 @@ export const ListMovementPage = () => {
     const username = searchParams.get("username") ?? "";
     const keyword = searchParams.get("keyword") ?? "";
 
+    const directionParam = searchParams.get("direction");
+    const direction =
+        directionParam === "asc" || directionParam === "desc"
+            ? directionParam
+            : undefined;
+
+    const sortByParam = searchParams.get("sortBy");
+    const sortBy =
+        sortByParam === "id" ||
+        sortByParam === "quantity" ||
+        sortByParam === "createdAt" ||
+        sortByParam === "movementType" ||
+        sortByParam === "userFirstname" ||
+        sortByParam === "modelName" ||
+        sortByParam === "productName"
+            ? sortByParam
+            : undefined;
+
     const [form, setForm] = useState({
         page: page,
         minQuantity: minQuantity,
@@ -36,6 +54,8 @@ export const ListMovementPage = () => {
         movementType: movementType,
         username: username,
         keyword: keyword,
+        direction: direction ?? "",
+        sortBy: sortBy ?? "",
     });
 
     const { data, isError, isLoading } = useQuery({
@@ -50,6 +70,8 @@ export const ListMovementPage = () => {
                 username,
                 keyword,
                 page,
+                direction,
+                sortBy,
             },
         ],
 
@@ -63,6 +85,8 @@ export const ListMovementPage = () => {
                 movementType: movementType as MovementItem["movementType"],
                 username: username,
                 keyword: keyword,
+                direction,
+                sortBy,
             }),
     });
 
@@ -93,6 +117,10 @@ export const ListMovementPage = () => {
                         if (form.username)
                             params.set("username", form.username);
                         if (form.keyword) params.set("keyword", form.keyword);
+
+                        if (form.sortBy) params.set("sortBy", form.sortBy);
+                        if (form.direction)
+                            params.set("direction", form.direction);
 
                         setSearchParams(params);
                     }}
@@ -151,7 +179,7 @@ export const ListMovementPage = () => {
                     </div>
                     <InputTextFilter
                         name="username"
-                        label="Usuario:"
+                        label="Usuario"
                         placeholder="Nombre, apellido, dni o correo"
                         type="text"
                         value={form.username}
@@ -165,7 +193,7 @@ export const ListMovementPage = () => {
 
                     <InputTextFilter
                         name="keyword"
-                        label="Producto:"
+                        label="Producto"
                         placeholder="Nombre de producto o modelo"
                         type="text"
                         value={form.keyword}
@@ -195,6 +223,62 @@ export const ListMovementPage = () => {
                         textInNullOption="Todos los movimientos"
                         value={form.movementType}
                     />
+                    <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
+                        <SelectOptionFilter
+                            name="sortBy"
+                            label="Ordenar por"
+                            value={form.sortBy}
+                            onChange={(e) =>
+                                setForm((prev) => ({
+                                    ...prev,
+                                    sortBy: e.target.value,
+                                }))
+                            }
+                            options={[
+                                { value: "id", label: "ID" },
+                                {
+                                    value: "quantity",
+                                    label: "Cantidad",
+                                },
+                                {
+                                    value: "createdAt",
+                                    label: "Fecha",
+                                },
+                                {
+                                    value: "movementType",
+                                    label: "Tipo de movimiento",
+                                },
+                                {
+                                    value: "userFirstname",
+                                    label: "Nombre del usuario",
+                                },
+                                {
+                                    value: "modelName",
+                                    label: "Nombre del modelo",
+                                },
+                                {
+                                    value: "productName",
+                                    label: "Nombre del producto",
+                                },
+                            ]}
+                        />
+
+                        <SelectOptionFilter
+                            name="direction"
+                            label="Dirección"
+                            value={form.direction}
+                            onChange={(e) =>
+                                setForm((prev) => ({
+                                    ...prev,
+                                    direction: e.target.value,
+                                }))
+                            }
+                            options={[
+                                { value: "desc", label: "Descendente" },
+                                { value: "asc", label: "Ascendente" },
+                            ]}
+                        />
+                    </div>
                 </FiltersFormContainer>
                 <TableContainer
                     headers={[
@@ -251,6 +335,10 @@ export const ListMovementPage = () => {
                                         params.set("username", form.username);
                                     if (form.keyword)
                                         params.set("keyword", form.keyword);
+                                    if (form.sortBy)
+                                        params.set("sortBy", form.sortBy);
+                                    if (form.direction)
+                                        params.set("direction", form.direction);
 
                                     params.set("page", page.toString());
 

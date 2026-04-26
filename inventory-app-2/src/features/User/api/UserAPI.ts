@@ -28,6 +28,8 @@ export type ListAllUsersQueryParams = {
     name?: string;
     idRoles?: number[];
     role: UserItem["role"] | "";
+    direction?: "desc" | "asc";
+    sortBy?: "id" | "firstname" | "lastname" | "dni" | "role";
 };
 
 export const listAllUsers = async (params: ListAllUsersQueryParams) => {

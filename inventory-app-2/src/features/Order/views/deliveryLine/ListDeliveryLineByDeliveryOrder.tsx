@@ -66,6 +66,8 @@ export const ListDeliveryLineByDeliveryOrder = ({
         subregionId: "",
         regionId: "",
         modelId: "",
+        direction: "",
+        sortBy: "",
     });
 
     const [form, setForm] = useState(() => {
@@ -76,6 +78,8 @@ export const ListDeliveryLineByDeliveryOrder = ({
         ) {
             return getEmptyForm();
         }
+        const directionParam = searchParams.get("direction");
+        const sortByParam = searchParams.get("sortBy");
 
         return {
             // page: Number(searchParams.get('page') ?? parsed?.page ?? 0),
@@ -99,6 +103,21 @@ export const ListDeliveryLineByDeliveryOrder = ({
                 searchParams.get("subregionId") ?? parsed?.subregionId ?? "",
             regionId: searchParams.get("regionId") ?? parsed?.regionId ?? "",
             modelId: searchParams.get("modelId") ?? parsed?.modelId ?? "",
+            direction:
+                directionParam === "asc" || directionParam === "desc"
+                    ? directionParam
+                    : "",
+            sortBy:
+                sortByParam === "id" ||
+                sortByParam === "requiredQuantity" ||
+                sortByParam === "pendingQuantity" ||
+                sortByParam === "limitDate" ||
+                sortByParam === "lineStatus" ||
+                sortByParam === "locationName" ||
+                sortByParam === "modelName" ||
+                sortByParam === "productName"
+                    ? sortByParam
+                    : "",
         };
     });
 
@@ -245,6 +264,8 @@ export const ListDeliveryLineByDeliveryOrder = ({
         subregionId: string;
         regionId: string;
         modelId: string;
+        direction: string;
+        sortBy: string;
     }) => {
         const params = new URLSearchParams();
 
@@ -365,6 +386,9 @@ export const ListDeliveryLineByDeliveryOrder = ({
                             if (form.modelId) {
                                 params.set("modelId", form.modelId);
                             }
+                            if (form.sortBy) params.set("sortBy", form.sortBy);
+                            if (form.direction)
+                                params.set("direction", form.direction);
 
                             // params.set('page', page.toString()); // resetear página al buscar
 
@@ -461,7 +485,6 @@ export const ListDeliveryLineByDeliveryOrder = ({
                                 }))
                             }
                         />
-                        {/* TODO: EN ALGUNA FUTURA ACTUALIZACIÓN SE PODRIA OPTAR POR SOLAMENTE LISTAR LAS REGIONES Y SUBREGIONES QUE ESTEN ASOCIADAS A LA ORDEN DE ENTREGA MEDIANTE UNA PETICION A LA API REST */}
 
                         {/* CADA VEZ QUE CAMBIE DE REGIONID, SUBREGIONID DEBE SER REINICIADO, ESTABLECER EL VALOR NULL */}
                         <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
@@ -483,7 +506,7 @@ export const ListDeliveryLineByDeliveryOrder = ({
                             {/* SI NO HA SELECCIONADO UNA REGION, ESTE CAMPO SE DEBE LIMPIAR QUE NO HAYA NINGUNA SUBREGION SELECCIONADA */}
                             <SelectOptionFilter
                                 name="subregionId"
-                                label="Subregión:"
+                                label="Subregión"
                                 options={subregions}
                                 onChange={(e) =>
                                     setForm((prev) => ({
@@ -495,6 +518,7 @@ export const ListDeliveryLineByDeliveryOrder = ({
                                 value={form.subregionId}
                             />
                         </div>
+
                         <SelectOptionFilter
                             name="modelId"
                             label="Modelo de la orden de entrega"
@@ -522,6 +546,67 @@ export const ListDeliveryLineByDeliveryOrder = ({
                             textInNullOption="Todos los estados"
                             value={form.lineStatus}
                         />
+
+                        <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
+                            <SelectOptionFilter
+                                name="sortBy"
+                                label="Ordenar por"
+                                value={form.sortBy}
+                                onChange={(e) =>
+                                    setForm((prev) => ({
+                                        ...prev,
+                                        sortBy: e.target.value,
+                                    }))
+                                }
+                                options={[
+                                    { value: "id", label: "ID" },
+                                    {
+                                        value: "requiredQuantity",
+                                        label: "Cantidad requerida",
+                                    },
+                                    {
+                                        value: "pendingQuantity",
+                                        label: "Cantidad pendiente",
+                                    },
+                                    {
+                                        value: "limitDate",
+                                        label: "Fecha limite",
+                                    },
+                                    {
+                                        value: "lineStatus",
+                                        label: "Estado",
+                                    },
+                                    {
+                                        value: "locationName",
+                                        label: "Ubicación",
+                                    },
+                                    {
+                                        value: "modelName",
+                                        label: "Nombre del modelo",
+                                    },
+                                    {
+                                        value: "productName",
+                                        label: "Nombre del producto",
+                                    },
+                                ]}
+                            />
+
+                            <SelectOptionFilter
+                                name="direction"
+                                label="Dirección"
+                                value={form.direction}
+                                onChange={(e) =>
+                                    setForm((prev) => ({
+                                        ...prev,
+                                        direction: e.target.value,
+                                    }))
+                                }
+                                options={[
+                                    { value: "desc", label: "Descendente" },
+                                    { value: "asc", label: "Ascendente" },
+                                ]}
+                            />
+                        </div>
                     </FiltersFormContainer>
 
                     <TableContainer
@@ -592,9 +677,9 @@ export const ListDeliveryLineByDeliveryOrder = ({
                                     />
                                     <BaseTableCell
                                         data={
-                                            <div>
+                                            <div className="text-lg">
                                                 {deliveryLine.deliveredQuantity}{" "}
-                                                de{" "}
+                                                /{" "}
                                                 {deliveryLine.requiredQuantity}
                                             </div>
                                         }
@@ -611,6 +696,7 @@ export const ListDeliveryLineByDeliveryOrder = ({
                                         }
                                     />
                                     <BaseTableCell
+                                        isCenter
                                         data={
                                             <DeliveryLineStatus
                                                 deliveryLineStatus={

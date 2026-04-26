@@ -38,7 +38,22 @@ export const ListStockLotPage = () => {
     const categoryId = searchParams.get("categoryId") ?? undefined;
     const typeId = searchParams.get("typeId") ?? undefined;
     // const modelId = searchParams.get("modelId") ?? undefined;
+    const directionParam = searchParams.get("direction");
+    const direction =
+        directionParam === "asc" || directionParam === "desc"
+            ? directionParam
+            : undefined;
 
+    const sortByParam = searchParams.get("sortBy");
+    const sortBy =
+        sortByParam === "id" ||
+        sortByParam === "quantityReceived" ||
+        sortByParam === "quantityAvailable" ||
+        sortByParam === "createdAt" ||
+        sortByParam === "modelName" ||
+        sortByParam === "productName"
+            ? sortByParam
+            : undefined;
     const [form, setForm] = useState({
         page: page,
         keyword: keyword,
@@ -51,6 +66,8 @@ export const ListStockLotPage = () => {
         companyId: companyId ?? "",
         categoryId: categoryId ?? "",
         typeId: typeId ?? "",
+        direction: direction ?? "",
+        sortBy: sortBy ?? "",
         // modelId: modelId ?? "",
     });
 
@@ -88,6 +105,8 @@ export const ListStockLotPage = () => {
                 typeId,
                 // modelId,
                 page,
+                direction,
+                sortBy,
             },
         ],
 
@@ -104,6 +123,9 @@ export const ListStockLotPage = () => {
                 companyId,
                 categoryId,
                 typeId,
+                direction,
+                sortBy,
+
                 // modelId,
             }),
     });
@@ -199,6 +221,11 @@ export const ListStockLotPage = () => {
                             params.set("categoryId", form.categoryId);
                         if (form.typeId) params.set("typeId", form.typeId);
                         // if (form.modelId) params.set("modelId", form.modelId);
+
+                        if (form.sortBy) params.set("sortBy", form.sortBy);
+                        if (form.direction)
+                            params.set("direction", form.direction);
+
                         setSearchParams(params);
                     }}
                 >
@@ -337,13 +364,65 @@ export const ListStockLotPage = () => {
                             value={form.typeId}
                         />
                     </div>
+                    <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
+                        <SelectOptionFilter
+                            name="sortBy"
+                            label="Ordenar por"
+                            value={form.sortBy}
+                            onChange={(e) =>
+                                setForm((prev) => ({
+                                    ...prev,
+                                    sortBy: e.target.value,
+                                }))
+                            }
+                            options={[
+                                { value: "id", label: "ID" },
+                                {
+                                    value: "quantityReceived",
+                                    label: "Cantidad recibida",
+                                },
+                                {
+                                    value: "quantityAvailable",
+                                    label: "Cantidad disponible",
+                                },
+                                {
+                                    value: "createdAt",
+                                    label: "Fecha de entrada",
+                                },
+                                {
+                                    value: "modelName",
+                                    label: "Nombre del modelo",
+                                },
+                                {
+                                    value: "productName",
+                                    label: "Nombre del producto",
+                                },
+                            ]}
+                        />
+
+                        <SelectOptionFilter
+                            name="direction"
+                            label="Dirección"
+                            value={form.direction}
+                            onChange={(e) =>
+                                setForm((prev) => ({
+                                    ...prev,
+                                    direction: e.target.value,
+                                }))
+                            }
+                            options={[
+                                { value: "desc", label: "Descendente" },
+                                { value: "asc", label: "Ascendente" },
+                            ]}
+                        />
+                    </div>
                 </FiltersFormContainer>
                 <TableContainer
                     headers={[
                         "ID",
                         "Código",
                         "Producto",
-                        "Cantidad restante",
+                        "Cantidad disponible",
                         "Fecha de entrada",
                         "Operaciones",
                     ]}
@@ -417,6 +496,10 @@ export const ListStockLotPage = () => {
                                         params.set("typeId", form.typeId);
                                     // if (form.modelId)
                                     //     params.set("modelId", form.modelId);
+                                    if (form.sortBy)
+                                        params.set("sortBy", form.sortBy);
+                                    if (form.direction)
+                                        params.set("direction", form.direction);
 
                                     params.set("page", page.toString());
 

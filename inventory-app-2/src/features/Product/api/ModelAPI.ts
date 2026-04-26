@@ -62,6 +62,16 @@ export type ModelQueryParams = {
     status?: boolean;
     categoryId?: string;
     typeId?: string;
+    direction?: "desc" | "asc";
+    sortBy?:
+        | "id"
+        | "productName"
+        | "modelName"
+        | "categoryName"
+        | "typeName"
+        | "caducityDate"
+        | "entryDate"
+        | "totalQuantityAvailable";
 };
 
 export async function listAllModels(params: ModelQueryParams) {

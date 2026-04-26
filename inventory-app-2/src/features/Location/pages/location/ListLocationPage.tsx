@@ -30,12 +30,28 @@ export const ListLocationPage = () => {
     const statusParam = searchParams.get("status");
     const status = statusParam === null ? undefined : statusParam === "true";
 
+    const directionParam = searchParams.get("direction");
+    const direction =
+        directionParam === "asc" || directionParam === "desc"
+            ? directionParam
+            : undefined;
+
+    const sortByParam = searchParams.get("sortBy");
+    const sortBy =
+        sortByParam === "id" ||
+        sortByParam === "name" ||
+        sortByParam === "subregionName"
+            ? sortByParam
+            : undefined;
+
     const [form, setForm] = useState({
         page: page,
         name: name,
         regionId: regionId ?? "",
         subregionId: subregionId ?? "",
         status: status === undefined ? "" : String(status),
+        direction: direction ?? "",
+        sortBy: sortBy ?? "",
     });
 
     // useEffectEvent(() => {
@@ -49,7 +65,10 @@ export const ListLocationPage = () => {
     // });
 
     const { data, isError, isLoading } = useQuery({
-        queryKey: ["locations", { name, regionId, subregionId, status, page }],
+        queryKey: [
+            "locations",
+            { name, regionId, subregionId, status, page, direction, sortBy },
+        ],
 
         queryFn: () =>
             listAllLocations({
@@ -58,6 +77,8 @@ export const ListLocationPage = () => {
                 regionId: regionId,
                 subregionId: subregionId,
                 status: status,
+                direction: direction,
+                sortBy: sortBy,
             }),
     });
 
@@ -131,12 +152,16 @@ export const ListLocationPage = () => {
                         if (form.status !== "")
                             params.set("status", form.status);
 
+                        if (form.sortBy) params.set("sortBy", form.sortBy);
+                        if (form.direction)
+                            params.set("direction", form.direction);
+
                         setSearchParams(params);
                     }}
                 >
                     <InputTextFilter
                         name="name"
-                        label="Nombre de la ubicación:"
+                        label="Nombre de la ubicación"
                         placeholder="Buscar ubicaciones por nombre"
                         type="text"
                         value={form.name}
@@ -151,7 +176,7 @@ export const ListLocationPage = () => {
                     <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
                         <SelectOptionFilter
                             name="regionId"
-                            label="Región:"
+                            label="Región"
                             options={regions}
                             onChange={(e) =>
                                 setForm((prev) => ({
@@ -167,7 +192,7 @@ export const ListLocationPage = () => {
                         {/* LUEGO DE SELECCIONAR UNA REGION DEBE LISTAR TODAS LAS SUBREGIONES ASOCIADAS A ESA REGION */}
                         <SelectOptionFilter
                             name="subregionId"
-                            label="Subregión:"
+                            label="Subregión"
                             options={subregions}
                             onChange={(e) =>
                                 setForm((prev) => ({
@@ -181,7 +206,7 @@ export const ListLocationPage = () => {
                     </div>
                     <SelectOptionFilter
                         name="status"
-                        label="Estado:"
+                        label="Estado"
                         options={statusOptions}
                         onChange={(e) =>
                             setForm((prev) => ({
@@ -191,6 +216,41 @@ export const ListLocationPage = () => {
                         }
                         value={form.status}
                     />
+
+                    <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
+                        <SelectOptionFilter
+                            name="sortBy"
+                            label="Ordenar por"
+                            value={form.sortBy}
+                            onChange={(e) =>
+                                setForm((prev) => ({
+                                    ...prev,
+                                    sortBy: e.target.value,
+                                }))
+                            }
+                            options={[
+                                { value: "id", label: "ID" },
+                                { value: "name", label: "Nombre" },
+                                { value: "regionName", label: "Región" },
+                            ]}
+                        />
+
+                        <SelectOptionFilter
+                            name="direction"
+                            label="Dirección"
+                            value={form.direction}
+                            onChange={(e) =>
+                                setForm((prev) => ({
+                                    ...prev,
+                                    direction: e.target.value,
+                                }))
+                            }
+                            options={[
+                                { value: "desc", label: "Descendente" },
+                                { value: "asc", label: "Ascendente" },
+                            ]}
+                        />
+                    </div>
                 </FiltersFormContainer>
 
                 <TableContainer
@@ -233,6 +293,10 @@ export const ListLocationPage = () => {
                                         );
                                     if (form.status !== "")
                                         params.set("status", form.status);
+                                    if (form.sortBy)
+                                        params.set("sortBy", form.sortBy);
+                                    if (form.direction)
+                                        params.set("direction", form.direction);
 
                                     params.set("page", page.toString());
 

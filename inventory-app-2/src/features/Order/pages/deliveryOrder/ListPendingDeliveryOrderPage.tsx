@@ -14,6 +14,7 @@ import { InputDateTimeFilter } from "@/ui/filters/InputDateTimeFilter";
 import { handleFormatDateTimeText } from "@/utils/handleFormatDateTimeText";
 import { DeliveryOrderStatus } from "../../components/deliveryOrder/DeliveryOrderStatus";
 import { LinkText } from "@/components/LinkText";
+import { SelectOptionFilter } from "@/ui/filters/SelectOptionFilter";
 
 export const ListPendingDeliveryOrderPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -22,18 +23,45 @@ export const ListPendingDeliveryOrderPage = () => {
     const startDate = searchParams.get("startDate") ?? "";
     const endDate = searchParams.get("endDate") ?? "";
     const userClientName = searchParams.get("userClientName") ?? "";
+
+    const directionParam = searchParams.get("direction");
+    const direction =
+        directionParam === "asc" || directionParam === "desc"
+            ? directionParam
+            : undefined;
+
+    const sortByParam = searchParams.get("sortBy");
+    const sortBy =
+        sortByParam === "id" ||
+        sortByParam === "batch" ||
+        sortByParam === "limitDate" ||
+        sortByParam === "priorityDate" ||
+        sortByParam === "userClientFirstname"
+            ? sortByParam
+            : undefined;
+
     const [form, setForm] = useState({
         page: page,
         batch,
         startDate,
         endDate,
         userClientName,
+        direction: direction ?? "",
+        sortBy: sortBy ?? "",
     });
 
     const { data, isError, isLoading } = useQuery({
         queryKey: [
             "deliveryOrders",
-            { batch, startDate, endDate, userClientName, page },
+            {
+                batch,
+                startDate,
+                endDate,
+                userClientName,
+                page,
+                direction,
+                sortBy,
+            },
         ],
 
         queryFn: () =>
@@ -43,6 +71,8 @@ export const ListPendingDeliveryOrderPage = () => {
                 startDate: startDate,
                 endDate: endDate,
                 userClientName: userClientName,
+                direction,
+                sortBy,
             }),
     });
 
@@ -79,6 +109,9 @@ export const ListPendingDeliveryOrderPage = () => {
                         if (form.endDate) params.set("endDate", form.endDate);
                         if (form.userClientName)
                             params.set("userClientName", form.userClientName);
+                        if (form.sortBy) params.set("sortBy", form.sortBy);
+                        if (form.direction)
+                            params.set("direction", form.direction);
 
                         setSearchParams(params);
                     }}
@@ -131,6 +164,54 @@ export const ListPendingDeliveryOrderPage = () => {
                             }))
                         }
                     />
+                    <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
+                        <SelectOptionFilter
+                            name="sortBy"
+                            label="Ordenar por"
+                            value={form.sortBy}
+                            onChange={(e) =>
+                                setForm((prev) => ({
+                                    ...prev,
+                                    sortBy: e.target.value,
+                                }))
+                            }
+                            options={[
+                                { value: "id", label: "ID" },
+                                {
+                                    value: "batch",
+                                    label: "Factura",
+                                },
+                                {
+                                    value: "limitDate",
+                                    label: "Fecha limite de entrega",
+                                },
+                                {
+                                    value: "priorityDate",
+                                    label: "Fecha prioritaria de entrega",
+                                },
+                                {
+                                    value: "userClientFirstname",
+                                    label: "Nombre del cliente",
+                                },
+                            ]}
+                        />
+
+                        <SelectOptionFilter
+                            name="direction"
+                            label="Dirección"
+                            value={form.direction}
+                            onChange={(e) =>
+                                setForm((prev) => ({
+                                    ...prev,
+                                    direction: e.target.value,
+                                }))
+                            }
+                            options={[
+                                { value: "desc", label: "Descendente" },
+                                { value: "asc", label: "Ascendente" },
+                            ]}
+                        />
+                    </div>
                 </FiltersFormContainer>
 
                 <TableContainer
@@ -181,6 +262,10 @@ export const ListPendingDeliveryOrderPage = () => {
                                             "userClientName",
                                             form.userClientName,
                                         );
+                                    if (form.sortBy)
+                                        params.set("sortBy", form.sortBy);
+                                    if (form.direction)
+                                        params.set("direction", form.direction);
 
                                     params.set("page", page.toString());
 
@@ -205,36 +290,58 @@ export const ListPendingDeliveryOrderPage = () => {
                                 />
                                 <BaseTableCell
                                     data={
-                                        order.priorityDate ? (
-                                            <span>
-                                                <span>
-                                                    {
-                                                        handleFormatDateTimeText(
-                                                            new Date(
-                                                                order.priorityDate,
-                                                            ),
-                                                        ).date
-                                                    }{" "}
-                                                    {
-                                                        handleFormatDateTimeText(
-                                                            new Date(
-                                                                order.priorityDate,
-                                                            ),
-                                                        ).hour
-                                                    }
-                                                </span>
-                                            </span>
-                                        ) : (
-                                            "Sin fecha"
-                                        )
+                                        <>
+                                            {order.priorityDate ? (
+                                                <div>
+                                                    <span>
+                                                        {
+                                                            handleFormatDateTimeText(
+                                                                new Date(
+                                                                    order.priorityDate,
+                                                                ),
+                                                            ).date
+                                                        }{" "}
+                                                        {
+                                                            handleFormatDateTimeText(
+                                                                new Date(
+                                                                    order.priorityDate,
+                                                                ),
+                                                            ).hour
+                                                        }
+                                                    </span>
+                                                </div>
+                                            ) : (
+                                                "Sin fecha"
+                                            )}
+
+                                            {order.limitDate ? (
+                                                <div>
+                                                    <span className="text-sm text-gray-500">
+                                                        Fecha limite:{" "}
+                                                        {
+                                                            handleFormatDateTimeText(
+                                                                new Date(
+                                                                    order.limitDate,
+                                                                ),
+                                                            ).date
+                                                        }{" "}
+                                                        {
+                                                            handleFormatDateTimeText(
+                                                                new Date(
+                                                                    order.limitDate,
+                                                                ),
+                                                            ).hour
+                                                        }
+                                                    </span>
+                                                </div>
+                                            ) : (
+                                                "Sin fecha"
+                                            )}
+                                        </>
                                     }
                                 />
                                 <BaseTableCell
-                                    data={
-                                        <div className="text-sm">
-                                            {order.userClientFullname}
-                                        </div>
-                                    }
+                                    data={<div>{order.userClientFullname}</div>}
                                 />
                                 <BaseTableCell
                                     isCenter

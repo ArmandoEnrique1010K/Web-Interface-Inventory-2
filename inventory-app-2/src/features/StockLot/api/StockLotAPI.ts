@@ -36,6 +36,14 @@ export type StockLotQueryParams = {
     categoryId?: string;
     typeId?: string;
     // modelId?: string;
+    direction?: "desc" | "asc";
+    sortBy?:
+        | "id"
+        | "quantityReceived"
+        | "quantityAvailable"
+        | "createdAt"
+        | "modelName"
+        | "productName";
 };
 
 export async function listAllStockLots(params: StockLotQueryParams) {

@@ -43,6 +43,16 @@ export type DeliveryLinesByDeliveryOrderParams = {
     subregionId?: string;
     regionId?: string;
     modelId?: string;
+    direction?: "desc" | "asc";
+    sortBy?:
+        | "id"
+        | "requiredQuantity"
+        | "pendingQuantity"
+        | "limitDate"
+        | "lineStatus"
+        | "locationName"
+        | "modelName"
+        | "productName";
 };
 
 export async function listAllDeliveryLinesByDeliveryOrder(

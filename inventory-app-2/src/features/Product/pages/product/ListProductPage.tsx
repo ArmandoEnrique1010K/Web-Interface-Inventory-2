@@ -32,12 +32,29 @@ export const ListProductPage = () => {
     const statusParam = searchParams.get("status");
     const status = statusParam === null ? undefined : statusParam === "true";
 
+    const directionParam = searchParams.get("direction");
+    const direction =
+        directionParam === "asc" || directionParam === "desc"
+            ? directionParam
+            : undefined;
+
+    const sortByParam = searchParams.get("sortBy");
+    const sortBy =
+        sortByParam === "id" ||
+        sortByParam === "name" ||
+        sortByParam === "categoryName" ||
+        sortByParam === "typeName"
+            ? sortByParam
+            : undefined;
+
     const [form, setForm] = useState({
         page: page,
         name: name,
         categoryId: categoryId ?? "",
         typeId: typeId ?? "",
         status: status === undefined ? "" : String(status),
+        direction: direction ?? "",
+        sortBy: sortBy ?? "",
     });
 
     // No se recomienda usar un hook useEffectEvent ni useEffect en React 19
@@ -60,7 +77,10 @@ export const ListProductPage = () => {
         : ["ID", "Nombre", "Característica", "Medidas", "Estado"];
 
     const { data, isError, isLoading } = useQuery({
-        queryKey: ["products", { name, categoryId, typeId, status, page }],
+        queryKey: [
+            "products",
+            { name, categoryId, typeId, status, page, direction, sortBy },
+        ],
 
         queryFn: () =>
             listAllProducts({
@@ -69,6 +89,8 @@ export const ListProductPage = () => {
                 categoryId: categoryId,
                 typeId: typeId,
                 status: status,
+                direction: direction,
+                sortBy: sortBy,
             }),
     });
 
@@ -141,6 +163,9 @@ export const ListProductPage = () => {
                         if (form.typeId) params.set("typeId", form.typeId);
                         if (form.status !== "")
                             params.set("status", form.status);
+                        if (form.sortBy) params.set("sortBy", form.sortBy);
+                        if (form.direction)
+                            params.set("direction", form.direction);
 
                         setSearchParams(params);
                     }}
@@ -200,6 +225,41 @@ export const ListProductPage = () => {
                             textInNullOption="Todos los estados"
                         />
                     </div>
+                    <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
+                        <SelectOptionFilter
+                            name="sortBy"
+                            label="Ordenar por"
+                            value={form.sortBy}
+                            onChange={(e) =>
+                                setForm((prev) => ({
+                                    ...prev,
+                                    sortBy: e.target.value,
+                                }))
+                            }
+                            options={[
+                                { value: "id", label: "ID" },
+                                { value: "name", label: "Nombre" },
+                                { value: "categoryName", label: "Categoria" },
+                                { value: "typeName", label: "Tipo" },
+                            ]}
+                        />
+
+                        <SelectOptionFilter
+                            name="direction"
+                            label="Dirección"
+                            value={form.direction}
+                            onChange={(e) =>
+                                setForm((prev) => ({
+                                    ...prev,
+                                    direction: e.target.value,
+                                }))
+                            }
+                            options={[
+                                { value: "desc", label: "Descendente" },
+                                { value: "asc", label: "Ascendente" },
+                            ]}
+                        />
+                    </div>
                 </FiltersFormContainer>
 
                 <TableContainer
@@ -242,6 +302,10 @@ export const ListProductPage = () => {
                                         params.set("typeId", form.typeId);
                                     if (form.status !== "")
                                         params.set("status", form.status);
+                                    if (form.sortBy)
+                                        params.set("sortBy", form.sortBy);
+                                    if (form.direction)
+                                        params.set("direction", form.direction);
 
                                     params.set("page", page.toString());
 

@@ -16,14 +16,27 @@ type Props = {
 };
 
 export const AdminDashboard = ({ data, isError, isLoading }: Props) => {
+    const formatDateNow = () => {
+        const date = new Date();
+
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+
+        return `${year}-${month}-${day}T00%3A00%3A00`;
+    };
+
+    console.log(formatDateNow());
+
     const [items] = useState([
-        // TODO: AJUSTAR QUERY PARAMS
         {
             textSingular: "Orden pendiente",
             textPlural: "Ordenes pendientes",
             value: data.quantityDeliveryOrdersPending,
             to: "/orders/pending",
         },
+
+        // TODO: REALIZAR UN AJUSTE EN LA ENTIDAD MODELS PARA AJUSTAR EL STOCK MINIMO
         {
             textSingular: "Modelo de producto con bajo stock",
             textPlural: "Modelos de productos con bajo stock",
@@ -34,23 +47,21 @@ export const AdminDashboard = ({ data, isError, isLoading }: Props) => {
             textSingular: "Modelo de producto a punto de caducar",
             textPlural: "Modelos de productos a punto de caducar",
             value: data.quantityNearCaducityDateModels,
-            to: "/products/models",
+            to: "/products/models?sortBy=caducityDate&direction=desc",
         },
         {
             textSingular: "Modelo de producto en el sistema",
             textPlural: "Modelos de productos en el sistema",
             value: data.quantityModelsActive,
-            to: "/products/models",
+            to: "/products/models?status=true&sortBy=entryDate&direction=desc",
         },
         {
             textSingular: "Movimiento realizado durante el día",
             textPlural: "Movimientos realizados durante el día",
             value: data.quantityMovementsToday,
-            to: "/movements",
+            to: `/movements?minCreatedAt=${formatDateNow()}&sortBy=createdAt`,
         },
     ]);
-
-    // TODO: CONTINUAR EN LOS DEMÁS MODULOS OPERATORDASHBOARD Y USERDASHBOARD
     return (
         <>
             <CounterGroup items={items} />

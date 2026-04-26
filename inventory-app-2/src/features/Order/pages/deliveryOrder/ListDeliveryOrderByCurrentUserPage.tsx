@@ -25,18 +25,36 @@ export const ListDeliveryOrderByCurrentUserPage = () => {
     const startDate = searchParams.get("startDate") ?? "";
     const endDate = searchParams.get("endDate") ?? "";
     const status = searchParams.get("status") ?? "";
+
+    const directionParam = searchParams.get("direction");
+    const direction =
+        directionParam === "asc" || directionParam === "desc"
+            ? directionParam
+            : undefined;
+
+    const sortByParam = searchParams.get("sortBy");
+    const sortBy =
+        sortByParam === "id" ||
+        sortByParam === "batch" ||
+        sortByParam === "limitDate" ||
+        sortByParam === "orderStatus"
+            ? sortByParam
+            : undefined;
+
     const [form, setForm] = useState({
         page: page,
         batch,
         startDate,
         endDate,
         status: status === undefined ? "" : String(status),
+        direction: direction ?? "",
+        sortBy: sortBy ?? "",
     });
 
     const { data, isError, isLoading } = useQuery({
         queryKey: [
             "deliveryOrders",
-            { batch, startDate, endDate, status, page },
+            { batch, startDate, endDate, status, page, direction, sortBy },
         ],
 
         queryFn: () =>
@@ -46,6 +64,8 @@ export const ListDeliveryOrderByCurrentUserPage = () => {
                 startDate: startDate,
                 endDate: endDate,
                 status: status as DeliveryOrderItem["orderStatus"],
+                direction,
+                sortBy,
             }),
     });
 
@@ -68,6 +88,9 @@ export const ListDeliveryOrderByCurrentUserPage = () => {
                             params.set("startDate", form.startDate);
                         if (form.endDate) params.set("endDate", form.endDate);
                         if (form.status) params.set("status", form.status);
+                        if (form.sortBy) params.set("sortBy", form.sortBy);
+                        if (form.direction)
+                            params.set("direction", form.direction);
 
                         setSearchParams(params);
                     }}
@@ -137,15 +160,55 @@ export const ListDeliveryOrderByCurrentUserPage = () => {
                         textInNullOption="Todos los estados"
                         value={form.status}
                     />
+
+                    <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
+                        <SelectOptionFilter
+                            name="sortBy"
+                            label="Ordenar por"
+                            value={form.sortBy}
+                            onChange={(e) =>
+                                setForm((prev) => ({
+                                    ...prev,
+                                    sortBy: e.target.value,
+                                }))
+                            }
+                            options={[
+                                { value: "id", label: "ID" },
+                                {
+                                    value: "batch",
+                                    label: "Factura",
+                                },
+                                {
+                                    value: "limitDate",
+                                    label: "Fecha limite de entrega",
+                                },
+                                {
+                                    value: "orderStatus",
+                                    label: "Estado",
+                                },
+                            ]}
+                        />
+
+                        <SelectOptionFilter
+                            name="direction"
+                            label="Dirección"
+                            value={form.direction}
+                            onChange={(e) =>
+                                setForm((prev) => ({
+                                    ...prev,
+                                    direction: e.target.value,
+                                }))
+                            }
+                            options={[
+                                { value: "desc", label: "Descendente" },
+                                { value: "asc", label: "Ascendente" },
+                            ]}
+                        />
+                    </div>
                 </FiltersFormContainer>
 
                 <TableContainer
-                    headers={[
-                        "ID",
-                        "# de factura",
-                        "Fecha prioritaria",
-                        "Estado",
-                    ]}
+                    headers={["ID", "# de factura", "Fecha limite", "Estado"]}
                     isLoading={isLoading}
                     isError={isError}
                     isEmpty={!content?.length}
@@ -183,6 +246,10 @@ export const ListDeliveryOrderByCurrentUserPage = () => {
 
                                     if (form.status !== "")
                                         params.set("status", form.status);
+                                    if (form.sortBy)
+                                        params.set("sortBy", form.sortBy);
+                                    if (form.direction)
+                                        params.set("direction", form.direction);
 
                                     params.set("page", page.toString());
 

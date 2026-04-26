@@ -47,11 +47,6 @@ export const deliveryOrderClientDetailsItemSchema = deliveryOrderSchema.pick({
     userClientFullname: true,
     orderStatus: true,
     percentage: true,
-
-    // TODO: ESTE CAMPO NO SE MUESTRA EN EL BACKEND
-    // priorityDate: true, // ← ADD THIS LINE
-    // deliveredAt: true,
-    // onTimeStatus: true,
 });
 
 export type DeliveryOrderItem = z.infer<typeof deliveryOrderItemSchema>;

@@ -52,6 +52,8 @@ export type ProductQueryParams = {
     status?: boolean;
     categoryId?: string;
     typeId?: string;
+    direction?: "desc" | "asc";
+    sortBy?: "id" | "name" | "categoryName" | "typeName";
 };
 
 export async function listAllProducts(params: ProductQueryParams) {

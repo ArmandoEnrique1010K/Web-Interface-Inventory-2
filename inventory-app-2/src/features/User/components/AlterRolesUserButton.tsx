@@ -32,7 +32,7 @@ export const AlterRolesUserButton = ({ userId }: Props) => {
                             setShowModal(false);
                         }}
                         size="lg"
-                        title={`Alterar roles del usuario #${userId}`}
+                        title={`Alterar rol del usuario #${userId}`}
                         locked
                     >
                         <LoaderUser

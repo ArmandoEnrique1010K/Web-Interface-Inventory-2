@@ -45,7 +45,6 @@ export const GeneralRouter = () => {
     );
     const { hasPermission } = useAuthRole();
 
-    // TODO: SE PODRIA RENDERIZAR OTRO COMPONENTE DE CARGA
     if (!authChecked) {
         return <div>Espere un momento...</div>;
     }

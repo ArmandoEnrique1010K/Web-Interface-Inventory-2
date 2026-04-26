@@ -16,12 +16,11 @@ type Props = {
 
 export const UserDashboard = ({ data, isError, isLoading }: Props) => {
     const [items] = useState([
-        // TODO: AJUSTAR QUERY PARAMS
         {
             textSingular: "Orden pendiente",
             textPlural: "Ordenes pendientes",
             value: data.pendingDeliveryOrdersByUserCount,
-            to: "/orders/my-orders",
+            to: "/orders/my-orders?status=ORDER_PENDING",
         },
     ]);
 

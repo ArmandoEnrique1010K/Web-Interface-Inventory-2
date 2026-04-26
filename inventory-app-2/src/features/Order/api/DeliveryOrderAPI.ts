@@ -31,6 +31,14 @@ export type DeliveryOrderQueryParams = {
     endDate?: string;
     userClientName?: string;
     status?: DeliveryOrderItem["orderStatus"];
+    direction?: "desc" | "asc";
+    sortBy?:
+        | "id"
+        | "batch"
+        | "limitDate"
+        | "priorityDate"
+        | "userClientFirstname"
+        | "orderStatus";
 };
 
 export async function listAllDeliveryOrders(params: DeliveryOrderQueryParams) {

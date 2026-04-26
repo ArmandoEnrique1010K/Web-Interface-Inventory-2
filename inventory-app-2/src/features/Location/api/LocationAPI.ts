@@ -25,6 +25,8 @@ export type LocationQueryParams = {
     regionId?: string;
     subregionId?: string;
     status?: boolean;
+    direction?: "desc" | "asc";
+    sortBy?: "id" | "name" | "subregionName";
 };
 
 export async function listAllLocations(params: LocationQueryParams) {

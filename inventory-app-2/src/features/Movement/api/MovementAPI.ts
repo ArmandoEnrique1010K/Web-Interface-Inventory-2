@@ -19,6 +19,15 @@ export type LocationQueryParams = {
     modelId?: string;
     userId?: string; // Id de usuario
     stockLotReceiverId?: string; // Lote de stock receptor
+    direction?: "desc" | "asc";
+    sortBy?:
+        | "id"
+        | "quantity"
+        | "createdAt"
+        | "movementType"
+        | "userFirstname"
+        | "modelName"
+        | "productName";
 };
 
 export async function listAllMovements(params: LocationQueryParams) {
