@@ -178,7 +178,7 @@ export const NewStockLotPage = () => {
 
                     {/* MOSTRAR UNA IMAGEN DEL MODELO */}
                     {dataModel && (
-                        <PreviewImage imageUrl={dataModel?.imageUrl} />
+                        <PreviewImage imageUrl={dataModel.imageUrl} />
                     )}
                 </EntityFormLayout.Inputs>
 

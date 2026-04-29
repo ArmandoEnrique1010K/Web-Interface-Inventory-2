@@ -15,8 +15,10 @@ export async function login(formData: AuthLoginForm) {
         const url = `/auth/login`;
         const { data } = await api.post(url, formData);
         const parsed = responseSchema.parse(data);
+        console.log(parsed);
         return parsed.message;
     } catch (error: unknown) {
+        console.log(error);
         throwApiErrorMessage(error);
     }
 }

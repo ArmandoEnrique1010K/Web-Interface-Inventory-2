@@ -181,7 +181,7 @@ export const AddDeliveryLineModal = ({
     // const locationId = useWatch({ control, name: 'locationId' });
     const modelId = useWatch({ control, name: "modelId" });
 
-    const { data: dataModel } = useQuery({
+    const { data: dataModel, isFetching } = useQuery({
         queryKey: ["model", modelId],
         queryFn: () => getModel(+modelId!),
         retry: false,
@@ -244,8 +244,12 @@ export const AddDeliveryLineModal = ({
                         textInNullOption="Seleccione un modelo"
                     ></SelectOption>
 
-                    {dataModel && (
-                        <PreviewImage imageUrl={dataModel?.imageUrl} />
+                    {/* EVITA QUE SE MUESTRE LA IMAGEN ANTERIOR */}
+                    {!isFetching && dataModel && (
+                        <PreviewImage
+                            key={modelId}
+                            imageUrl={dataModel.imageUrl}
+                        />
                     )}
 
                     {/* CAMPO PARA SELECCIONAR UNA REGIÓN */}

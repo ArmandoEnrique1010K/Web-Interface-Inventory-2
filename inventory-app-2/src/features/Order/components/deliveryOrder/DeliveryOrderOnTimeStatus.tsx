@@ -1,8 +1,8 @@
-import type { DeliveryOrderItem } from "../../schemas/items";
+import type { DeliveryOrderDetailsItem } from "../../schemas/items";
 import { deliveryOrderOnTimeStatusOptions } from "../../data/deliveryOrderOnTimeStatusOptions";
 
 type Props = {
-    deliveryOrderOnTimeStatus: DeliveryOrderItem["onTimeStatus"];
+    deliveryOrderOnTimeStatus: DeliveryOrderDetailsItem["onTimeStatus"];
 };
 
 const deliveryOrderMap = Object.fromEntries(

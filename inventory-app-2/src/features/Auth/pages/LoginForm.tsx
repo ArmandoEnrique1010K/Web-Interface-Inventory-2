@@ -10,6 +10,7 @@ import { InputPassword } from "@/ui/fields/InputPassword";
 import { AuthFormLayout } from "../layout/AuthFormLayout";
 import type { GeneralError } from "@/types";
 import type { AuthLoginForm } from "../schemas/requests";
+import { useEffect } from "react";
 
 export const LoginForm = () => {
     const navigate = useNavigate();
@@ -23,6 +24,11 @@ export const LoginForm = () => {
     const { register, handleSubmit, setError } = useForm({
         defaultValues: initialValues,
     });
+
+    useEffect(() => {
+        console.log(import.meta.env.VITE_API_URL);
+        console.log(import.meta.env.VITE_FRONTEND_DOMAIN);
+    }, []);
 
     const { mutate, isPending } = useMutation({
         mutationFn: login,

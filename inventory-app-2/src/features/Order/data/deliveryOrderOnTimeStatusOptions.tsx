@@ -1,7 +1,7 @@
-import type { DeliveryOrderItem } from "../schemas/items";
+import type { DeliveryOrderDetailsItem } from "../schemas/items";
 
 export type OrderOnTimeStatusOptions = {
-    value: DeliveryOrderItem["onTimeStatus"];
+    value: DeliveryOrderDetailsItem["onTimeStatus"];
     label: string;
     color?: string;
 }[];
