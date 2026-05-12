@@ -8,6 +8,7 @@ import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { InputText } from "@/ui/fields/InputText";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 import type { StockLotAdjustmentForm } from "../../../schemas/requests";
+import { useAuthRole } from "@/hooks/useAuthRole";
 
 type Props = {
     stockLotId: number;
@@ -27,6 +28,7 @@ export const IncreaseStockLotModal = ({ stockLotId, setShowModal }: Props) => {
         },
     });
     const queryClient = useQueryClient();
+    const { userRole } = useAuthRole();
 
     const { mutate } = useMutation({
         mutationFn: increaseStockLot,
@@ -57,6 +59,10 @@ export const IncreaseStockLotModal = ({ stockLotId, setShowModal }: Props) => {
                 queryKey: ["stocklot", stockLotId],
             });
             queryClient.invalidateQueries({ queryKey: ["movements"] });
+            queryClient.invalidateQueries({
+                queryKey: ["dashboard", userRole],
+            });
+
             toast.success(data);
             setShowModal(false);
         },

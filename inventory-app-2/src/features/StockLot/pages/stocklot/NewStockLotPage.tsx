@@ -17,6 +17,7 @@ import {
     listFirstTenModelsByKeyword,
 } from "@/features/Product/api/ModelAPI";
 import { PreviewImage } from "@/components/PreviewImage";
+import { useAuthRole } from "@/hooks/useAuthRole";
 
 type StockLotFields = {
     quantity: number | undefined;
@@ -46,6 +47,7 @@ export const NewStockLotPage = () => {
     const navigate = useNavigate();
 
     const queryClient = useQueryClient();
+    const { userRole } = useAuthRole();
 
     const { mutate } = useMutation({
         mutationFn: registerStockLot,
@@ -71,6 +73,10 @@ export const NewStockLotPage = () => {
         },
         onSuccess: (data) => {
             queryClient.invalidateQueries({ queryKey: ["movements"] });
+            queryClient.invalidateQueries({
+                queryKey: ["dashboard", userRole],
+            });
+
             toast.success(data);
             navigate("/stocklots");
         },

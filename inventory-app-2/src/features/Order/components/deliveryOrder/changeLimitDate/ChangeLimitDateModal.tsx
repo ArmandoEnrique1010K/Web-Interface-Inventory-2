@@ -9,6 +9,7 @@ import { Button } from "@/ui/Button";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { handleFormatDateTime } from "@/utils/handleFormatDateTime";
 import type { DeliveryOrderChangeLimitDateForm } from "../../../schemas/requests";
+import { useAuthRole } from "@/hooks/useAuthRole";
 
 type Props = {
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -19,6 +20,8 @@ export const ChangeLimitDateModal = ({
     setShowModal,
     deliveryOrderId,
 }: Props) => {
+    const { userRole } = useAuthRole();
+
     const initialValues = {
         limitDate: "",
     };
@@ -69,6 +72,9 @@ export const ChangeLimitDateModal = ({
             setShowModal(false);
             queryClient.invalidateQueries({
                 queryKey: ["deliveryOrder", deliveryOrderId],
+            });
+            queryClient.invalidateQueries({
+                queryKey: ["dashboard", userRole],
             });
         },
     });

@@ -9,6 +9,7 @@ import { InputText } from "@/ui/fields/InputText";
 import { Button } from "@/ui/Button";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import type { DeliveryLineAlterForm } from "../../../schemas/requests";
+import { useAuthRole } from "@/hooks/useAuthRole";
 
 type Props = {
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -25,6 +26,7 @@ export const LostDeliveryLineModal = ({
         quantity: undefined,
         movementComment: "",
     };
+    const { userRole } = useAuthRole();
 
     const {
         register,
@@ -71,7 +73,9 @@ export const LostDeliveryLineModal = ({
                 ],
             });
             queryClient.invalidateQueries({ queryKey: ["movements"] });
-
+            queryClient.invalidateQueries({
+                queryKey: ["dashboard", userRole],
+            });
             toast.success(data);
             setShowModal(false);
         },

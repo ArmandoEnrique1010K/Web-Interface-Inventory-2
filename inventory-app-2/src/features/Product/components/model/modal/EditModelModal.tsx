@@ -12,6 +12,7 @@ import { UploadImage } from "@/ui/fields/UploadImage";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 import type { ModelForm } from "../../../schemas/requests";
 import type { ModelItem } from "../../../schemas/items";
+import { useAuthRole } from "@/hooks/useAuthRole";
 
 type Props = {
     data: ModelItem & { file: File };
@@ -36,6 +37,7 @@ export const EditModelModal = ({ data, modelId, setShowModal }: Props) => {
 
     const [file, setFile] = useState<File | null>(null);
     const [preview, setPreview] = useState<string | null>(data.imageUrl);
+    const { userRole } = useAuthRole();
 
     const queryClient = useQueryClient();
 
@@ -64,6 +66,10 @@ export const EditModelModal = ({ data, modelId, setShowModal }: Props) => {
         onSuccess: (data) => {
             queryClient.invalidateQueries({ queryKey: ["models"] });
             queryClient.invalidateQueries({ queryKey: ["model", +modelId] });
+            queryClient.invalidateQueries({
+                queryKey: ["dashboard", userRole],
+            });
+
             toast.success(data);
             // navigate(`/products/${productId}?modelId=${modelId}`)
             setShowModal(false);

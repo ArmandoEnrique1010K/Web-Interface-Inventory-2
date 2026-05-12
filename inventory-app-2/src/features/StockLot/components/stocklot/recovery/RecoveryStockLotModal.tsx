@@ -8,6 +8,7 @@ import { InputText } from "@/ui/fields/InputText";
 import { recoveryStockLot } from "../../../api/StockLotAPI";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 import type { StockLotAdjustmentForm } from "@/features/StockLot/schemas/requests";
+import { useAuthRole } from "@/hooks/useAuthRole";
 
 type Props = {
     stockLotId: number;
@@ -27,6 +28,7 @@ export const RecoveryStockLotModal = ({ stockLotId, setShowModal }: Props) => {
         },
     });
     const queryClient = useQueryClient();
+    const { userRole } = useAuthRole();
 
     const { mutate } = useMutation({
         mutationFn: recoveryStockLot,
@@ -56,6 +58,10 @@ export const RecoveryStockLotModal = ({ stockLotId, setShowModal }: Props) => {
                 queryKey: ["stocklot", stockLotId],
             });
             queryClient.invalidateQueries({ queryKey: ["movements"] });
+            queryClient.invalidateQueries({
+                queryKey: ["dashboard", userRole],
+            });
+
             toast.success(data);
             setShowModal(false);
         },

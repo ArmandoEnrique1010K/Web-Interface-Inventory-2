@@ -6,6 +6,7 @@ import { Button } from "@/ui/Button";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import { Modal } from "@/components/Modal";
+import { useAuthRole } from "../../../../hooks/useAuthRole";
 
 type Props = {
     from?: string;
@@ -26,6 +27,7 @@ export const StatusProductButton = ({
 
     const navigate = useNavigate();
     const queryClient = useQueryClient();
+    const { userRole } = useAuthRole();
 
     const { mutate } = useMutation({
         mutationFn: () => changeStatusProduct(productId),
@@ -52,6 +54,9 @@ export const StatusProductButton = ({
                     queryKey: ["model", modelId],
                 });
             }
+            queryClient.invalidateQueries({
+                queryKey: ["dashboard", userRole],
+            });
 
             if (from === "product-details") {
                 navigate("/products");

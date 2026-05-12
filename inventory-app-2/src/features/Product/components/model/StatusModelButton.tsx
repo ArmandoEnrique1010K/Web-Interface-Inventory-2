@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { changeStatusModel } from "../../api/ModelAPI";
 import { useNavigate } from "react-router-dom";
+import { useAuthRole } from "@/hooks/useAuthRole";
 
 export const StatusModelButton = ({
     from,
@@ -22,6 +23,7 @@ export const StatusModelButton = ({
 }) => {
     const { handleSubmit } = useForm();
     const queryClient = useQueryClient();
+    const { userRole } = useAuthRole();
 
     const navigate = useNavigate();
 
@@ -45,6 +47,9 @@ export const StatusModelButton = ({
             queryClient.invalidateQueries({ queryKey: ["models"] });
             queryClient.invalidateQueries({
                 queryKey: ["model", modelId ? +modelId : 0],
+            });
+            queryClient.invalidateQueries({
+                queryKey: ["dashboard", userRole],
             });
 
             if (from === "model-details") {

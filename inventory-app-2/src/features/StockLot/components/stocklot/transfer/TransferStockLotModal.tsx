@@ -13,6 +13,7 @@ import { SelectOption } from "@/ui/fields/SelectOption";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 import type { StockLotTransferForm } from "@/features/StockLot/schemas/requests";
 import type { StockLotDetailItem } from "@/features/StockLot/schemas/items";
+import { useAuthRole } from "@/hooks/useAuthRole";
 
 type Props = {
     data: StockLotDetailItem;
@@ -38,6 +39,7 @@ export const TransferStockLotModal = ({
         },
     });
     const queryClient = useQueryClient();
+    const { userRole } = useAuthRole();
 
     const { mutate } = useMutation({
         mutationFn: transferStockLot,
@@ -67,6 +69,10 @@ export const TransferStockLotModal = ({
                 queryKey: ["stocklot", stockLotEmitterId],
             });
             queryClient.invalidateQueries({ queryKey: ["movements"] });
+            queryClient.invalidateQueries({
+                queryKey: ["dashboard", userRole],
+            });
+
             toast.success(data);
             setShowModal(false);
         },

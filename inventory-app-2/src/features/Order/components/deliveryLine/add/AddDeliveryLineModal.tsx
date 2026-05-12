@@ -18,6 +18,7 @@ import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { Button } from "@/ui/Button";
 import { PreviewImage } from "@/components/PreviewImage";
 import { getModel } from "@/features/Product/api/ModelAPI";
+import { useAuthRole } from "@/hooks/useAuthRole";
 
 type Props = {
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -61,6 +62,7 @@ export const AddDeliveryLineModal = ({
         defaultValues: parsed || initialValues,
     });
     const queryClient = useQueryClient();
+    const { userRole } = useAuthRole();
 
     const { mutate } = useMutation({
         mutationFn: registerDeliveryLine,
@@ -92,6 +94,9 @@ export const AddDeliveryLineModal = ({
             });
             queryClient.invalidateQueries({
                 queryKey: ["deliveryLines", "deliveryOrder", deliveryOrderId!],
+            });
+            queryClient.invalidateQueries({
+                queryKey: ["dashboard", userRole],
             });
         },
     });

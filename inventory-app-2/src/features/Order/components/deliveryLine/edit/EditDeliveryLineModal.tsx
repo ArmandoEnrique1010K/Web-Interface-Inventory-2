@@ -10,6 +10,7 @@ import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { Button } from "@/ui/Button";
 import { handleFormatDateTimeWithoutT } from "@/utils/handleFormatDateTime";
 import type { DeliveryLineUpdateForm } from "../../../schemas/requests";
+import { useAuthRole } from "@/hooks/useAuthRole";
 
 type Props = {
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -31,6 +32,7 @@ export const EditDeliveryLineModal = ({
         limitDate: `${handleFormatDateTimeWithoutT(new Date(limitDate))}`,
         movementComment: "",
     };
+    const { userRole } = useAuthRole();
 
     const {
         register,
@@ -77,6 +79,10 @@ export const EditDeliveryLineModal = ({
                 ],
             });
             queryClient.invalidateQueries({ queryKey: ["movements"] });
+            queryClient.invalidateQueries({
+                queryKey: ["dashboard", userRole],
+            });
+
             toast.success(data);
             setShowModal(false);
         },

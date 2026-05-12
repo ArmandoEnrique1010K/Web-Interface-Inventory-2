@@ -4,6 +4,7 @@ import { sendDeliveryOrder } from "../../api/DeliveryOrderAPI";
 import type { GeneralError } from "@/types/index";
 import { toast } from "sonner";
 import { Button } from "@/ui/Button";
+import { useAuthRole } from "@/hooks/useAuthRole";
 
 type Props = {
     deliveryOrderId: number;
@@ -12,6 +13,7 @@ type Props = {
 export const SendDeliveryOrderButton = ({ deliveryOrderId }: Props) => {
     const { handleSubmit } = useForm();
     const queryClient = useQueryClient();
+    const { userRole } = useAuthRole();
 
     const { mutate } = useMutation({
         mutationFn: () => sendDeliveryOrder(deliveryOrderId),
@@ -28,6 +30,9 @@ export const SendDeliveryOrderButton = ({ deliveryOrderId }: Props) => {
                 queryKey: ["deliveryOrder", deliveryOrderId],
             });
             queryClient.invalidateQueries({ queryKey: ["movements"] });
+            queryClient.invalidateQueries({
+                queryKey: ["dashboard", userRole],
+            });
             toast.success(data);
         },
     });

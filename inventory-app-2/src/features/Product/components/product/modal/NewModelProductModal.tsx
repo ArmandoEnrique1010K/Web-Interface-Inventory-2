@@ -11,6 +11,7 @@ import { useState } from "react";
 import { UploadImage } from "@/ui/fields/UploadImage";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 import type { ModelForm } from "../../../schemas/requests";
+import { useAuthRole } from "@/hooks/useAuthRole";
 
 type Props = {
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -30,6 +31,7 @@ export const NewModelProductModal = ({ setShowModal, productId }: Props) => {
         caducityDate: "",
         minimumAvailableQuantity: null,
     };
+    const { userRole } = useAuthRole();
 
     const {
         register,
@@ -70,6 +72,9 @@ export const NewModelProductModal = ({ setShowModal, productId }: Props) => {
             queryClient.invalidateQueries({ queryKey: ["products"] });
             queryClient.invalidateQueries({ queryKey: ["product", productId] });
             queryClient.invalidateQueries({ queryKey: ["models"] });
+            queryClient.invalidateQueries({
+                queryKey: ["dashboard", userRole],
+            });
         },
     });
 

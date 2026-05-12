@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { cancelDeliveryLine } from "../../api/DeliveryLineAPI";
 import { Button } from "@/ui/Button";
 import { useNavigate } from "react-router-dom";
+import { useAuthRole } from "@/hooks/useAuthRole";
 
 type Props = {
     deliveryLineId: number;
@@ -18,6 +19,7 @@ export const CancelDeliveryLineButton = ({
     const { handleSubmit } = useForm();
     const queryClient = useQueryClient();
     const navigate = useNavigate();
+    const { userRole } = useAuthRole();
 
     const { mutate } = useMutation({
         mutationFn: () => cancelDeliveryLine(deliveryLineId),
@@ -42,6 +44,9 @@ export const CancelDeliveryLineButton = ({
                 ],
             });
             queryClient.invalidateQueries({ queryKey: ["movements"] });
+            queryClient.invalidateQueries({
+                queryKey: ["dashboard", userRole],
+            });
             toast.success(data);
             navigate(`/orders/${deliveryOrderId}`);
         },

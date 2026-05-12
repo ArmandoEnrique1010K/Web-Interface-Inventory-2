@@ -9,6 +9,7 @@ import { Button } from "@/ui/Button";
 import { InputText } from "@/ui/fields/InputText";
 import { useNavigate } from "react-router-dom";
 import type { DeliveryOrderCommentForm } from "../../../schemas/requests";
+import { useAuthRole } from "@/hooks/useAuthRole";
 
 type Props = {
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -34,6 +35,7 @@ export const CancelDeliveryOrderModal = ({
 
     const queryClient = useQueryClient();
     const navigate = useNavigate();
+    const { userRole } = useAuthRole();
 
     // Mutacion para guardar los cambios
     const { mutate } = useMutation({
@@ -59,10 +61,14 @@ export const CancelDeliveryOrderModal = ({
             }
         },
         onSuccess: (data) => {
+            // Se tiene que eliminar el cache (cuando se trata de hacer un borrado logico)
             queryClient.removeQueries({
                 queryKey: ["deliveryOrder", deliveryOrderId],
             });
             queryClient.invalidateQueries({ queryKey: ["movements"] });
+            queryClient.invalidateQueries({
+                queryKey: ["dashboard", userRole],
+            });
             toast.success(data);
             setShowModal(false);
             navigate(`/orders`);

@@ -12,6 +12,7 @@ import { useEffect } from "react";
 import type { DeliveryLineAllocateForm } from "../../../schemas/requests";
 import type { StockLotSameProductItem } from "@/features/StockLot/schemas/items";
 import { useForm, useWatch, type FieldError } from "react-hook-form";
+import { useAuthRole } from "@/hooks/useAuthRole";
 
 type Props = {
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -26,6 +27,8 @@ export const AllocateDeliveryLineModal = ({
     modelId,
     setShowModal,
 }: Props) => {
+    const { userRole } = useAuthRole();
+
     // LIMPIEZA + CONTROL
     const storedModelId = sessionStorage.getItem("currentModelId");
 
@@ -114,6 +117,9 @@ export const AllocateDeliveryLineModal = ({
                 queryKey: ["deliveryLine", "stockLots", deliveryLineId],
             });
             queryClient.invalidateQueries({ queryKey: ["movements"] });
+            queryClient.invalidateQueries({
+                queryKey: ["dashboard", userRole],
+            });
 
             toast.success(data);
             setShowModal(false);

@@ -11,6 +11,7 @@ import { listAllActiveTypes } from "../../../api/TypeAPI";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 import type { ProductUpdateForm } from "../../../schemas/requests";
+import { useAuthRole } from "@/hooks/useAuthRole";
 
 type Props = {
     data: ProductUpdateForm;
@@ -42,6 +43,7 @@ export const EditProductModal = ({
     } = useForm<ProductUpdateForm>({
         defaultValues: initialValues,
     });
+    const { userRole } = useAuthRole();
 
     const queryClient = useQueryClient();
 
@@ -74,7 +76,9 @@ export const EditProductModal = ({
             if (modelId) {
                 queryClient.invalidateQueries({ queryKey: ["model", modelId] });
             }
-
+            queryClient.invalidateQueries({
+                queryKey: ["dashboard", userRole],
+            });
             toast.success(data);
             setShowModal(false);
         },

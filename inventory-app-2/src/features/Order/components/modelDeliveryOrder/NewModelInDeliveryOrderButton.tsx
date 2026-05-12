@@ -8,6 +8,7 @@ import type { GeneralError } from "@/types/index";
 import { toast } from "sonner";
 import { Button } from "@/ui/Button";
 import type { ModelDeliveryOrderItem } from "../../schemas/items";
+import { useAuthRole } from "@/hooks/useAuthRole";
 
 type Props = {
     modelId: number;
@@ -24,6 +25,7 @@ export const NewModelInDeliveryOrderButton = ({
 }: Props) => {
     const { handleSubmit } = useForm();
     const queryClient = useQueryClient();
+    const { userRole } = useAuthRole();
 
     const isAlreadyAdded = existingModels.some(
         (model) => +model.modelId === Number(modelId),
@@ -44,6 +46,9 @@ export const NewModelInDeliveryOrderButton = ({
             toast.success(data);
             queryClient.invalidateQueries({
                 queryKey: ["models", "deliveryOrder", deliveryOrderId],
+            });
+            queryClient.invalidateQueries({
+                queryKey: ["dashboard", userRole],
             });
         },
     });
