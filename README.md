@@ -27,13 +27,15 @@ El proyecto consume una API REST desarrollada con Spring Boot y utiliza autentic
 
 ## Variables de entorno
 
-`VITE_API_URL` = URL base del backend [backend](https://github.com/ArmandoEnrique1010K/API-REST-Inventory-2) desplegado (debe terminar Ccon "/api").
+`VITE_API_URL` = URL base del [backend](https://github.com/ArmandoEnrique1010K/API-REST-Inventory-2) desplegado (debe terminar con "/api").
 
 `VITE_FRONTEND_DOMAIN` = URL del dominio donde se encuentra desplegado el frontend.
 
 ## Acceso a la aplicación
 
-Actualmente el registro de usuarios está restringido. Si deseas probar la aplicación, puedes solicitar una invitación enviando un correo a [enrique1010k@gmail.com](mailto:enrique1010k@gmail.com). Si utilizas un correo real de Gmail, podrás recuperar o cambiar tu contraseña posteriormente desde la aplicación.
+Actualmente el registro de usuarios está restringido. Si deseas probar la aplicación, puedes solicitar una invitación enviando un correo a [enrique1010k@gmail.com](mailto:enrique1010k@gmail.com) con tu email real y un rol: **Usuario**, **Operador** o **Administrador**. 
+
+Si utilizas un correo real de Gmail, podrás recuperar o cambiar tu contraseña posteriormente desde la aplicación.
 
 ## Licencia
 
