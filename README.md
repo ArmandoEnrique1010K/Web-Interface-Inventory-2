@@ -33,9 +33,25 @@ El proyecto consume una API REST desarrollada con Spring Boot y utiliza autentic
 
 ## Acceso a la aplicación
 
-Actualmente el registro de usuarios está restringido. Si deseas probar la aplicación, puedes solicitar una invitación enviando un correo a [enrique1010k@gmail.com](mailto:enrique1010k@gmail.com) con tu email real y un rol: **Usuario**, **Operador** o **Administrador**. 
+Actualmente el registro de usuarios está restringido. Si deseas probar la aplicación, tienes 2 opciones:
 
-Si utilizas un correo real de Gmail, podrás recuperar o cambiar tu contraseña posteriormente desde la aplicación.
+### Usar un usuario de prueba
+
+Inicia sesión con una de las siguientes credenciales de prueba:
+
+| Correo             | Contraseña | Rol           |
+| ------------------ | ---------- | ------------- |
+| user@gmail.com     | 12345      | Usuario       |
+| operator@gmail.com | 12345      | Operador      |
+| admin@gmail.com    | 12345      | Administrador |
+
+Los usuarios de prueba no pueden modificar su correo ni su contraseña.
+
+### Usar un correo real
+
+Puedes enviar un correo a [enrique1010k@gmail.com](mailto:enrique1010k@gmail.com) con tu email real y un rol: **Usuario**, **Operador** o **Administrador**. Si utilizas un correo real de Gmail, podrás recuperar o cambiar tu contraseña posteriormente desde la aplicación.
+
+Ten en cuenta que todos los usuarios que inician sesión y tienen el rol de **Administrador**, pueden ver el correo de todos los usuarios registrados en la aplicación, pero la contraseña no se ve a pesar que esta encriptada en la base de datos. **Se recomienda no colocar una contraseña sensible cuando cambies de contraseña**.
 
 ## Licencia
 
