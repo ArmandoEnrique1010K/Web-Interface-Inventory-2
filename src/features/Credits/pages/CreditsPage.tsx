@@ -102,6 +102,13 @@ export const CreditsPage = () => {
                             </CreditItem>
                             <CreditItem
                                 type="li"
+                                url="https://www.npmjs.com/package/react-calendar"
+                            >
+                                React Calendar
+                            </CreditItem>
+
+                            <CreditItem
+                                type="li"
                                 url="https://www.npmjs.com/package/react-qr-code"
                             >
                                 React QR Code

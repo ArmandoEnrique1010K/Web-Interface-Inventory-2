@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { GeneralError } from "@/types/index";
 import { registerDeliveryOrder } from "../../api/DeliveryOrderAPI";
 import { toast } from "sonner";
@@ -11,6 +11,7 @@ import { ButtonLink } from "@/ui/ButtonLink";
 import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { InputDateTime } from "@/ui/fields/InputDateTime";
 import { AsyncSelectField, type Option } from "@/ui/fields/AsyncSelectOption";
+import { useAuthRole } from "@/hooks/useAuthRole";
 
 type DeliveryOrderFormFields = {
     limitDate: string;
@@ -32,6 +33,10 @@ export const NewDeliveryOrderPage = () => {
     } = useForm<DeliveryOrderFormFields>({
         defaultValues: initialValues,
     });
+
+    const queryClient = useQueryClient();
+    const { userRole } = useAuthRole();
+
     const navigate = useNavigate();
     const { mutate } = useMutation({
         mutationFn: registerDeliveryOrder,
@@ -56,6 +61,10 @@ export const NewDeliveryOrderPage = () => {
             }
         },
         onSuccess: (data) => {
+            queryClient.invalidateQueries({
+                queryKey: ["dashboard", userRole],
+            });
+
             toast.success(data);
             navigate("/orders");
         },

@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { GeneralError } from "@/types/index";
 import { registerProduct } from "../../api/ProductAPI";
 import { toast } from "sonner";
@@ -17,6 +17,7 @@ import { UploadImage } from "@/ui/fields/UploadImage";
 import { Subtitle } from "@/components/Subtitle";
 import { EntityFormLayout } from "@/layout/entity/EntityFormLayout";
 import type { ProductCreateForm } from "../../schemas/requests";
+import { useAuthRole } from "@/hooks/useAuthRole";
 
 export const NewProductPage = () => {
     const [file, setFile] = useState<File | null>(null);
@@ -38,6 +39,8 @@ export const NewProductPage = () => {
     };
 
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
+    const { userRole } = useAuthRole();
 
     const {
         register,
@@ -72,6 +75,9 @@ export const NewProductPage = () => {
             }
         },
         onSuccess: (data) => {
+            queryClient.invalidateQueries({
+                queryKey: ["dashboard", userRole],
+            });
             toast.success(data);
             navigate("/products");
         },
